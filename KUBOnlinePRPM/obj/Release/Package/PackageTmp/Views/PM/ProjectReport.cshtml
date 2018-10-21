@@ -1,0 +1,377 @@
+﻿<div class="media-md align-items-center g-mb-30 container-fluid">
+    <div class="d-flex g-mb-15 g-mb-0--md">
+        <h3 class="g-font-weight-400 g-font-size-16 g-color-black mb-0 g-pa-20">Weekly Report</h3>
+    </div>
+    <div class="media-body align-self-center text-right">
+        <a class="js-fancybox btn btn-xl u-btn-lightblue-v3 g-font-size-default g-ml-10" href="#!" data-src="#new-project-form" data-speed="350" data-options='{"touch" : false}'>
+            New Weekly Report
+        </a>
+    </div>
+</div>
+<div class="media-md align-items-center g-mb-30 container-fluid">
+    <div class="media d-md-flex align-items-center ml-auto">
+        <div class="d-flex align-items-center">
+            <span class="g-hidden-sm-down g-color-gray-dark-v6 g-mr-12">Show:</span>
+            <div class="u-select--v1 g-pr-20">
+                <select id="datatableEntries7" class="js-select u-select--v1-select w-100" style="display: none;">
+                    <option data-content='<span class="d-flex align-items-center g-line-height-1_2 g-color-black">5 Entries</span>' value="5">5 Entries</option>
+                    <option data-content='<span class="d-flex align-items-center g-line-height-1_2 g-color-black">10 Entries</span>' value="10">10 Entries</option>
+                    <option data-content='<span class="d-flex align-items-center g-line-height-1_2 g-color-black">15 Entries</span>' value="15">15 Entries</option>
+                    <option data-content='<span class="d-flex align-items-center g-line-height-1_2 g-color-black">20 Entries</span>' value="20">20 Entries</option>
+                    <option data-content='<span class="d-flex align-items-center g-line-height-1_2 g-color-black">25 Entries</span>' value="25">25 Entries</option>
+                </select>
+                <i class="hs-admin-angle-down g-absolute-centered--y g-right-0 g-color-gray-light-v6 ml-auto"></i>
+            </div>
+        </div>
+        <div class="d-flex g-ml-15 g-ml-55--md">
+            <div class="input-group g-pos-rel g-width-320--md">
+                <input id="datatableSearch7" class="form-control g-font-size-default g-brd-gray-light-v7 g-brd-lightblue-v3--focus g-rounded-20 g-pl-20 g-pr-50 g-py-10" type="text" placeholder="Search for name, position">
+                <button class="btn g-pos-abs g-top-0 g-right-0 g-z-index-2 g-width-60 h-100 g-bg-transparent g-font-size-16 g-color-lightred-v2 g-color-lightblue-v3--hover rounded-0" type="submit">
+                    <i class="hs-admin-search g-absolute-centered"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="g-mb-40">
+    <div class="table-responsive container-fluid">
+        <table class="js-datatable table table-striped u-table--v3 u-editable-table--v1 g-brd-style-solid g-brd-2 g-brd-gray-light-v6" style="width:100%" data-dt-info="#datatableInfo7" data-dt-search="#datatableSearch7" data-dt-entries="#datatableEntries7" data-dt-pagination="datatablePagination7" data-dt-page-length="5"
+               data-dt-is-responsive="false" data-dt-pagination-classes="list-inline text-right mb-0" data-dt-pagination-items-classes="list-inline-item g-hidden-sm-down" data-dt-pagination-links-classes="u-pagination-v1__item u-pagination-v1-2 g-bg-lightblue-v3--active g-color-white--active g-brd-gray-light-v7 g-brd-lightblue-v3--hover g-brd-lightblue-v3--active g-rounded-4 g-py-8 g-px-15"
+               data-dt-pagination-next-classes="list-inline-item" data-dt-pagination-next-link-classes="u-pagination-v1__item u-pagination-v1-2 g-brd-gray-light-v7 g-brd-lightblue-v3--hover g-rounded-4 g-py-8 g-px-12" data-dt-pagination-next-link-markup='<span class="g-line-height-1 g-valign-middle" aria-hidden="true"><i class="hs-admin-angle-right"></i></span><span class="sr-only">Next</span>'
+               data-dt-pagination-prev-classes="list-inline-item" data-dt-pagination-prev-link-classes="u-pagination-v1__item u-pagination-v1-2 g-brd-gray-light-v7 g-brd-lightblue-v3--hover g-rounded-4 g-py-8 g-px-12" data-dt-pagination-prev-link-markup='<span class="g-line-height-1 g-valign-middle" aria-hidden="true"><i class="hs-admin-angle-left"></i></span><span class="sr-only">Prev</span>'>
+            <thead>
+                <tr>
+                    <th class="g-hidden-xs-up"></th>
+                    <th class="g-first-child">
+                        <div class="media">
+                            <div class="d-flex align-self-center">No</div>
+                            <div class="d-flex align-self-center ml-auto">
+                                <span class="d-inline-block g-width-10 g-line-height-1 g-font-size-10">
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-up"></i>
+                                    </a>
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-down"></i>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="media">
+                            <div class="d-flex align-self-center">Week</div>
+                            <div class="d-flex align-self-center ml-auto">
+                                <span class="d-inline-block g-width-10 g-line-height-1 g-font-size-10">
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-up"></i>
+                                    </a>
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-down"></i>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="media">
+                            <div class="d-flex align-self-center">Details</div>
+                            <div class="d-flex align-self-center ml-auto">
+                                <span class="d-inline-block g-width-10 g-line-height-1 g-font-size-10">
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-up"></i>
+                                    </a>
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-down"></i>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="g-hidden-xs-up">1</td>
+                    <td class="g-first-child">
+                        <div class="media align-items-center">
+                            <div class="media-body text-left g-ml-15">1</div>
+                        </div>
+                    </td>
+                    <td>16 Jul 18 - 22 Jul 18</td>
+                    <td>
+                        <a href="#">Week 3 Jul 18 Report.pdf</a>
+                    </td>
+                    <td class="text-right">
+                        <div class="g-pos-rel g-top-3 d-inline-block">
+                            <a id="WeeklyReport1Invoker" class="u-link-v5 g-line-height-0 g-font-size-24 g-color-gray-light-v6 g-color-lightblue-v3--hover" href="#!" aria-controls="WeeklyReport1" aria-haspopup="true" aria-expanded="false" data-dropdown-event="click" data-dropdown-target="#WeeklyReport1">
+                                <i class="hs-admin-more-alt"></i>
+                            </a>
+                            <div id="WeeklyReport1" class="u-shadow-v31 g-pos-abs g-right-0 g-z-index-2 g-bg-white" aria-labelledby="WeeklyReportInvoker">
+                                <ul class="list-unstyled g-nowrap mb-0">
+                                    <li>
+                                        <a class="d-flex align-items-center u-link-v5 g-bg-gray-light-v8--hover g-font-size-12 g-font-size-default--md g-color-gray-dark-v6 g-px-25 g-py-14" href="#!">
+                                            <i class="hs-admin-pencil g-font-size-18 g-color-gray-light-v6 g-mr-10 g-mr-15--md"></i>
+                                            View Report
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="g-hidden-xs-up">2</td>
+                    <td class="g-first-child">
+                        <div class="media align-items-center">
+                            <div class="media-body text-left g-ml-15">2</div>
+                        </div>
+                    </td>
+                    <td>23 Jul 18 - 29 Jul 18</td>
+                    <td>
+                        <a href="#">Week 4 Jul 18 Report.pdf</a>
+                    </td>
+                    <td class="text-right">
+                        <div class="g-pos-rel g-top-3 d-inline-block">
+                            <a id="WeeklyReport2Invoker" class="u-link-v5 g-line-height-0 g-font-size-24 g-color-gray-light-v6 g-color-lightblue-v3--hover" href="#!" aria-controls="WeeklyReport2" aria-haspopup="true" aria-expanded="false" data-dropdown-event="click" data-dropdown-target="#WeeklyReport2">
+                                <i class="hs-admin-more-alt"></i>
+                            </a>
+                            <div id="WeeklyReport2" class="u-shadow-v31 g-pos-abs g-right-0 g-z-index-2 g-bg-white" aria-labelledby="WeeklyReport2Invoker">
+                                <ul class="list-unstyled g-nowrap mb-0">
+                                    <li>
+                                        <a class="d-flex align-items-center u-link-v5 g-bg-gray-light-v8--hover g-font-size-12 g-font-size-default--md g-color-gray-dark-v6 g-px-25 g-py-14" href="#!">
+                                            <i class="hs-admin-pencil g-font-size-18 g-color-gray-light-v6 g-mr-10 g-mr-15--md"></i>
+                                            View Report
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="g-hidden-xs-up">3</td>
+                    <td class="g-first-child">
+                        <div class="media align-items-center">
+                            <div class="media-body text-left g-ml-15">3</div>
+                        </div>
+                    </td>
+                    <td>9 Jul 18 - 13 Jul 18</td>
+                    <td>
+                        <a href="#">Week 2 Jul 18 Report.pdf</a>
+                    </td>
+                    <td class="text-right">
+                        <div class="g-pos-rel g-top-3 d-inline-block">
+                            <a id="WeeklyReport3Invoker" class="u-link-v5 g-line-height-0 g-font-size-24 g-color-gray-light-v6 g-color-lightblue-v3--hover" href="#!" aria-controls="WeeklyReport3" aria-haspopup="true" aria-expanded="false" data-dropdown-event="click" data-dropdown-target="#WeeklyReport3">
+                                <i class="hs-admin-more-alt"></i>
+                            </a>
+                            <div id="WeeklyReport3" class="u-shadow-v31 g-pos-abs g-right-0 g-z-index-2 g-bg-white" aria-labelledby="WeeklyReport3Invoker">
+                                <ul class="list-unstyled g-nowrap mb-0">
+                                    <li>
+                                        <a class="d-flex align-items-center u-link-v5 g-bg-gray-light-v8--hover g-font-size-12 g-font-size-default--md g-color-gray-dark-v6 g-px-25 g-py-14" href="#!">
+                                            <i class="hs-admin-pencil g-font-size-18 g-color-gray-light-v6 g-mr-10 g-mr-15--md"></i>
+                                            View Report
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="container-fluid media align-items-center g-mb-45">
+    <div id="datatableInfo7" class="media-body"></div>
+    <nav id="datatablePagination7" class="d-flex ml-auto" aria-label="Page Navigation"></nav>
+</div>
+
+<div class="media-md align-items-center g-mb-30 container-fluid">
+    <div class="d-flex g-mb-15 g-mb-0--md">
+        <h3 class="g-font-weight-400 g-font-size-16 g-color-black mb-0 g-pa-20">Monthly Report</h3>
+    </div>
+    <div class="media-body align-self-center text-right">
+        <a class="js-fancybox btn btn-xl u-btn-lightblue-v3 g-font-size-default g-ml-10" href="#!" data-src="#new-project-form" data-speed="350" data-options='{"touch" : false}'>
+            New Monthly Report
+        </a>
+    </div>
+</div>
+<div class="media-md align-items-center g-mb-30 container-fluid">
+    <div class="media d-md-flex align-items-center ml-auto">
+        <div class="d-flex align-items-center">
+            <span class="g-hidden-sm-down g-color-gray-dark-v6 g-mr-12">Show:</span>
+            <div class="u-select--v1 g-pr-20">
+                <select id="datatableEntries17" class="js-select u-select--v1-select w-100" style="display: none;">
+                    <option data-content='<span class="d-flex align-items-center g-line-height-1_2 g-color-black">5 Entries</span>' value="5">5 Entries</option>
+                    <option data-content='<span class="d-flex align-items-center g-line-height-1_2 g-color-black">10 Entries</span>' value="10">10 Entries</option>
+                    <option data-content='<span class="d-flex align-items-center g-line-height-1_2 g-color-black">15 Entries</span>' value="15">15 Entries</option>
+                    <option data-content='<span class="d-flex align-items-center g-line-height-1_2 g-color-black">20 Entries</span>' value="20">20 Entries</option>
+                    <option data-content='<span class="d-flex align-items-center g-line-height-1_2 g-color-black">25 Entries</span>' value="25">25 Entries</option>
+                </select>
+                <i class="hs-admin-angle-down g-absolute-centered--y g-right-0 g-color-gray-light-v6 ml-auto"></i>
+            </div>
+        </div>
+        <div class="d-flex g-ml-15 g-ml-55--md">
+            <div class="input-group g-pos-rel g-width-320--md">
+                <input id="datatableSearch17" class="form-control g-font-size-default g-brd-gray-light-v7 g-brd-lightblue-v3--focus g-rounded-20 g-pl-20 g-pr-50 g-py-10" type="text" placeholder="Search for name, position">
+                <button class="btn g-pos-abs g-top-0 g-right-0 g-z-index-2 g-width-60 h-100 g-bg-transparent g-font-size-16 g-color-lightred-v2 g-color-lightblue-v3--hover rounded-0" type="submit">
+                    <i class="hs-admin-search g-absolute-centered"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="g-mb-40">
+    <div class="table-responsive container-fluid">
+        <table class="js-datatable table table-striped u-table--v3 u-editable-table--v1 g-brd-style-solid g-brd-2 g-brd-gray-light-v6" style="width:100%" data-dt-info="#datatableInfo17" data-dt-search="#datatableSearch17" data-dt-entries="#datatableEntries17" data-dt-pagination="datatablePagination17" data-dt-page-length="5"
+               data-dt-is-responsive="false" data-dt-pagination-classes="list-inline text-right mb-0" data-dt-pagination-items-classes="list-inline-item g-hidden-sm-down" data-dt-pagination-links-classes="u-pagination-v1__item u-pagination-v1-2 g-bg-lightblue-v3--active g-color-white--active g-brd-gray-light-v7 g-brd-lightblue-v3--hover g-brd-lightblue-v3--active g-rounded-4 g-py-8 g-px-15"
+               data-dt-pagination-next-classes="list-inline-item" data-dt-pagination-next-link-classes="u-pagination-v1__item u-pagination-v1-2 g-brd-gray-light-v7 g-brd-lightblue-v3--hover g-rounded-4 g-py-8 g-px-12" data-dt-pagination-next-link-markup='<span class="g-line-height-1 g-valign-middle" aria-hidden="true"><i class="hs-admin-angle-right"></i></span><span class="sr-only">Next</span>'
+               data-dt-pagination-prev-classes="list-inline-item" data-dt-pagination-prev-link-classes="u-pagination-v1__item u-pagination-v1-2 g-brd-gray-light-v7 g-brd-lightblue-v3--hover g-rounded-4 g-py-8 g-px-12" data-dt-pagination-prev-link-markup='<span class="g-line-height-1 g-valign-middle" aria-hidden="true"><i class="hs-admin-angle-left"></i></span><span class="sr-only">Prev</span>'>
+            <thead>
+                <tr>
+                    <th class="g-hidden-xs-up"></th>
+                    <th class="g-first-child">
+                        <div class="media">
+                            <div class="d-flex align-self-center">No</div>
+                            <div class="d-flex align-self-center ml-auto">
+                                <span class="d-inline-block g-width-10 g-line-height-1 g-font-size-10">
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-up"></i>
+                                    </a>
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-down"></i>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="media">
+                            <div class="d-flex align-self-center">Month</div>
+                            <div class="d-flex align-self-center ml-auto">
+                                <span class="d-inline-block g-width-10 g-line-height-1 g-font-size-10">
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-up"></i>
+                                    </a>
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-down"></i>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="media">
+                            <div class="d-flex align-self-center">Details</div>
+                            <div class="d-flex align-self-center ml-auto">
+                                <span class="d-inline-block g-width-10 g-line-height-1 g-font-size-10">
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-up"></i>
+                                    </a>
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-down"></i>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="g-hidden-xs-up">1</td>
+                    <td class="g-first-child">
+                        <div class="media align-items-center">
+                            <div class="media-body text-left g-ml-15">1</div>
+                        </div>
+                    </td>
+                    <td>January 18</td>
+                    <td>
+                        <a href="#">Jan 18 Report.pdf</a>
+                    </td>
+                    <td class="text-right">
+                        <div class="g-pos-rel g-top-3 d-inline-block">
+                            <a id="MonthlyReport1Invoker" class="u-link-v5 g-line-height-0 g-font-size-24 g-color-gray-light-v6 g-color-lightblue-v3--hover" href="#!" aria-controls="MonthlyReport1" aria-haspopup="true" aria-expanded="false" data-dropdown-event="click" data-dropdown-target="#MonthlyReport1">
+                                <i class="hs-admin-more-alt"></i>
+                            </a>
+                            <div id="MonthlyReport1" class="u-shadow-v31 g-pos-abs g-right-0 g-z-index-2 g-bg-white" aria-labelledby="MonthlyReport1Invoker">
+                                <ul class="list-unstyled g-nowrap mb-0">
+                                    <li>
+                                        <a class="d-flex align-items-center u-link-v5 g-bg-gray-light-v8--hover g-font-size-12 g-font-size-default--md g-color-gray-dark-v6 g-px-25 g-py-14" href="#!">
+                                            <i class="hs-admin-pencil g-font-size-18 g-color-gray-light-v6 g-mr-10 g-mr-15--md"></i>
+                                            View Report
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="g-hidden-xs-up">2</td>
+                    <td class="g-first-child">
+                        <div class="media align-items-center">
+                            <div class="media-body text-left g-ml-15">2</div>
+                        </div>
+                    </td>
+                    <td>February 18</td>
+                    <td>
+                        <a href="#">Feb 18 Report.pdf</a>
+                    </td>
+                    <td class="text-right">
+                        <div class="g-pos-rel g-top-3 d-inline-block">
+                            <a id="MonthlyReport2Invoker" class="u-link-v5 g-line-height-0 g-font-size-24 g-color-gray-light-v6 g-color-lightblue-v3--hover" href="#!" aria-controls="MonthlyReport2" aria-haspopup="true" aria-expanded="false" data-dropdown-event="click" data-dropdown-target="#MonthlyReport2">
+                                <i class="hs-admin-more-alt"></i>
+                            </a>
+                            <div id="MonthlyReport2" class="u-shadow-v31 g-pos-abs g-right-0 g-z-index-2 g-bg-white" aria-labelledby="MonthlyReport2Invoker">
+                                <ul class="list-unstyled g-nowrap mb-0">
+                                    <li>
+                                        <a class="d-flex align-items-center u-link-v5 g-bg-gray-light-v8--hover g-font-size-12 g-font-size-default--md g-color-gray-dark-v6 g-px-25 g-py-14" href="#!">
+                                            <i class="hs-admin-pencil g-font-size-18 g-color-gray-light-v6 g-mr-10 g-mr-15--md"></i>
+                                            View Report
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="g-hidden-xs-up">3</td>
+                    <td class="g-first-child">
+                        <div class="media align-items-center">
+                            <div class="media-body text-left g-ml-15">3</div>
+                        </div>
+                    </td>
+                    <td>March 18</td>
+                    <td>
+                        <a href="#">March Report.pdf</a>
+                    </td>
+                    <td class="text-right">
+                        <div class="g-pos-rel g-top-3 d-inline-block">
+                            <a id="MonthlyReport3Invoker" class="u-link-v5 g-line-height-0 g-font-size-24 g-color-gray-light-v6 g-color-lightblue-v3--hover" href="#!" aria-controls="MonthlyReport3" aria-haspopup="true" aria-expanded="false" data-dropdown-event="click" data-dropdown-target="#MonthlyReport3">
+                                <i class="hs-admin-more-alt"></i>
+                            </a>
+                            <div id="MonthlyReport3" class="u-shadow-v31 g-pos-abs g-right-0 g-z-index-2 g-bg-white" aria-labelledby="MonthlyReport3Invoker">
+                                <ul class="list-unstyled g-nowrap mb-0">
+                                    <li>
+                                        <a class="d-flex align-items-center u-link-v5 g-bg-gray-light-v8--hover g-font-size-12 g-font-size-default--md g-color-gray-dark-v6 g-px-25 g-py-14" href="#!">
+                                            <i class="hs-admin-pencil g-font-size-18 g-color-gray-light-v6 g-mr-10 g-mr-15--md"></i>
+                                            View Report
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="container-fluid media align-items-center g-mb-45">
+    <div id="datatableInfo17" class="media-body"></div>
+    <nav id="datatablePagination17" class="d-flex ml-auto" aria-label="Page Navigation"></nav>
+</div>

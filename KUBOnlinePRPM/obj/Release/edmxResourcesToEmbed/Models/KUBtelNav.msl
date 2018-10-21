@@ -1,0 +1,272 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="KUB_TelModelStoreContainer" CdmEntityContainer="KUB_TelEntities">
+    <EntitySetMapping Name="KUB_Telekomunikasi_Sdn_Bhd_Contact">
+      <EntityTypeMapping TypeName="KUB_TelModel.KUB_Telekomunikasi_Sdn_Bhd_Contact">
+        <MappingFragment StoreEntitySet="KUB Telekomunikasi Sdn Bhd$Contact">
+          <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+          <ScalarProperty Name="No_" ColumnName="No_" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Search_Name" ColumnName="Search Name" />
+          <ScalarProperty Name="Name_2" ColumnName="Name 2" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Address_2" ColumnName="Address 2" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="Phone_No_" ColumnName="Phone No_" />
+          <ScalarProperty Name="Telex_No_" ColumnName="Telex No_" />
+          <ScalarProperty Name="Territory_Code" ColumnName="Territory Code" />
+          <ScalarProperty Name="Currency_Code" ColumnName="Currency Code" />
+          <ScalarProperty Name="Language_Code" ColumnName="Language Code" />
+          <ScalarProperty Name="Salesperson_Code" ColumnName="Salesperson Code" />
+          <ScalarProperty Name="Country_Region_Code" ColumnName="Country_Region Code" />
+          <ScalarProperty Name="Last_Date_Modified" ColumnName="Last Date Modified" />
+          <ScalarProperty Name="Fax_No_" ColumnName="Fax No_" />
+          <ScalarProperty Name="Telex_Answer_Back" ColumnName="Telex Answer Back" />
+          <ScalarProperty Name="VAT_Registration_No_" ColumnName="VAT Registration No_" />
+          <ScalarProperty Name="Picture" ColumnName="Picture" />
+          <ScalarProperty Name="Post_Code" ColumnName="Post Code" />
+          <ScalarProperty Name="County" ColumnName="County" />
+          <ScalarProperty Name="E_Mail" ColumnName="E-Mail" />
+          <ScalarProperty Name="Home_Page" ColumnName="Home Page" />
+          <ScalarProperty Name="No__Series" ColumnName="No_ Series" />
+          <ScalarProperty Name="Image" ColumnName="Image" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Company_No_" ColumnName="Company No_" />
+          <ScalarProperty Name="Company_Name" ColumnName="Company Name" />
+          <ScalarProperty Name="Lookup_Contact_No_" ColumnName="Lookup Contact No_" />
+          <ScalarProperty Name="First_Name" ColumnName="First Name" />
+          <ScalarProperty Name="Middle_Name" ColumnName="Middle Name" />
+          <ScalarProperty Name="Surname" ColumnName="Surname" />
+          <ScalarProperty Name="Job_Title" ColumnName="Job Title" />
+          <ScalarProperty Name="Initials" ColumnName="Initials" />
+          <ScalarProperty Name="Extension_No_" ColumnName="Extension No_" />
+          <ScalarProperty Name="Mobile_Phone_No_" ColumnName="Mobile Phone No_" />
+          <ScalarProperty Name="Pager" ColumnName="Pager" />
+          <ScalarProperty Name="Organizational_Level_Code" ColumnName="Organizational Level Code" />
+          <ScalarProperty Name="Exclude_from_Segment" ColumnName="Exclude from Segment" />
+          <ScalarProperty Name="External_ID" ColumnName="External ID" />
+          <ScalarProperty Name="Correspondence_Type" ColumnName="Correspondence Type" />
+          <ScalarProperty Name="Salutation_Code" ColumnName="Salutation Code" />
+          <ScalarProperty Name="Search_E_Mail" ColumnName="Search E-Mail" />
+          <ScalarProperty Name="Last_Time_Modified" ColumnName="Last Time Modified" />
+          <ScalarProperty Name="E_Mail_2" ColumnName="E-Mail 2" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="KUB_Telekomunikasi_Sdn_Bhd_Item">
+      <EntityTypeMapping TypeName="KUB_TelModel.KUB_Telekomunikasi_Sdn_Bhd_Item">
+        <MappingFragment StoreEntitySet="KUB Telekomunikasi Sdn Bhd$Item">
+          <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+          <ScalarProperty Name="No_" ColumnName="No_" />
+          <ScalarProperty Name="No__2" ColumnName="No_ 2" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Search_Description" ColumnName="Search Description" />
+          <ScalarProperty Name="Description_2" ColumnName="Description 2" />
+          <ScalarProperty Name="Base_Unit_of_Measure" ColumnName="Base Unit of Measure" />
+          <ScalarProperty Name="Price_Unit_Conversion" ColumnName="Price Unit Conversion" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Inventory_Posting_Group" ColumnName="Inventory Posting Group" />
+          <ScalarProperty Name="Shelf_No_" ColumnName="Shelf No_" />
+          <ScalarProperty Name="Item_Disc__Group" ColumnName="Item Disc_ Group" />
+          <ScalarProperty Name="Allow_Invoice_Disc_" ColumnName="Allow Invoice Disc_" />
+          <ScalarProperty Name="Statistics_Group" ColumnName="Statistics Group" />
+          <ScalarProperty Name="Commission_Group" ColumnName="Commission Group" />
+          <ScalarProperty Name="Unit_Price" ColumnName="Unit Price" />
+          <ScalarProperty Name="Price_Profit_Calculation" ColumnName="Price_Profit Calculation" />
+          <ScalarProperty Name="Profit__" ColumnName="Profit _" />
+          <ScalarProperty Name="Costing_Method" ColumnName="Costing Method" />
+          <ScalarProperty Name="Unit_Cost" ColumnName="Unit Cost" />
+          <ScalarProperty Name="Standard_Cost" ColumnName="Standard Cost" />
+          <ScalarProperty Name="Last_Direct_Cost" ColumnName="Last Direct Cost" />
+          <ScalarProperty Name="Indirect_Cost__" ColumnName="Indirect Cost _" />
+          <ScalarProperty Name="Cost_is_Adjusted" ColumnName="Cost is Adjusted" />
+          <ScalarProperty Name="Allow_Online_Adjustment" ColumnName="Allow Online Adjustment" />
+          <ScalarProperty Name="Vendor_No_" ColumnName="Vendor No_" />
+          <ScalarProperty Name="Vendor_Item_No_" ColumnName="Vendor Item No_" />
+          <ScalarProperty Name="Lead_Time_Calculation" ColumnName="Lead Time Calculation" />
+          <ScalarProperty Name="Reorder_Point" ColumnName="Reorder Point" />
+          <ScalarProperty Name="Maximum_Inventory" ColumnName="Maximum Inventory" />
+          <ScalarProperty Name="Reorder_Quantity" ColumnName="Reorder Quantity" />
+          <ScalarProperty Name="Alternative_Item_No_" ColumnName="Alternative Item No_" />
+          <ScalarProperty Name="Unit_List_Price" ColumnName="Unit List Price" />
+          <ScalarProperty Name="Duty_Due__" ColumnName="Duty Due _" />
+          <ScalarProperty Name="Duty_Code" ColumnName="Duty Code" />
+          <ScalarProperty Name="Gross_Weight" ColumnName="Gross Weight" />
+          <ScalarProperty Name="Net_Weight" ColumnName="Net Weight" />
+          <ScalarProperty Name="Units_per_Parcel" ColumnName="Units per Parcel" />
+          <ScalarProperty Name="Unit_Volume" ColumnName="Unit Volume" />
+          <ScalarProperty Name="Durability" ColumnName="Durability" />
+          <ScalarProperty Name="Freight_Type" ColumnName="Freight Type" />
+          <ScalarProperty Name="Tariff_No_" ColumnName="Tariff No_" />
+          <ScalarProperty Name="Duty_Unit_Conversion" ColumnName="Duty Unit Conversion" />
+          <ScalarProperty Name="Country_Region_Purchased_Code" ColumnName="Country_Region Purchased Code" />
+          <ScalarProperty Name="Budget_Quantity" ColumnName="Budget Quantity" />
+          <ScalarProperty Name="Budgeted_Amount" ColumnName="Budgeted Amount" />
+          <ScalarProperty Name="Budget_Profit" ColumnName="Budget Profit" />
+          <ScalarProperty Name="Blocked" ColumnName="Blocked" />
+          <ScalarProperty Name="Last_Date_Modified" ColumnName="Last Date Modified" />
+          <ScalarProperty Name="Last_Time_Modified" ColumnName="Last Time Modified" />
+          <ScalarProperty Name="Price_Includes_VAT" ColumnName="Price Includes VAT" />
+          <ScalarProperty Name="VAT_Bus__Posting_Gr___Price_" ColumnName="VAT Bus_ Posting Gr_ (Price)" />
+          <ScalarProperty Name="Gen__Prod__Posting_Group" ColumnName="Gen_ Prod_ Posting Group" />
+          <ScalarProperty Name="Picture" ColumnName="Picture" />
+          <ScalarProperty Name="Country_Region_of_Origin_Code" ColumnName="Country_Region of Origin Code" />
+          <ScalarProperty Name="Automatic_Ext__Texts" ColumnName="Automatic Ext_ Texts" />
+          <ScalarProperty Name="No__Series" ColumnName="No_ Series" />
+          <ScalarProperty Name="Tax_Group_Code" ColumnName="Tax Group Code" />
+          <ScalarProperty Name="VAT_Prod__Posting_Group" ColumnName="VAT Prod_ Posting Group" />
+          <ScalarProperty Name="Reserve" ColumnName="Reserve" />
+          <ScalarProperty Name="Global_Dimension_1_Code" ColumnName="Global Dimension 1 Code" />
+          <ScalarProperty Name="Global_Dimension_2_Code" ColumnName="Global Dimension 2 Code" />
+          <ScalarProperty Name="Stockout_Warning" ColumnName="Stockout Warning" />
+          <ScalarProperty Name="Prevent_Negative_Inventory" ColumnName="Prevent Negative Inventory" />
+          <ScalarProperty Name="Application_Wksh__User_ID" ColumnName="Application Wksh_ User ID" />
+          <ScalarProperty Name="Assembly_Policy" ColumnName="Assembly Policy" />
+          <ScalarProperty Name="GTIN" ColumnName="GTIN" />
+          <ScalarProperty Name="Default_Deferral_Template_Code" ColumnName="Default Deferral Template Code" />
+          <ScalarProperty Name="Low_Level_Code" ColumnName="Low-Level Code" />
+          <ScalarProperty Name="Lot_Size" ColumnName="Lot Size" />
+          <ScalarProperty Name="Serial_Nos_" ColumnName="Serial Nos_" />
+          <ScalarProperty Name="Last_Unit_Cost_Calc__Date" ColumnName="Last Unit Cost Calc_ Date" />
+          <ScalarProperty Name="Rolled_up_Material_Cost" ColumnName="Rolled-up Material Cost" />
+          <ScalarProperty Name="Rolled_up_Capacity_Cost" ColumnName="Rolled-up Capacity Cost" />
+          <ScalarProperty Name="Scrap__" ColumnName="Scrap _" />
+          <ScalarProperty Name="Inventory_Value_Zero" ColumnName="Inventory Value Zero" />
+          <ScalarProperty Name="Discrete_Order_Quantity" ColumnName="Discrete Order Quantity" />
+          <ScalarProperty Name="Minimum_Order_Quantity" ColumnName="Minimum Order Quantity" />
+          <ScalarProperty Name="Maximum_Order_Quantity" ColumnName="Maximum Order Quantity" />
+          <ScalarProperty Name="Safety_Stock_Quantity" ColumnName="Safety Stock Quantity" />
+          <ScalarProperty Name="Order_Multiple" ColumnName="Order Multiple" />
+          <ScalarProperty Name="Safety_Lead_Time" ColumnName="Safety Lead Time" />
+          <ScalarProperty Name="Flushing_Method" ColumnName="Flushing Method" />
+          <ScalarProperty Name="Replenishment_System" ColumnName="Replenishment System" />
+          <ScalarProperty Name="Rounding_Precision" ColumnName="Rounding Precision" />
+          <ScalarProperty Name="Sales_Unit_of_Measure" ColumnName="Sales Unit of Measure" />
+          <ScalarProperty Name="Purch__Unit_of_Measure" ColumnName="Purch_ Unit of Measure" />
+          <ScalarProperty Name="Time_Bucket" ColumnName="Time Bucket" />
+          <ScalarProperty Name="Reordering_Policy" ColumnName="Reordering Policy" />
+          <ScalarProperty Name="Include_Inventory" ColumnName="Include Inventory" />
+          <ScalarProperty Name="Manufacturing_Policy" ColumnName="Manufacturing Policy" />
+          <ScalarProperty Name="Rescheduling_Period" ColumnName="Rescheduling Period" />
+          <ScalarProperty Name="Lot_Accumulation_Period" ColumnName="Lot Accumulation Period" />
+          <ScalarProperty Name="Dampener_Period" ColumnName="Dampener Period" />
+          <ScalarProperty Name="Dampener_Quantity" ColumnName="Dampener Quantity" />
+          <ScalarProperty Name="Overflow_Level" ColumnName="Overflow Level" />
+          <ScalarProperty Name="Manufacturer_Code" ColumnName="Manufacturer Code" />
+          <ScalarProperty Name="Item_Category_Code" ColumnName="Item Category Code" />
+          <ScalarProperty Name="Created_From_Nonstock_Item" ColumnName="Created From Nonstock Item" />
+          <ScalarProperty Name="Product_Group_Code" ColumnName="Product Group Code" />
+          <ScalarProperty Name="Service_Item_Group" ColumnName="Service Item Group" />
+          <ScalarProperty Name="Item_Tracking_Code" ColumnName="Item Tracking Code" />
+          <ScalarProperty Name="Lot_Nos_" ColumnName="Lot Nos_" />
+          <ScalarProperty Name="Expiration_Calculation" ColumnName="Expiration Calculation" />
+          <ScalarProperty Name="Warehouse_Class_Code" ColumnName="Warehouse Class Code" />
+          <ScalarProperty Name="Special_Equipment_Code" ColumnName="Special Equipment Code" />
+          <ScalarProperty Name="Put_away_Template_Code" ColumnName="Put-away Template Code" />
+          <ScalarProperty Name="Put_away_Unit_of_Measure_Code" ColumnName="Put-away Unit of Measure Code" />
+          <ScalarProperty Name="Phys_Invt_Counting_Period_Code" ColumnName="Phys Invt Counting Period Code" />
+          <ScalarProperty Name="Last_Counting_Period_Update" ColumnName="Last Counting Period Update" />
+          <ScalarProperty Name="Use_Cross_Docking" ColumnName="Use Cross-Docking" />
+          <ScalarProperty Name="Next_Counting_Start_Date" ColumnName="Next Counting Start Date" />
+          <ScalarProperty Name="Next_Counting_End_Date" ColumnName="Next Counting End Date" />
+          <ScalarProperty Name="Supply_Tax_Code" ColumnName="Supply Tax Code" />
+          <ScalarProperty Name="Purchase_Tax_Code" ColumnName="Purchase Tax Code" />
+          <ScalarProperty Name="WHT_Product_Posting_Group" ColumnName="WHT Product Posting Group" />
+          <ScalarProperty Name="Routing_No_" ColumnName="Routing No_" />
+          <ScalarProperty Name="Production_BOM_No_" ColumnName="Production BOM No_" />
+          <ScalarProperty Name="Single_Level_Material_Cost" ColumnName="Single-Level Material Cost" />
+          <ScalarProperty Name="Single_Level_Capacity_Cost" ColumnName="Single-Level Capacity Cost" />
+          <ScalarProperty Name="Single_Level_Subcontrd__Cost" ColumnName="Single-Level Subcontrd_ Cost" />
+          <ScalarProperty Name="Single_Level_Cap__Ovhd_Cost" ColumnName="Single-Level Cap_ Ovhd Cost" />
+          <ScalarProperty Name="Single_Level_Mfg__Ovhd_Cost" ColumnName="Single-Level Mfg_ Ovhd Cost" />
+          <ScalarProperty Name="Overhead_Rate" ColumnName="Overhead Rate" />
+          <ScalarProperty Name="Rolled_up_Subcontracted_Cost" ColumnName="Rolled-up Subcontracted Cost" />
+          <ScalarProperty Name="Rolled_up_Mfg__Ovhd_Cost" ColumnName="Rolled-up Mfg_ Ovhd Cost" />
+          <ScalarProperty Name="Rolled_up_Cap__Overhead_Cost" ColumnName="Rolled-up Cap_ Overhead Cost" />
+          <ScalarProperty Name="Order_Tracking_Policy" ColumnName="Order Tracking Policy" />
+          <ScalarProperty Name="Critical" ColumnName="Critical" />
+          <ScalarProperty Name="Common_Item_No_" ColumnName="Common Item No_" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="KUB_Telekomunikasi_Sdn_Bhd_Vendor">
+      <EntityTypeMapping TypeName="KUB_TelModel.KUB_Telekomunikasi_Sdn_Bhd_Vendor">
+        <MappingFragment StoreEntitySet="KUB Telekomunikasi Sdn Bhd$Vendor">
+          <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+          <ScalarProperty Name="No_" ColumnName="No_" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Search_Name" ColumnName="Search Name" />
+          <ScalarProperty Name="Name_2" ColumnName="Name 2" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Address_2" ColumnName="Address 2" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="Contact" ColumnName="Contact" />
+          <ScalarProperty Name="Phone_No_" ColumnName="Phone No_" />
+          <ScalarProperty Name="Telex_No_" ColumnName="Telex No_" />
+          <ScalarProperty Name="Our_Account_No_" ColumnName="Our Account No_" />
+          <ScalarProperty Name="Territory_Code" ColumnName="Territory Code" />
+          <ScalarProperty Name="Global_Dimension_1_Code" ColumnName="Global Dimension 1 Code" />
+          <ScalarProperty Name="Global_Dimension_2_Code" ColumnName="Global Dimension 2 Code" />
+          <ScalarProperty Name="Budgeted_Amount" ColumnName="Budgeted Amount" />
+          <ScalarProperty Name="Vendor_Posting_Group" ColumnName="Vendor Posting Group" />
+          <ScalarProperty Name="Currency_Code" ColumnName="Currency Code" />
+          <ScalarProperty Name="Language_Code" ColumnName="Language Code" />
+          <ScalarProperty Name="Statistics_Group" ColumnName="Statistics Group" />
+          <ScalarProperty Name="Payment_Terms_Code" ColumnName="Payment Terms Code" />
+          <ScalarProperty Name="Fin__Charge_Terms_Code" ColumnName="Fin_ Charge Terms Code" />
+          <ScalarProperty Name="Purchaser_Code" ColumnName="Purchaser Code" />
+          <ScalarProperty Name="Shipment_Method_Code" ColumnName="Shipment Method Code" />
+          <ScalarProperty Name="Shipping_Agent_Code" ColumnName="Shipping Agent Code" />
+          <ScalarProperty Name="Invoice_Disc__Code" ColumnName="Invoice Disc_ Code" />
+          <ScalarProperty Name="Country_Region_Code" ColumnName="Country_Region Code" />
+          <ScalarProperty Name="Blocked" ColumnName="Blocked" />
+          <ScalarProperty Name="Pay_to_Vendor_No_" ColumnName="Pay-to Vendor No_" />
+          <ScalarProperty Name="Priority" ColumnName="Priority" />
+          <ScalarProperty Name="Payment_Method_Code" ColumnName="Payment Method Code" />
+          <ScalarProperty Name="Last_Date_Modified" ColumnName="Last Date Modified" />
+          <ScalarProperty Name="Application_Method" ColumnName="Application Method" />
+          <ScalarProperty Name="Prices_Including_VAT" ColumnName="Prices Including VAT" />
+          <ScalarProperty Name="Fax_No_" ColumnName="Fax No_" />
+          <ScalarProperty Name="Telex_Answer_Back" ColumnName="Telex Answer Back" />
+          <ScalarProperty Name="VAT_Registration_No_" ColumnName="VAT Registration No_" />
+          <ScalarProperty Name="Gen__Bus__Posting_Group" ColumnName="Gen_ Bus_ Posting Group" />
+          <ScalarProperty Name="Picture" ColumnName="Picture" />
+          <ScalarProperty Name="GLN" ColumnName="GLN" />
+          <ScalarProperty Name="Post_Code" ColumnName="Post Code" />
+          <ScalarProperty Name="County" ColumnName="County" />
+          <ScalarProperty Name="E_Mail" ColumnName="E-Mail" />
+          <ScalarProperty Name="Home_Page" ColumnName="Home Page" />
+          <ScalarProperty Name="No__Series" ColumnName="No_ Series" />
+          <ScalarProperty Name="Tax_Area_Code" ColumnName="Tax Area Code" />
+          <ScalarProperty Name="Tax_Liable" ColumnName="Tax Liable" />
+          <ScalarProperty Name="VAT_Bus__Posting_Group" ColumnName="VAT Bus_ Posting Group" />
+          <ScalarProperty Name="Block_Payment_Tolerance" ColumnName="Block Payment Tolerance" />
+          <ScalarProperty Name="IC_Partner_Code" ColumnName="IC Partner Code" />
+          <ScalarProperty Name="Prepayment__" ColumnName="Prepayment _" />
+          <ScalarProperty Name="Partner_Type" ColumnName="Partner Type" />
+          <ScalarProperty Name="Image" ColumnName="Image" />
+          <ScalarProperty Name="Creditor_No_" ColumnName="Creditor No_" />
+          <ScalarProperty Name="Preferred_Bank_Account_Code" ColumnName="Preferred Bank Account Code" />
+          <ScalarProperty Name="Cash_Flow_Payment_Terms_Code" ColumnName="Cash Flow Payment Terms Code" />
+          <ScalarProperty Name="Primary_Contact_No_" ColumnName="Primary Contact No_" />
+          <ScalarProperty Name="Responsibility_Center" ColumnName="Responsibility Center" />
+          <ScalarProperty Name="Location_Code" ColumnName="Location Code" />
+          <ScalarProperty Name="Lead_Time_Calculation" ColumnName="Lead Time Calculation" />
+          <ScalarProperty Name="Base_Calendar_Code" ColumnName="Base Calendar Code" />
+          <ScalarProperty Name="Document_Sending_Profile" ColumnName="Document Sending Profile" />
+          <ScalarProperty Name="Address_3" ColumnName="Address 3" />
+          <ScalarProperty Name="Business_Registration_No_" ColumnName="Business Registration No_" />
+          <ScalarProperty Name="RMCD_Approval_No_" ColumnName="RMCD Approval No_" />
+          <ScalarProperty Name="Self_Billed_Prefix" ColumnName="Self Billed Prefix" />
+          <ScalarProperty Name="Self_Billed_Last_Used_No_" ColumnName="Self Billed Last Used No_" />
+          <ScalarProperty Name="Non_GST_Registrant_BK" ColumnName="Non GST Registrant BK" />
+          <ScalarProperty Name="GST_Registrant_Type" ColumnName="GST Registrant Type" />
+          <ScalarProperty Name="FRS_Approval_No_" ColumnName="FRS Approval No_" />
+          <ScalarProperty Name="WHT_Business_Posting_Group" ColumnName="WHT Business Posting Group" />
+          <ScalarProperty Name="WHT_Registration_ID" ColumnName="WHT Registration ID" />
+          <ScalarProperty Name="ID_No_" ColumnName="ID No_" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

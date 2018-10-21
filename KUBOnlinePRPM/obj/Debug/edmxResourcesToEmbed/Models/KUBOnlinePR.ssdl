@@ -1,0 +1,1064 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="KUBOnlinePRModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Customer">
+    <Key>
+      <PropertyRef Name="custId" />
+    </Key>
+    <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="custId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="150" />
+    <Property Name="abbreviation" Type="varchar" MaxLength="50" />
+    <Property Name="createDate" Type="datetime" />
+    <Property Name="createByUserId" Type="int" />
+    <Property Name="custRegNo" Type="varchar" MaxLength="50" />
+    <Property Name="type" Type="varchar" MaxLength="50" />
+    <Property Name="homeURL" Type="nvarchar" MaxLength="75" />
+    <Property Name="address" Type="nvarchar" MaxLength="150" />
+    <Property Name="telephoneNo" Type="int" />
+    <Property Name="modifiedDate" Type="datetime" />
+    <Property Name="modifiedByUserId" Type="int" />
+  </EntityType>
+  <EntityType Name="FileUpload">
+    <Key>
+      <PropertyRef Name="fileEntryId" />
+    </Key>
+    <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="fileEntryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="uploadUserId" Type="int" Nullable="false" />
+    <Property Name="uploadDate" Type="datetime" Nullable="false" />
+    <Property Name="FileName" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="FullPath" Type="nvarchar" MaxLength="255" />
+    <Property Name="description" Type="nvarchar" MaxLength="1000" />
+    <Property Name="Extension" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="File" Type="varbinary(max)" Nullable="false" />
+    <Property Name="archivedFlag" Type="bit" />
+  </EntityType>
+  <EntityType Name="ItemCode">
+    <Key>
+      <PropertyRef Name="codeId" />
+    </Key>
+    <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="codeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ItemCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="UoM" Type="nvarchar" MaxLength="10" />
+    <Property Name="createDate" Type="datetime" />
+    <Property Name="createByUserId" Type="int" />
+  </EntityType>
+  <EntityType Name="ItemType">
+    <Key>
+      <PropertyRef Name="itemTypeId" />
+    </Key>
+    <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="itemTypeId" Type="int" Nullable="false" />
+    <Property Name="type" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="NotificationMsg">
+    <Key>
+      <PropertyRef Name="msgId" />
+    </Key>
+    <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="msgId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="message" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="PRId" Type="int" />
+    <Property Name="POId" Type="int" />
+    <Property Name="fromUserId" Type="int" />
+    <Property Name="msgDate" Type="datetime" Nullable="false" />
+    <Property Name="msgType" Type="nvarchar" MaxLength="10" />
+    <Property Name="done" Type="bit" />
+  </EntityType>
+  <EntityType Name="NotiGroup">
+    <Key>
+      <PropertyRef Name="uuid" />
+    </Key>
+    <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="msgId" Type="int" Nullable="false" />
+    <Property Name="toUserId" Type="int" Nullable="false" />
+    <Property Name="resubmit" Type="bit" />
+  </EntityType>
+  <EntityType Name="PO_Item">
+    <Key>
+      <PropertyRef Name="uuid" />
+    </Key>
+    <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="itemsId" Type="int" Nullable="false" />
+    <Property Name="POId" Type="int" Nullable="false" />
+    <Property Name="dateRequired" Type="datetime" Nullable="false" />
+    <Property Name="description" Type="nvarchar" MaxLength="300" />
+    <Property Name="codeId" Type="int" Nullable="false" />
+    <Property Name="custPONo" Type="nvarchar" MaxLength="30" />
+    <Property Name="quantity" Type="int" Nullable="false" />
+    <Property Name="unitPrice" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="totalPrice" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PR_Admin">
+    <Key>
+      <PropertyRef Name="uuid" />
+    </Key>
+    <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="adminId" Type="int" Nullable="false" />
+    <Property Name="PRId" Type="int" Nullable="false" />
+    <Property Name="adminSaved" Type="int" Nullable="false" />
+    <Property Name="adminSubmited" Type="int" Nullable="false" />
+    <Property Name="adminSubmitDate" Type="datetime" />
+    <Property Name="lastModifyDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="PR_Approver">
+    <Key>
+      <PropertyRef Name="uuid" />
+    </Key>
+    <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="approverId" Type="int" Nullable="false" />
+    <Property Name="PRId" Type="int" Nullable="false" />
+    <Property Name="approverApproved" Type="int" Nullable="false" />
+    <Property Name="approverApprovedDate" Type="datetime" />
+    <Property Name="lastApprovedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="PR_HOD">
+    <Key>
+      <PropertyRef Name="uuid" />
+    </Key>
+    <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="HODId" Type="int" Nullable="false" />
+    <Property Name="PRId" Type="int" Nullable="false" />
+    <Property Name="HODApprovedP1" Type="int" Nullable="false" />
+    <Property Name="HODApprovedDate1" Type="datetime" />
+    <Property Name="HODApprovedP2" Type="int" Nullable="false" />
+    <Property Name="HODApprovedDate2" Type="datetime" />
+    <Property Name="LastHODApprovedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="PR_Items">
+    <Key>
+      <PropertyRef Name="itemsId" />
+    </Key>
+    <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="itemsId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="itemTypeId" Type="int" />
+    <Property Name="PRId" Type="int" Nullable="false" />
+    <Property Name="dateRequired" Type="datetime" Nullable="false" />
+    <Property Name="description" Type="nvarchar" MaxLength="300" />
+    <Property Name="codeId" Type="int" />
+    <Property Name="custPONo" Type="nvarchar" MaxLength="30" />
+    <Property Name="quantity" Type="int" Nullable="false" />
+    <Property Name="outStandingQuantity" Type="int" />
+    <Property Name="unitPrice" Type="numeric" Precision="18" Scale="2" />
+    <Property Name="totalPrice" Type="numeric" Precision="18" Scale="2" />
+    <Property Name="location" Type="nvarchar" MaxLength="100" />
+    <Property Name="jobNo" Type="int" />
+    <Property Name="jobTaskNo" Type="int" />
+    <Property Name="plannedReceiptDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="PR_Recommender">
+    <Key>
+      <PropertyRef Name="uuid" />
+    </Key>
+    <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="recommenderId" Type="int" Nullable="false" />
+    <Property Name="PRId" Type="int" Nullable="false" />
+    <Property Name="recommended" Type="int" Nullable="false" />
+    <Property Name="recommendedDate" Type="datetime" />
+    <Property Name="lastRecommendedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="PR_Reviewer">
+    <Key>
+      <PropertyRef Name="uuid" />
+    </Key>
+    <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="reviewerId" Type="int" Nullable="false" />
+    <Property Name="PRId" Type="int" Nullable="false" />
+    <Property Name="reviewed" Type="int" Nullable="false" />
+    <Property Name="reviewedDate" Type="datetime" />
+    <Property Name="lastReviewedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Project">
+    <Key>
+      <PropertyRef Name="projectId" />
+    </Key>
+    <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="projectId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="projectName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="paperVerified" Type="bit" Nullable="false" />
+    <Property Name="budgetedAmount" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="utilizedToDate" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="budgetBalance" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PRs_FileUpload">
+    <Key>
+      <PropertyRef Name="uuid" />
+    </Key>
+    <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="fileEntryId" Type="int" Nullable="false" />
+    <Property Name="PRId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PRStatus">
+    <Key>
+      <PropertyRef Name="statusId" />
+    </Key>
+    <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="statusId" Type="nchar" MaxLength="4" Nullable="false" />
+    <Property Name="status" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="PurchaseOrder">
+    <Key>
+      <PropertyRef Name="POId" />
+    </Key>
+    <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="POId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PRId" Type="int" />
+    <Property Name="PONo" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="PODate" Type="datetime" Nullable="false" />
+    <Property Name="projectId" Type="int" Nullable="false" />
+    <Property Name="vendorId" Type="int" Nullable="false" />
+    <Property Name="vendorStaffId" Type="int" />
+    <Property Name="Saved" Type="int" />
+    <Property Name="PreparedDate" Type="datetime" />
+    <Property Name="PreparedById" Type="int" />
+    <Property Name="LastModifyDate" Type="datetime" />
+    <Property Name="Submited" Type="bit" />
+    <Property Name="SubmitDate" Type="datetime" />
+    <Property Name="POAging" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PurchaseRequisition">
+    <Key>
+      <PropertyRef Name="PRId" />
+    </Key>
+    <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="PRId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CustId" Type="int" Nullable="false" />
+    <Property Name="PRNo" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="ProjectId" Type="int" Nullable="false" />
+    <Property Name="Unbudgeted" Type="bit" Nullable="false" />
+    <Property Name="PaperRefNo" Type="nvarchar" MaxLength="30" />
+    <Property Name="FileEntryId" Type="int" />
+    <Property Name="PurchaseTypeId" Type="int" Nullable="false" />
+    <Property Name="BudgetDescription" Type="nvarchar" MaxLength="100" />
+    <Property Name="Justification" Type="nvarchar" MaxLength="200" />
+    <Property Name="AmountRequired" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="VendorId" Type="int" />
+    <Property Name="VendorStaffId" Type="int" />
+    <Property Name="VendorQuoteNo" Type="nvarchar" MaxLength="30" />
+    <Property Name="BidWaiverRefNo" Type="nvarchar" MaxLength="30" />
+    <Property Name="PreparedDate" Type="datetime" Nullable="false" />
+    <Property Name="PreparedById" Type="int" Nullable="false" />
+    <Property Name="LastModifyDate" Type="datetime" />
+    <Property Name="Saved" Type="int" Nullable="false" />
+    <Property Name="Submited" Type="int" Nullable="false" />
+    <Property Name="SubmitDate" Type="datetime" />
+    <Property Name="LastSubmitedDate" Type="datetime" />
+    <Property Name="Rejected" Type="int" Nullable="false" />
+    <Property Name="RejectedRemark" Type="nvarchar" MaxLength="300" />
+    <Property Name="RejectedById" Type="int" />
+    <Property Name="RejectedDate" Type="datetime" />
+    <Property Name="Phase1Completed" Type="bit" Nullable="false" />
+    <Property Name="PRType" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="POId" Type="int" />
+    <Property Name="AmountPOBalance" Type="numeric" Precision="18" Scale="2" />
+    <Property Name="Phase2Completed" Type="bit" Nullable="false" />
+    <Property Name="PRAging" Type="int" />
+    <Property Name="StatusId" Type="nchar" MaxLength="4" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PurchaseType">
+    <Key>
+      <PropertyRef Name="purchaseTypeId" />
+    </Key>
+    <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="purchaseTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="purchaseType" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="roleId" />
+    </Key>
+    <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="roleId" Type="char" MaxLength="10" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="75" />
+    <Property Name="description" Type="varchar" MaxLength="2000" />
+    <Property Name="canViewAllOppo" Type="bit" />
+    <Property Name="canAddUser" Type="bit" />
+    <Property Name="canAddCustomer" Type="bit" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="userId" />
+    </Key>
+    <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="userId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="companyId" Type="int" />
+    <Property Name="createByUserId" Type="int" />
+    <Property Name="createDate" Type="datetime" />
+    <Property Name="modifiedByUserId" Type="int" />
+    <Property Name="modifiedDate" Type="datetime" />
+    <Property Name="userName" Type="nvarchar" MaxLength="75" />
+    <Property Name="password" Type="nvarchar" MaxLength="75" />
+    <Property Name="passwordReset" Type="bit" />
+    <Property Name="passwordModifiedDate" Type="datetime" />
+    <Property Name="reminderQueryQuestion" Type="varchar" MaxLength="75" />
+    <Property Name="reminderQueryAnswer" Type="varchar" MaxLength="75" />
+    <Property Name="emailAddress" Type="nvarchar" MaxLength="75" />
+    <Property Name="firstName" Type="nvarchar" MaxLength="75" />
+    <Property Name="lastName" Type="nvarchar" MaxLength="75" />
+    <Property Name="employeeNo" Type="nchar" MaxLength="10" />
+    <Property Name="jobTitle" Type="varchar" MaxLength="100" />
+    <Property Name="superiorId" Type="int" />
+    <Property Name="loginDate" Type="datetime" />
+    <Property Name="loginLatLng" Type="nvarchar" MaxLength="75" />
+    <Property Name="loginAddress" Type="nvarchar" MaxLength="75" />
+    <Property Name="lastLoginDate" Type="datetime" />
+    <Property Name="lastFailedLoginDate" Type="datetime" />
+    <Property Name="failedLoginAttempts" Type="int" />
+    <Property Name="lockout" Type="bit" />
+    <Property Name="lockoutDate" Type="datetime" />
+    <Property Name="status" Type="bit" />
+    <Property Name="telephoneNo" Type="varchar" MaxLength="20" />
+    <Property Name="address" Type="nvarchar" MaxLength="100" />
+    <Property Name="extensionNo" Type="int" />
+  </EntityType>
+  <EntityType Name="Users_Roles">
+    <Key>
+      <PropertyRef Name="uuid" />
+    </Key>
+    <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="userId" Type="int" Nullable="false" />
+    <Property Name="roleId" Type="char" MaxLength="10" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Vendor">
+    <Key>
+      <PropertyRef Name="vendorId" />
+    </Key>
+    <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="vendorId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="createByUserId" Type="int" />
+    <Property Name="createDate" Type="datetime" />
+    <Property Name="lastModifyByUserId" Type="int" />
+    <Property Name="lastModifyDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="VendorStaff">
+    <Key>
+      <PropertyRef Name="staffId" />
+    </Key>
+    <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="staffId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="vendorId" Type="int" Nullable="false" />
+    <Property Name="vendorContactName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="vendorEmail" Type="nvarchar" MaxLength="50" />
+    <Property Name="vendorContactNo" Type="nvarchar" MaxLength="30" />
+    <Property Name="createByUserId" Type="int" />
+    <Property Name="lastModifyByUserId" Type="int" />
+    <Property Name="createDate" Type="datetime" />
+    <Property Name="lastModifyDate" Type="datetime" />
+  </EntityType>
+  <Association Name="FK_Customer_User">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="Customer" Type="Self.Customer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="Customer">
+        <PropertyRef Name="createByUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Customer_User1">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="Customer" Type="Self.Customer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="Customer">
+        <PropertyRef Name="modifiedByUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FileUpload_User">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="FileUpload" Type="Self.FileUpload" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="FileUpload">
+        <PropertyRef Name="uploadUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ItemCodes_User">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="ItemCode" Type="Self.ItemCode" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="ItemCode">
+        <PropertyRef Name="createByUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_NotiGroup_NotificationMsg">
+    <End Role="NotificationMsg" Type="Self.NotificationMsg" Multiplicity="1" />
+    <End Role="NotiGroup" Type="Self.NotiGroup" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="NotificationMsg">
+        <PropertyRef Name="msgId" />
+      </Principal>
+      <Dependent Role="NotiGroup">
+        <PropertyRef Name="msgId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_NotiGroup_User">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="NotiGroup" Type="Self.NotiGroup" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="NotiGroup">
+        <PropertyRef Name="toUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PO_Item_ItemCodes">
+    <End Role="ItemCode" Type="Self.ItemCode" Multiplicity="1" />
+    <End Role="PO_Item" Type="Self.PO_Item" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ItemCode">
+        <PropertyRef Name="codeId" />
+      </Principal>
+      <Dependent Role="PO_Item">
+        <PropertyRef Name="codeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PO_Item_PR_Items">
+    <End Role="PR_Items" Type="Self.PR_Items" Multiplicity="1" />
+    <End Role="PO_Item" Type="Self.PO_Item" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PR_Items">
+        <PropertyRef Name="itemsId" />
+      </Principal>
+      <Dependent Role="PO_Item">
+        <PropertyRef Name="itemsId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PO_Item_PurchaseOrder">
+    <End Role="PurchaseOrder" Type="Self.PurchaseOrder" Multiplicity="1" />
+    <End Role="PO_Item" Type="Self.PO_Item" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PurchaseOrder">
+        <PropertyRef Name="POId" />
+      </Principal>
+      <Dependent Role="PO_Item">
+        <PropertyRef Name="POId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PR_Admin_PurchaseRequisition">
+    <End Role="PurchaseRequisition" Type="Self.PurchaseRequisition" Multiplicity="1" />
+    <End Role="PR_Admin" Type="Self.PR_Admin" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PurchaseRequisition">
+        <PropertyRef Name="PRId" />
+      </Principal>
+      <Dependent Role="PR_Admin">
+        <PropertyRef Name="PRId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PR_Approver_PurchaseRequisition">
+    <End Role="PurchaseRequisition" Type="Self.PurchaseRequisition" Multiplicity="1" />
+    <End Role="PR_Approver" Type="Self.PR_Approver" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PurchaseRequisition">
+        <PropertyRef Name="PRId" />
+      </Principal>
+      <Dependent Role="PR_Approver">
+        <PropertyRef Name="PRId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PR_Approver_User">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="PR_Approver" Type="Self.PR_Approver" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="PR_Approver">
+        <PropertyRef Name="approverId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PR_HOD_PurchaseRequisition">
+    <End Role="PurchaseRequisition" Type="Self.PurchaseRequisition" Multiplicity="1" />
+    <End Role="PR_HOD" Type="Self.PR_HOD" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PurchaseRequisition">
+        <PropertyRef Name="PRId" />
+      </Principal>
+      <Dependent Role="PR_HOD">
+        <PropertyRef Name="PRId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PR_HOD_User">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="PR_HOD" Type="Self.PR_HOD" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="PR_HOD">
+        <PropertyRef Name="HODId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PR_Items_ItemCode">
+    <End Role="ItemCode" Type="Self.ItemCode" Multiplicity="0..1" />
+    <End Role="PR_Items" Type="Self.PR_Items" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ItemCode">
+        <PropertyRef Name="codeId" />
+      </Principal>
+      <Dependent Role="PR_Items">
+        <PropertyRef Name="codeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PR_Items_ItemType">
+    <End Role="ItemType" Type="Self.ItemType" Multiplicity="0..1" />
+    <End Role="PR_Items" Type="Self.PR_Items" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ItemType">
+        <PropertyRef Name="itemTypeId" />
+      </Principal>
+      <Dependent Role="PR_Items">
+        <PropertyRef Name="itemTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PR_Items_PurchaseRequisition">
+    <End Role="PurchaseRequisition" Type="Self.PurchaseRequisition" Multiplicity="1" />
+    <End Role="PR_Items" Type="Self.PR_Items" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PurchaseRequisition">
+        <PropertyRef Name="PRId" />
+      </Principal>
+      <Dependent Role="PR_Items">
+        <PropertyRef Name="PRId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PR_Recommender_PurchaseRequisition">
+    <End Role="PurchaseRequisition" Type="Self.PurchaseRequisition" Multiplicity="1" />
+    <End Role="PR_Recommender" Type="Self.PR_Recommender" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PurchaseRequisition">
+        <PropertyRef Name="PRId" />
+      </Principal>
+      <Dependent Role="PR_Recommender">
+        <PropertyRef Name="PRId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PR_Recommender_User">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="PR_Recommender" Type="Self.PR_Recommender" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="PR_Recommender">
+        <PropertyRef Name="recommenderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PR_Reviewer_PurchaseRequisition">
+    <End Role="PurchaseRequisition" Type="Self.PurchaseRequisition" Multiplicity="1" />
+    <End Role="PR_Reviewer" Type="Self.PR_Reviewer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PurchaseRequisition">
+        <PropertyRef Name="PRId" />
+      </Principal>
+      <Dependent Role="PR_Reviewer">
+        <PropertyRef Name="PRId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PR_Reviewer_User">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="PR_Reviewer" Type="Self.PR_Reviewer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="PR_Reviewer">
+        <PropertyRef Name="reviewerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PRs_FileUpload_FileUpload">
+    <End Role="FileUpload" Type="Self.FileUpload" Multiplicity="1" />
+    <End Role="PRs_FileUpload" Type="Self.PRs_FileUpload" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FileUpload">
+        <PropertyRef Name="fileEntryId" />
+      </Principal>
+      <Dependent Role="PRs_FileUpload">
+        <PropertyRef Name="fileEntryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PRs_FileUpload_PurchaseRequisition">
+    <End Role="PurchaseRequisition" Type="Self.PurchaseRequisition" Multiplicity="1" />
+    <End Role="PRs_FileUpload" Type="Self.PRs_FileUpload" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PurchaseRequisition">
+        <PropertyRef Name="PRId" />
+      </Principal>
+      <Dependent Role="PRs_FileUpload">
+        <PropertyRef Name="PRId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PurchaseOrder_Project">
+    <End Role="Project" Type="Self.Project" Multiplicity="1" />
+    <End Role="PurchaseOrder" Type="Self.PurchaseOrder" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Project">
+        <PropertyRef Name="projectId" />
+      </Principal>
+      <Dependent Role="PurchaseOrder">
+        <PropertyRef Name="projectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PurchaseOrder_PurchaseRequisition">
+    <End Role="PurchaseRequisition" Type="Self.PurchaseRequisition" Multiplicity="0..1" />
+    <End Role="PurchaseOrder" Type="Self.PurchaseOrder" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PurchaseRequisition">
+        <PropertyRef Name="PRId" />
+      </Principal>
+      <Dependent Role="PurchaseOrder">
+        <PropertyRef Name="PRId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PurchaseOrder_Vendor">
+    <End Role="Vendor" Type="Self.Vendor" Multiplicity="1" />
+    <End Role="PurchaseOrder" Type="Self.PurchaseOrder" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Vendor">
+        <PropertyRef Name="vendorId" />
+      </Principal>
+      <Dependent Role="PurchaseOrder">
+        <PropertyRef Name="vendorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PurchaseOrder_VendorStaff">
+    <End Role="VendorStaff" Type="Self.VendorStaff" Multiplicity="0..1" />
+    <End Role="PurchaseOrder" Type="Self.PurchaseOrder" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="VendorStaff">
+        <PropertyRef Name="staffId" />
+      </Principal>
+      <Dependent Role="PurchaseOrder">
+        <PropertyRef Name="vendorStaffId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PurchaseRequisition_Customer">
+    <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+    <End Role="PurchaseRequisition" Type="Self.PurchaseRequisition" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="custId" />
+      </Principal>
+      <Dependent Role="PurchaseRequisition">
+        <PropertyRef Name="CustId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PurchaseRequisition_FileUpload">
+    <End Role="FileUpload" Type="Self.FileUpload" Multiplicity="0..1" />
+    <End Role="PurchaseRequisition" Type="Self.PurchaseRequisition" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FileUpload">
+        <PropertyRef Name="fileEntryId" />
+      </Principal>
+      <Dependent Role="PurchaseRequisition">
+        <PropertyRef Name="FileEntryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PurchaseRequisition_Project">
+    <End Role="Project" Type="Self.Project" Multiplicity="1" />
+    <End Role="PurchaseRequisition" Type="Self.PurchaseRequisition" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Project">
+        <PropertyRef Name="projectId" />
+      </Principal>
+      <Dependent Role="PurchaseRequisition">
+        <PropertyRef Name="ProjectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PurchaseRequisition_PRStatus">
+    <End Role="PRStatus" Type="Self.PRStatus" Multiplicity="1" />
+    <End Role="PurchaseRequisition" Type="Self.PurchaseRequisition" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PRStatus">
+        <PropertyRef Name="statusId" />
+      </Principal>
+      <Dependent Role="PurchaseRequisition">
+        <PropertyRef Name="StatusId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PurchaseRequisition_PurchaseType">
+    <End Role="PurchaseType" Type="Self.PurchaseType" Multiplicity="1" />
+    <End Role="PurchaseRequisition" Type="Self.PurchaseRequisition" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PurchaseType">
+        <PropertyRef Name="purchaseTypeId" />
+      </Principal>
+      <Dependent Role="PurchaseRequisition">
+        <PropertyRef Name="PurchaseTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PurchaseRequisition_User">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="PurchaseRequisition" Type="Self.PurchaseRequisition" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="PurchaseRequisition">
+        <PropertyRef Name="PreparedById" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PurchaseRequisition_Vendor">
+    <End Role="Vendor" Type="Self.Vendor" Multiplicity="0..1" />
+    <End Role="PurchaseRequisition" Type="Self.PurchaseRequisition" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Vendor">
+        <PropertyRef Name="vendorId" />
+      </Principal>
+      <Dependent Role="PurchaseRequisition">
+        <PropertyRef Name="VendorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PurchaseRequisition_VendorStaff">
+    <End Role="VendorStaff" Type="Self.VendorStaff" Multiplicity="0..1" />
+    <End Role="PurchaseRequisition" Type="Self.PurchaseRequisition" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="VendorStaff">
+        <PropertyRef Name="staffId" />
+      </Principal>
+      <Dependent Role="PurchaseRequisition">
+        <PropertyRef Name="VendorStaffId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_Customer">
+    <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+    <End Role="User" Type="Self.User" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="custId" />
+      </Principal>
+      <Dependent Role="User">
+        <PropertyRef Name="companyId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Users_Roles_Role">
+    <End Role="Role" Type="Self.Role" Multiplicity="1" />
+    <End Role="Users_Roles" Type="Self.Users_Roles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="roleId" />
+      </Principal>
+      <Dependent Role="Users_Roles">
+        <PropertyRef Name="roleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Users_Roles_User">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="Users_Roles" Type="Self.Users_Roles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="Users_Roles">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Vendor_User">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="Vendor" Type="Self.Vendor" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="Vendor">
+        <PropertyRef Name="createByUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Vendor_User1">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="Vendor" Type="Self.Vendor" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="Vendor">
+        <PropertyRef Name="lastModifyByUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VendorStaff_User">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="VendorStaff" Type="Self.VendorStaff" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="VendorStaff">
+        <PropertyRef Name="createByUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VendorStaff_User1">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="VendorStaff" Type="Self.VendorStaff" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="VendorStaff">
+        <PropertyRef Name="lastModifyByUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VendorStaff_Vendor">
+    <End Role="Vendor" Type="Self.Vendor" Multiplicity="1" />
+    <End Role="VendorStaff" Type="Self.VendorStaff" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Vendor">
+        <PropertyRef Name="vendorId" />
+      </Principal>
+      <Dependent Role="VendorStaff">
+        <PropertyRef Name="vendorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="KUBOnlinePRModelStoreContainer">
+    <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="FileUpload" EntityType="Self.FileUpload" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ItemCode" EntityType="Self.ItemCode" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ItemType" EntityType="Self.ItemType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="NotificationMsg" EntityType="Self.NotificationMsg" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="NotiGroup" EntityType="Self.NotiGroup" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PO_Item" EntityType="Self.PO_Item" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PR_Admin" EntityType="Self.PR_Admin" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PR_Approver" EntityType="Self.PR_Approver" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PR_HOD" EntityType="Self.PR_HOD" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PR_Items" EntityType="Self.PR_Items" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PR_Recommender" EntityType="Self.PR_Recommender" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PR_Reviewer" EntityType="Self.PR_Reviewer" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Project" EntityType="Self.Project" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PRs_FileUpload" EntityType="Self.PRs_FileUpload" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PRStatus" EntityType="Self.PRStatus" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PurchaseOrder" EntityType="Self.PurchaseOrder" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PurchaseRequisition" EntityType="Self.PurchaseRequisition" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PurchaseType" EntityType="Self.PurchaseType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Users_Roles" EntityType="Self.Users_Roles" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Vendor" EntityType="Self.Vendor" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VendorStaff" EntityType="Self.VendorStaff" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Customer_User" Association="Self.FK_Customer_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="Customer" EntitySet="Customer" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Customer_User1" Association="Self.FK_Customer_User1">
+      <End Role="User" EntitySet="User" />
+      <End Role="Customer" EntitySet="Customer" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FileUpload_User" Association="Self.FK_FileUpload_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="FileUpload" EntitySet="FileUpload" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ItemCodes_User" Association="Self.FK_ItemCodes_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="ItemCode" EntitySet="ItemCode" />
+    </AssociationSet>
+    <AssociationSet Name="FK_NotiGroup_NotificationMsg" Association="Self.FK_NotiGroup_NotificationMsg">
+      <End Role="NotificationMsg" EntitySet="NotificationMsg" />
+      <End Role="NotiGroup" EntitySet="NotiGroup" />
+    </AssociationSet>
+    <AssociationSet Name="FK_NotiGroup_User" Association="Self.FK_NotiGroup_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="NotiGroup" EntitySet="NotiGroup" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PO_Item_ItemCodes" Association="Self.FK_PO_Item_ItemCodes">
+      <End Role="ItemCode" EntitySet="ItemCode" />
+      <End Role="PO_Item" EntitySet="PO_Item" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PO_Item_PR_Items" Association="Self.FK_PO_Item_PR_Items">
+      <End Role="PR_Items" EntitySet="PR_Items" />
+      <End Role="PO_Item" EntitySet="PO_Item" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PO_Item_PurchaseOrder" Association="Self.FK_PO_Item_PurchaseOrder">
+      <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
+      <End Role="PO_Item" EntitySet="PO_Item" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PR_Admin_PurchaseRequisition" Association="Self.FK_PR_Admin_PurchaseRequisition">
+      <End Role="PurchaseRequisition" EntitySet="PurchaseRequisition" />
+      <End Role="PR_Admin" EntitySet="PR_Admin" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PR_Approver_PurchaseRequisition" Association="Self.FK_PR_Approver_PurchaseRequisition">
+      <End Role="PurchaseRequisition" EntitySet="PurchaseRequisition" />
+      <End Role="PR_Approver" EntitySet="PR_Approver" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PR_Approver_User" Association="Self.FK_PR_Approver_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="PR_Approver" EntitySet="PR_Approver" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PR_HOD_PurchaseRequisition" Association="Self.FK_PR_HOD_PurchaseRequisition">
+      <End Role="PurchaseRequisition" EntitySet="PurchaseRequisition" />
+      <End Role="PR_HOD" EntitySet="PR_HOD" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PR_HOD_User" Association="Self.FK_PR_HOD_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="PR_HOD" EntitySet="PR_HOD" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PR_Items_ItemCode" Association="Self.FK_PR_Items_ItemCode">
+      <End Role="ItemCode" EntitySet="ItemCode" />
+      <End Role="PR_Items" EntitySet="PR_Items" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PR_Items_ItemType" Association="Self.FK_PR_Items_ItemType">
+      <End Role="ItemType" EntitySet="ItemType" />
+      <End Role="PR_Items" EntitySet="PR_Items" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PR_Items_PurchaseRequisition" Association="Self.FK_PR_Items_PurchaseRequisition">
+      <End Role="PurchaseRequisition" EntitySet="PurchaseRequisition" />
+      <End Role="PR_Items" EntitySet="PR_Items" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PR_Recommender_PurchaseRequisition" Association="Self.FK_PR_Recommender_PurchaseRequisition">
+      <End Role="PurchaseRequisition" EntitySet="PurchaseRequisition" />
+      <End Role="PR_Recommender" EntitySet="PR_Recommender" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PR_Recommender_User" Association="Self.FK_PR_Recommender_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="PR_Recommender" EntitySet="PR_Recommender" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PR_Reviewer_PurchaseRequisition" Association="Self.FK_PR_Reviewer_PurchaseRequisition">
+      <End Role="PurchaseRequisition" EntitySet="PurchaseRequisition" />
+      <End Role="PR_Reviewer" EntitySet="PR_Reviewer" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PR_Reviewer_User" Association="Self.FK_PR_Reviewer_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="PR_Reviewer" EntitySet="PR_Reviewer" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PRs_FileUpload_FileUpload" Association="Self.FK_PRs_FileUpload_FileUpload">
+      <End Role="FileUpload" EntitySet="FileUpload" />
+      <End Role="PRs_FileUpload" EntitySet="PRs_FileUpload" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PRs_FileUpload_PurchaseRequisition" Association="Self.FK_PRs_FileUpload_PurchaseRequisition">
+      <End Role="PurchaseRequisition" EntitySet="PurchaseRequisition" />
+      <End Role="PRs_FileUpload" EntitySet="PRs_FileUpload" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PurchaseOrder_Project" Association="Self.FK_PurchaseOrder_Project">
+      <End Role="Project" EntitySet="Project" />
+      <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PurchaseOrder_PurchaseRequisition" Association="Self.FK_PurchaseOrder_PurchaseRequisition">
+      <End Role="PurchaseRequisition" EntitySet="PurchaseRequisition" />
+      <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PurchaseOrder_Vendor" Association="Self.FK_PurchaseOrder_Vendor">
+      <End Role="Vendor" EntitySet="Vendor" />
+      <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PurchaseOrder_VendorStaff" Association="Self.FK_PurchaseOrder_VendorStaff">
+      <End Role="VendorStaff" EntitySet="VendorStaff" />
+      <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PurchaseRequisition_Customer" Association="Self.FK_PurchaseRequisition_Customer">
+      <End Role="Customer" EntitySet="Customer" />
+      <End Role="PurchaseRequisition" EntitySet="PurchaseRequisition" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PurchaseRequisition_FileUpload" Association="Self.FK_PurchaseRequisition_FileUpload">
+      <End Role="FileUpload" EntitySet="FileUpload" />
+      <End Role="PurchaseRequisition" EntitySet="PurchaseRequisition" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PurchaseRequisition_Project" Association="Self.FK_PurchaseRequisition_Project">
+      <End Role="Project" EntitySet="Project" />
+      <End Role="PurchaseRequisition" EntitySet="PurchaseRequisition" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PurchaseRequisition_PRStatus" Association="Self.FK_PurchaseRequisition_PRStatus">
+      <End Role="PRStatus" EntitySet="PRStatus" />
+      <End Role="PurchaseRequisition" EntitySet="PurchaseRequisition" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PurchaseRequisition_PurchaseType" Association="Self.FK_PurchaseRequisition_PurchaseType">
+      <End Role="PurchaseType" EntitySet="PurchaseType" />
+      <End Role="PurchaseRequisition" EntitySet="PurchaseRequisition" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PurchaseRequisition_User" Association="Self.FK_PurchaseRequisition_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="PurchaseRequisition" EntitySet="PurchaseRequisition" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PurchaseRequisition_Vendor" Association="Self.FK_PurchaseRequisition_Vendor">
+      <End Role="Vendor" EntitySet="Vendor" />
+      <End Role="PurchaseRequisition" EntitySet="PurchaseRequisition" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PurchaseRequisition_VendorStaff" Association="Self.FK_PurchaseRequisition_VendorStaff">
+      <End Role="VendorStaff" EntitySet="VendorStaff" />
+      <End Role="PurchaseRequisition" EntitySet="PurchaseRequisition" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_Customer" Association="Self.FK_User_Customer">
+      <End Role="Customer" EntitySet="Customer" />
+      <End Role="User" EntitySet="User" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Users_Roles_Role" Association="Self.FK_Users_Roles_Role">
+      <End Role="Role" EntitySet="Role" />
+      <End Role="Users_Roles" EntitySet="Users_Roles" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Users_Roles_User" Association="Self.FK_Users_Roles_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="Users_Roles" EntitySet="Users_Roles" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Vendor_User" Association="Self.FK_Vendor_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="Vendor" EntitySet="Vendor" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Vendor_User1" Association="Self.FK_Vendor_User1">
+      <End Role="User" EntitySet="User" />
+      <End Role="Vendor" EntitySet="Vendor" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VendorStaff_User" Association="Self.FK_VendorStaff_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="VendorStaff" EntitySet="VendorStaff" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VendorStaff_User1" Association="Self.FK_VendorStaff_User1">
+      <End Role="User" EntitySet="User" />
+      <End Role="VendorStaff" EntitySet="VendorStaff" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VendorStaff_Vendor" Association="Self.FK_VendorStaff_Vendor">
+      <End Role="Vendor" EntitySet="Vendor" />
+      <End Role="VendorStaff" EntitySet="VendorStaff" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,192 @@
+﻿html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+
+body, body {
+    display: flex;
+}
+
+form {
+    margin: auto;
+}
+
+.u-header-logo {
+    width: 108px;
+    height: 40px;
+    margin-bottom: 5px;
+}
+
+.u-header__section--admin-dark {
+    background-color: #D3E3FC;
+    color: white;
+}
+
+.u-sidebar-navigation--light {
+    background-color: #77A6F7;
+}
+
+    .u-sidebar-navigation--light .u-side-nav--has-sub-menu.u-side-nav-opened {
+        background-color: #77A6F7;
+    }
+
+    .u-sidebar-navigation--light .u-side-nav--top-level-menu-item:hover {
+        background-color: lightblue;
+    }
+
+    .u-sidebar-navigation--light.u-sidebar-navigation-v1--mini .u-side-nav--second-level-menu {
+        background-color: lightblue;
+    } 
+    
+    .g-bg-default {
+        background-color: #F2F2F2;
+    }
+
+.u-sidebar-navigation--light .u-side-nav--top-level-menu-link:hover {
+    background-color: lightblue;
+}
+
+.u-header__section--admin-dark [aria-labelledby] {
+    background-color: #D3E3FC;
+}
+
+    .u-header__section--admin-dark .u-header-logo-toggler {
+        background-color: #D3E3FC;
+    }
+
+    .u-header__section--admin-dark .u-header-dropdown-bordered-v1 {
+        border-bottom-color: #D3E3FC;
+    }
+
+    .u-header__section--admin-dark [aria-labelledby] i {
+        color:inherit;
+    }
+
+    .u-header__section--admin-dark [data-dropdown-target] i {
+        color:inherit;
+    }
+
+.g-color-secondary {
+    color: inherit!important;
+}
+
+.custom-select {
+    display:block;
+}
+
+    .u-btn-outline-primary {
+    color: black;
+    border-color: #e62154;
+    background-color: transparent;
+}
+
+.u-nav-v4-1.u-nav-primary .nav-link.active {
+    border-color: #72c02c darkgray white;
+    background-color: white;
+}
+
+.container-fluid-v2 {
+    padding-right:0px;    
+}
+
+.g-overflow-x-hidden {
+     overflow-x: visible; 
+}
+
+div.container-fluid-v3 {
+    width: 100%;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba( 255, 255, 255, .8 ) url('../Images/ajax_loader.gif') 50% 50% no-repeat;
+}
+
+body.loading {
+    overflow: hidden;
+}
+
+    /* Anytime the body has the loading class, our
+   modal element will be visible */
+    body.loading .modal {
+        display: block;
+    }
+
+@media (min-width: 576px) {
+    .u-header__section--admin-dark [data-dropdown-target].active i {
+        color: inherit;
+    }
+
+    .u-header__section--admin-dark .u-header-icon-v1.active {
+        background-color: inherit;
+    }
+}
+
+.g-brd--black {
+    border-left: solid;
+    border-right: solid;
+    border-bottom: solid;
+    border-width: 1px;
+    border-color: darkgray;
+}
+
+/*span {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+}*/
+
+.formfield {
+  height: 50px;
+  line-height: 50px;
+}
+
+/*.hide {
+    display:none;
+}*/
+
+.progress {
+    background-color: lightgray;
+}
+
+.col {
+    flex-basis:auto!important;
+}
+
+.chart-container {
+    position: relative;
+    margin: auto;
+    height: 300px;
+    width: 100%;
+}
+
+#myDiv {
+    background-color: white;
+    position: absolute;
+    margin-top: -130px;
+    margin-left: -5%;
+}
+
+@media (max-width: 480px) {
+    #myDiv {
+        margin-left: -5%;
+    }
+
+    .col-xs-12 {
+        padding-left: 0px!important;
+    }
+
+    .chart-container-xs {
+        position: relative;
+        margin: auto;
+        height: 300px;
+        width: 60vw;
+    }
+}

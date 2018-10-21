@@ -1,0 +1,401 @@
+﻿@model KUBOnlinePRPM.Models.PRModel
+
+<!-- Breadcrumb-v1 -->
+<div class="g-hidden-sm-down g-bg-gray-light-v8 g-pa-20 g-mb-30">
+    <ul class="u-list-inline g-color-gray-dark-v6">
+        <li class="list-inline-item g-mr-10">
+            <a class="u-link-v5 g-color-gray-dark-v6 g-color-lightblue-v3--hover g-valign-middle" href="~/PR">Home</a>
+            <i class="hs-admin-angle-right g-font-size-12 g-color-gray-light-v6 g-valign-middle g-ml-10"></i>
+        </li>
+        <li class="list-inline-item">
+            <span class="g-valign-middle">Purchase Requisition - New</span>
+        </li>
+    </ul>
+</div>
+<!-- End Breadcrumb-v1 -->
+@*<div class="container-fluid g-mb-40">*@
+@using (Html.BeginForm("NewPR", "PR", FormMethod.Post, new { @id = "NewPR", @class = "container-fluid g-mb-40" }))
+{
+    @Html.TextBoxFor(m => m.Type, new { @id = "PRType", @class = "d-none", @type = "text" })
+    <a id="UrlViewPRTabs" class="d-none" href="@Url.Action("ViewPRTabs", "PR")"></a>
+    <a id="UrlPRTabs" class="d-none" href="@Url.Action("PRTabs", "PR")"></a>
+    <a id="UrlPRList" class="d-none" href="@Url.Action("PRList", "PR")"></a>
+
+    <div class="row g-brd--black g-brd-style-solid g-bg-white g-pa-20">
+        <div class="col-md-12">
+            <div class="media-body align-self-center text-left g-mb-20">
+                <h3 class="g-font-weight-300 g-font-size-20 g-color-black">Purchase Requisition - New</h3>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                <section>
+                    <div class="row">
+                        <div class="d-flex col-md-6 col-sm-6 formfield">
+                            <span>Project/Dept/Branch/Estate Name</span>
+                        </div>
+                        <div class="d-flex col-md-6 col-sm-6">
+                            @Html.DropDownListFor(m => m.NewPRForm.ProjectId, (IEnumerable<SelectListItem>)ViewBag.ProjectNameList, "Select project here", new { @id = "ProjectName", @class = "custom-select g-width-100vw g-height-50 g-color-black g-color-primary--hover text-left g-rounded-20" })
+                            @*<select class="custom-select g-width-100vw g-height-50 g-color-gray-light-v1 g-color-primary--hover text-left g-rounded-20">
+                                    <option selected="">Select project name</option>
+                                    <option value="OR">Orlando</option>
+                                    <option value="TO">Toronto</option>
+                                    <option value="VA">Vancouver</option>
+                                </select>*@
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                <section>
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4 formfield">
+                            <span>Paper Ref No.</span>
+                        </div>
+                        <div class="d-flex col-md-8 col-sm-8">
+                            @Html.TextBoxFor(m => m.NewPRForm.PaperRefNo, new { @id = "PaperRefNo", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                            @Html.ValidationMessageFor(m => m.NewPRForm.PaperRefNo, null, new { @class = "note-error color-red" })
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                <section>
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4 formfield">
+                            <span>Bid Waiver Ref No.</span>
+                        </div>
+                        <div class="d-flex col-md-8 col-sm-8">
+                            @Html.TextBoxFor(m => m.NewPRForm.BidWaiverRefNo, new { @id = "BidWaiverRefNo", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                            @Html.ValidationMessageFor(m => m.NewPRForm.BidWaiverRefNo, null, new { @class = "note-error color-red" })
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md g-mb-20">
+                <section>
+                    <div class="row">
+                        <label class="form-check-inline u-check g-pl-25">
+                            <input id="Unbudgeted" name="NewPRForm.Unbudgeted" class="g-hidden-xs-up g-pos-abs g-top-0 g-left-0" type="checkbox">
+                            <div class="u-check-icon-checkbox-v4 g-absolute-centered--y g-left-0">
+                                <i class="fa" data-check-icon="&#xf00c"></i>
+                            </div>
+                            Unbudgeted
+                        </label>
+                    </div>
+                </section>
+            </div>
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                <section>
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4 formfield">
+                            <label class="g-mb-10" for="inputGroup1_2">File input</label>
+                        </div>
+                        <div class="d-flex col-md-8 col-sm-8">
+                            <div class="input-group u-file-attach-v1 g-brd-gray-light-v2">
+                                <input id="inputGroup1_2" class="form-control form-control-md g-rounded-4" placeholder="If already have paper" readonly="" type="text">
+
+                                <div class="input-group-append">
+                                    <button class="btn btn-md u-btn-blue rounded-0" type="submit">Browse</button>
+                                    <input name="file" type="file">
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="form-group">
+                            <label class="g-mb-10" for="inputGroup1_2">File input</label>
+
+                            <div class="input-group u-file-attach-v1 g-brd-gray-light-v2">
+                                <input id="inputGroup1_2" class="form-control form-control-md rounded-0" placeholder="Text in field" readonly="" type="text">
+
+                                <div class="input-group-append">
+                                    <button id="PRAttachment" class="btn btn-md u-btn-primary rounded-0" type="submit">Browse</button>
+                                    <input id="FileName" name="file"  type="file">
+                                </div>
+                            </div>
+                        </div>*@
+                    </div>
+                </section>
+            </div>           
+        </div>
+        <div class="col-md-12">
+            <div class="media-body align-self-center text-left g-mb-30">
+                <h3 class="g-font-weight-300 g-font-size-20 g-color-black">Budget Info</h3>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                <section>
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4 formfield">
+                            <span>Purchase Type</span>
+                        </div>
+                        <div class="d-flex col-md-8 col-sm-8">
+                            @Html.DropDownListFor(m => m.NewPRForm.PurchaseTypeId, (IEnumerable<SelectListItem>)ViewBag.PurchaseTypeList, "Select Purchase type here", new { @id = "PurchaseType", @class = "custom-select g-width-100vw g-height-50 g-color-black g-color-primary--hover text-left g-rounded-20" })
+                            @*<select class="custom-select g-width-100vw g-height-50 g-color-gray-light-v1 g-color-primary--hover text-left g-rounded-20">
+                                    <option selected="">Select purchase type</option>
+                                    <option value="OR">Orlando</option>
+                                    <option value="TO">Toronto</option>
+                                    <option value="VA">Vancouver</option>
+                                </select>*@
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                <section>
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4 formfield">
+                            <span>Budget Description</span>
+                        </div>
+                        <div class="d-flex col-md-8 col-sm-8">
+                            @*<input id="inputGroup-3_1" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10" placeholder="" type="text">*@
+                            @Html.TextBoxFor(m => m.NewPRForm.BudgetDescription, new { @id = "BudgetDescription", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                            @Html.ValidationMessageFor(m => m.NewPRForm.BudgetDescription, null, new { @class = "note-error color-red" })
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                <section>
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4 formfield">
+                            <span>Budgeted Amount</span>
+                        </div>
+                        <div class="d-flex col-md-8 col-sm-8">
+                            @*<input id="inputGroup-3_1" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10" placeholder="Unit (RM)" type="text">*@
+                            @Html.TextBoxFor(m => m.NewPRForm.BudgetedAmount, new { @id = "BudgetedAmount", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "Unit (RM)", @type = "text", @readonly = true })
+                        </div>
+                    </div>
+                    @*<div class="row">
+                            <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                                @Html.ValidationMessageFor(m => m.NewPRForm.BudgetedAmount, null, new { @class = "note-error color-red" })
+                            </div>
+                        </div>*@
+                </section>
+            </div>
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                <section>
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4 formfield">
+                            <span>Justification</span>
+                        </div>
+                        <div class="d-flex col-md-8 col-sm-8">
+                            @*<input id="inputGroup-3_1" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10" placeholder="" type="text">*@
+                            @Html.TextBoxFor(m => m.NewPRForm.Justification, new { @id = "Justification", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                            @Html.ValidationMessageFor(m => m.NewPRForm.Justification, null, new { @class = "note-error color-red" })
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                <section>
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4 formfield">
+                            <span>Utilized To Date</span>
+                        </div>
+                        <div class="d-flex col-md-8 col-sm-8">
+                            @*<input id="inputGroup-3_2" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10" placeholder="Unit (RM)" type="text">*@
+                            @Html.TextBoxFor(m => m.NewPRForm.UtilizedToDate, new { @id = "UtilizedToDate", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "Unit (RM)", @type = "text", @readonly = true })
+                        </div>
+                    </div>
+                    @*<div class="row">
+                            <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                                @Html.ValidationMessageFor(m => m.NewPRForm.UtilizedToDate, null, new { @class = "note-error color-red" })
+                            </div>
+                        </div>*@
+                </section>
+            </div>
+            @*<div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                    <section>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 formfield">
+                                <span>Amount Required</span>
+                            </div>
+                            <div class="d-flex col-md-8 col-sm-8">
+                                <input id="inputGroup-3_1" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10" placeholder="Unit (RM)" type="text">
+                                @Html.TextBoxFor(m => m.NewPRForm.AmountRequired, new { @id = "AmountRequired", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "Unit (RM)", @type = "text" })
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                                @Html.ValidationMessageFor(m => m.NewPRForm.AmountRequired, null, new { @class = "note-error color-red" })
+                            </div>
+                        </div>
+                    </section>
+                </div>*@
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                <section>
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4 formfield">
+                            <span>Budget Balance</span>
+                        </div>
+                        <div class="d-flex col-md-8 col-sm-8">
+                            @*<input id="inputGroup-3_1" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10" placeholder="Unit (RM)" type="text">*@
+                            @Html.TextBoxFor(m => m.NewPRForm.BudgetBalance, new { @id = "BudgetBalance", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "Unit (RM)", @type = "text", @readonly = true })
+                        </div>
+                    </div>
+                    @*<div class="row">
+                            <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                                @Html.ValidationMessageFor(m => m.NewPRForm.BudgetBalance, null, new { @class = "note-error color-red" })
+                            </div>
+                        </div>*@
+                </section>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-12 g-mb-30 g-mt-40">
+            <table id="PRItemTable" class="table table-striped table-bordered nowrap dt-responsive table-hover" style="width:100%">
+                <thead>
+                    <tr>
+                        <th class="d-none"></th>
+                        <th class="all">
+                            <div class="media">
+                                <div class="d-flex align-self-center">Date required</div>
+                            </div>
+                        </th>
+                        <th class="desktop">
+                            <div class="media">
+                                <div class="d-flex align-self-center">Description/Spec</div>
+                            </div>
+                        </th>
+                        @*<th class="desktop">
+                                <div class="media">
+                                    <div class="d-flex align-self-center">Item Code</div>
+                                </div>
+                            </th>*@
+                        <th class="desktop">
+                            <div class="media">
+                                <div class="d-flex align-self-center">Cust PO No</div>
+                            </div>
+                        </th>
+                        <th class="desktop">
+                            <div class="media">
+                                <div class="d-flex align-self-center">Quantity</div>
+                            </div>
+                        </th>
+                        @*<th class="desktop">
+                                <div class="media">
+                                    <div class="d-flex align-self-center">UM</div>
+                                </div>
+                            </th>*@
+                        <th class="all">
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr id="dontRemove">
+                        <td class="d-none"><input id="ItemsId" class="Id form-control custom-filter desktop" type="text" name="ItemsId" value="" /></td>
+                        <td>
+                            <input id="DateRequired" class="form-control rounded-0 form-control-md" name="DateRequired" type="date">
+                        </td>
+                        <td>
+                            <input id="Description" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="Description" type="text">
+                        </td>
+                        @*<td>
+                                    <select id="ItemCode" class="newSelect custom-select g-height-45 g-color-gray-light-v1 g-color-primary--hover text-left g-rounded-20">
+                                        <option selected="">Item Code</option>
+                                        <option value="OR">Orlando</option>
+                                        <option value="TO">Toronto</option>
+                                        <option value="VA">Vancouver</option>
+                                    </select>
+                            </td>*@
+                        <td>
+                            <input id="CustPONo" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="CustPONo" type="text">
+                        </td>
+                        <td>
+                            <input id="Quantity" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="Quantity" type="text">
+                        </td>
+                        @*<td>
+                                <input id="UM" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="UM" type="text">
+                            </td>*@
+                        <td>
+                            <div class="g-width-70 row">
+                                <a class="g-color-gray-dark-v5 g-text-underline--none--hover g-pa-5 AddPRItem" data-toggle="tooltip" data-placement="top" data-original-title="Add">
+                                    <i class="icon-plus g-font-size-18 g-mr-7"></i>
+                                </a>
+                                <a class="g-color-gray-dark-v5 g-text-underline--none--hover g-pa-5 RemovePRItem" data-toggle="tooltip" data-placement="top" data-original-title="Delete">
+                                    <i class="icon-trash g-font-size-18 g-mr-7"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        @*<div class="col-md-6">
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-10--md g-mb-30">
+                <section>
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4 formfield">
+                            <span>Reviewer</span>
+                        </div>
+                        <div class="d-flex col-md-8 col-sm-8">
+                            @Html.DropDownListFor(m => m.NewPRForm.ReviewerId, (IEnumerable<SelectListItem>)ViewBag.ReviewerNameList, new { @id = "Reviewer", @class = "custom-select g-width-100vw g-height-50 g-color-gray-light-v1 g-color-primary--hover text-left g-rounded-20" })
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>*@
+        @*<div class="col-md-6">
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-10--md g-mb-30">
+                <section>
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4 formfield">
+                            <span>Approver</span>
+                        </div>
+                        <div class="d-flex col-md-8 col-sm-8">
+                            @Html.DropDownListFor(m => m.NewPRForm.ApproverId, (IEnumerable<SelectListItem>)ViewBag.ApproverNameList, new { @id = "Approver", @class = "custom-select g-width-100vw g-height-50 g-color-gray-light-v1 g-color-primary--hover text-left g-rounded-20" })
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>*@
+        <div class="col-md-12 col-sm-12">
+            <div class="row">
+                @*<div class="col-md-9 col-sm-8"></div>*@
+                <div class="col-md-3 offset-md-9 col-sm-4 offset-sm-8">
+                    <div class="media">
+                        <div class="d-flex u-main-nav--push-right text-right">
+                            <div class="row">
+                                <a id="SavePR" class="saveSubmit btn btn-md u-btn-white g-mr-5 g-mb-15">SAVE</a>
+                                <a id="CancelPR" href="~/PR/PRList?type=@Model.Type" class="btn btn-md u-btn-white g-mr-5 g-mb-15">CANCEL</a>
+                                <a id="SubmitPR" class="saveSubmit btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">SUBMIT</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </div>
+   
+    <div class="modal">
+    </div>
+}
+@*</div>*@
+@section scripts {
+    <script type="text/javascript">
+        var UrlNewPR = "@Url.Action("NewPR", "PR")";
+        var UrlPRTabs = "@Url.Action("ViewPRTabs", "PR")";
+        var UrlGetProjectInfo = "@Url.Action("GetProjectInfo", "PR")";
+    </script>
+    <script src="~/Scripts/NewPR.js"></script>
+}

@@ -1,0 +1,272 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="KUB_TelModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="KUB Telekomunikasi Sdn Bhd$Contact">
+    <Key>
+      <PropertyRef Name="No_" />
+    </Key>
+    <Property Name="timestamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+    <Property Name="No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Search Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Name 2" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Address" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Address 2" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="City" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="Phone No_" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="Telex No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Territory Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Currency Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Language Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Salesperson Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Country_Region Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Last Date Modified" Type="datetime" Nullable="false" />
+    <Property Name="Fax No_" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="Telex Answer Back" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="VAT Registration No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Picture" Type="image" />
+    <Property Name="Post Code" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="County" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="E-Mail" Type="nvarchar" MaxLength="80" Nullable="false" />
+    <Property Name="Home Page" Type="nvarchar" MaxLength="80" Nullable="false" />
+    <Property Name="No_ Series" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Image" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Type" Type="int" Nullable="false" />
+    <Property Name="Company No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Company Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Lookup Contact No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="First Name" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="Middle Name" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="Surname" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="Job Title" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="Initials" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="Extension No_" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="Mobile Phone No_" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="Pager" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="Organizational Level Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Exclude from Segment" Type="tinyint" Nullable="false" />
+    <Property Name="External ID" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Correspondence Type" Type="int" Nullable="false" />
+    <Property Name="Salutation Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Search E-Mail" Type="nvarchar" MaxLength="80" Nullable="false" />
+    <Property Name="Last Time Modified" Type="datetime" Nullable="false" />
+    <Property Name="E-Mail 2" Type="nvarchar" MaxLength="80" Nullable="false" />
+  </EntityType>
+  <EntityType Name="KUB Telekomunikasi Sdn Bhd$Item">
+    <Key>
+      <PropertyRef Name="No_" />
+    </Key>
+    <Property Name="timestamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+    <Property Name="No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="No_ 2" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Search Description" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Description 2" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Base Unit of Measure" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Price Unit Conversion" Type="int" Nullable="false" />
+    <Property Name="Type" Type="int" Nullable="false" />
+    <Property Name="Inventory Posting Group" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Shelf No_" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Item Disc_ Group" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Allow Invoice Disc_" Type="tinyint" Nullable="false" />
+    <Property Name="Statistics Group" Type="int" Nullable="false" />
+    <Property Name="Commission Group" Type="int" Nullable="false" />
+    <Property Name="Unit Price" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Price_Profit Calculation" Type="int" Nullable="false" />
+    <Property Name="Profit _" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Costing Method" Type="int" Nullable="false" />
+    <Property Name="Unit Cost" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Standard Cost" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Last Direct Cost" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Indirect Cost _" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Cost is Adjusted" Type="tinyint" Nullable="false" />
+    <Property Name="Allow Online Adjustment" Type="tinyint" Nullable="false" />
+    <Property Name="Vendor No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Vendor Item No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Lead Time Calculation" Type="varchar" MaxLength="32" Nullable="false" />
+    <Property Name="Reorder Point" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Maximum Inventory" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Reorder Quantity" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Alternative Item No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Unit List Price" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Duty Due _" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Duty Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Gross Weight" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Net Weight" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Units per Parcel" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Unit Volume" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Durability" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Freight Type" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Tariff No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Duty Unit Conversion" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Country_Region Purchased Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Budget Quantity" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Budgeted Amount" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Budget Profit" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Blocked" Type="tinyint" Nullable="false" />
+    <Property Name="Last Date Modified" Type="datetime" Nullable="false" />
+    <Property Name="Last Time Modified" Type="datetime" Nullable="false" />
+    <Property Name="Price Includes VAT" Type="tinyint" Nullable="false" />
+    <Property Name="VAT Bus_ Posting Gr_ (Price)" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Gen_ Prod_ Posting Group" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Picture" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Country_Region of Origin Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Automatic Ext_ Texts" Type="tinyint" Nullable="false" />
+    <Property Name="No_ Series" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Tax Group Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="VAT Prod_ Posting Group" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Reserve" Type="int" Nullable="false" />
+    <Property Name="Global Dimension 1 Code" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Global Dimension 2 Code" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Stockout Warning" Type="int" Nullable="false" />
+    <Property Name="Prevent Negative Inventory" Type="int" Nullable="false" />
+    <Property Name="Application Wksh_ User ID" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="Assembly Policy" Type="int" Nullable="false" />
+    <Property Name="GTIN" Type="nvarchar" MaxLength="14" Nullable="false" />
+    <Property Name="Default Deferral Template Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Low-Level Code" Type="int" Nullable="false" />
+    <Property Name="Lot Size" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Serial Nos_" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Last Unit Cost Calc_ Date" Type="datetime" Nullable="false" />
+    <Property Name="Rolled-up Material Cost" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Rolled-up Capacity Cost" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Scrap _" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Inventory Value Zero" Type="tinyint" Nullable="false" />
+    <Property Name="Discrete Order Quantity" Type="int" Nullable="false" />
+    <Property Name="Minimum Order Quantity" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Maximum Order Quantity" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Safety Stock Quantity" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Order Multiple" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Safety Lead Time" Type="varchar" MaxLength="32" Nullable="false" />
+    <Property Name="Flushing Method" Type="int" Nullable="false" />
+    <Property Name="Replenishment System" Type="int" Nullable="false" />
+    <Property Name="Rounding Precision" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Sales Unit of Measure" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Purch_ Unit of Measure" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Time Bucket" Type="varchar" MaxLength="32" Nullable="false" />
+    <Property Name="Reordering Policy" Type="int" Nullable="false" />
+    <Property Name="Include Inventory" Type="tinyint" Nullable="false" />
+    <Property Name="Manufacturing Policy" Type="int" Nullable="false" />
+    <Property Name="Rescheduling Period" Type="varchar" MaxLength="32" Nullable="false" />
+    <Property Name="Lot Accumulation Period" Type="varchar" MaxLength="32" Nullable="false" />
+    <Property Name="Dampener Period" Type="varchar" MaxLength="32" Nullable="false" />
+    <Property Name="Dampener Quantity" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Overflow Level" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Manufacturer Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Item Category Code" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Created From Nonstock Item" Type="tinyint" Nullable="false" />
+    <Property Name="Product Group Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Service Item Group" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Item Tracking Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Lot Nos_" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Expiration Calculation" Type="varchar" MaxLength="32" Nullable="false" />
+    <Property Name="Warehouse Class Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Special Equipment Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Put-away Template Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Put-away Unit of Measure Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Phys Invt Counting Period Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Last Counting Period Update" Type="datetime" Nullable="false" />
+    <Property Name="Use Cross-Docking" Type="tinyint" Nullable="false" />
+    <Property Name="Next Counting Start Date" Type="datetime" Nullable="false" />
+    <Property Name="Next Counting End Date" Type="datetime" Nullable="false" />
+    <Property Name="Supply Tax Code" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Purchase Tax Code" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="WHT Product Posting Group" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Routing No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Production BOM No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Single-Level Material Cost" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Single-Level Capacity Cost" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Single-Level Subcontrd_ Cost" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Single-Level Cap_ Ovhd Cost" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Single-Level Mfg_ Ovhd Cost" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Overhead Rate" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Rolled-up Subcontracted Cost" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Rolled-up Mfg_ Ovhd Cost" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Rolled-up Cap_ Overhead Cost" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Order Tracking Policy" Type="int" Nullable="false" />
+    <Property Name="Critical" Type="tinyint" Nullable="false" />
+    <Property Name="Common Item No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+  </EntityType>
+  <EntityType Name="KUB Telekomunikasi Sdn Bhd$Vendor">
+    <Key>
+      <PropertyRef Name="No_" />
+    </Key>
+    <Property Name="timestamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+    <Property Name="No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Search Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Name 2" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Address" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Address 2" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="City" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="Contact" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Phone No_" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="Telex No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Our Account No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Territory Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Global Dimension 1 Code" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Global Dimension 2 Code" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Budgeted Amount" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Vendor Posting Group" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Currency Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Language Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Statistics Group" Type="int" Nullable="false" />
+    <Property Name="Payment Terms Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Fin_ Charge Terms Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Purchaser Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Shipment Method Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Shipping Agent Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Invoice Disc_ Code" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Country_Region Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Blocked" Type="int" Nullable="false" />
+    <Property Name="Pay-to Vendor No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Priority" Type="int" Nullable="false" />
+    <Property Name="Payment Method Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Last Date Modified" Type="datetime" Nullable="false" />
+    <Property Name="Application Method" Type="int" Nullable="false" />
+    <Property Name="Prices Including VAT" Type="tinyint" Nullable="false" />
+    <Property Name="Fax No_" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="Telex Answer Back" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="VAT Registration No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Gen_ Bus_ Posting Group" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Picture" Type="image" />
+    <Property Name="GLN" Type="nvarchar" MaxLength="13" Nullable="false" />
+    <Property Name="Post Code" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="County" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="E-Mail" Type="nvarchar" MaxLength="80" Nullable="false" />
+    <Property Name="Home Page" Type="nvarchar" MaxLength="80" Nullable="false" />
+    <Property Name="No_ Series" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Tax Area Code" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Tax Liable" Type="tinyint" Nullable="false" />
+    <Property Name="VAT Bus_ Posting Group" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Block Payment Tolerance" Type="tinyint" Nullable="false" />
+    <Property Name="IC Partner Code" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Prepayment _" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+    <Property Name="Partner Type" Type="int" Nullable="false" />
+    <Property Name="Image" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Creditor No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Preferred Bank Account Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Cash Flow Payment Terms Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Primary Contact No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Responsibility Center" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Location Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Lead Time Calculation" Type="varchar" MaxLength="32" Nullable="false" />
+    <Property Name="Base Calendar Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Document Sending Profile" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Address 3" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Business Registration No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="RMCD Approval No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Self Billed Prefix" Type="nvarchar" MaxLength="3" Nullable="false" />
+    <Property Name="Self Billed Last Used No_" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Non GST Registrant BK" Type="tinyint" Nullable="false" />
+    <Property Name="GST Registrant Type" Type="int" Nullable="false" />
+    <Property Name="FRS Approval No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="WHT Business Posting Group" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="WHT Registration ID" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="ID No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+  </EntityType>
+  <EntityContainer Name="KUB_TelModelStoreContainer">
+    <EntitySet Name="KUB Telekomunikasi Sdn Bhd$Contact" EntityType="Self.KUB Telekomunikasi Sdn Bhd$Contact" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="KUB Telekomunikasi Sdn Bhd$Item" EntityType="Self.KUB Telekomunikasi Sdn Bhd$Item" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="KUB Telekomunikasi Sdn Bhd$Vendor" EntityType="Self.KUB Telekomunikasi Sdn Bhd$Vendor" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>
