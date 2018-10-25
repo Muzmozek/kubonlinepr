@@ -5625,6 +5625,7 @@
     <Content Include="Views\PR\PRFiles.cshtml" />
     <Content Include="Views\PO\Index.cshtml" />
     <Content Include="Views\Notification\Index.cshtml" />
+    <Content Include="Views\User\MyProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
