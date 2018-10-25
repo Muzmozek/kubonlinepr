@@ -1,0 +1,119 @@
+﻿@{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+
+<!-- Breadcrumb-v1 -->
+<div class="g-hidden-sm-down g-bg-gray-light-v8 g-pa-20 g-mb-30">
+    <ul class="u-list-inline g-color-gray-dark-v6">
+        <li class="list-inline-item g-mr-10">
+            <a class="u-link-v5 g-color-gray-dark-v6 g-color-lightblue-v3--hover g-valign-middle" href="~/">Home</a>
+            <i class="hs-admin-angle-right g-font-size-12 g-color-gray-light-v6 g-valign-middle g-ml-10"></i>
+        </li>
+        @*<li class="list-inline-item g-mr-10">
+            <a class="u-link-v5 g-color-gray-dark-v6 g-color-lightblue-v3--hover g-valign-middle" href="~/PM">Project Monitoring</a>
+            <i class="hs-admin-angle-right g-font-size-12 g-color-gray-light-v6 g-valign-middle g-ml-10"></i>
+        </li>*@
+        <li class="list-inline-item">
+            <span class="g-valign-middle">Morlot Highway</span>
+        </li>
+    </ul>
+</div>
+<!-- End Breadcrumb-v1 -->
+<ul class="nav u-nav-v4-1 u-nav-primary" role="tablist" data-target="nav-4-1-primary-hor-center" data-tabs-mobile-type="slide-up-down" data-btn-classes="btn btn-md btn-block u-btn-outline-primary">
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#nav-4-1-primary-hor-center--Overview" role="tab">Overview</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#nav-4-1-primary-hor-center--Schedules" role="tab">Schedules</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#nav-4-1-primary-hor-center--Finance" role="tab">Finance</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#nav-4-1-primary-hor-center--DO" role="tab">Delivery Order</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#nav-4-1-primary-hor-center--Issues" role="tab">Issues</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#nav-4-1-primary-hor-center--Report" role="tab">Report</a>
+    </li>   
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#nav-4-1-primary-hor-center--Files" role="tab">Files</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#nav-4-1-primary-hor-center--Conversation" role="tab">Conversation</a>
+    </li>
+</ul>
+<div id="nav-4-1-primary-hor-center" class="tab-content g-pt-20 g-mb-40 g-brd--black g-bg-white">
+    <div class="tab-pane fade show active" id="nav-4-1-primary-hor-center--Overview" role="tabpanel">
+        @{ Html.RenderAction("ProjectOverview", "PM"); }
+    </div>
+    <div class="tab-pane fade" id="nav-4-1-primary-hor-center--Schedules" role="tabpanel">
+        @{ Html.RenderAction("ProjectSchedules", "PM"); }       
+    </div>
+    <div class="tab-pane fade" id="nav-4-1-primary-hor-center--Finance" role="tabpanel">
+        @{ Html.RenderAction("ProjectFinance", "PM"); }
+    </div>
+    <div class="tab-pane fade" id="nav-4-1-primary-hor-center--DO" role="tabpanel">
+        @{ Html.RenderAction("ProjectDO", "PM"); }
+    </div>
+    <div class="tab-pane fade" id="nav-4-1-primary-hor-center--Issues" role="tabpanel">
+        @{ Html.RenderAction("ProjectIssues", "PM"); }        
+    </div>
+    <div class="tab-pane fade g-mb-30" id="nav-4-1-primary-hor-center--Report" role="tabpanel">
+        @{ Html.RenderAction("ProjectReport", "PM"); }        
+    </div>
+    <div class="tab-pane fade" id="nav-4-1-primary-hor-center--Files" role="tabpanel">
+        @{ Html.RenderAction("ProjectFiles", "PM"); }        
+    </div>   
+    <div class="tab-pane fade" id="nav-4-1-primary-hor-center--Conversation" role="tabpanel">
+        @{ Html.RenderAction("ProjectConversation", "PM"); }        
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(function () {
+            var IssuesChart = new CanvasJS.Chart("IssuesChart", {
+                animationEnabled: true,
+                theme: "light2",
+                data: [
+                {
+                    type: "pie",                   
+                    startAngle: -20,
+                    showInLegend: false,
+                    dataPoints: [
+                        { y: 70, label: "Open" },
+                        { y: 30, label: "Closed" }
+                    ],
+
+                    //You can add dynamic data from the controller as shown below. Check the controller and uncomment the line which generates dataPoints.
+                    //dataPoints: @Html.Raw(ViewBag.DataPoints),
+                }
+                ]
+            });
+            IssuesChart.render();
+
+            var TaskChart = new CanvasJS.Chart("TaskChart", {
+                animationEnabled: true,
+                theme: "light2",
+                data: [
+                {
+                    type: "pie",
+                    startAngle: -20,
+                    showInLegend: false,
+                    dataPoints: [
+                        { y: 170, label: "In Progress" },
+                        { y: 30, label: "Not Started" },
+                        { y: 130, label: "Completed" },
+                        { y: 30, label: "Overdue" }
+                    ],
+
+                    //You can add dynamic data from the controller as shown below. Check the controller and uncomment the line which generates dataPoints.
+                    //dataPoints: @Html.Raw(ViewBag.DataPoints),
+                }
+                ]
+            });
+            TaskChart.render();
+        });
+    </script>
+    }

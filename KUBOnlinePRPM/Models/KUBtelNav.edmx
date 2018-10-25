@@ -1,0 +1,847 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="KUB_TelModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="KUB Telekomunikasi Sdn Bhd$Contact">
+          <Key>
+            <PropertyRef Name="No_" />
+          </Key>
+          <Property Name="timestamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Search Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Name 2" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Address 2" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="City" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Phone No_" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Telex No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Territory Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Currency Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Language Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Salesperson Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Country_Region Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Last Date Modified" Type="datetime" Nullable="false" />
+          <Property Name="Fax No_" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Telex Answer Back" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="VAT Registration No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Picture" Type="image" />
+          <Property Name="Post Code" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="County" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="E-Mail" Type="nvarchar" MaxLength="80" Nullable="false" />
+          <Property Name="Home Page" Type="nvarchar" MaxLength="80" Nullable="false" />
+          <Property Name="No_ Series" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Image" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Type" Type="int" Nullable="false" />
+          <Property Name="Company No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Company Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Lookup Contact No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="First Name" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Middle Name" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Surname" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Job Title" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Initials" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Extension No_" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Mobile Phone No_" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Pager" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Organizational Level Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Exclude from Segment" Type="tinyint" Nullable="false" />
+          <Property Name="External ID" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Correspondence Type" Type="int" Nullable="false" />
+          <Property Name="Salutation Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Search E-Mail" Type="nvarchar" MaxLength="80" Nullable="false" />
+          <Property Name="Last Time Modified" Type="datetime" Nullable="false" />
+          <Property Name="E-Mail 2" Type="nvarchar" MaxLength="80" Nullable="false" />
+        </EntityType>
+        <EntityType Name="KUB Telekomunikasi Sdn Bhd$Item">
+          <Key>
+            <PropertyRef Name="No_" />
+          </Key>
+          <Property Name="timestamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="No_ 2" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Search Description" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description 2" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Base Unit of Measure" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Price Unit Conversion" Type="int" Nullable="false" />
+          <Property Name="Type" Type="int" Nullable="false" />
+          <Property Name="Inventory Posting Group" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Shelf No_" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Item Disc_ Group" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Allow Invoice Disc_" Type="tinyint" Nullable="false" />
+          <Property Name="Statistics Group" Type="int" Nullable="false" />
+          <Property Name="Commission Group" Type="int" Nullable="false" />
+          <Property Name="Unit Price" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Price_Profit Calculation" Type="int" Nullable="false" />
+          <Property Name="Profit _" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Costing Method" Type="int" Nullable="false" />
+          <Property Name="Unit Cost" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Standard Cost" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Last Direct Cost" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Indirect Cost _" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Cost is Adjusted" Type="tinyint" Nullable="false" />
+          <Property Name="Allow Online Adjustment" Type="tinyint" Nullable="false" />
+          <Property Name="Vendor No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Vendor Item No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Lead Time Calculation" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="Reorder Point" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Maximum Inventory" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Reorder Quantity" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Alternative Item No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Unit List Price" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Duty Due _" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Duty Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Gross Weight" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Net Weight" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Units per Parcel" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Unit Volume" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Durability" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Freight Type" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Tariff No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Duty Unit Conversion" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Country_Region Purchased Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Budget Quantity" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Budgeted Amount" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Budget Profit" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Blocked" Type="tinyint" Nullable="false" />
+          <Property Name="Last Date Modified" Type="datetime" Nullable="false" />
+          <Property Name="Last Time Modified" Type="datetime" Nullable="false" />
+          <Property Name="Price Includes VAT" Type="tinyint" Nullable="false" />
+          <Property Name="VAT Bus_ Posting Gr_ (Price)" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Gen_ Prod_ Posting Group" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Picture" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Country_Region of Origin Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Automatic Ext_ Texts" Type="tinyint" Nullable="false" />
+          <Property Name="No_ Series" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Tax Group Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="VAT Prod_ Posting Group" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Reserve" Type="int" Nullable="false" />
+          <Property Name="Global Dimension 1 Code" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Global Dimension 2 Code" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Stockout Warning" Type="int" Nullable="false" />
+          <Property Name="Prevent Negative Inventory" Type="int" Nullable="false" />
+          <Property Name="Application Wksh_ User ID" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Assembly Policy" Type="int" Nullable="false" />
+          <Property Name="GTIN" Type="nvarchar" MaxLength="14" Nullable="false" />
+          <Property Name="Default Deferral Template Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Low-Level Code" Type="int" Nullable="false" />
+          <Property Name="Lot Size" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Serial Nos_" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Last Unit Cost Calc_ Date" Type="datetime" Nullable="false" />
+          <Property Name="Rolled-up Material Cost" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Rolled-up Capacity Cost" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Scrap _" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Inventory Value Zero" Type="tinyint" Nullable="false" />
+          <Property Name="Discrete Order Quantity" Type="int" Nullable="false" />
+          <Property Name="Minimum Order Quantity" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Maximum Order Quantity" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Safety Stock Quantity" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Order Multiple" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Safety Lead Time" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="Flushing Method" Type="int" Nullable="false" />
+          <Property Name="Replenishment System" Type="int" Nullable="false" />
+          <Property Name="Rounding Precision" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Sales Unit of Measure" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Purch_ Unit of Measure" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Time Bucket" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="Reordering Policy" Type="int" Nullable="false" />
+          <Property Name="Include Inventory" Type="tinyint" Nullable="false" />
+          <Property Name="Manufacturing Policy" Type="int" Nullable="false" />
+          <Property Name="Rescheduling Period" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="Lot Accumulation Period" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="Dampener Period" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="Dampener Quantity" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Overflow Level" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Manufacturer Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Item Category Code" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Created From Nonstock Item" Type="tinyint" Nullable="false" />
+          <Property Name="Product Group Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Service Item Group" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Item Tracking Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Lot Nos_" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Expiration Calculation" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="Warehouse Class Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Special Equipment Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Put-away Template Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Put-away Unit of Measure Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Phys Invt Counting Period Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Last Counting Period Update" Type="datetime" Nullable="false" />
+          <Property Name="Use Cross-Docking" Type="tinyint" Nullable="false" />
+          <Property Name="Next Counting Start Date" Type="datetime" Nullable="false" />
+          <Property Name="Next Counting End Date" Type="datetime" Nullable="false" />
+          <Property Name="Supply Tax Code" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Purchase Tax Code" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="WHT Product Posting Group" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Routing No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Production BOM No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Single-Level Material Cost" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Single-Level Capacity Cost" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Single-Level Subcontrd_ Cost" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Single-Level Cap_ Ovhd Cost" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Single-Level Mfg_ Ovhd Cost" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Overhead Rate" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Rolled-up Subcontracted Cost" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Rolled-up Mfg_ Ovhd Cost" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Rolled-up Cap_ Overhead Cost" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Order Tracking Policy" Type="int" Nullable="false" />
+          <Property Name="Critical" Type="tinyint" Nullable="false" />
+          <Property Name="Common Item No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="KUB Telekomunikasi Sdn Bhd$Vendor">
+          <Key>
+            <PropertyRef Name="No_" />
+          </Key>
+          <Property Name="timestamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Search Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Name 2" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Address 2" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="City" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Contact" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Phone No_" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Telex No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Our Account No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Territory Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Global Dimension 1 Code" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Global Dimension 2 Code" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Budgeted Amount" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Vendor Posting Group" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Currency Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Language Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Statistics Group" Type="int" Nullable="false" />
+          <Property Name="Payment Terms Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Fin_ Charge Terms Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Purchaser Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Shipment Method Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Shipping Agent Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Invoice Disc_ Code" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Country_Region Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Blocked" Type="int" Nullable="false" />
+          <Property Name="Pay-to Vendor No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Priority" Type="int" Nullable="false" />
+          <Property Name="Payment Method Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Last Date Modified" Type="datetime" Nullable="false" />
+          <Property Name="Application Method" Type="int" Nullable="false" />
+          <Property Name="Prices Including VAT" Type="tinyint" Nullable="false" />
+          <Property Name="Fax No_" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Telex Answer Back" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="VAT Registration No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Gen_ Bus_ Posting Group" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Picture" Type="image" />
+          <Property Name="GLN" Type="nvarchar" MaxLength="13" Nullable="false" />
+          <Property Name="Post Code" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="County" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="E-Mail" Type="nvarchar" MaxLength="80" Nullable="false" />
+          <Property Name="Home Page" Type="nvarchar" MaxLength="80" Nullable="false" />
+          <Property Name="No_ Series" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Tax Area Code" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Tax Liable" Type="tinyint" Nullable="false" />
+          <Property Name="VAT Bus_ Posting Group" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Block Payment Tolerance" Type="tinyint" Nullable="false" />
+          <Property Name="IC Partner Code" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Prepayment _" Type="decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Partner Type" Type="int" Nullable="false" />
+          <Property Name="Image" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Creditor No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Preferred Bank Account Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Cash Flow Payment Terms Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Primary Contact No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Responsibility Center" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Location Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Lead Time Calculation" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="Base Calendar Code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Document Sending Profile" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Address 3" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Business Registration No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="RMCD Approval No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Self Billed Prefix" Type="nvarchar" MaxLength="3" Nullable="false" />
+          <Property Name="Self Billed Last Used No_" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Non GST Registrant BK" Type="tinyint" Nullable="false" />
+          <Property Name="GST Registrant Type" Type="int" Nullable="false" />
+          <Property Name="FRS Approval No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="WHT Business Posting Group" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="WHT Registration ID" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="ID No_" Type="nvarchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="KUB_TelModelStoreContainer">
+          <EntitySet Name="KUB Telekomunikasi Sdn Bhd$Contact" EntityType="Self.KUB Telekomunikasi Sdn Bhd$Contact" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="KUB Telekomunikasi Sdn Bhd$Item" EntityType="Self.KUB Telekomunikasi Sdn Bhd$Item" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="KUB Telekomunikasi Sdn Bhd$Vendor" EntityType="Self.KUB Telekomunikasi Sdn Bhd$Vendor" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="KUB_TelModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="KUB_Telekomunikasi_Sdn_Bhd_Contact">
+          <Key>
+            <PropertyRef Name="No_" />
+          </Key>
+          <Property Name="timestamp" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="No_" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Search_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name_2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Address_2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="City" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Phone_No_" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Telex_No_" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Territory_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Currency_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Language_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Salesperson_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Country_Region_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Last_Date_Modified" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Fax_No_" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Telex_Answer_Back" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="VAT_Registration_No_" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Picture" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="Post_Code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="County" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="E_Mail" Type="String" MaxLength="80" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Home_Page" Type="String" MaxLength="80" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="No__Series" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Image" Type="Guid" Nullable="false" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <Property Name="Company_No_" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Company_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Lookup_Contact_No_" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="First_Name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Middle_Name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Surname" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Job_Title" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Initials" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Extension_No_" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Mobile_Phone_No_" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Pager" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Organizational_Level_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Exclude_from_Segment" Type="Byte" Nullable="false" />
+          <Property Name="External_ID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Correspondence_Type" Type="Int32" Nullable="false" />
+          <Property Name="Salutation_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Search_E_Mail" Type="String" MaxLength="80" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Last_Time_Modified" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="E_Mail_2" Type="String" MaxLength="80" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="KUB_Telekomunikasi_Sdn_Bhd_Item">
+          <Key>
+            <PropertyRef Name="No_" />
+          </Key>
+          <Property Name="timestamp" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="No_" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="No__2" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Search_Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description_2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Base_Unit_of_Measure" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Price_Unit_Conversion" Type="Int32" Nullable="false" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <Property Name="Inventory_Posting_Group" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Shelf_No_" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Item_Disc__Group" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Allow_Invoice_Disc_" Type="Byte" Nullable="false" />
+          <Property Name="Statistics_Group" Type="Int32" Nullable="false" />
+          <Property Name="Commission_Group" Type="Int32" Nullable="false" />
+          <Property Name="Unit_Price" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Price_Profit_Calculation" Type="Int32" Nullable="false" />
+          <Property Name="Profit__" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Costing_Method" Type="Int32" Nullable="false" />
+          <Property Name="Unit_Cost" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Standard_Cost" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Last_Direct_Cost" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Indirect_Cost__" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Cost_is_Adjusted" Type="Byte" Nullable="false" />
+          <Property Name="Allow_Online_Adjustment" Type="Byte" Nullable="false" />
+          <Property Name="Vendor_No_" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Vendor_Item_No_" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Lead_Time_Calculation" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Reorder_Point" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Maximum_Inventory" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Reorder_Quantity" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Alternative_Item_No_" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Unit_List_Price" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Duty_Due__" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Duty_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Gross_Weight" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Net_Weight" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Units_per_Parcel" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Unit_Volume" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Durability" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Freight_Type" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Tariff_No_" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Duty_Unit_Conversion" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Country_Region_Purchased_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Budget_Quantity" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Budgeted_Amount" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Budget_Profit" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Blocked" Type="Byte" Nullable="false" />
+          <Property Name="Last_Date_Modified" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Last_Time_Modified" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Price_Includes_VAT" Type="Byte" Nullable="false" />
+          <Property Name="VAT_Bus__Posting_Gr___Price_" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Gen__Prod__Posting_Group" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Picture" Type="Guid" Nullable="false" />
+          <Property Name="Country_Region_of_Origin_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Automatic_Ext__Texts" Type="Byte" Nullable="false" />
+          <Property Name="No__Series" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Tax_Group_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="VAT_Prod__Posting_Group" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Reserve" Type="Int32" Nullable="false" />
+          <Property Name="Global_Dimension_1_Code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Global_Dimension_2_Code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Stockout_Warning" Type="Int32" Nullable="false" />
+          <Property Name="Prevent_Negative_Inventory" Type="Int32" Nullable="false" />
+          <Property Name="Application_Wksh__User_ID" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Assembly_Policy" Type="Int32" Nullable="false" />
+          <Property Name="GTIN" Type="String" MaxLength="14" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Default_Deferral_Template_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Low_Level_Code" Type="Int32" Nullable="false" />
+          <Property Name="Lot_Size" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Serial_Nos_" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Last_Unit_Cost_Calc__Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Rolled_up_Material_Cost" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Rolled_up_Capacity_Cost" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Scrap__" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Inventory_Value_Zero" Type="Byte" Nullable="false" />
+          <Property Name="Discrete_Order_Quantity" Type="Int32" Nullable="false" />
+          <Property Name="Minimum_Order_Quantity" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Maximum_Order_Quantity" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Safety_Stock_Quantity" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Order_Multiple" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Safety_Lead_Time" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Flushing_Method" Type="Int32" Nullable="false" />
+          <Property Name="Replenishment_System" Type="Int32" Nullable="false" />
+          <Property Name="Rounding_Precision" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Sales_Unit_of_Measure" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Purch__Unit_of_Measure" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Time_Bucket" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Reordering_Policy" Type="Int32" Nullable="false" />
+          <Property Name="Include_Inventory" Type="Byte" Nullable="false" />
+          <Property Name="Manufacturing_Policy" Type="Int32" Nullable="false" />
+          <Property Name="Rescheduling_Period" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Lot_Accumulation_Period" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Dampener_Period" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Dampener_Quantity" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Overflow_Level" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Manufacturer_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Item_Category_Code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Created_From_Nonstock_Item" Type="Byte" Nullable="false" />
+          <Property Name="Product_Group_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Service_Item_Group" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Item_Tracking_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Lot_Nos_" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Expiration_Calculation" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Warehouse_Class_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Special_Equipment_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Put_away_Template_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Put_away_Unit_of_Measure_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Phys_Invt_Counting_Period_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Last_Counting_Period_Update" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Use_Cross_Docking" Type="Byte" Nullable="false" />
+          <Property Name="Next_Counting_Start_Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Next_Counting_End_Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Supply_Tax_Code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Purchase_Tax_Code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="WHT_Product_Posting_Group" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Routing_No_" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Production_BOM_No_" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Single_Level_Material_Cost" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Single_Level_Capacity_Cost" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Single_Level_Subcontrd__Cost" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Single_Level_Cap__Ovhd_Cost" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Single_Level_Mfg__Ovhd_Cost" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Overhead_Rate" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Rolled_up_Subcontracted_Cost" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Rolled_up_Mfg__Ovhd_Cost" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Rolled_up_Cap__Overhead_Cost" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Order_Tracking_Policy" Type="Int32" Nullable="false" />
+          <Property Name="Critical" Type="Byte" Nullable="false" />
+          <Property Name="Common_Item_No_" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="KUB_Telekomunikasi_Sdn_Bhd_Vendor">
+          <Key>
+            <PropertyRef Name="No_" />
+          </Key>
+          <Property Name="timestamp" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="No_" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Search_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name_2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Address_2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="City" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Contact" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Phone_No_" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Telex_No_" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Our_Account_No_" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Territory_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Global_Dimension_1_Code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Global_Dimension_2_Code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Budgeted_Amount" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Vendor_Posting_Group" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Currency_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Language_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Statistics_Group" Type="Int32" Nullable="false" />
+          <Property Name="Payment_Terms_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Fin__Charge_Terms_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Purchaser_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Shipment_Method_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Shipping_Agent_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Invoice_Disc__Code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Country_Region_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Blocked" Type="Int32" Nullable="false" />
+          <Property Name="Pay_to_Vendor_No_" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Priority" Type="Int32" Nullable="false" />
+          <Property Name="Payment_Method_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Last_Date_Modified" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Application_Method" Type="Int32" Nullable="false" />
+          <Property Name="Prices_Including_VAT" Type="Byte" Nullable="false" />
+          <Property Name="Fax_No_" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Telex_Answer_Back" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="VAT_Registration_No_" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Gen__Bus__Posting_Group" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Picture" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="GLN" Type="String" MaxLength="13" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Post_Code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="County" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="E_Mail" Type="String" MaxLength="80" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Home_Page" Type="String" MaxLength="80" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="No__Series" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Tax_Area_Code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Tax_Liable" Type="Byte" Nullable="false" />
+          <Property Name="VAT_Bus__Posting_Group" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Block_Payment_Tolerance" Type="Byte" Nullable="false" />
+          <Property Name="IC_Partner_Code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Prepayment__" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
+          <Property Name="Partner_Type" Type="Int32" Nullable="false" />
+          <Property Name="Image" Type="Guid" Nullable="false" />
+          <Property Name="Creditor_No_" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Preferred_Bank_Account_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Cash_Flow_Payment_Terms_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Primary_Contact_No_" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Responsibility_Center" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Location_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Lead_Time_Calculation" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Base_Calendar_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Document_Sending_Profile" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Address_3" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Business_Registration_No_" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="RMCD_Approval_No_" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Self_Billed_Prefix" Type="String" MaxLength="3" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Self_Billed_Last_Used_No_" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Non_GST_Registrant_BK" Type="Byte" Nullable="false" />
+          <Property Name="GST_Registrant_Type" Type="Int32" Nullable="false" />
+          <Property Name="FRS_Approval_No_" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="WHT_Business_Posting_Group" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="WHT_Registration_ID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ID_No_" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="KUB_TelEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="KUB_Telekomunikasi_Sdn_Bhd_Contact" EntityType="Self.KUB_Telekomunikasi_Sdn_Bhd_Contact" />
+          <EntitySet Name="KUB_Telekomunikasi_Sdn_Bhd_Item" EntityType="Self.KUB_Telekomunikasi_Sdn_Bhd_Item" />
+          <EntitySet Name="KUB_Telekomunikasi_Sdn_Bhd_Vendor" EntityType="Self.KUB_Telekomunikasi_Sdn_Bhd_Vendor" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="KUB_TelModelStoreContainer" CdmEntityContainer="KUB_TelEntities">
+          <EntitySetMapping Name="KUB_Telekomunikasi_Sdn_Bhd_Contact">
+            <EntityTypeMapping TypeName="KUB_TelModel.KUB_Telekomunikasi_Sdn_Bhd_Contact">
+              <MappingFragment StoreEntitySet="KUB Telekomunikasi Sdn Bhd$Contact">
+                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+                <ScalarProperty Name="No_" ColumnName="No_" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Search_Name" ColumnName="Search Name" />
+                <ScalarProperty Name="Name_2" ColumnName="Name 2" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Address_2" ColumnName="Address 2" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Phone_No_" ColumnName="Phone No_" />
+                <ScalarProperty Name="Telex_No_" ColumnName="Telex No_" />
+                <ScalarProperty Name="Territory_Code" ColumnName="Territory Code" />
+                <ScalarProperty Name="Currency_Code" ColumnName="Currency Code" />
+                <ScalarProperty Name="Language_Code" ColumnName="Language Code" />
+                <ScalarProperty Name="Salesperson_Code" ColumnName="Salesperson Code" />
+                <ScalarProperty Name="Country_Region_Code" ColumnName="Country_Region Code" />
+                <ScalarProperty Name="Last_Date_Modified" ColumnName="Last Date Modified" />
+                <ScalarProperty Name="Fax_No_" ColumnName="Fax No_" />
+                <ScalarProperty Name="Telex_Answer_Back" ColumnName="Telex Answer Back" />
+                <ScalarProperty Name="VAT_Registration_No_" ColumnName="VAT Registration No_" />
+                <ScalarProperty Name="Picture" ColumnName="Picture" />
+                <ScalarProperty Name="Post_Code" ColumnName="Post Code" />
+                <ScalarProperty Name="County" ColumnName="County" />
+                <ScalarProperty Name="E_Mail" ColumnName="E-Mail" />
+                <ScalarProperty Name="Home_Page" ColumnName="Home Page" />
+                <ScalarProperty Name="No__Series" ColumnName="No_ Series" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Company_No_" ColumnName="Company No_" />
+                <ScalarProperty Name="Company_Name" ColumnName="Company Name" />
+                <ScalarProperty Name="Lookup_Contact_No_" ColumnName="Lookup Contact No_" />
+                <ScalarProperty Name="First_Name" ColumnName="First Name" />
+                <ScalarProperty Name="Middle_Name" ColumnName="Middle Name" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Job_Title" ColumnName="Job Title" />
+                <ScalarProperty Name="Initials" ColumnName="Initials" />
+                <ScalarProperty Name="Extension_No_" ColumnName="Extension No_" />
+                <ScalarProperty Name="Mobile_Phone_No_" ColumnName="Mobile Phone No_" />
+                <ScalarProperty Name="Pager" ColumnName="Pager" />
+                <ScalarProperty Name="Organizational_Level_Code" ColumnName="Organizational Level Code" />
+                <ScalarProperty Name="Exclude_from_Segment" ColumnName="Exclude from Segment" />
+                <ScalarProperty Name="External_ID" ColumnName="External ID" />
+                <ScalarProperty Name="Correspondence_Type" ColumnName="Correspondence Type" />
+                <ScalarProperty Name="Salutation_Code" ColumnName="Salutation Code" />
+                <ScalarProperty Name="Search_E_Mail" ColumnName="Search E-Mail" />
+                <ScalarProperty Name="Last_Time_Modified" ColumnName="Last Time Modified" />
+                <ScalarProperty Name="E_Mail_2" ColumnName="E-Mail 2" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="KUB_Telekomunikasi_Sdn_Bhd_Item">
+            <EntityTypeMapping TypeName="KUB_TelModel.KUB_Telekomunikasi_Sdn_Bhd_Item">
+              <MappingFragment StoreEntitySet="KUB Telekomunikasi Sdn Bhd$Item">
+                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+                <ScalarProperty Name="No_" ColumnName="No_" />
+                <ScalarProperty Name="No__2" ColumnName="No_ 2" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Search_Description" ColumnName="Search Description" />
+                <ScalarProperty Name="Description_2" ColumnName="Description 2" />
+                <ScalarProperty Name="Base_Unit_of_Measure" ColumnName="Base Unit of Measure" />
+                <ScalarProperty Name="Price_Unit_Conversion" ColumnName="Price Unit Conversion" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Inventory_Posting_Group" ColumnName="Inventory Posting Group" />
+                <ScalarProperty Name="Shelf_No_" ColumnName="Shelf No_" />
+                <ScalarProperty Name="Item_Disc__Group" ColumnName="Item Disc_ Group" />
+                <ScalarProperty Name="Allow_Invoice_Disc_" ColumnName="Allow Invoice Disc_" />
+                <ScalarProperty Name="Statistics_Group" ColumnName="Statistics Group" />
+                <ScalarProperty Name="Commission_Group" ColumnName="Commission Group" />
+                <ScalarProperty Name="Unit_Price" ColumnName="Unit Price" />
+                <ScalarProperty Name="Price_Profit_Calculation" ColumnName="Price_Profit Calculation" />
+                <ScalarProperty Name="Profit__" ColumnName="Profit _" />
+                <ScalarProperty Name="Costing_Method" ColumnName="Costing Method" />
+                <ScalarProperty Name="Unit_Cost" ColumnName="Unit Cost" />
+                <ScalarProperty Name="Standard_Cost" ColumnName="Standard Cost" />
+                <ScalarProperty Name="Last_Direct_Cost" ColumnName="Last Direct Cost" />
+                <ScalarProperty Name="Indirect_Cost__" ColumnName="Indirect Cost _" />
+                <ScalarProperty Name="Cost_is_Adjusted" ColumnName="Cost is Adjusted" />
+                <ScalarProperty Name="Allow_Online_Adjustment" ColumnName="Allow Online Adjustment" />
+                <ScalarProperty Name="Vendor_No_" ColumnName="Vendor No_" />
+                <ScalarProperty Name="Vendor_Item_No_" ColumnName="Vendor Item No_" />
+                <ScalarProperty Name="Lead_Time_Calculation" ColumnName="Lead Time Calculation" />
+                <ScalarProperty Name="Reorder_Point" ColumnName="Reorder Point" />
+                <ScalarProperty Name="Maximum_Inventory" ColumnName="Maximum Inventory" />
+                <ScalarProperty Name="Reorder_Quantity" ColumnName="Reorder Quantity" />
+                <ScalarProperty Name="Alternative_Item_No_" ColumnName="Alternative Item No_" />
+                <ScalarProperty Name="Unit_List_Price" ColumnName="Unit List Price" />
+                <ScalarProperty Name="Duty_Due__" ColumnName="Duty Due _" />
+                <ScalarProperty Name="Duty_Code" ColumnName="Duty Code" />
+                <ScalarProperty Name="Gross_Weight" ColumnName="Gross Weight" />
+                <ScalarProperty Name="Net_Weight" ColumnName="Net Weight" />
+                <ScalarProperty Name="Units_per_Parcel" ColumnName="Units per Parcel" />
+                <ScalarProperty Name="Unit_Volume" ColumnName="Unit Volume" />
+                <ScalarProperty Name="Durability" ColumnName="Durability" />
+                <ScalarProperty Name="Freight_Type" ColumnName="Freight Type" />
+                <ScalarProperty Name="Tariff_No_" ColumnName="Tariff No_" />
+                <ScalarProperty Name="Duty_Unit_Conversion" ColumnName="Duty Unit Conversion" />
+                <ScalarProperty Name="Country_Region_Purchased_Code" ColumnName="Country_Region Purchased Code" />
+                <ScalarProperty Name="Budget_Quantity" ColumnName="Budget Quantity" />
+                <ScalarProperty Name="Budgeted_Amount" ColumnName="Budgeted Amount" />
+                <ScalarProperty Name="Budget_Profit" ColumnName="Budget Profit" />
+                <ScalarProperty Name="Blocked" ColumnName="Blocked" />
+                <ScalarProperty Name="Last_Date_Modified" ColumnName="Last Date Modified" />
+                <ScalarProperty Name="Last_Time_Modified" ColumnName="Last Time Modified" />
+                <ScalarProperty Name="Price_Includes_VAT" ColumnName="Price Includes VAT" />
+                <ScalarProperty Name="VAT_Bus__Posting_Gr___Price_" ColumnName="VAT Bus_ Posting Gr_ (Price)" />
+                <ScalarProperty Name="Gen__Prod__Posting_Group" ColumnName="Gen_ Prod_ Posting Group" />
+                <ScalarProperty Name="Picture" ColumnName="Picture" />
+                <ScalarProperty Name="Country_Region_of_Origin_Code" ColumnName="Country_Region of Origin Code" />
+                <ScalarProperty Name="Automatic_Ext__Texts" ColumnName="Automatic Ext_ Texts" />
+                <ScalarProperty Name="No__Series" ColumnName="No_ Series" />
+                <ScalarProperty Name="Tax_Group_Code" ColumnName="Tax Group Code" />
+                <ScalarProperty Name="VAT_Prod__Posting_Group" ColumnName="VAT Prod_ Posting Group" />
+                <ScalarProperty Name="Reserve" ColumnName="Reserve" />
+                <ScalarProperty Name="Global_Dimension_1_Code" ColumnName="Global Dimension 1 Code" />
+                <ScalarProperty Name="Global_Dimension_2_Code" ColumnName="Global Dimension 2 Code" />
+                <ScalarProperty Name="Stockout_Warning" ColumnName="Stockout Warning" />
+                <ScalarProperty Name="Prevent_Negative_Inventory" ColumnName="Prevent Negative Inventory" />
+                <ScalarProperty Name="Application_Wksh__User_ID" ColumnName="Application Wksh_ User ID" />
+                <ScalarProperty Name="Assembly_Policy" ColumnName="Assembly Policy" />
+                <ScalarProperty Name="GTIN" ColumnName="GTIN" />
+                <ScalarProperty Name="Default_Deferral_Template_Code" ColumnName="Default Deferral Template Code" />
+                <ScalarProperty Name="Low_Level_Code" ColumnName="Low-Level Code" />
+                <ScalarProperty Name="Lot_Size" ColumnName="Lot Size" />
+                <ScalarProperty Name="Serial_Nos_" ColumnName="Serial Nos_" />
+                <ScalarProperty Name="Last_Unit_Cost_Calc__Date" ColumnName="Last Unit Cost Calc_ Date" />
+                <ScalarProperty Name="Rolled_up_Material_Cost" ColumnName="Rolled-up Material Cost" />
+                <ScalarProperty Name="Rolled_up_Capacity_Cost" ColumnName="Rolled-up Capacity Cost" />
+                <ScalarProperty Name="Scrap__" ColumnName="Scrap _" />
+                <ScalarProperty Name="Inventory_Value_Zero" ColumnName="Inventory Value Zero" />
+                <ScalarProperty Name="Discrete_Order_Quantity" ColumnName="Discrete Order Quantity" />
+                <ScalarProperty Name="Minimum_Order_Quantity" ColumnName="Minimum Order Quantity" />
+                <ScalarProperty Name="Maximum_Order_Quantity" ColumnName="Maximum Order Quantity" />
+                <ScalarProperty Name="Safety_Stock_Quantity" ColumnName="Safety Stock Quantity" />
+                <ScalarProperty Name="Order_Multiple" ColumnName="Order Multiple" />
+                <ScalarProperty Name="Safety_Lead_Time" ColumnName="Safety Lead Time" />
+                <ScalarProperty Name="Flushing_Method" ColumnName="Flushing Method" />
+                <ScalarProperty Name="Replenishment_System" ColumnName="Replenishment System" />
+                <ScalarProperty Name="Rounding_Precision" ColumnName="Rounding Precision" />
+                <ScalarProperty Name="Sales_Unit_of_Measure" ColumnName="Sales Unit of Measure" />
+                <ScalarProperty Name="Purch__Unit_of_Measure" ColumnName="Purch_ Unit of Measure" />
+                <ScalarProperty Name="Time_Bucket" ColumnName="Time Bucket" />
+                <ScalarProperty Name="Reordering_Policy" ColumnName="Reordering Policy" />
+                <ScalarProperty Name="Include_Inventory" ColumnName="Include Inventory" />
+                <ScalarProperty Name="Manufacturing_Policy" ColumnName="Manufacturing Policy" />
+                <ScalarProperty Name="Rescheduling_Period" ColumnName="Rescheduling Period" />
+                <ScalarProperty Name="Lot_Accumulation_Period" ColumnName="Lot Accumulation Period" />
+                <ScalarProperty Name="Dampener_Period" ColumnName="Dampener Period" />
+                <ScalarProperty Name="Dampener_Quantity" ColumnName="Dampener Quantity" />
+                <ScalarProperty Name="Overflow_Level" ColumnName="Overflow Level" />
+                <ScalarProperty Name="Manufacturer_Code" ColumnName="Manufacturer Code" />
+                <ScalarProperty Name="Item_Category_Code" ColumnName="Item Category Code" />
+                <ScalarProperty Name="Created_From_Nonstock_Item" ColumnName="Created From Nonstock Item" />
+                <ScalarProperty Name="Product_Group_Code" ColumnName="Product Group Code" />
+                <ScalarProperty Name="Service_Item_Group" ColumnName="Service Item Group" />
+                <ScalarProperty Name="Item_Tracking_Code" ColumnName="Item Tracking Code" />
+                <ScalarProperty Name="Lot_Nos_" ColumnName="Lot Nos_" />
+                <ScalarProperty Name="Expiration_Calculation" ColumnName="Expiration Calculation" />
+                <ScalarProperty Name="Warehouse_Class_Code" ColumnName="Warehouse Class Code" />
+                <ScalarProperty Name="Special_Equipment_Code" ColumnName="Special Equipment Code" />
+                <ScalarProperty Name="Put_away_Template_Code" ColumnName="Put-away Template Code" />
+                <ScalarProperty Name="Put_away_Unit_of_Measure_Code" ColumnName="Put-away Unit of Measure Code" />
+                <ScalarProperty Name="Phys_Invt_Counting_Period_Code" ColumnName="Phys Invt Counting Period Code" />
+                <ScalarProperty Name="Last_Counting_Period_Update" ColumnName="Last Counting Period Update" />
+                <ScalarProperty Name="Use_Cross_Docking" ColumnName="Use Cross-Docking" />
+                <ScalarProperty Name="Next_Counting_Start_Date" ColumnName="Next Counting Start Date" />
+                <ScalarProperty Name="Next_Counting_End_Date" ColumnName="Next Counting End Date" />
+                <ScalarProperty Name="Supply_Tax_Code" ColumnName="Supply Tax Code" />
+                <ScalarProperty Name="Purchase_Tax_Code" ColumnName="Purchase Tax Code" />
+                <ScalarProperty Name="WHT_Product_Posting_Group" ColumnName="WHT Product Posting Group" />
+                <ScalarProperty Name="Routing_No_" ColumnName="Routing No_" />
+                <ScalarProperty Name="Production_BOM_No_" ColumnName="Production BOM No_" />
+                <ScalarProperty Name="Single_Level_Material_Cost" ColumnName="Single-Level Material Cost" />
+                <ScalarProperty Name="Single_Level_Capacity_Cost" ColumnName="Single-Level Capacity Cost" />
+                <ScalarProperty Name="Single_Level_Subcontrd__Cost" ColumnName="Single-Level Subcontrd_ Cost" />
+                <ScalarProperty Name="Single_Level_Cap__Ovhd_Cost" ColumnName="Single-Level Cap_ Ovhd Cost" />
+                <ScalarProperty Name="Single_Level_Mfg__Ovhd_Cost" ColumnName="Single-Level Mfg_ Ovhd Cost" />
+                <ScalarProperty Name="Overhead_Rate" ColumnName="Overhead Rate" />
+                <ScalarProperty Name="Rolled_up_Subcontracted_Cost" ColumnName="Rolled-up Subcontracted Cost" />
+                <ScalarProperty Name="Rolled_up_Mfg__Ovhd_Cost" ColumnName="Rolled-up Mfg_ Ovhd Cost" />
+                <ScalarProperty Name="Rolled_up_Cap__Overhead_Cost" ColumnName="Rolled-up Cap_ Overhead Cost" />
+                <ScalarProperty Name="Order_Tracking_Policy" ColumnName="Order Tracking Policy" />
+                <ScalarProperty Name="Critical" ColumnName="Critical" />
+                <ScalarProperty Name="Common_Item_No_" ColumnName="Common Item No_" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="KUB_Telekomunikasi_Sdn_Bhd_Vendor">
+            <EntityTypeMapping TypeName="KUB_TelModel.KUB_Telekomunikasi_Sdn_Bhd_Vendor">
+              <MappingFragment StoreEntitySet="KUB Telekomunikasi Sdn Bhd$Vendor">
+                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+                <ScalarProperty Name="No_" ColumnName="No_" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Search_Name" ColumnName="Search Name" />
+                <ScalarProperty Name="Name_2" ColumnName="Name 2" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Address_2" ColumnName="Address 2" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Contact" ColumnName="Contact" />
+                <ScalarProperty Name="Phone_No_" ColumnName="Phone No_" />
+                <ScalarProperty Name="Telex_No_" ColumnName="Telex No_" />
+                <ScalarProperty Name="Our_Account_No_" ColumnName="Our Account No_" />
+                <ScalarProperty Name="Territory_Code" ColumnName="Territory Code" />
+                <ScalarProperty Name="Global_Dimension_1_Code" ColumnName="Global Dimension 1 Code" />
+                <ScalarProperty Name="Global_Dimension_2_Code" ColumnName="Global Dimension 2 Code" />
+                <ScalarProperty Name="Budgeted_Amount" ColumnName="Budgeted Amount" />
+                <ScalarProperty Name="Vendor_Posting_Group" ColumnName="Vendor Posting Group" />
+                <ScalarProperty Name="Currency_Code" ColumnName="Currency Code" />
+                <ScalarProperty Name="Language_Code" ColumnName="Language Code" />
+                <ScalarProperty Name="Statistics_Group" ColumnName="Statistics Group" />
+                <ScalarProperty Name="Payment_Terms_Code" ColumnName="Payment Terms Code" />
+                <ScalarProperty Name="Fin__Charge_Terms_Code" ColumnName="Fin_ Charge Terms Code" />
+                <ScalarProperty Name="Purchaser_Code" ColumnName="Purchaser Code" />
+                <ScalarProperty Name="Shipment_Method_Code" ColumnName="Shipment Method Code" />
+                <ScalarProperty Name="Shipping_Agent_Code" ColumnName="Shipping Agent Code" />
+                <ScalarProperty Name="Invoice_Disc__Code" ColumnName="Invoice Disc_ Code" />
+                <ScalarProperty Name="Country_Region_Code" ColumnName="Country_Region Code" />
+                <ScalarProperty Name="Blocked" ColumnName="Blocked" />
+                <ScalarProperty Name="Pay_to_Vendor_No_" ColumnName="Pay-to Vendor No_" />
+                <ScalarProperty Name="Priority" ColumnName="Priority" />
+                <ScalarProperty Name="Payment_Method_Code" ColumnName="Payment Method Code" />
+                <ScalarProperty Name="Last_Date_Modified" ColumnName="Last Date Modified" />
+                <ScalarProperty Name="Application_Method" ColumnName="Application Method" />
+                <ScalarProperty Name="Prices_Including_VAT" ColumnName="Prices Including VAT" />
+                <ScalarProperty Name="Fax_No_" ColumnName="Fax No_" />
+                <ScalarProperty Name="Telex_Answer_Back" ColumnName="Telex Answer Back" />
+                <ScalarProperty Name="VAT_Registration_No_" ColumnName="VAT Registration No_" />
+                <ScalarProperty Name="Gen__Bus__Posting_Group" ColumnName="Gen_ Bus_ Posting Group" />
+                <ScalarProperty Name="Picture" ColumnName="Picture" />
+                <ScalarProperty Name="GLN" ColumnName="GLN" />
+                <ScalarProperty Name="Post_Code" ColumnName="Post Code" />
+                <ScalarProperty Name="County" ColumnName="County" />
+                <ScalarProperty Name="E_Mail" ColumnName="E-Mail" />
+                <ScalarProperty Name="Home_Page" ColumnName="Home Page" />
+                <ScalarProperty Name="No__Series" ColumnName="No_ Series" />
+                <ScalarProperty Name="Tax_Area_Code" ColumnName="Tax Area Code" />
+                <ScalarProperty Name="Tax_Liable" ColumnName="Tax Liable" />
+                <ScalarProperty Name="VAT_Bus__Posting_Group" ColumnName="VAT Bus_ Posting Group" />
+                <ScalarProperty Name="Block_Payment_Tolerance" ColumnName="Block Payment Tolerance" />
+                <ScalarProperty Name="IC_Partner_Code" ColumnName="IC Partner Code" />
+                <ScalarProperty Name="Prepayment__" ColumnName="Prepayment _" />
+                <ScalarProperty Name="Partner_Type" ColumnName="Partner Type" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Creditor_No_" ColumnName="Creditor No_" />
+                <ScalarProperty Name="Preferred_Bank_Account_Code" ColumnName="Preferred Bank Account Code" />
+                <ScalarProperty Name="Cash_Flow_Payment_Terms_Code" ColumnName="Cash Flow Payment Terms Code" />
+                <ScalarProperty Name="Primary_Contact_No_" ColumnName="Primary Contact No_" />
+                <ScalarProperty Name="Responsibility_Center" ColumnName="Responsibility Center" />
+                <ScalarProperty Name="Location_Code" ColumnName="Location Code" />
+                <ScalarProperty Name="Lead_Time_Calculation" ColumnName="Lead Time Calculation" />
+                <ScalarProperty Name="Base_Calendar_Code" ColumnName="Base Calendar Code" />
+                <ScalarProperty Name="Document_Sending_Profile" ColumnName="Document Sending Profile" />
+                <ScalarProperty Name="Address_3" ColumnName="Address 3" />
+                <ScalarProperty Name="Business_Registration_No_" ColumnName="Business Registration No_" />
+                <ScalarProperty Name="RMCD_Approval_No_" ColumnName="RMCD Approval No_" />
+                <ScalarProperty Name="Self_Billed_Prefix" ColumnName="Self Billed Prefix" />
+                <ScalarProperty Name="Self_Billed_Last_Used_No_" ColumnName="Self Billed Last Used No_" />
+                <ScalarProperty Name="Non_GST_Registrant_BK" ColumnName="Non GST Registrant BK" />
+                <ScalarProperty Name="GST_Registrant_Type" ColumnName="GST Registrant Type" />
+                <ScalarProperty Name="FRS_Approval_No_" ColumnName="FRS Approval No_" />
+                <ScalarProperty Name="WHT_Business_Posting_Group" ColumnName="WHT Business Posting Group" />
+                <ScalarProperty Name="WHT_Registration_ID" ColumnName="WHT Registration ID" />
+                <ScalarProperty Name="ID_No_" ColumnName="ID No_" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

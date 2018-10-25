@@ -1,0 +1,733 @@
+﻿<div class="media-md align-items-center g-mb-30 container-fluid">
+    <div class="d-flex g-mb-15 g-mb-0--md">
+        <h3 class="g-font-weight-400 g-font-size-16 g-color-black mb-0 g-pa-20">Project Schedules</h3>
+    </div>
+    <div class="media-body align-self-center text-right">
+        <a class="js-fancybox btn btn-xl u-btn-lightblue-v3 g-font-size-default g-ml-10" href="#!" data-src="#new-project-form" data-speed="350" data-options='{"touch" : false}'>
+            New Schedule
+        </a>
+    </div>
+</div>
+<div class="media-md align-items-center g-mb-30 container-fluid">
+    <div class="media d-md-flex align-items-center ml-auto">
+        <div class="d-flex align-items-center">
+            <span class="g-hidden-sm-down g-color-gray-dark-v6 g-mr-12">Show:</span>
+            <div class="u-select--v1 g-pr-20">
+                <select id="datatableEntries3" class="js-select u-select--v1-select w-100" style="display: none;">
+                    <option data-content='<span class="d-flex align-items-center g-line-height-1_2 g-color-black">5 Entries</span>' value="5">5 Entries</option>
+                    <option data-content='<span class="d-flex align-items-center g-line-height-1_2 g-color-black">10 Entries</span>' value="10">10 Entries</option>
+                    <option data-content='<span class="d-flex align-items-center g-line-height-1_2 g-color-black">15 Entries</span>' value="15">15 Entries</option>
+                    <option data-content='<span class="d-flex align-items-center g-line-height-1_2 g-color-black">20 Entries</span>' value="20">20 Entries</option>
+                    <option data-content='<span class="d-flex align-items-center g-line-height-1_2 g-color-black">25 Entries</span>' value="25">25 Entries</option>
+                </select>
+                <i class="hs-admin-angle-down g-absolute-centered--y g-right-0 g-color-gray-light-v6 ml-auto"></i>
+            </div>
+        </div>
+        <div class="d-flex g-ml-15 g-ml-55--md">
+            <div class="input-group g-pos-rel g-width-320--md">
+                <input id="datatableSearch3" class="form-control g-font-size-default g-brd-gray-light-v7 g-brd-lightblue-v3--focus g-rounded-20 g-pl-20 g-pr-50 g-py-10" type="text" placeholder="Search for name, position">
+                <button class="btn g-pos-abs g-top-0 g-right-0 g-z-index-2 g-width-60 h-100 g-bg-transparent g-font-size-16 g-color-lightred-v2 g-color-lightblue-v3--hover rounded-0" type="submit">
+                    <i class="hs-admin-search g-absolute-centered"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="g-mb-40">
+    <div class="table-responsive container-fluid">
+        <table class="js-datatable table table-striped u-table--v3 u-editable-table--v1 g-brd-style-solid g-brd-2 g-brd-gray-light-v6" style="width:100%" data-dt-info="#datatableInfo" data-dt-search="#datatableSearch3" data-dt-entries="#datatableEntries3" data-dt-pagination="datatablePagination3" data-dt-page-length="5"
+               data-dt-is-responsive="true" data-dt-pagination-classes="list-inline text-right mb-0" data-dt-pagination-items-classes="list-inline-item g-hidden-sm-down" data-dt-pagination-links-classes="u-pagination-v1__item u-pagination-v1-2 g-bg-lightblue-v3--active g-color-white--active g-brd-gray-light-v7 g-brd-lightblue-v3--hover g-brd-lightblue-v3--active g-rounded-4 g-py-8 g-px-15"
+               data-dt-pagination-next-classes="list-inline-item" data-dt-pagination-next-link-classes="u-pagination-v1__item u-pagination-v1-2 g-brd-gray-light-v7 g-brd-lightblue-v3--hover g-rounded-4 g-py-8 g-px-12" data-dt-pagination-next-link-markup='<span class="g-line-height-1 g-valign-middle" aria-hidden="true"><i class="hs-admin-angle-right"></i></span><span class="sr-only">Next</span>'
+               data-dt-pagination-prev-classes="list-inline-item" data-dt-pagination-prev-link-classes="u-pagination-v1__item u-pagination-v1-2 g-brd-gray-light-v7 g-brd-lightblue-v3--hover g-rounded-4 g-py-8 g-px-12" data-dt-pagination-prev-link-markup='<span class="g-line-height-1 g-valign-middle" aria-hidden="true"><i class="hs-admin-angle-left"></i></span><span class="sr-only">Prev</span>'>
+            <thead>
+                <tr>
+                    <th class="g-hidden-xs-up"></th>
+                    <th class="g-first-child">
+                        <div class="media">
+                            <div class="d-flex align-self-center">No.</div>
+                            <div class="d-flex align-self-center ml-auto">
+                                <span class="d-inline-block g-width-10 g-line-height-1 g-font-size-10">
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-up"></i>
+                                    </a>
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-down"></i>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="media">
+                            <div class="d-flex align-self-center">Project Milestones</div>
+                            <div class="d-flex align-self-center ml-auto">
+                                <span class="d-inline-block g-width-10 g-line-height-1 g-font-size-10">
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-up"></i>
+                                    </a>
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-down"></i>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="media">
+                            <div class="d-flex align-self-center">PIC</div>
+                            <div class="d-flex align-self-center ml-auto">
+                                <span class="d-inline-block g-width-10 g-line-height-1 g-font-size-10">
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-up"></i>
+                                    </a>
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-down"></i>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </th>
+                    <th class="g-width-155--lg">
+                        <div class="media">
+                            <div class="d-flex align-self-center">Date Start</div>
+                            <div class="d-flex align-self-center ml-auto">
+                                <span class="d-inline-block g-width-10 g-line-height-1 g-font-size-10">
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-up"></i>
+                                    </a>
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-down"></i>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </th>
+                    <th class="g-width-155--lg">
+                        <div class="media">
+                            <div class="d-flex align-self-center">Date End</div>
+                            <div class="d-flex align-self-center ml-auto">
+                                <span class="d-inline-block g-width-10 g-line-height-1 g-font-size-10">
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-up"></i>
+                                    </a>
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-down"></i>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </th>
+                    @*<th>
+                        <div class="media">
+                            <div class="d-flex align-self-center">Duration (day)</div>
+                            <div class="d-flex align-self-center ml-auto">
+                                <span class="d-inline-block g-width-10 g-line-height-1 g-font-size-10">
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-up"></i>
+                                    </a>
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-down"></i>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </th>*@
+                    <th>
+                        <div class="media">
+                            <div class="d-flex align-self-center">Status</div>
+                            <div class="d-flex align-self-center ml-auto">
+                                <span class="d-inline-block g-width-10 g-line-height-1 g-font-size-10">
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-up"></i>
+                                    </a>
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-down"></i>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="media">
+                            <div class="d-flex align-self-center">Weightage (%)</div>
+                            <div class="d-flex align-self-center ml-auto">
+                                <span class="d-inline-block g-width-10 g-line-height-1 g-font-size-10">
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-up"></i>
+                                    </a>
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-down"></i>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="media">
+                            <div class="d-flex align-self-center">Progress (%)</div>
+                            <div class="d-flex align-self-center ml-auto">
+                                <span class="d-inline-block g-width-10 g-line-height-1 g-font-size-10">
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-up"></i>
+                                    </a>
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-down"></i>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </th>
+                    @*<th>
+                        <div class="media">
+                            <div class="d-flex align-self-center">Project Progress (%)</div>
+                            <div class="d-flex align-self-center ml-auto">
+                                <span class="d-inline-block g-width-10 g-line-height-1 g-font-size-10">
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-up"></i>
+                                    </a>
+                                    <a class="g-color-gray-light-v6 g-color-lightblue-v3--hover g-text-underline--none--hover" href="#!">
+                                        <i class="hs-admin-angle-down"></i>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </th>*@
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="g-hidden-xs-up">1</td>
+                    <td class="g-first-child">
+                        <div class="media align-items-center">
+                            <div class="media-body text-left g-ml-15">1</div>
+                        </div>
+                    </td>
+                    <td>Award Letter</td>
+                    <td>Latif</td>
+                    <td>19-Oct-15</td>
+                    <td>20-Oct-15</td>
+                    @*<td>1</td>*@
+                    <td>
+                        <div class="d-inline-block">
+                            <span class="d-flex align-items-center justify-content-center u-tags-v1 g-brd-around g-bg-white g-font-size-default g-color-gray-dark-v6 g-brd-white g-rounded-50 g-py-4 g-px-15">
+                                <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-green g-mr-8"></span>
+                                Completed
+                            </span>
+                        </div>
+                    </td>
+                    <td>2</td>
+                    <td>
+                        <div class="progress g-height-6 g-rounded-3">
+                            <div class="progress-bar g-bg-green g-rounded-3" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        100%
+                    </td>
+                    @*<td>
+                        2
+                    </td>*@
+                    <td class="text-right">
+                        <div class="g-pos-rel g-top-3 d-inline-block">
+                            <a id="Schedule1Invoker" class="u-link-v5 g-line-height-0 g-font-size-24 g-color-gray-light-v6 g-color-lightblue-v3--hover" href="#!" aria-controls="Schedule1" aria-haspopup="true" aria-expanded="false" data-dropdown-event="click" data-dropdown-target="#Schedule1">
+                                <i class="hs-admin-more-alt"></i>
+                            </a>
+                            <div id="Schedule1" class="u-shadow-v31 g-pos-abs g-right-0 g-z-index-2 g-bg-white" aria-labelledby="Schedule1Invoker">
+                                <ul class="list-unstyled g-nowrap mb-0">
+                                    <li>
+                                        <a class="d-flex align-items-center u-link-v5 g-bg-gray-light-v8--hover g-font-size-12 g-font-size-default--md g-color-gray-dark-v6 g-px-25 g-py-14" href="#!">
+                                            <i class="hs-admin-pencil g-font-size-18 g-color-gray-light-v6 g-mr-10 g-mr-15--md"></i>
+                                            Edit
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="g-hidden-xs-up">2</td>
+                    <td class="g-first-child">
+                        <div class="media align-items-center">
+                            <div class="media-body text-left g-ml-15">2</div>
+                        </div>
+                    </td>
+                    <td>Project Administration</td>
+                    <td>Latif</td>
+                    <td>2-Nov-15</td>
+                    <td>7-Nov-15</td>
+                    @*<td>5</td>*@
+                    <td>
+                        <div class="d-inline-block">
+                            <span class="d-flex align-items-center justify-content-center u-tags-v1 g-brd-around g-bg-white g-font-size-default g-color-gray-dark-v6 g-brd-white g-rounded-50 g-py-4 g-px-15">
+                                <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-green g-mr-8"></span>
+                                Completed
+                            </span>
+                        </div>
+                    </td>
+                    <td>2</td>
+                    <td>
+                        <div class="progress g-height-6 g-rounded-3">
+                            <div class="progress-bar g-bg-green g-rounded-3" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        100%
+                    </td>
+                    @*<td>
+                        2
+                    </td>*@
+                    <td class="text-right">
+                        <div class="g-pos-rel g-top-3 d-inline-block">
+                            <a id="Schedule2Invoker" class="u-link-v5 g-line-height-0 g-font-size-24 g-color-gray-light-v6 g-color-lightblue-v3--hover" href="#!" aria-controls="Schedule2" aria-haspopup="true" aria-expanded="false" data-dropdown-event="click" data-dropdown-target="#Schedule2">
+                                <i class="hs-admin-more-alt"></i>
+                            </a>
+                            <div id="Schedule2" class="u-shadow-v31 g-pos-abs g-right-0 g-z-index-2 g-bg-white" aria-labelledby="Schedule2Invoker">
+                                <ul class="list-unstyled g-nowrap mb-0">
+                                    <li>
+                                        <a class="d-flex align-items-center u-link-v5 g-bg-gray-light-v8--hover g-font-size-12 g-font-size-default--md g-color-gray-dark-v6 g-px-25 g-py-14" href="#!">
+                                            <i class="hs-admin-pencil g-font-size-18 g-color-gray-light-v6 g-mr-10 g-mr-15--md"></i>
+                                            Edit
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="g-hidden-xs-up">3</td>
+                    <td class="g-first-child">
+                        <div class="media align-items-center">
+                            <div class="media-body text-left g-ml-15">3</div>
+                        </div>
+                    </td>
+                    <td>Project Management Office</td>
+                    <td>Latif</td>
+                    <td>3-Nov-15</td>
+                    <td>24-Dec-15</td>
+                    @*<td>51</td>*@
+                    <td>
+                        <div class="d-inline-block">
+                            <span class="d-flex align-items-center justify-content-center u-tags-v1 g-brd-around g-bg-white g-font-size-default g-color-gray-dark-v6 g-brd-white g-rounded-50 g-py-4 g-px-15">
+                                <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-green g-mr-8"></span>
+                                Completed
+                            </span>
+                        </div>
+                    </td>
+                    <td>2</td>
+                    <td>
+                        <div class="progress g-height-6 g-rounded-3">
+                            <div class="progress-bar g-bg-green g-rounded-3" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        100%
+                    </td>
+                    @*<td>
+                        2
+                    </td>*@
+                    <td class="text-right">
+                        <div class="g-pos-rel g-top-3 d-inline-block">
+                            <a id="Schedule3Invoker" class="u-link-v5 g-line-height-0 g-font-size-24 g-color-gray-light-v6 g-color-lightblue-v3--hover" href="#!" aria-controls="Schedule3" aria-haspopup="true" aria-expanded="false" data-dropdown-event="click" data-dropdown-target="#Schedule3">
+                                <i class="hs-admin-more-alt"></i>
+                            </a>
+                            <div id="Schedule3" class="u-shadow-v31 g-pos-abs g-right-0 g-z-index-2 g-bg-white" aria-labelledby="Schedule3Invoker">
+                                <ul class="list-unstyled g-nowrap mb-0">
+                                    <li>
+                                        <a class="d-flex align-items-center u-link-v5 g-bg-gray-light-v8--hover g-font-size-12 g-font-size-default--md g-color-gray-dark-v6 g-px-25 g-py-14" href="#!">
+                                            <i class="hs-admin-pencil g-font-size-18 g-color-gray-light-v6 g-mr-10 g-mr-15--md"></i>
+                                            Edit
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="g-hidden-xs-up">4</td>
+                    <td class="g-first-child">
+                        <div class="media align-items-center">
+                            <div class="media-body text-left g-ml-15">4</div>
+                        </div>
+                    </td>
+                    <td>Identifying Site Preparation Requirement</td>
+                    <td>Latif</td>
+                    <td>16-Nov-15</td>
+                    <td>28-Dec-15</td>
+                    @*<td>42</td>*@
+                    <td>
+                        <div class="d-inline-block">
+                            <span class="d-flex align-items-center justify-content-center u-tags-v1 g-brd-around g-bg-white g-font-size-default g-color-gray-dark-v6 g-brd-white g-rounded-50 g-py-4 g-px-15">
+                                <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-green g-mr-8"></span>
+                                Completed
+                            </span>
+                        </div>
+                    </td>
+                    <td>5</td>
+                    <td>
+                        <div class="progress g-height-6 g-rounded-3">
+                            <div class="progress-bar g-bg-green g-rounded-3" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        100%
+                    </td>
+                    @*<td>
+                        5
+                    </td>*@
+                    <td class="text-right">
+                        <div class="g-pos-rel g-top-3 d-inline-block">
+                            <a id="Schedule4Invoker" class="u-link-v5 g-line-height-0 g-font-size-24 g-color-gray-light-v6 g-color-lightblue-v3--hover" href="#!" aria-controls="Schedule4" aria-haspopup="true" aria-expanded="false" data-dropdown-event="click" data-dropdown-target="#Schedule4">
+                                <i class="hs-admin-more-alt"></i>
+                            </a>
+                            <div id="Schedule4" class="u-shadow-v31 g-pos-abs g-right-0 g-z-index-2 g-bg-white" aria-labelledby="Schedule4Invoker">
+                                <ul class="list-unstyled g-nowrap mb-0">
+                                    <li>
+                                        <a class="d-flex align-items-center u-link-v5 g-bg-gray-light-v8--hover g-font-size-12 g-font-size-default--md g-color-gray-dark-v6 g-px-25 g-py-14" href="#!">
+                                            <i class="hs-admin-pencil g-font-size-18 g-color-gray-light-v6 g-mr-10 g-mr-15--md"></i>
+                                            Edit
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="g-hidden-xs-up">5</td>
+                    <td class="g-first-child">
+                        <div class="media align-items-center">
+                            <div class="media-body text-left g-ml-15">5</div>
+                        </div>
+                    </td>
+                    <td>Identifying Components And Specification Of Equipment</td>
+                    <td>Latif</td>
+                    <td>15-Dec-15</td>
+                    <td>12-Jan-16</td>
+                    @*<td>28</td>*@
+                    <td>
+                        <div class="d-inline-block">
+                            <span class="d-flex align-items-center justify-content-center u-tags-v1 g-brd-around g-bg-white g-font-size-default g-color-gray-dark-v6 g-brd-white g-rounded-50 g-py-4 g-px-15">
+                                <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-green g-mr-8"></span>
+                                Completed
+                            </span>
+                        </div>
+                    </td>
+                    <td>5</td>
+                    <td>
+                        <div class="progress g-height-6 g-rounded-3">
+                            <div class="progress-bar g-bg-green g-rounded-3" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        100%
+                    </td>
+                    @*<td>
+                        5
+                    </td>*@
+                    <td class="text-right">
+                        <div class="g-pos-rel g-top-3 d-inline-block">
+                            <a id="Schedule5Invoker" class="u-link-v5 g-line-height-0 g-font-size-24 g-color-gray-light-v6 g-color-lightblue-v3--hover" href="#!" aria-controls="Schedule5" aria-haspopup="true" aria-expanded="false" data-dropdown-event="click" data-dropdown-target="#Schedule5">
+                                <i class="hs-admin-more-alt"></i>
+                            </a>
+                            <div id="Schedule5" class="u-shadow-v31 g-pos-abs g-right-0 g-z-index-2 g-bg-white" aria-labelledby="Schedule5Invoker">
+                                <ul class="list-unstyled g-nowrap mb-0">
+                                    <li>
+                                        <a class="d-flex align-items-center u-link-v5 g-bg-gray-light-v8--hover g-font-size-12 g-font-size-default--md g-color-gray-dark-v6 g-px-25 g-py-14" href="#!">
+                                            <i class="hs-admin-pencil g-font-size-18 g-color-gray-light-v6 g-mr-10 g-mr-15--md"></i>
+                                            Edit
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="g-hidden-xs-up">6</td>
+                    <td class="g-first-child">
+                        <div class="media align-items-center">
+                            <div class="media-body text-left g-ml-15">6</div>
+                        </div>
+                    </td>
+                    <td>Procurement</td>
+                    <td>Latif</td>
+                    <td>17-Jan-16</td>
+                    <td>1-Apr-16</td>
+                    <td>
+                        <div class="d-inline-block">
+                            <span class="d-flex align-items-center justify-content-center u-tags-v1 g-brd-around g-bg-white g-font-size-default g-color-gray-dark-v6 g-brd-white g-rounded-50 g-py-4 g-px-15">
+                                <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-green g-mr-8"></span>
+                                Completed
+                            </span>
+                        </div>
+                    </td>
+                    <td>25</td>
+                    <td>
+                        <div class="progress g-height-6 g-rounded-3">
+                            <div class="progress-bar g-bg-green g-rounded-3" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        100%
+                    </td>
+                    @*<td>
+                        25
+                    </td>*@
+                    <td class="text-right">
+                        <div class="g-pos-rel g-top-3 d-inline-block">
+                            <a id="Schedule6Invoker" class="u-link-v5 g-line-height-0 g-font-size-24 g-color-gray-light-v6 g-color-lightblue-v3--hover" href="#!" aria-controls="Schedule6" aria-haspopup="true" aria-expanded="false" data-dropdown-event="click" data-dropdown-target="#Schedule6">
+                                <i class="hs-admin-more-alt"></i>
+                            </a>
+                            <div id="Schedule6" class="u-shadow-v31 g-pos-abs g-right-0 g-z-index-2 g-bg-white" aria-labelledby="Schedule6Invoker">
+                                <ul class="list-unstyled g-nowrap mb-0">
+                                    <li>
+                                        <a class="d-flex align-items-center u-link-v5 g-bg-gray-light-v8--hover g-font-size-12 g-font-size-default--md g-color-gray-dark-v6 g-px-25 g-py-14" href="#!">
+                                            <i class="hs-admin-pencil g-font-size-18 g-color-gray-light-v6 g-mr-10 g-mr-15--md"></i>
+                                            Edit
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="g-hidden-xs-up">7</td>
+                    <td class="g-first-child">
+                        <div class="media align-items-center">
+                            <div class="media-body text-left g-ml-15">7</div>
+                        </div>
+                    </td>
+                    <td>Site Installation</td>
+                    <td>Latif</td>
+                    <td>22-Dec-15</td>
+                    <td>9-Feb-16</td>
+                    @*<td>49</td>*@
+                    <td>
+                        <div class="d-inline-block">
+                            <span class="d-flex align-items-center justify-content-center u-tags-v1 g-brd-around g-bg-white g-font-size-default g-color-gray-dark-v6 g-brd-white g-rounded-50 g-py-4 g-px-15">
+                                <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-green g-mr-8"></span>
+                                Completed
+                            </span>
+                        </div>
+                    </td>
+                    <td>22</td>
+                    <td>
+                        <div class="progress g-height-6 g-rounded-3">
+                            <div class="progress-bar g-bg-green g-rounded-3" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        100%
+                    </td>
+                    @*<td>
+                        22
+                    </td>*@
+                    <td class="text-right">
+                        <div class="g-pos-rel g-top-3 d-inline-block">
+                            <a id="Schedule7Invoker" class="u-link-v5 g-line-height-0 g-font-size-24 g-color-gray-light-v6 g-color-lightblue-v3--hover" href="#!" aria-controls="Schedule7" aria-haspopup="true" aria-expanded="false" data-dropdown-event="click" data-dropdown-target="#Schedule7">
+                                <i class="hs-admin-more-alt"></i>
+                            </a>
+                            <div id="Schedule7" class="u-shadow-v31 g-pos-abs g-right-0 g-z-index-2 g-bg-white" aria-labelledby="Schedule7Invoker">
+                                <ul class="list-unstyled g-nowrap mb-0">
+                                    <li>
+                                        <a class="d-flex align-items-center u-link-v5 g-bg-gray-light-v8--hover g-font-size-12 g-font-size-default--md g-color-gray-dark-v6 g-px-25 g-py-14" href="#!">
+                                            <i class="hs-admin-pencil g-font-size-18 g-color-gray-light-v6 g-mr-10 g-mr-15--md"></i>
+                                            Edit
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="g-hidden-xs-up">8</td>
+                    <td class="g-first-child">
+                        <div class="media align-items-center">
+                            <div class="media-body text-left g-ml-15">8</div>
+                        </div>
+                    </td>
+                    <td>Software Development And Testing</td>
+                    <td>Latif</td>
+                    <td>7-Dec-15</td>
+                    <td>21-Feb-16</td>
+                    @*<td>76</td>*@
+                    <td>
+                        <div class="d-inline-block">
+                            <span class="d-flex align-items-center justify-content-center u-tags-v1 g-brd-around g-bg-white g-font-size-default g-color-gray-dark-v6 g-brd-white g-rounded-50 g-py-4 g-px-15">
+                                <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-green g-mr-8"></span>
+                                Completed
+                            </span>
+                        </div>
+                    </td>
+                    <td>20</td>
+                    <td>
+                        <div class="progress g-height-6 g-rounded-3">
+                            <div class="progress-bar g-bg-green g-rounded-3" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        100%
+                    </td>
+                    @*<td>
+                        20
+                    </td>*@
+                    <td class="text-right">
+                        <div class="g-pos-rel g-top-3 d-inline-block">
+                            <a id="Schedule8Invoker" class="u-link-v5 g-line-height-0 g-font-size-24 g-color-gray-light-v6 g-color-lightblue-v3--hover" href="#!" aria-controls="Schedule8" aria-haspopup="true" aria-expanded="false" data-dropdown-event="click" data-dropdown-target="#Schedule8">
+                                <i class="hs-admin-more-alt"></i>
+                            </a>
+                            <div id="Schedule8" class="u-shadow-v31 g-pos-abs g-right-0 g-z-index-2 g-bg-white" aria-labelledby="Schedule8Invoker">
+                                <ul class="list-unstyled g-nowrap mb-0">
+                                    <li>
+                                        <a class="d-flex align-items-center u-link-v5 g-bg-gray-light-v8--hover g-font-size-12 g-font-size-default--md g-color-gray-dark-v6 g-px-25 g-py-14" href="#!">
+                                            <i class="hs-admin-pencil g-font-size-18 g-color-gray-light-v6 g-mr-10 g-mr-15--md"></i>
+                                            Edit
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="g-hidden-xs-up">9</td>
+                    <td class="g-first-child">
+                        <div class="media align-items-center">
+                            <div class="media-body text-left g-ml-15">9</div>
+                        </div>
+                    </td>
+                    <td>Handover and Training</td>
+                    <td>Latif</td>
+                    <td>1-Apr-16</td>
+                    <td>30-Dec-16</td>
+                    @*<td>273</td>*@
+                    <td>
+                        <div class="d-inline-block">
+                            <span class="d-flex align-items-center justify-content-center u-tags-v1 g-brd-around g-bg-white g-font-size-default g-color-gray-dark-v6 g-brd-white g-rounded-50 g-py-4 g-px-15">
+                                <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-green g-mr-8"></span>
+                                Completed
+                            </span>
+                        </div>
+                    </td>
+                    <td>5</td>
+                    <td>
+                        <div class="progress g-height-6 g-rounded-3">
+                            <div class="progress-bar g-bg-green g-rounded-3" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        100%
+                    </td>
+                    @*<td>
+                        5
+                    </td>*@
+                    <td class="text-right">
+                        <div class="g-pos-rel g-top-3 d-inline-block">
+                            <a id="Schedule9Invoker" class="u-link-v5 g-line-height-0 g-font-size-24 g-color-gray-light-v6 g-color-lightblue-v3--hover" href="#!" aria-controls="Schedule9" aria-haspopup="true" aria-expanded="false" data-dropdown-event="click" data-dropdown-target="#Schedule9">
+                                <i class="hs-admin-more-alt"></i>
+                            </a>
+                            <div id="Schedule9" class="u-shadow-v31 g-pos-abs g-right-0 g-z-index-2 g-bg-white" aria-labelledby="Schedule9Invoker">
+                                <ul class="list-unstyled g-nowrap mb-0">
+                                    <li>
+                                        <a class="d-flex align-items-center u-link-v5 g-bg-gray-light-v8--hover g-font-size-12 g-font-size-default--md g-color-gray-dark-v6 g-px-25 g-py-14" href="#!">
+                                            <i class="hs-admin-pencil g-font-size-18 g-color-gray-light-v6 g-mr-10 g-mr-15--md"></i>
+                                            Edit
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="g-hidden-xs-up">10</td>
+                    <td class="g-first-child">
+                        <div class="media align-items-center">
+                            <div class="media-body text-left g-ml-15">10</div>
+                        </div>
+                    </td>
+                    <td>Maintenance Phase (24 months)</td>
+                    <td>Latif</td>
+                    <td>1-Jan-17</td>
+                    <td>31-Dec-18</td>
+                    @*<td>729</td>*@
+                    <td>
+                        <div class="d-inline-block">
+                            <span class="d-flex align-items-center justify-content-center u-tags-v1 g-brd-around g-bg-white g-font-size-default g-color-gray-dark-v6 g-brd-white g-rounded-50 g-py-4 g-px-15">
+                                <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-yellow g-mr-8"></span>
+                                In Progress
+                            </span>
+                        </div>
+                    </td>
+                    <td>12</td>
+                    <td>
+                        <div class="progress g-height-6 g-rounded-3">
+                            <div class="progress-bar g-bg-green g-rounded-3" role="progressbar" style="width: 34.7%" aria-valuenow="34.7" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        34.7%
+                    </td>
+                    @*<td>
+                        4.16
+                    </td>*@
+                    <td class="text-right">
+                        <div class="g-pos-rel g-top-3 d-inline-block">
+                            <a id="Schedule10Invoker" class="u-link-v5 g-line-height-0 g-font-size-24 g-color-gray-light-v6 g-color-lightblue-v3--hover" href="#!" aria-controls="Schedule10" aria-haspopup="true" aria-expanded="false" data-dropdown-event="click" data-dropdown-target="#Schedule10">
+                                <i class="hs-admin-more-alt"></i>
+                            </a>
+                            <div id="Schedule10" class="u-shadow-v31 g-pos-abs g-right-0 g-z-index-2 g-bg-white" aria-labelledby="Schedule10Invoker">
+                                <ul class="list-unstyled g-nowrap mb-0">
+                                    <li>
+                                        <a class="d-flex align-items-center u-link-v5 g-bg-gray-light-v8--hover g-font-size-12 g-font-size-default--md g-color-gray-dark-v6 g-px-25 g-py-14" href="#!">
+                                            <i class="hs-admin-pencil g-font-size-18 g-color-gray-light-v6 g-mr-10 g-mr-15--md"></i>
+                                            Edit
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="g-hidden-xs-up">11</td>
+                    <td class="g-first-child">
+                        <div class="media align-items-center">
+                            <div class="media-body text-left g-ml-15">11</div>
+                        </div>
+                    </td>
+                    <td>Claim for Warranty (RM1,329,100.08) and Defect Liability Period (12-months)</td>
+                    <td>Latif</td>
+                    <td>1-Jan-19</td>
+                    <td>31-Dec-19</td>
+                    @*<td>364</td>*@
+                    <td>
+                        <div class="d-inline-block">
+                            <span class="d-flex align-items-center justify-content-center u-tags-v1 g-brd-around g-bg-white g-font-size-default g-color-gray-dark-v6 g-brd-white g-rounded-50 g-py-4 g-px-15">
+                                <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-gray-light-v1 g-mr-8"></span>
+                                Not Started
+                            </span>
+                        </div>
+                    </td>
+                    <td>0</td>
+                    <td>
+                        <div class="progress g-height-6 g-rounded-3">
+                            <div class="progress-bar g-bg-green g-rounded-3" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        0%
+                    </td>
+                    @*<td>
+                        0
+                    </td>*@
+                    <td class="text-right">
+                        <div class="g-pos-rel g-top-3 d-inline-block">
+                            <a id="Schedule11Invoker" class="u-link-v5 g-line-height-0 g-font-size-24 g-color-gray-light-v6 g-color-lightblue-v3--hover" href="#!" aria-controls="Schedule11" aria-haspopup="true" aria-expanded="false" data-dropdown-event="click" data-dropdown-target="#Schedule11">
+                                <i class="hs-admin-more-alt"></i>
+                            </a>
+                            <div id="Schedule11" class="u-shadow-v31 g-pos-abs g-right-0 g-z-index-2 g-bg-white" aria-labelledby="Schedule11Invoker">
+                                <ul class="list-unstyled g-nowrap mb-0">
+                                    <li>
+                                        <a class="d-flex align-items-center u-link-v5 g-bg-gray-light-v8--hover g-font-size-12 g-font-size-default--md g-color-gray-dark-v6 g-px-25 g-py-14" href="#!">
+                                            <i class="hs-admin-pencil g-font-size-18 g-color-gray-light-v6 g-mr-10 g-mr-15--md"></i>
+                                            Edit
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="container-fluid media align-items-center g-mb-45">
+    <div id="datatableInfo" class="media-body"></div>
+    <nav id="datatablePagination3" class="d-flex ml-auto" aria-label="Page Navigation"></nav>
+</div>

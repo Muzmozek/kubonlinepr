@@ -1,0 +1,658 @@
+﻿@model KUBOnlinePRPM.Models.PRModel
+
+@if (Model.NewPRForm.StatusId == "PR06")
+{
+    <div class="row container-fluid">
+        @*<div class="media-body align-self-center text-left">
+                <h3 class="g-font-weight-300 g-font-size-20 g-color-black">PR Online Summary (2018)</h3>
+            </div>*@
+        <div class="media-body align-self-center text-right">
+            <a href="~/PR/PRForm">
+                <span class="u-icon-v1 g-color-blue">
+                    <i class="icon-printer"></i>
+                </span>
+            </a>
+        </div>
+    </div>
+}
+
+@using (Html.BeginForm("PRDetails", "PR", FormMethod.Post, new { @id = "PRDetails", @class = "checkFiles container-fluid g-mb-40" }))
+{
+    @Html.TextBoxFor(m => m.PRId, new { @id = "PRId", @class = "d-none", @type = "text" })
+    @Html.TextBoxFor(m => m.Type, new { @id = "PRType", @class = "d-none", @type = "text" })
+    @Html.TextBoxFor(m => m.NewPRForm.StatusId, new { @id = "StatusId", @class = "d-none", @type = "text" })
+    <a id="UrlPRList" class="d-none" href="@Url.Action("PRList", "PR" )"></a>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                <section>
+                    <div class="row">
+                        <div class="d-flex col-md-6 col-sm-6 formfield">
+                            <span>Project/Dept/Branch/Estate Name *</span>
+                        </div>
+                        <div class="d-flex col-md-6 col-sm-6">
+                            @if (Session["ifAdmin"] != null || Session["ifReviewer"] != null || Session["ifApprover"] != null)
+                            {
+                                @Html.DropDownListFor(m => m.NewPRForm.ProjectId, (IEnumerable<SelectListItem>
+                            )ViewBag.ProjectNameList, "Select project here", new { @id = "ProjectName", @class = "custom-select g-width-100vw g-height-50 g-color-black g-color-primary--hover text-left g-rounded-20", @disabled = "disabled" })
+                                @Html.HiddenFor(m => m.NewPRForm.ProjectId)
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(m => m.NewPRForm.ProjectId, (IEnumerable<SelectListItem>
+                                )ViewBag.ProjectNameList, "Select project here", new { @id = "ProjectName", @class = "custom-select g-width-100vw g-height-50 g-color-black g-color-primary--hover text-left g-rounded-20" })
+
+                            }
+                        </div>
+                    </div>
+                    <div class="row has-danger">
+                        <div class="d-flex offset-md-6 offset-sm-6 col-md-6 col-sm-6">
+                            @Html.ValidationMessageFor(m => m.NewPRForm.ProjectId, null, new { @class = "form-control-feedback" })
+                        </div>
+                    </div>
+                </section>
+            </div>
+            @if (Session["ifRequestor"] != null)
+            {
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                    <section>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 formfield">
+                                <span>BOD/GMD Paper Ref No.</span>
+                            </div>
+                            <div class="d-flex col-md-8 col-sm-8">
+                                @Html.TextBoxFor(m => m.NewPRForm.PaperRefNo, new { @id = "PaperRefNo", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text" })
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                                @Html.ValidationMessageFor(m => m.NewPRForm.PaperRefNo, null, new { @class = "note-error color-red" })
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                    <section>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 formfield">
+                                <span>Bid Waiver Ref No.</span>
+                            </div>
+                            <div class="d-flex col-md-8 col-sm-8">
+                                @Html.TextBoxFor(m => m.NewPRForm.BidWaiverRefNo, new { @id = "BidWaiverRefNo", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text" })
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                                @Html.ValidationMessageFor(m => m.NewPRForm.BidWaiverRefNo, null, new { @class = "note-error color-red" })
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            }
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                <section>
+                    <div class="row">
+                        <div class="d-flex col-md-4 col-sm-4 formfield">
+                            <span>Budgeted *</span>
+                        </div>
+                        <div class="d-flex col-md-8 col-sm-8">
+                            @if (Session["ifAdmin"] != null || Session["ifReviewer"] != null || Session["ifApprover"] != null)
+                        {
+                        @Html.DropDownListFor(m => m.NewPRForm.Value, (IEnumerable<SelectListItem>
+                            )ViewBag.BudgetedList, "", new { @id = "Budgeted", @class = "custom-select g-width-100vw g-height-50 g-color-black g-color-primary--hover text-left g-rounded-20", @disabled = "disabled" })
+                        @Html.HiddenFor(m => m.NewPRForm.Value)
+                            }
+                            else
+                            {
+                        @Html.DropDownListFor(m => m.NewPRForm.Value, (IEnumerable<SelectListItem>
+                                )ViewBag.BudgetedList, "", new { @id = "Budgeted", @class = "custom-select g-width-100vw g-height-50 g-color-black g-color-primary--hover text-left g-rounded-20" })
+                                }
+                        </div>
+                    </div>
+                </section>
+            </div>
+            @*<div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-10--md g-mb-30">
+                    <section>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 formfield">
+                                <span>Reviewer</span>
+                            </div>
+                            <div class="d-flex col-md-8 col-sm-8">
+                                @if (Session["ifAdmin"] != null || Session["ifReviewer"] != null || Session["ifApprover"] != null)
+                                {
+                                @Html.DropDownListFor(m => m.NewPRForm.ReviewerId, (IEnumerable<SelectListItem>
+                                    )ViewBag.ReviewerNameList, new { @id = "Reviewer", @class = "custom-select g-width-100vw g-height-50 g-color-black g-color-primary--hover text-left g-rounded-20", @disabled = "disabled" })
+                                    @Html.HiddenFor(m => m.NewPRForm.ReviewerId)
+                                    }
+                                    else
+                                    {
+                                    @Html.DropDownListFor(m => m.NewPRForm.ReviewerId, (IEnumerable<SelectListItem>
+                                        )ViewBag.ReviewerNameList, "Select project here", new { @id = "Reviewer", @class = "custom-select g-width-100vw g-height-50 g-color-black g-color-primary--hover text-left g-rounded-20" })
+                                        }
+                            </div>
+                        </div>
+                    </section>
+                </div>*@
+        </div>
+        <div class="col-md-6">
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                <section>
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4 formfield">
+                            <span>Status</span>
+                        </div>
+                        <div class="d-flex col-md-8 col-sm-8">
+                            @*<input id="inputGroup-3_1" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10" placeholder="" type="text">*@
+                            @Html.TextBoxFor(m => m.NewPRForm.PRStatus, new { @id = "PRStatus", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                            @Html.ValidationMessageFor(m => m.NewPRForm.PRStatus, null, new { @class = "note-error color-red" })
+                        </div>
+                    </div>
+                </section>
+            </div>
+            @if (Session["ifRequestor"] != null)
+            {
+                <div class="col-md-12 col-sm-12 g-pa-10--md">
+                    <section>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 formfield">
+                                <label class="g-mb-10" for="inputGroup1_2">Attachment</label>
+                            </div>
+                            <div class="col-md-8 col-sm-8 input-group u-file-attach-v1 g-brd-gray-light-v2">
+                                <input id="inputGroup1_2" class="form-control form-control-md g-rounded-4" placeholder="If already have paper" readonly="" type="text">
+
+                                <div class="input-group-append">
+                                    <button class="btn btn-md u-btn-blue rounded-0" type="submit">Browse</button>
+                                    <input name="PaperRefNoFile" type="file">
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div class="col-md-12 col-sm-12 g-pa-10--md">
+                    <section>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 formfield">
+                                <label class="g-mb-10" for="inputGroup1_2">Attachment</label>
+                            </div>
+                            <div class="col-md-8 col-sm-8 input-group u-file-attach-v1 g-brd-gray-light-v2">
+                                <input id="inputGroup1_2" class="form-control form-control-md g-rounded-4" placeholder="If already have paper" readonly="" type="text">
+
+                                <div class="input-group-append">
+                                    <button class="btn btn-md u-btn-blue rounded-0" type="submit">Browse</button>
+                                    <input name="BidWaiverRefNoFile" type="file">
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            }
+            @*<div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md g-mb-20">
+                    <section>
+                        <div class="row">
+                            <label class="form-check-inline u-check g-pl-25">
+                                @if (Session["ifAdmin"] != null || Session["ifReviewer"] != null || Session["ifApprover"] != null)
+                                {
+                                if (Model.NewPRForm.Unbudgeted == true)
+                                {
+                                <input id="UnbudgetedDetails" name="NewPRForm.Unbudgeted" class="g-hidden-xs-up g-pos-abs g-top-0 g-left-0" checked="" type="checkbox" disabled="disabled">
+                                }
+                                else
+                                {
+                                <input id="UnbudgetedDetails" name="NewPRForm.Unbudgeted" class="g-hidden-xs-up g-pos-abs g-top-0 g-left-0" type="checkbox" disabled="disabled">
+                                }
+                                }
+                                else
+                                {
+                                if (Model.NewPRForm.Unbudgeted == true)
+                                {
+                                <input id="UnbudgetedDetails" name="NewPRForm.Unbudgeted" class="g-hidden-xs-up g-pos-abs g-top-0 g-left-0" checked="" type="checkbox">
+                                }
+                                else
+                                {
+                                <input id="UnbudgetedDetails" name="NewPRForm.Unbudgeted" class="g-hidden-xs-up g-pos-abs g-top-0 g-left-0" type="checkbox">
+                                }
+                                }
+                                <div class="u-check-icon-checkbox-v4 g-absolute-centered--y g-left-0">
+                                    <i class="fa" data-check-icon="&#xf00c"></i>
+                                </div>
+                                Unbudgeted
+                            </label>
+                        </div>
+                    </section>
+                </div>*@
+            @*<div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-10--md g-mb-30">
+                    <section>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 formfield">
+                                <span>Approver</span>
+                            </div>
+                            <div class="d-flex col-md-8 col-sm-8">
+                                @if (Session["ifAdmin"] != null || Session["ifReviewer"] != null || Session["ifApprover"] != null)
+                                {
+                                @Html.DropDownListFor(m => m.NewPRForm.ApproverId, (IEnumerable<SelectListItem>
+                                    )ViewBag.ApproverNameList, new { @id = "Approver", @class = "custom-select g-width-100vw g-height-50 g-color-black g-color-primary--hover text-left g-rounded-20", @disabled = "disabled" })
+                                    @Html.HiddenFor(m => m.NewPRForm.ApproverId)
+                                    }
+                                    else
+                                    {
+                                    @Html.DropDownListFor(m => m.NewPRForm.ApproverId, (IEnumerable<SelectListItem>
+                                        )ViewBag.ApproverNameList, new { @id = "Approver", @class = "custom-select g-width-100vw g-height-50 g-color-black g-color-primary--hover text-left g-rounded-20" })
+                                        }
+                            </div>
+                        </div>
+                    </section>
+                </div>*@
+        </div>
+        @if (Session["ifAdmin"] != null)
+        {
+            <div class="col-md-12">
+                <div class="media-body align-self-center text-left g-mb-30">
+                    <h3 class="g-font-weight-300 g-font-size-20 g-color-black">Potential Vendor</h3>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                    <section>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 formfield">
+                                <span>Company</span>
+                            </div>
+                            <div class="d-flex col-md-8 col-sm-8">
+                                @Html.DropDownListFor(m => m.NewPRForm.VendorId, (IEnumerable<SelectListItem>)ViewBag.VendorList, "Select vendor company here", new { @id = "VendorId", @class = "custom-select g-width-100vw g-height-50 g-color-black g-color-black--hover text-left g-rounded-20" })
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                    <section>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 formfield">
+                                <span>Contact Name</span>
+                            </div>
+                            <div class="d-flex col-md-8 col-sm-8">
+                                @Html.DropDownListFor(m => m.NewPRForm.VendorStaffId, (IEnumerable<SelectListItem>)ViewBag.VendorStaffList, "Select vendor contact name here", new { @id = "VendorStaffId", @class = "custom-select g-width-100vw g-height-50 g-color-black g-color-black--hover text-left g-rounded-20" })
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                    <section>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 formfield">
+                                <span>Email</span>
+                            </div>
+                            <div class="d-flex col-md-8 col-sm-8">
+                                @*<input id="inputGroup-3_1" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10" placeholder="" type="text">*@
+                                @Html.TextBoxFor(m => m.NewPRForm.VendorEmail, new { @id = "VendorEmail", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                                @Html.ValidationMessageFor(m => m.NewPRForm.VendorEmail, null, new { @class = "note-error color-red" })
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                    <section>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 formfield">
+                                <span>Contact No</span>
+                            </div>
+                            <div class="d-flex col-md-8 col-sm-8">
+                                @*<input id="inputGroup-3_1" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10" placeholder="Unit (RM)" type="text">*@
+                                @Html.TextBoxFor(m => m.NewPRForm.VendorContactNo, new { @id = "VendorContactNo", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "", @type = "text", @readonly = true })
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                                @Html.ValidationMessageFor(m => m.NewPRForm.VendorContactNo, null, new { @class = "note-error color-red" })
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        }
+        <div class="col-md-12">
+            <div class="media-body align-self-center text-left g-mb-30">
+                <h3 class="g-font-weight-300 g-font-size-20 g-color-black">Budget Info</h3>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                <section>
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4 formfield">
+                            <span>Purchase Type *</span>
+                        </div>
+                        <div class="d-flex col-md-8 col-sm-8">
+                            @if (Session["ifAdmin"] != null || Session["ifReviewer"] != null || Session["ifApprover"] != null)
+                            {
+                                @Html.DropDownListFor(m => m.NewPRForm.PurchaseTypeId, (IEnumerable<SelectListItem>
+                            )ViewBag.PurchaseTypeList, "Select Purchase type here", new { @id = "PurchaseType", @class = "custom-select g-width-100vw g-height-50 g-color-black g-color-primary--hover text-left g-rounded-20", @disabled = "disabled" })
+                                @Html.HiddenFor(m => m.NewPRForm.PurchaseTypeId)
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(m => m.NewPRForm.PurchaseTypeId, (IEnumerable<SelectListItem>
+                                )ViewBag.PurchaseTypeList, "Select Purchase type here", new { @id = "PurchaseType", @class = "custom-select g-width-100vw g-height-50 g-color-black g-color-primary--hover text-left g-rounded-20" })
+                            }
+                        </div>
+                    </div>
+                    <div class="row has-danger">
+                        <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                            @Html.ValidationMessageFor(m => m.NewPRForm.PurchaseTypeId, null, new { @class = "form-control-feedback" })
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                <section>
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4 formfield">
+                            <span>Budget Description *</span>
+                        </div>
+                        <div class="d-flex col-md-8 col-sm-8">
+                            @*<input id="inputGroup-3_1" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10" placeholder="" type="text">*@
+                            @if (Session["ifAdmin"] != null || Session["ifReviewer"] != null || Session["ifApprover"] != null)
+                            {
+                                @Html.TextBoxFor(m => m.NewPRForm.BudgetDescription, new { @id = "BudgetDescription", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(m => m.NewPRForm.BudgetDescription, new { @id = "BudgetDescription", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text" })
+                            }
+                        </div>
+                    </div>
+                    <div class="row has-danger">
+                        <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                            @Html.ValidationMessageFor(m => m.NewPRForm.BudgetDescription, null, new { @class = "form-control-feedback" })
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                <section>
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4 formfield">
+                            <span>Budgeted Amount *</span>
+                        </div>
+                        <div class="d-flex col-md-8 col-sm-8">
+                            @*<input id="inputGroup-3_1" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10" placeholder="Unit (RM)" type="text">*@
+                            @Html.TextBoxFor(m => m.NewPRForm.BudgetedAmount, String.Format("{0:n}", Model.NewPRForm.BudgetedAmount), new { @id = "BudgetedAmount", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "Unit (RM)", @type = "text", @readonly = true })
+                        </div>
+                    </div>
+                    <div class="row has-danger">
+                        <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                            @Html.ValidationMessageFor(m => m.NewPRForm.BudgetedAmount, null, new { @class = "form-control-feedback" })
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                <section>
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4 formfield">
+                            <span>Justification</span>
+                        </div>
+                        <div class="d-flex col-md-8 col-sm-8">
+                            @*<input id="inputGroup-3_1" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10" placeholder="" type="text">*@
+                            @if (Session["ifAdmin"] != null || Session["ifReviewer"] != null || Session["ifApprover"] != null)
+                            {
+                                @Html.TextBoxFor(m => m.NewPRForm.Justification, new { @id = "Justification", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(m => m.NewPRForm.Justification, new { @id = "Justification", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text" })
+
+                            }
+                        </div>
+                    </div>
+                    @*<div class="row">
+                        <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                            @Html.ValidationMessageFor(m => m.NewPRForm.Justification, null, new { @class = "note-error color-red" })
+                        </div>
+                    </div>*@
+                </section>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                <section>
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4 formfield">
+                            <span>Utilized To Date *</span>
+                        </div>
+                        <div class="d-flex col-md-8 col-sm-8">
+                            @*<input id="inputGroup-3_2" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10" placeholder="Unit (RM)" type="text">*@
+                            @Html.TextBoxFor(m => m.NewPRForm.UtilizedToDate, String.Format("{0:n}", Model.NewPRForm.UtilizedToDate), new { @id = "UtilizedToDate", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "Unit (RM)", @type = "text", @readonly = true })
+                        </div>
+                    </div>
+                </section>
+            </div>
+            @if (Session["ifAdmin"] != null)
+            {
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                    <section>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 formfield">
+                                <span>Amount Required</span>
+                            </div>
+                            <div class="d-flex col-md-8 col-sm-8">
+                                @*<input id="inputGroup-3_1" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10" placeholder="Unit (RM)" type="text">*@
+                                @Html.TextBoxFor(m => m.NewPRForm.AmountRequired, String.Format("{0:n}", Model.NewPRForm.AmountRequired), new { @id = "AmountRequired", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "shall be calculated when save", @type = "text", @readonly = true })
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                                @Html.ValidationMessageFor(m => m.NewPRForm.AmountRequired, null, new { @class = "note-error color-red" })
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                    <section>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 formfield">
+                                <span>Budget Balance</span>
+                            </div>
+                            <div class="d-flex col-md-8 col-sm-8">
+                                @*<input id="inputGroup-3_1" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10" placeholder="Unit (RM)" type="text">*@
+                                @Html.TextBoxFor(m => m.NewPRForm.BudgetBalance, String.Format("{0:n}", Model.NewPRForm.BudgetBalance), new { @id = "BudgetBalance", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "Unit (RM)", @type = "text", @readonly = true })
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            }
+
+        </div>
+        <div class="container-fluid-v3 col-xs-12 g-mb-30 g-mt-40">
+            <table id="PRItemTable" class="table table-striped table-bordered nowrap dt-responsive table-hover" style="width:100%">
+                <thead>
+                    <tr>
+                        <th class="d-none"></th>
+                        <th class="all">
+                            <div class="media">
+                                <div class="d-flex align-self-center">Date required</div>
+                            </div>
+                        </th>
+                        <th class="desktop">
+                            <div class="media">
+                                <div class="d-flex align-self-center">Description/Spec</div>
+                            </div>
+                        </th>
+                        @if (Session["ifAdmin"] != null)
+                        {
+                            <th class="desktop">
+                                <div class="media">
+                                    <div class="d-flex align-self-center">Item Code</div>
+                                </div>
+                            </th>
+                        }
+                        <th class="desktop">
+                            <div class="media">
+                                <div class="d-flex align-self-center">Cust PO No</div>
+                            </div>
+                        </th>
+                        <th class="desktop">
+                            <div class="media">
+                                <div class="d-flex align-self-center">Quantity</div>
+                            </div>
+                        </th>
+                        @if (Session["ifAdmin"] != null)
+                        {
+                            <th class="desktop">
+                                <div class="media">
+                                    <div class="d-flex align-self-center">UoM</div>
+                                </div>
+                            </th>
+                            <th class="desktop">
+                                <div class="media">
+                                    <div class="d-flex align-self-center">Unit Price (RM)</div>
+                                </div>
+                            </th>
+                            <th class="desktop">
+                                <div class="media">
+                                    <div class="d-flex align-self-center">Total (RM)</div>
+                                </div>
+                            </th>
+                        }
+                        @if (Session["ifRequestor"] != null && Session["ifSuperAdmin"] == null)
+                        {
+                            <th class="all">
+                            </th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int i = 1;
+                        foreach (var item in Model.NewPRForm.PRItemListObject)
+                        {
+                            var ItemsId = "ItemsId" + i; var DateRequired = "DateRequired" + i; var Description = "Description" + i; var CustPONo = "CustPONo" + i;
+                            var Quantity = "Quantity" + i; var CodeId = "CodeId" + i; var UoM = "UoM" + i; var UnitPrice = "UnitPrice" + i; var TotalPrice = "TotalPrice" + i;
+                            <tr>
+                                <td class="d-none"><input id="@ItemsId" class="Id form-control custom-filter desktop" type="text" name="@ItemsId" value="@item.ItemsId" /></td>
+
+                                @if (Session["ifAdmin"] != null || Session["ifReviewer"] != null || Session["ifApprover"] != null)
+                    {
+                                    <td>
+                                        <input id="@DateRequired" class="form-control rounded-0 form-control-md" value="@item.DateRequired.ToString(" yyyy-MM-dd")" name="DateRequired" type="text" readonly>
+                                    </td>
+                                    <td>
+                                        <input id="@Description" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="Description" value="@item.Description" type="text" readonly>
+                                    </td>
+                                    if (Session["ifAdmin"] != null)
+                                    {
+                                        <td>
+                                            @Html.DropDownListFor(m => item.CodeId, (IEnumerable<SelectListItem>)ViewData["ItemCodeList" + i], "Select item code here", new { @id = CodeId, @class = "CodeId custom-select g-height-50 g-color-black g-color-primary--hover text-left g-rounded-20" })
+                                        </td>
+                                    }
+                                    <td>
+                                        <input id="@CustPONo" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="CustPONo" value="@item.CustPONo" type="text" readonly>
+                                    </td>
+                                    <td>
+                                        <input id="@Quantity" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="Quantity" value="@item.Quantity" type="text" readonly>
+                                    </td>
+                                    if (Session["ifAdmin"] != null)
+                                    {
+                                        <td>
+                                            <input id="@UoM" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="UoM" value="@item.UOM" type="text" readonly>
+                                        </td>
+                                        <td>
+                                            <div class="has-danger">
+                                                <input id="@UnitPrice" class="UnitPrice form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="UnitPrice" value="@item.UnitPrice" type="text">
+                                                @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[i].UnitPrice, null, new { @class = "form-control-feedback" })
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input id="@TotalPrice" class="TotalPrice form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="TotalPrice" value="@item.TotalPrice" type="text" readonly>
+                                        </td>
+                                    }
+                                }
+                                else
+                                {
+                                    <td>
+                                        <div class="has-danger">
+                                            <input id="@DateRequired" class="form-control rounded-0 form-control-md" value="@item.DateRequired.ToString("yyyy-MM-dd")" name="DateRequired" type="date">
+                                            @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[i].DateRequired, null, new { @class = "form-control-feedback" })
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="has-danger">
+                                            <input id="@Description" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="Description" value="@item.Description" type="text">
+                                        @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[i].Description, null, new { @class = "form-control-feedback" })
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input id="@CustPONo" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="CustPONo" value="@item.CustPONo" type="text">
+                                    </td>
+                                    <td>
+                                        <div class="has-danger">
+                                            <input id="@Quantity" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="Quantity" value="@item.Quantity" type="text">
+                                        @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[i].Quantity, null, new { @class = "form-control-feedback" })
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="g-width-30 row">
+                                            <a class="g-color-gray-dark-v5 g-text-underline--none--hover g-pa-5 AddPRItem" data-toggle="tooltip" data-placement="top" data-original-title="Add">
+                                                <i class="icon-plus g-font-size-18 g-mr-7"></i>
+                                            </a>
+                                            @*<a class="g-color-gray-dark-v5 g-text-underline--none--hover g-pa-5 RemovePRItem" data-toggle="tooltip" data-placement="top" data-original-title="Delete">
+                                                    <i class="icon-trash g-font-size-18 g-mr-7"></i>
+                                                </a>*@
+                                        </div>
+                                    </td>
+                                }
+                            </tr>
+                            i++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div id="counter" class="d-none">@i</div>
+        <div class="col-md-12 col-sm-12">
+            <div class="row">
+                @*<div class="col-md-9 col-sm-8"></div>*@
+                <div class="col-md-3 offset-md-9 col-sm-4 offset-sm-8">
+                    <div class="media">
+                        <div class="d-flex u-main-nav--push-right text-right">
+                            <div class="row">
+                                @if (((Model.NewPRForm.StatusId == "PR01" || Model.NewPRForm.StatusId == "PR07") && Session["ifRequestor"] != null) || (Model.NewPRForm.StatusId == "PR02" && Session["ifAdmin"] != null))
+                                {
+                                    <a id="SavePR" class="saveSubmitDetail btn btn-md u-btn-white g-mr-5 g-mb-15">SAVE</a>
+                                    @*<a id="CancelPR" class="btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">CANCEL</a>*@
+                                    <a id="SubmitPR" class="saveSubmitDetail btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">SUBMIT</a>
+                                }
+                                @if ((Model.NewPRForm.StatusId == "PR03" && Session["ifReviewer"] != null) || ((Model.NewPRForm.StatusId == "PR05" || Model.NewPRForm.StatusId == "PR09") && Session["ifApprover"] != null))
+                                {
+                                    <a id="ApprovePR" class="approveRejectDetail btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">APPROVE</a>
+                                    <a class="btn btn-md text-white u-btn-blue g-mr-5 g-mb-15" href="#RejectModal" data-modal-target="#RejectModal" data-modal-effect="fadein">
+                                        REJECT
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal">
+    </div>
+    <div id="RejectModal" class="text-left g-max-width-600 g-bg-white g-overflow-y-auto g-pa-20" style="display: none;">
+        <button type="button" class="close" onclick="Custombox.modal.close();">
+            <i class="hs-icon hs-icon-close"></i>
+        </button>
+        <h4 class="g-mb-20">Please state the reason why the PR is rejected</h4>
+        <textarea id="RejectRemark" class="form-control form-control-md g-resize-none rounded-0" rows="3" placeholder="Text area"></textarea>
+        <a id="RejectPR" class="approveRejectDetail btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">SUBMIT</a>
+    </div>
+                        }
