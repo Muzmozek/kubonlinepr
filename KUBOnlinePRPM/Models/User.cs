@@ -50,6 +50,7 @@ namespace KUBOnlinePRPM.Models
         public string emailAddress { get; set; }
         public string firstName { get; set; }
         public string lastName { get; set; }
+        public string fullName { get { return this.firstName + " " + this.lastName; } }
         public string employeeNo { get; set; }
         public string jobTitle { get; set; }
         public Nullable<System.DateTime> loginDate { get; set; }

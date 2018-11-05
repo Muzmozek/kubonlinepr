@@ -1,0 +1,265 @@
+﻿@model KUBOnlinePRPM.Models.User
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>User</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.uuid)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.uuid)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.createByUserId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.createByUserId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.createDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.createDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.modifiedByUserId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.modifiedByUserId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.modifiedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.modifiedDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.userName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.userName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.password)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.password)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.passwordReset)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.passwordReset)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.passwordModifiedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.passwordModifiedDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.reminderQueryQuestion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.reminderQueryQuestion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.reminderQueryAnswer)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.reminderQueryAnswer)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.emailAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.emailAddress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.firstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.firstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.lastName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.lastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.employeeNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.employeeNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.jobTitle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.jobTitle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.loginDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.loginDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.loginLatLng)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.loginLatLng)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.loginAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.loginAddress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.lastLoginDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.lastLoginDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.lastFailedLoginDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.lastFailedLoginDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.failedLoginAttempts)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.failedLoginAttempts)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.lockout)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.lockout)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.lockoutDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.lockoutDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.status)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.telephoneNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.telephoneNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.address)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.extensionNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.extensionNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.superiorId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.superiorId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Customer.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Customer.name)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>
