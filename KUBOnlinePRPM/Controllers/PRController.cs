@@ -16,6 +16,7 @@ using System.DirectoryServices.ActiveDirectory;
 using System.DirectoryServices.AccountManagement;
 using System.Net;
 using System.Globalization;
+using KUBOnlinePRPM.Service;
 
 namespace KUBOnlinePRPM.Controllers
 {
@@ -45,6 +46,8 @@ namespace KUBOnlinePRPM.Controllers
     public class PRController : Controller
     {
         private KUBOnlinePREntities db = new KUBOnlinePREntities();
+        private KUBHelper KUBHelper = new KUBHelper();
+
         //private KUB_TelEntities db1 = new KUB_TelEntities();
         public ActionResult Index()
         {
@@ -359,6 +362,8 @@ namespace KUBOnlinePRPM.Controllers
                 var ifAdmin = Session["ifAdmin"];
                 var ifHOD = Session["JobTitle"].ToString();
 
+                var ifProcurement = KUBHelper.CheckRole("R07") ? true : false;
+                
                 PRModel PRList = new PRModel();
 
                 //using (KUBOnlinePREntities context = new KUBOnlinePREntities())
@@ -430,7 +435,8 @@ namespace KUBOnlinePRPM.Controllers
                                                //PRAging = m.aging,
                                                Status = p.status
                                            }).ToList();
-                } else if (ifReviewer != null)
+                }
+                else if (ifReviewer != null)
                 {
                     PRList.PRListObject = (from m in db.PurchaseRequisitions
                                            join n in db.Users on m.PreparedById equals n.userId
@@ -484,6 +490,26 @@ namespace KUBOnlinePRPM.Controllers
                                            from r in q.DefaultIfEmpty()
                                            from u in t.DefaultIfEmpty()
                                            where m.PRType == type && u.approverId == UserId
+                                           select new PRListTable()
+                                           {
+                                               PRId = m.PRId,
+                                               PRNo = m.PRNo,
+                                               PRDate = m.PreparedDate,
+                                               RequestorName = n.firstName + " " + n.lastName,
+                                               VendorCompany = r.name,
+                                               AmountRequired = m.AmountRequired,
+                                               //PRAging = m.aging,
+                                               Status = p.status
+                                           }).ToList();
+                }
+                else if (ifProcurement != null)
+                {
+                    PRList.PRListObject = (from m in db.PurchaseRequisitions
+                                           join n in db.Users on m.PreparedById equals n.userId
+                                           join o in db.Vendors on m.VendorId equals o.vendorId into q
+                                           join p in db.PRStatus on m.StatusId equals p.statusId
+                                           from r in q.DefaultIfEmpty()
+                                           where m.PRType == type && p.statusId == "PR02"
                                            select new PRListTable()
                                            {
                                                PRId = m.PRId,
