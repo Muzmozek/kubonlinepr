@@ -1525,5 +1525,19 @@ namespace KUBOnlinePRPM.Controllers
                 return Redirect("~/Home/Index");
             }
         }
+
+
+        public JsonResult UpdateXXX()
+        {
+            return Json("");
+        }
+
+
+        public JsonResult SubmitXXX()
+        {
+            return Json("");
+        }
+
+
     }
 }
