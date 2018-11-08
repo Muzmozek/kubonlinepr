@@ -1,0 +1,90 @@
+﻿@model IEnumerable<KUBOnlinePRPM.Models.User>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>User Listing</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.userName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.emailAddress)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.firstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.lastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.employeeNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.jobTitle)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.lastLoginDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.superiorId)
+        </th>
+        <th>
+            Role
+        </th>
+        <th>
+
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>        
+        <td>
+            @Html.DisplayFor(modelItem => item.userName)
+        </td>        
+        <td>
+            @Html.DisplayFor(modelItem => item.emailAddress)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.firstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.lastName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.employeeNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.jobTitle)
+        </td>        
+        <td>
+            @Html.DisplayFor(modelItem => item.lastLoginDate)
+        </td>        
+        <td>
+            @Html.DisplayFor(modelItem => item.superiorId)
+        </td>
+        <td>
+            <ol>
+
+                @foreach (var x in item.Users_Roles)
+                {
+                    <li>@x.Role.name</li>
+                }
+            </ol>
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.userId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.userId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.userId })
+        </td>
+    </tr>
+}
+
+</table>

@@ -7,6 +7,7 @@ using KUBOnlinePRPM.Models;
 using System.IO;
 using System.Web.Security;
 using System.DirectoryServices;
+using KUBOnlinePRPM.Service;
 
 namespace KUBOnlinePRPM.Controllers
 {
@@ -31,6 +32,7 @@ namespace KUBOnlinePRPM.Controllers
     public class HomeController : Controller
     {
         private KUBOnlinePREntities db = new KUBOnlinePREntities();
+        private KUBHelper KUBHelper = new KUBHelper();
         public ActionResult Index()
         {
             return View();
@@ -52,8 +54,12 @@ namespace KUBOnlinePRPM.Controllers
                                      {
                                          Password = m.password
                                      }).FirstOrDefault();
-
-            bool validate = BCrypt.CheckPassword(model.Password, CheckUserPassword.Password);
+            bool validate = false;
+            if (CheckUserPassword != null)
+            {
+                validate = BCrypt.CheckPassword(model.Password, CheckUserPassword.Password);
+            } 
+            
             //var directoryEntry = new DirectoryEntry("LDAP://172.16.0.1/DC=kub,DC=local");
             //directoryEntry.Username = "win2k8";
             //directoryEntry.Password = "Quantum111?";
@@ -81,6 +87,8 @@ namespace KUBOnlinePRPM.Controllers
                 Session["ifApprover"] = getRole.FirstOrDefault(x => x.roleId.Contains("R04"));
                 Session["ifAdmin"] = getRole.FirstOrDefault(x => x.roleId.Contains("R05"));
                 Session["ifSuperAdmin"] = getRole.FirstOrDefault(x => x.roleId.Contains("R06"));
+                Session["ifProcurement"] = getRole.FirstOrDefault(x => x.roleId.Contains("R07"));
+                Session["roles"] = db.Users_Roles.Where(x => x.userId == CheckUserId.UserId).ToList();
                 Session["FullName"] = CheckUserId.FullName;
                 Session["CompanyId"] = CheckUserId.CompanyId;
                 Session["JobTitle"] = CheckUserId.JobTitle;

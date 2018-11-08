@@ -297,7 +297,8 @@ D:\OneDrive - KUB Telekomunikasi Sdn Bhd\Projects\kubonlinepr\KUBOnlinePRPM\bin\
 D:\OneDrive - KUB Telekomunikasi Sdn Bhd\Projects\kubonlinepr\KUBOnlinePRPM\bin\System.Web.WebPages.Deployment.xml
 D:\OneDrive - KUB Telekomunikasi Sdn Bhd\Projects\kubonlinepr\KUBOnlinePRPM\bin\System.Web.WebPages.Razor.xml
 D:\OneDrive - KUB Telekomunikasi Sdn Bhd\Projects\kubonlinepr\KUBOnlinePRPM\bin\System.Web.Optimization.xml
-D:\OneDrive - KUB Telekomunikasi Sdn Bhd\Projects\kubonlinepr\KUBOnlinePRPM\obj\Debug\KUBOnlinePRPM.csprojResolveAssemblyReference.cache
+D:\OneDrive - KUB Telekomunikasi Sdn Bhd\Projects\kubonlinepr\KUBOnlinePRPM\obj\Debug\KUBOnlinePRPM.csprojAssemblyReference.cache
 D:\OneDrive - KUB Telekomunikasi Sdn Bhd\Projects\kubonlinepr\KUBOnlinePRPM\obj\Debug\KUBOnlinePRPM.csproj.CoreCompileInputs.cache
+D:\OneDrive - KUB Telekomunikasi Sdn Bhd\Projects\kubonlinepr\KUBOnlinePRPM\obj\Debug\KUBOnlinePRPM.csproj.CopyComplete
 D:\OneDrive - KUB Telekomunikasi Sdn Bhd\Projects\kubonlinepr\KUBOnlinePRPM\obj\Debug\KUBOnlinePRPM.dll
 D:\OneDrive - KUB Telekomunikasi Sdn Bhd\Projects\kubonlinepr\KUBOnlinePRPM\obj\Debug\KUBOnlinePRPM.pdb
