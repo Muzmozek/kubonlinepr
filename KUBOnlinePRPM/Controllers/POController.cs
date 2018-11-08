@@ -42,48 +42,48 @@ namespace KUBOnlinePRPM.Controllers
                 };
                 int PRId = Int32.Parse(Session["PRId"].ToString());
                 NewPO.NewPOForm = (from a in db.PurchaseRequisitions
-                                      join b in db.Users on a.PreparedById equals b.userId into s
-                                      join c in db.PRStatus on a.StatusId equals c.statusId
-                                      join d in db.Projects on a.ProjectId equals d.projectId
-                                      join e in db.Vendors on a.VendorId equals e.vendorId into f
-                                      join g in db.VendorStaffs on a.VendorStaffId equals g.staffId into l
-                                      join h in db.PR_Items on a.PRId equals h.PRId
-                                      join j in db.ItemCodes on h.codeId equals j.codeId into k
-                                      from w in l.DefaultIfEmpty()
-                                      from x in s.DefaultIfEmpty()
-                                      from y in f.DefaultIfEmpty()
-                                      from z in k.DefaultIfEmpty()
-                                      where a.PRId == PRId
+                                   join b in db.Users on a.PreparedById equals b.userId into s
+                                   join c in db.PRStatus on a.StatusId equals c.statusId
+                                   join d in db.Projects on a.ProjectId equals d.projectId
+                                   join e in db.Vendors on a.VendorId equals e.vendorId into f
+                                   join g in db.VendorStaffs on a.VendorStaffId equals g.staffId into l
+                                   join h in db.PR_Items on a.PRId equals h.PRId
+                                   join j in db.ItemCodes on h.codeId equals j.codeId into k
+                                   from w in l.DefaultIfEmpty()
+                                   from x in s.DefaultIfEmpty()
+                                   from y in f.DefaultIfEmpty()
+                                   from z in k.DefaultIfEmpty()
+                                   where a.PRId == PRId
                                    select new NewPOModel()
-                                      {
-                                          //PRNo = a.PRNo,
-                                          ProjectId = a.ProjectId,
-                                          VendorId = a.VendorId,
-                                          VendorEmail = w.vendorEmail,
-                                          VendorStaffId = w.staffId,
-                                          VendorContactNo = w.vendorContactNo,
-                                          PreparedById = a.PreparedById,
-                                          PreparedDate = a.PreparedDate,
-                                          Saved = a.Saved,
-                                          //TotalAmountRequired = a.AmountRequired.Value
-                                          //StatusId = a.StatusId.Trim()
-                                      }).FirstOrDefault();
+                                   {
+                                       //PRNo = a.PRNo,
+                                       ProjectId = a.ProjectId,
+                                       VendorId = a.VendorId,
+                                       VendorEmail = w.vendorEmail,
+                                       VendorStaffId = w.staffId,
+                                       VendorContactNo = w.vendorContactNo,
+                                       PreparedById = a.PreparedById,
+                                       PreparedDate = a.PreparedDate,
+                                       Saved = a.Saved,
+                                       //TotalAmountRequired = a.AmountRequired.Value
+                                       //StatusId = a.StatusId.Trim()
+                                   }).FirstOrDefault();
                 NewPO.NewPOForm.POItemListObject = (from m in db.PR_Items
-                                                       join n in db.ItemCodes on m.codeId equals n.codeId into o
-                                                       from p in o.DefaultIfEmpty()
-                                                       where m.PRId == PRId
-                                                       select new POItemsTable()
-                                                       {
-                                                           ItemsId = m.itemsId,
-                                                           DateRequired = m.dateRequired,
-                                                           Description = m.description,
-                                                           CodeId = p.codeId,
-                                                           ItemCode = p.ItemCode1,
-                                                           OutStandingQuantity = m.outStandingQuantity.Value,
-                                                           UnitPrice = m.unitPrice.Value,
-                                                           //TotalPrice = m.totalPrice,
-                                                           UOM = p.UoM
-                                                       }).ToList();
+                                                    join n in db.ItemCodes on m.codeId equals n.codeId into o
+                                                    from p in o.DefaultIfEmpty()
+                                                    where m.PRId == PRId
+                                                    select new POItemsTable()
+                                                    {
+                                                        ItemsId = m.itemsId,
+                                                        DateRequired = m.dateRequired,
+                                                        Description = m.description,
+                                                        CodeId = p.codeId,
+                                                        ItemCode = p.ItemCode1,
+                                                        OutStandingQuantity = m.outStandingQuantity.Value,
+                                                        UnitPrice = m.unitPrice.Value,
+                                                        //TotalPrice = m.totalPrice,
+                                                        UOM = p.UoM
+                                                    }).ToList();
 
                 //TotalBudgetedQuantity
                 //foreach (var item in NewPO.NewPOForm.POItemListObject)
@@ -91,7 +91,7 @@ namespace KUBOnlinePRPM.Controllers
 
                 //}
 
-                ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "projectName",NewPO.NewPOForm.ProjectId);
+                ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "projectName", NewPO.NewPOForm.ProjectId);
                 ViewBag.VendorList = new SelectList(VendorListQuery.AsEnumerable(), "vendorId", "VendorName", NewPO.NewPOForm.VendorId);
                 ViewBag.VendorStaffList = new SelectList(VendorStaffQuery.AsEnumerable(), "staffId", "VendorContactName", NewPO.NewPOForm.VendorStaffId);
 
@@ -106,23 +106,58 @@ namespace KUBOnlinePRPM.Controllers
         [HttpPost]
         public ActionResult NewPO(POModel POModel)
         {
-            var ProjectNameQuery = db.Projects.Select(c => new { ProjectId = c.projectId, ProjectName = c.projectName })
-                        .OrderBy(c => c.ProjectName);
-            var VendorListQuery = db.Vendors.Select(c => new { VendorId = c.vendorId, VendorName = c.name }).OrderBy(c => c.VendorName);
-            var VendorStaffQuery = db.VendorStaffs.Select(c => new { StaffId = c.staffId, VendorContactName = c.vendorContactName }).OrderBy(c => c.VendorContactName);
-
-            if (!ModelState.IsValid)
+            if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
-                ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "projectName", POModel.NewPOForm.ProjectId);
-                ViewBag.VendorList = new SelectList(VendorListQuery.AsEnumerable(), "vendorId", "VendorName", POModel.NewPOForm.VendorId);
-                ViewBag.VendorStaffList = new SelectList(VendorStaffQuery.AsEnumerable(), "staffId", "VendorContactName", POModel.NewPOForm.VendorStaffId);
+                var ProjectNameQuery = db.Projects.Select(c => new { ProjectId = c.projectId, ProjectName = c.projectName })
+                        .OrderBy(c => c.ProjectName);
+                var VendorListQuery = db.Vendors.Select(c => new { VendorId = c.vendorId, VendorName = c.name }).OrderBy(c => c.VendorName);
+                var VendorStaffQuery = db.VendorStaffs.Select(c => new { StaffId = c.staffId, VendorContactName = c.vendorContactName }).OrderBy(c => c.VendorContactName);
+
+                if (!ModelState.IsValid)
+                {
+                    ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "projectName", POModel.NewPOForm.ProjectId);
+                    ViewBag.VendorList = new SelectList(VendorListQuery.AsEnumerable(), "vendorId", "VendorName", POModel.NewPOForm.VendorId);
+                    ViewBag.VendorStaffList = new SelectList(VendorStaffQuery.AsEnumerable(), "staffId", "VendorContactName", POModel.NewPOForm.VendorStaffId);
+
+                    return new JsonResult
+                    {
+                        Data = new
+                        {
+                            success = false,
+                            exception = true,
+                            type = POModel.Type,
+                            POId = POModel.POId,
+                            Saved = POModel.NewPOForm.SelectSave,
+                            Submited = POModel.NewPOForm.SelectSubmit,
+                            NewPO = true,
+                            view = this.PartialView("NewPO", POModel)
+                        },
+                        JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                    };
+                }
+                POModel.PRId = Int32.Parse(Session["PRId"].ToString());
+                POModel.UserId = Int32.Parse(Session["UserId"].ToString());
+                DBLogicController.POSaveDbLogic(POModel);
+
+
+                //var CalcPOBalance = (from m in db.PurchaseRequisitions
+                //                     join n in db.Projects on m.ProjectId equals n.projectId
+                //                     join o in db.PurchaseOrders on m.PRId equals o.PRId
+                //                     where m.PRId == newPO.PRId.Value
+                //                     select new NewPOModel()
+                //                     {
+                //                         AmountPOBalance = m.AmountRequired.Value - POModel.NewPOForm.AmountRequired,
+                //                    }).ToList();
+                //Project updateProject = db.Projects.First(m => m.projectId == POModel.NewPOForm.ProjectId);
+                //PurchaseRequisition updatePR = db.PurchaseRequisitions.First(m => m.PRId == newPO.PRId.Value);
+                //updatePR.AmountPOBalance = updatePR.AmountRequired - POModel.NewPOForm.AmountRequired;
 
                 return new JsonResult
                 {
                     Data = new
                     {
-                        success = false,
-                        exception = true,
+                        success = true,
+                        exception = false,
                         type = POModel.Type,
                         POId = POModel.POId,
                         Saved = POModel.NewPOForm.SelectSave,
@@ -133,38 +168,10 @@ namespace KUBOnlinePRPM.Controllers
                     JsonRequestBehavior = JsonRequestBehavior.AllowGet
                 };
             }
-            POModel.PRId = Int32.Parse(Session["PRId"].ToString());
-            POModel.UserId = Int32.Parse(Session["UserId"].ToString());
-            DBLogicController.POSaveDbLogic(POModel);
-            
-
-            //var CalcPOBalance = (from m in db.PurchaseRequisitions
-            //                     join n in db.Projects on m.ProjectId equals n.projectId
-            //                     join o in db.PurchaseOrders on m.PRId equals o.PRId
-            //                     where m.PRId == newPO.PRId.Value
-            //                     select new NewPOModel()
-            //                     {
-            //                         AmountPOBalance = m.AmountRequired.Value - POModel.NewPOForm.AmountRequired,
-            //                    }).ToList();
-            //Project updateProject = db.Projects.First(m => m.projectId == POModel.NewPOForm.ProjectId);
-            //PurchaseRequisition updatePR = db.PurchaseRequisitions.First(m => m.PRId == newPO.PRId.Value);
-            //updatePR.AmountPOBalance = updatePR.AmountRequired - POModel.NewPOForm.AmountRequired;
-
-            return new JsonResult
+            else
             {
-                Data = new
-                {
-                    success = true,
-                    exception = false,
-                    type = POModel.Type,
-                    POId = POModel.POId,
-                    Saved = POModel.NewPOForm.SelectSave,
-                    Submited = POModel.NewPOForm.SelectSubmit,
-                    NewPO = true,
-                    view = this.PartialView("NewPO", POModel)
-                },
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
+                return Redirect("~/Home/Index");
+            }
         }
 
         public ActionResult POList(string Type)
@@ -198,7 +205,8 @@ namespace KUBOnlinePRPM.Controllers
                     POList.Type = Type;
 
                     return View("POList", POList);
-                } else if (Type == "Blanket")
+                }
+                else if (Type == "Blanket")
                 {
                     int PRId = Int32.Parse(Session["PRId"].ToString());
                     POList.POListObject = (from m in db.PurchaseOrders
@@ -301,7 +309,7 @@ namespace KUBOnlinePRPM.Controllers
                                                        join n in db.ItemCodes on m.codeId equals n.codeId into o
                                                        join p in db.PR_Items on m.itemsId equals p.itemsId
                                                        from q in o.DefaultIfEmpty()
-                                                       where m.POId == PODetail.POId 
+                                                       where m.POId == PODetail.POId
                                                        select new POItemsTable()
                                                        {
                                                            ItemsId = m.itemsId,

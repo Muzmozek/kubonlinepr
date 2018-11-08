@@ -13,6 +13,8 @@ namespace KUBOnlinePRPM.Controllers
         // GET: Notification
         public ActionResult Index()
         {
+            if (User.Identity.IsAuthenticated && Session["UserId"] != null)
+            {
                 NotiModel NewNotiList = new NotiModel();
                 int userId = Int32.Parse(Session["UserId"].ToString());
                 //var haha = db.NotificationMsgs.ToList();
@@ -37,6 +39,11 @@ namespace KUBOnlinePRPM.Controllers
                                               }).ToList();
 
                 return View(NewNotiList);
+            }
+            else
+            {
+                return Redirect("~/Home/Index");
+            }
         }
     }
 }

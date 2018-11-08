@@ -139,10 +139,10 @@
 
     $(document).on("change", ".UnitPrice", function () {
         //var UnitPrice = $(this).parent().parent().find("input[name='UnitPrice']").val();
-        var Quantity = $(this).parent().parent().find("input[name='Quantity']").val();
+        var Quantity = $(this).parent().parent().parent().find("input[name='Quantity']").val();
         var TotalPrice = $(this).val() * Quantity;
         var AmountRequired = 0;
-        $(this).parent().parent().find("input[name='TotalPrice']").val(TotalPrice);
+        $(this).parent().parent().parent().find("input[name='TotalPrice']").val(TotalPrice);
         for (var i = 0; i < $(".TotalPrice").length; i++) {
             if ($(".TotalPrice")[i].value !== "") {
                 AmountRequired += parseInt($(".TotalPrice")[i].value);
