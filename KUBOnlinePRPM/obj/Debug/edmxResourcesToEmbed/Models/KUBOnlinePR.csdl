@@ -138,6 +138,8 @@
     <Property Name="SubmitDate" Type="DateTime" Precision="3" />
     <NavigationProperty Name="PO_Item" Relationship="KUBOnlinePRModel.FK_PO_Item_PurchaseOrder" FromRole="PurchaseOrder" ToRole="PO_Item" />
     <NavigationProperty Name="PurchaseRequisition" Relationship="KUBOnlinePRModel.FK_PurchaseOrder_PurchaseRequisition" FromRole="PurchaseOrder" ToRole="PurchaseRequisition" />
+    <Property Name="StatusId" Type="String" MaxLength="4" FixedLength="true" Unicode="true" />
+    <NavigationProperty Name="POStatu" Relationship="KUBOnlinePRModel.FK_PurchaseOrder_POStatus" FromRole="PurchaseOrder" ToRole="POStatu" />
   </EntityType>
   <EntityType Name="PurchaseType">
     <Key>
@@ -677,6 +679,11 @@
       <End Role="User" EntitySet="Users" />
       <End Role="PR_Approver" EntitySet="PR_Approver" />
     </AssociationSet>
+    <EntitySet Name="POStatus" EntityType="KUBOnlinePRModel.POStatu" />
+    <AssociationSet Name="FK_PurchaseOrder_POStatus" Association="KUBOnlinePRModel.FK_PurchaseOrder_POStatus">
+      <End Role="POStatu" EntitySet="POStatus" />
+      <End Role="PurchaseOrder" EntitySet="PurchaseOrders" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="ItemType">
     <Key>
@@ -1162,6 +1169,27 @@
       </Principal>
       <Dependent Role="PR_Approver">
         <PropertyRef Name="approverId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="POStatu">
+    <Key>
+      <PropertyRef Name="statusId" />
+    </Key>
+    <Property Name="uuid" Type="Guid" Nullable="false" />
+    <Property Name="statusId" Type="String" Nullable="false" MaxLength="4" FixedLength="true" Unicode="true" />
+    <Property Name="status" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="PurchaseOrders" Relationship="KUBOnlinePRModel.FK_PurchaseOrder_POStatus" FromRole="POStatu" ToRole="PurchaseOrder" />
+  </EntityType>
+  <Association Name="FK_PurchaseOrder_POStatus">
+    <End Type="KUBOnlinePRModel.POStatu" Role="POStatu" Multiplicity="0..1" />
+    <End Type="KUBOnlinePRModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="POStatu">
+        <PropertyRef Name="statusId" />
+      </Principal>
+      <Dependent Role="PurchaseOrder">
+        <PropertyRef Name="StatusId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

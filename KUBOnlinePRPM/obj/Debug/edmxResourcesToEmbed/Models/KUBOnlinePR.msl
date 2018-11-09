@@ -104,6 +104,7 @@
     <EntitySetMapping Name="PurchaseOrders">
       <EntityTypeMapping TypeName="KUBOnlinePRModel.PurchaseOrder">
         <MappingFragment StoreEntitySet="PurchaseOrder">
+          <ScalarProperty Name="StatusId" ColumnName="StatusId" />
           <ScalarProperty Name="SubmitDate" ColumnName="SubmitDate" />
           <ScalarProperty Name="LastModifyDate" ColumnName="LastModifyDate" />
           <ScalarProperty Name="PreparedById" ColumnName="PreparedById" />
@@ -368,6 +369,15 @@
           <ScalarProperty Name="approverApproved" ColumnName="approverApproved" />
           <ScalarProperty Name="PRId" ColumnName="PRId" />
           <ScalarProperty Name="approverId" ColumnName="approverId" />
+          <ScalarProperty Name="uuid" ColumnName="uuid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="POStatus">
+      <EntityTypeMapping TypeName="KUBOnlinePRModel.POStatu">
+        <MappingFragment StoreEntitySet="POStatus">
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="statusId" ColumnName="statusId" />
           <ScalarProperty Name="uuid" ColumnName="uuid" />
         </MappingFragment>
       </EntityTypeMapping>
