@@ -13,6 +13,7 @@ namespace KUBOnlinePRPM.Controllers
         private KUBOnlinePREntities db = new KUBOnlinePREntities();
 
         // GET: User
+        //
         public ActionResult Index()
         {
             return View();
