@@ -293,6 +293,7 @@ namespace KUBOnlinePRPM.Controllers
                                       join d in db.VendorStaffs on a.vendorStaffId equals d.staffId
                                       join e in db.PO_Item on a.POId equals e.POId
                                       join f in db.ItemCodes on e.codeId equals f.codeId
+                                      join g in db.POStatus on a.StatusId equals g.statusId
                                       where a.POId == PODetail.POId
                                       select new NewPOModel()
                                       {
@@ -303,6 +304,8 @@ namespace KUBOnlinePRPM.Controllers
                                           VendorEmail = d.vendorEmail,
                                           VendorStaffId = d.staffId,
                                           VendorContactNo = d.vendorContactNo,
+                                          StatusId = a.StatusId,
+                                          Status = g.status
                                           //Submited = a.Submited.Value
                                       }).FirstOrDefault();
                 PODetail.NewPOForm.POItemListObject = (from m in db.PO_Item

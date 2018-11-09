@@ -40,6 +40,8 @@ namespace KUBOnlinePRPM.Models
         public bool SelectSubmit { get; set; }
         public bool Submited { get; set; }
         public int POAging { get; set; }
+        public string StatusId { get; set; }
+        public string Status { get; set; }
         public List<POItemsTable> POItemListObject { get; set; }
     }
     public class POListTable

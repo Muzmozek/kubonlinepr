@@ -241,6 +241,9 @@
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\POModel.cs" />
+    <Compile Include="Models\POStatu.cs">
+      <DependentUpon>KUBOnlinePR.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PO_Item.cs">
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
     </Compile>
@@ -4377,11 +4380,6 @@
     <Content Include="Assets\img-temp\logos\img4.png" />
     <Content Include="Assets\img-temp\logos\img5.png" />
     <Content Include="Assets\img-temp\logos\img6.png" />
-    <Content Include="Assets\img-temp\packages\umify-main.png" />
-    <Content Include="Assets\img-temp\packages\unify-admin.png" />
-    <Content Include="Assets\img-temp\packages\unify-ecommerce.png" />
-    <Content Include="Assets\img-temp\packages\unify-multipackage.png" />
-    <Content Include="Assets\img-temp\packages\unify-onepages.png" />
     <Content Include="Assets\img-temp\unify-preview\img1.jpg" />
     <Content Include="Assets\img-temp\unify-preview\img10.jpg" />
     <Content Include="Assets\img-temp\unify-preview\img11.jpg" />

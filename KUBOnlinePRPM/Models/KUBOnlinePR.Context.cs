@@ -49,5 +49,6 @@ namespace KUBOnlinePRPM.Models
         public virtual DbSet<PR_Reviewer> PR_Reviewer { get; set; }
         public virtual DbSet<PurchaseRequisition> PurchaseRequisitions { get; set; }
         public virtual DbSet<PR_Approver> PR_Approver { get; set; }
+        public virtual DbSet<POStatu> POStatus { get; set; }
     }
 }

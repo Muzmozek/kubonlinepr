@@ -35,6 +35,7 @@ namespace KUBOnlinePRPM.Models
         public Nullable<int> PreparedById { get; set; }
         public Nullable<System.DateTime> LastModifyDate { get; set; }
         public Nullable<System.DateTime> SubmitDate { get; set; }
+        public string StatusId { get; set; }
     
         public virtual Project Project { get; set; }
         public virtual Vendor Vendor { get; set; }
@@ -42,5 +43,6 @@ namespace KUBOnlinePRPM.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PO_Item> PO_Item { get; set; }
         public virtual PurchaseRequisition PurchaseRequisition { get; set; }
+        public virtual POStatu POStatu { get; set; }
     }
 }

@@ -2,16 +2,43 @@
 <ArrayOfArrayOfArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <ArrayOfArrayOfString>
     <ArrayOfString>
-      <string>D:\OneDrive - KUB Telekomunikasi Sdn Bhd\Projects\kubonlinepr\KUBOnlinePRPM\Controllers\CustomerController.cs</string>
+      <string>D:\OneDrive - KUB Telekomunikasi Sdn Bhd\Projects\kubonlinepr\KUBOnlinePRPM\Views\PR\NewPR.cshtml</string>
     </ArrayOfString>
     <ArrayOfString>
-      <string>D:\OneDrive - KUB Telekomunikasi Sdn Bhd\Projects\kubonlinepr\KUBOnlinePRPM\Controllers\BPRController.cs</string>
+      <string>D:\OneDrive - KUB Telekomunikasi Sdn Bhd\Projects\kubonlinepr\KUBOnlinePRPM\Controllers\PRController.cs</string>
     </ArrayOfString>
     <ArrayOfString>
-      <string>D:\OneDrive - KUB Telekomunikasi Sdn Bhd\Projects\kubonlinepr\KUBOnlinePRPM\Controllers\BCrypt.cs</string>
+      <string>D:\OneDrive - KUB Telekomunikasi Sdn Bhd\Projects\kubonlinepr\KUBOnlinePRPM\Views\Shared\_Layout.cshtml</string>
     </ArrayOfString>
     <ArrayOfString>
-      <string>D:\OneDrive - KUB Telekomunikasi Sdn Bhd\Projects\kubonlinepr\KUBOnlinePRPM\Controllers\HomeController.cs</string>
+      <string>D:\OneDrive - KUB Telekomunikasi Sdn Bhd\Projects\kubonlinepr\KUBOnlinePRPM\Views\PR\Index.cshtml</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>D:\OneDrive - KUB Telekomunikasi Sdn Bhd\Projects\kubonlinepr\KUBOnlinePRPM\Controllers\DBLogicController.cs</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>D:\OneDrive - KUB Telekomunikasi Sdn Bhd\Projects\kubonlinepr\KUBOnlinePRPM\Views\PR\PRDetails.cshtml</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>D:\OneDrive - KUB Telekomunikasi Sdn Bhd\Projects\kubonlinepr\KUBOnlinePRPM\Scripts\PRDetails.js</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>D:\OneDrive - KUB Telekomunikasi Sdn Bhd\Projects\kubonlinepr\KUBOnlinePRPM\Scripts\NewPR.js</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>D:\OneDrive - KUB Telekomunikasi Sdn Bhd\Projects\kubonlinepr\KUBOnlinePRPM\Web.config</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>D:\OneDrive - KUB Telekomunikasi Sdn Bhd\Projects\kubonlinepr\KUBOnlinePRPM\Controllers\POController.cs</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>D:\OneDrive - KUB Telekomunikasi Sdn Bhd\Projects\kubonlinepr\KUBOnlinePRPM\Views\PO\PODetails.cshtml</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>D:\OneDrive - KUB Telekomunikasi Sdn Bhd\Projects\kubonlinepr\KUBOnlinePRPM\Models\KUBOnlinePR.edmx</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>D:\OneDrive - KUB Telekomunikasi Sdn Bhd\Projects\kubonlinepr\KUBOnlinePRPM\Models\POModel.cs</string>
     </ArrayOfString>
   </ArrayOfArrayOfString>
 </ArrayOfArrayOfArrayOfString>

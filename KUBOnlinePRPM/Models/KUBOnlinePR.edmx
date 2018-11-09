@@ -95,6 +95,14 @@
           <Property Name="unitPrice" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="totalPrice" Type="decimal" Precision="18" Scale="2" Nullable="false" />
         </EntityType>
+        <EntityType Name="POStatus">
+          <Key>
+            <PropertyRef Name="statusId" />
+          </Key>
+          <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="statusId" Type="nchar" MaxLength="4" Nullable="false" />
+          <Property Name="status" Type="nvarchar" MaxLength="100" />
+        </EntityType>
         <EntityType Name="PR_Admin">
           <Key>
             <PropertyRef Name="uuid" />
@@ -214,13 +222,14 @@
           <Property Name="projectId" Type="int" Nullable="false" />
           <Property Name="vendorId" Type="int" Nullable="false" />
           <Property Name="vendorStaffId" Type="int" />
-          <Property Name="Saved" Type="int" />
+          <Property Name="Saved" Type="int" Nullable="false" />
           <Property Name="PreparedDate" Type="datetime" />
           <Property Name="PreparedById" Type="int" />
           <Property Name="LastModifyDate" Type="datetime" />
-          <Property Name="Submited" Type="bit" />
+          <Property Name="Submited" Type="bit" Nullable="false" />
           <Property Name="SubmitDate" Type="datetime" />
           <Property Name="POAging" Type="int" Nullable="false" />
+          <Property Name="StatusId" Type="nchar" MaxLength="4" />
         </EntityType>
         <EntityType Name="PurchaseRequisition">
           <Key>
@@ -628,6 +637,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PurchaseOrder_POStatus">
+          <End Role="POStatus" Type="Self.POStatus" Multiplicity="0..1" />
+          <End Role="PurchaseOrder" Type="Self.PurchaseOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="POStatus">
+              <PropertyRef Name="statusId" />
+            </Principal>
+            <Dependent Role="PurchaseOrder">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PurchaseOrder_Project">
           <End Role="Project" Type="Self.Project" Multiplicity="1" />
           <End Role="PurchaseOrder" Type="Self.PurchaseOrder" Multiplicity="*" />
@@ -876,6 +897,7 @@
           <EntitySet Name="NotificationMsg" EntityType="Self.NotificationMsg" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NotiGroup" EntityType="Self.NotiGroup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PO_Item" EntityType="Self.PO_Item" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="POStatus" EntityType="Self.POStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PR_Admin" EntityType="Self.PR_Admin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PR_Approver" EntityType="Self.PR_Approver" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PR_HOD" EntityType="Self.PR_HOD" Schema="dbo" store:Type="Tables" />
@@ -984,6 +1006,10 @@
           <AssociationSet Name="FK_PRs_FileUpload_PurchaseRequisition" Association="Self.FK_PRs_FileUpload_PurchaseRequisition">
             <End Role="PurchaseRequisition" EntitySet="PurchaseRequisition" />
             <End Role="PRs_FileUpload" EntitySet="PRs_FileUpload" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchaseOrder_POStatus" Association="Self.FK_PurchaseOrder_POStatus">
+            <End Role="POStatus" EntitySet="POStatus" />
+            <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
           </AssociationSet>
           <AssociationSet Name="FK_PurchaseOrder_Project" Association="Self.FK_PurchaseOrder_Project">
             <End Role="Project" EntitySet="Project" />
@@ -1208,6 +1234,8 @@
           <Property Name="SubmitDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="PO_Item" Relationship="KUBOnlinePRModel.FK_PO_Item_PurchaseOrder" FromRole="PurchaseOrder" ToRole="PO_Item" />
           <NavigationProperty Name="PurchaseRequisition" Relationship="KUBOnlinePRModel.FK_PurchaseOrder_PurchaseRequisition" FromRole="PurchaseOrder" ToRole="PurchaseRequisition" />
+          <Property Name="StatusId" Type="String" MaxLength="4" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="POStatu" Relationship="KUBOnlinePRModel.FK_PurchaseOrder_POStatus" FromRole="PurchaseOrder" ToRole="POStatu" />
         </EntityType>
         <EntityType Name="PurchaseType">
           <Key>
@@ -1747,6 +1775,11 @@
             <End Role="User" EntitySet="Users" />
             <End Role="PR_Approver" EntitySet="PR_Approver" />
           </AssociationSet>
+          <EntitySet Name="POStatus" EntityType="KUBOnlinePRModel.POStatu" />
+          <AssociationSet Name="FK_PurchaseOrder_POStatus" Association="KUBOnlinePRModel.FK_PurchaseOrder_POStatus">
+            <End Role="POStatu" EntitySet="POStatus" />
+            <End Role="PurchaseOrder" EntitySet="PurchaseOrders" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="ItemType">
           <Key>
@@ -2235,6 +2268,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="POStatu">
+          <Key>
+            <PropertyRef Name="statusId" />
+          </Key>
+          <Property Name="uuid" Type="Guid" Nullable="false" />
+          <Property Name="statusId" Type="String" Nullable="false" MaxLength="4" FixedLength="true" Unicode="true" />
+          <Property Name="status" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PurchaseOrders" Relationship="KUBOnlinePRModel.FK_PurchaseOrder_POStatus" FromRole="POStatu" ToRole="PurchaseOrder" />
+        </EntityType>
+        <Association Name="FK_PurchaseOrder_POStatus">
+          <End Type="KUBOnlinePRModel.POStatu" Role="POStatu" Multiplicity="0..1" />
+          <End Type="KUBOnlinePRModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="POStatu">
+              <PropertyRef Name="statusId" />
+            </Principal>
+            <Dependent Role="PurchaseOrder">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2344,6 +2398,7 @@
           <EntitySetMapping Name="PurchaseOrders">
             <EntityTypeMapping TypeName="KUBOnlinePRModel.PurchaseOrder">
               <MappingFragment StoreEntitySet="PurchaseOrder">
+                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
                 <ScalarProperty Name="SubmitDate" ColumnName="SubmitDate" />
                 <ScalarProperty Name="LastModifyDate" ColumnName="LastModifyDate" />
                 <ScalarProperty Name="PreparedById" ColumnName="PreparedById" />
@@ -2608,6 +2663,15 @@
                 <ScalarProperty Name="approverApproved" ColumnName="approverApproved" />
                 <ScalarProperty Name="PRId" ColumnName="PRId" />
                 <ScalarProperty Name="approverId" ColumnName="approverId" />
+                <ScalarProperty Name="uuid" ColumnName="uuid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="POStatus">
+            <EntityTypeMapping TypeName="KUBOnlinePRModel.POStatu">
+              <MappingFragment StoreEntitySet="POStatus">
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="statusId" ColumnName="statusId" />
                 <ScalarProperty Name="uuid" ColumnName="uuid" />
               </MappingFragment>
             </EntityTypeMapping>

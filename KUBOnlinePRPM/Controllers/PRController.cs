@@ -1206,75 +1206,7 @@ namespace KUBOnlinePRPM.Controllers
 
                         NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == requestorDone.MsgId);
                         getDone.done = true;
-                        db.SaveChanges();
-
-                        if (PRType == "Generic")
-                        {
-                            PurchaseOrder newPO = new PurchaseOrder()
-                            {
-                                uuid = Guid.NewGuid(),
-                                PRId = PRId,
-                                PONo = "dummyset",
-                                PODate = DateTime.Now,
-                                projectId = objPRDetails.ProjectId,
-                                vendorId = objPRDetails.VendorId.Value,
-                                vendorStaffId = objPRDetails.VendorStaffId,
-                                POAging = 0
-                            };
-                            db.PurchaseOrders.Add(newPO);
-                            db.SaveChanges();
-                            newPO.PONo = "PO-" + DateTime.Now.Year + "-" + string.Format("{0}{1}", 0, newPO.POId.ToString("D4"));
-                            db.SaveChanges();
-
-                            NotificationMsg _objNewPO = new NotificationMsg
-                            {
-                                uuid = Guid.NewGuid(),
-                                PRId = PRId,
-                                POId = newPO.POId,
-                                msgDate = DateTime.Now,
-                                fromUserId = Int32.Parse(Session["UserId"].ToString()),
-                                msgType = "Trail",
-                                message = Session["FullName"].ToString() + " has create new PO No. " + newPO.PONo
-                            };
-                            db.NotificationMsgs.Add(_objNewPO);
-
-                            foreach (var value in objPRItemList)
-                            {
-                                PO_Item newPOItem = new PO_Item()
-                                {
-                                    uuid = Guid.NewGuid(),
-                                    POId = newPO.POId,
-                                    itemsId = value.itemsId,
-                                    dateRequired = value.dateRequired,
-                                    description = value.description,
-                                    codeId = value.codeId.Value,
-                                    custPONo = value.custPONo,
-                                    quantity = value.quantity,
-                                    unitPrice = value.unitPrice.Value,
-                                    totalPrice = value.totalPrice.Value
-                                };
-                                db.PO_Item.Add(newPOItem);
-                                db.SaveChanges();
-
-                                NotificationMsg newPOMsg = new NotificationMsg()
-                                {
-                                    uuid = Guid.NewGuid(),
-                                    PRId = PRId,
-                                    POId = newPOItem.POId,
-                                    msgDate = DateTime.Now,
-                                    fromUserId = Int32.Parse(Session["UserId"].ToString()),
-                                    msgType = "Trail",
-                                    message = "The system create new PO item from PR No. " + objPRDetails.PRNo
-                                };
-                                db.NotificationMsgs.Add(newPOMsg);
-                            }
-                            objPRDetails.AmountPOBalance = 0;
-                            updateProject.utilizedToDate = updateProject.utilizedToDate + objPRDetails.AmountRequired;
-                            updateProject.budgetBalance = updateProject.budgetedAmount - updateProject.utilizedToDate;
-
-                            db.SaveChanges();
-                        }
-                                                
+                        db.SaveChanges();                       
                     }
 
                 }
