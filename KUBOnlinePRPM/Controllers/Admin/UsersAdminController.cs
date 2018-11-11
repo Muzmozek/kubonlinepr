@@ -83,7 +83,7 @@ namespace KUBOnlinePRPM.Controllers.Admin
                 return HttpNotFound();
             }
             ViewBag.companyId = new SelectList(db.Customers, "custId", "name", user.companyId);
-            ViewBag.superiorId = new SelectList(db.Users, "userId", "fullName", user.superiorId);
+            ViewBag.superiorId = new SelectList(db.Users, "userId", "firstName", user.superiorId);
             ViewBag.roleList = db.Roles.Select(x => new UserRoleViewModel{ roleId = x.roleId , roleName = x.name});
             return View(user);
         }
