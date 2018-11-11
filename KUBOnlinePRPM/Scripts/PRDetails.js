@@ -53,6 +53,38 @@
         });
     }
     
+    $("#SavePreparedProcurement").click(function (e) {
+
+        e.preventDefault();
+        
+        Url = "/PR/UpdatePRProcurement";
+        $.post(Url, {
+
+            PRId: PRId,
+            SpecsReviewer: $("#SpecsReviewer").val()
+
+        }, function (resp) {
+            alert(resp);
+        });
+
+    });
+
+    $("#SubmitPreparedProcurement").click(function (e) {
+
+        e.preventDefault();
+
+        Url = "/PR/SubmitPRProcurement";
+        $.post(Url, {
+
+            PRId: PRId,
+            SpecsReviewer: $("#SpecsReviewer").val()
+
+        }, function (resp) {
+            alert(resp);
+        });
+
+    });
+    
 
     $(document).on("click", ".approveRejectDetail", function (e) {
         e.preventDefault();

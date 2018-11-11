@@ -61,6 +61,7 @@ namespace KUBOnlinePRPM.Models
         public string StatusId { get; set; }
         public bool Phase1Completed { get; set; }
         public bool Phase2Completed { get; set; }
+        public string SpecsReviewer { get; set; }
     
         public virtual Customer Customer { get; set; }
         public virtual FileUpload FileUpload { get; set; }

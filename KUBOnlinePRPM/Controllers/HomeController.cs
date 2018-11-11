@@ -84,10 +84,11 @@ namespace KUBOnlinePRPM.Controllers
                 Session["Username"] = model.Username;
                 Session["ifRequestor"] = getRole.FirstOrDefault(x => x.roleId.Contains("R01"));
                 Session["ifReviewer"] = getRole.FirstOrDefault(x => x.roleId.Contains("R02"));
+                Session["ifProcurement"] = getRole.FirstOrDefault(x => x.roleId.Contains("R03"));
                 Session["ifApprover"] = getRole.FirstOrDefault(x => x.roleId.Contains("R04"));
                 Session["ifAdmin"] = getRole.FirstOrDefault(x => x.roleId.Contains("R05"));
                 Session["ifSuperAdmin"] = getRole.FirstOrDefault(x => x.roleId.Contains("R06"));
-                Session["ifProcurement"] = getRole.FirstOrDefault(x => x.roleId.Contains("R07"));
+                
                 Session["roles"] = db.Users_Roles.Where(x => x.userId == CheckUserId.UserId).ToList();
                 Session["FullName"] = CheckUserId.FullName;
                 Session["CompanyId"] = CheckUserId.CompanyId;

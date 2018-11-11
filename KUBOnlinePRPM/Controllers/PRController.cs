@@ -17,6 +17,7 @@ using System.DirectoryServices.AccountManagement;
 using System.Net;
 using System.Globalization;
 using KUBOnlinePRPM.Service;
+using System.Diagnostics;
 
 namespace KUBOnlinePRPM.Controllers
 {
@@ -47,6 +48,7 @@ namespace KUBOnlinePRPM.Controllers
     {
         private KUBOnlinePREntities db = new KUBOnlinePREntities();
         private KUBHelper KUBHelper = new KUBHelper();
+        private PRService PRService = new PRService();
 
         //private KUB_TelEntities db1 = new KUB_TelEntities();
         public ActionResult Index()
@@ -220,6 +222,9 @@ namespace KUBOnlinePRPM.Controllers
                     ViewBag.PurchaseTypeList = new SelectList(PurchaseTypeQuery.AsEnumerable(), "purchaseTypeId", "purchaseType");
                     //ViewBag.ReviewerNameList = new SelectList(ReviewerNameQuery.AsEnumerable(), "reviewerId", "reviewerName");
                     //ViewBag.ApproverNameList = new SelectList(ApproverNameQuery.AsEnumerable(), "approverId", "approverName");
+                    var errors = ModelState.Select(x => x.Value.Errors)
+                           .Where(y => y.Count > 0)
+                           .ToList();
 
                     return new JsonResult
                     {
@@ -362,7 +367,8 @@ namespace KUBOnlinePRPM.Controllers
                 var ifAdmin = Session["ifAdmin"];
                 var ifHOD = Session["JobTitle"].ToString();
 
-                var ifProcurement = KUBHelper.CheckRole("R07") ? true : false;
+                var ifProcurement = Session["ifProcurement"];
+                //var ifProcurement = KUBHelper.CheckRole("R03") ? true : false;
                 
                 PRModel PRList = new PRModel();
 
@@ -1458,16 +1464,69 @@ namespace KUBOnlinePRPM.Controllers
             }
         }
 
-
-        public JsonResult UpdateXXX()
+        [HttpPost]
+        public JsonResult UpdatePRProcurement()
         {
-            return Json("");
+            int PrId = Int32.Parse(Request["PrId"]);
+            String SpecsReviewer = Request["SpecsReviewer"];
+
+            var PR = db.PurchaseRequisitions.First(x => x.PRId == PrId);
+            PR.SpecsReviewer = SpecsReviewer;
+
+            if (db.SaveChanges() > 0)
+            {
+                return Json("Sucessfully update");
+            }
+            else {
+                return Json("Something is wrong");
+            }
+            
         }
 
 
-        public JsonResult SubmitXXX()
+        public JsonResult SubmitPRProcurement()
         {
-            return Json("");
+            // todo check session if login as procurement or admin only
+
+            int PrId = Int32.Parse(Request["PrId"]);
+            String SpecsReviewer = Request["SpecsReviewer"];
+
+            var PR = db.PurchaseRequisitions.First(x => x.PRId == PrId);
+            PR.SpecsReviewer = SpecsReviewer;
+            db.SaveChanges();
+
+            Debug.WriteLine("SubmitPRProcurement");
+            int amountBudget = 500;
+
+            if (PRService.CheckAmountScenarioOne(amountBudget) || PRService.IncludeInBudget(PR))
+            {
+                PR.StatusId = "PR03";
+                db.SaveChanges();
+                // send notifications to requestor
+
+                // send notifications to hod
+
+                // send notifications to reviewer
+
+                return Json("Scenario 1 success");
+            }
+            else if (PRService.IncludeInBudget(PR) == false || PRService.CheckAmountScenarioTwo(amountBudget))
+            {
+                PR.StatusId = "PR03";
+                db.SaveChanges();
+
+                return Json("Scenario 2 success");
+            }
+            else if (PRService.CheckAmountScenarioThree(amountBudget))
+            {
+                PR.StatusId = "PR03";
+                db.SaveChanges();
+
+                return Json("Scenario 3 success");
+            }
+            else {
+                return Json("Does not fit to any conditions. Please recheck. ");
+            }
         }
 
 
