@@ -269,7 +269,6 @@
           <Property Name="Phase2Completed" Type="bit" Nullable="false" />
           <Property Name="PRAging" Type="int" />
           <Property Name="StatusId" Type="nchar" MaxLength="4" Nullable="false" />
-          <Property Name="SpecsReviewer" Type="varchar" MaxLength="25" />
         </EntityType>
         <EntityType Name="PurchaseType">
           <Key>
@@ -2051,7 +2050,6 @@
           <Property Name="Phase1Completed" Type="Boolean" Nullable="false" />
           <Property Name="Phase2Completed" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="PR_Approver" Relationship="KUBOnlinePRModel.FK_PR_Approver_PurchaseRequisition" FromRole="PurchaseRequisition" ToRole="PR_Approver" />
-          <Property Name="SpecsReviewer" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_PurchaseRequisition_Customer">
           <End Type="KUBOnlinePRModel.Customer" Role="Customer" Multiplicity="1" />
@@ -2620,7 +2618,6 @@
           <EntitySetMapping Name="PurchaseRequisitions">
             <EntityTypeMapping TypeName="KUBOnlinePRModel.PurchaseRequisition">
               <MappingFragment StoreEntitySet="PurchaseRequisition">
-                <ScalarProperty Name="SpecsReviewer" ColumnName="SpecsReviewer" />
                 <ScalarProperty Name="Phase2Completed" ColumnName="Phase2Completed" />
                 <ScalarProperty Name="Phase1Completed" ColumnName="Phase1Completed" />
                 <ScalarProperty Name="StatusId" ColumnName="StatusId" />
