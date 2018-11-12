@@ -1479,7 +1479,8 @@ namespace KUBOnlinePRPM.Controllers
         {
             // todo check session if login as procurement or admin only
 
-            int PrId = Int32.Parse(Request["PrId"]);
+            int PrId = Int32.Parse(Request["PrId"]); int UserId = Int32.Parse(Session["UserId"].ToString());
+            var getFullName = db.Users.First(m => m.userId == UserId);
             String SpecsReviewer = Request["SpecsReviewer"];
 
             var PR = db.PurchaseRequisitions.First(x => x.PRId == PrId);
@@ -1487,17 +1488,59 @@ namespace KUBOnlinePRPM.Controllers
             db.SaveChanges();
 
             Debug.WriteLine("SubmitPRProcurement");
-            int amountBudget = 500;
+            decimal amountBudget = PR.AmountRequired;
 
             if (PRService.CheckAmountScenarioOne(amountBudget) || PRService.IncludeInBudget(PR))
             {
                 PR.StatusId = "PR03";
                 db.SaveChanges();
                 // send notifications to requestor
+                NotificationMsg _objSubmited = new NotificationMsg
+                {
+                    uuid = Guid.NewGuid(),
+                    PRId = PrId,
+                    msgDate = DateTime.Now,
+                    fromUserId = UserId,
+                    msgType = "Trail",
+                    message = getFullName.firstName + " " + getFullName.lastName + " has submit PR application for PR No. " + PR.PRNo + " subject for reviewal"
+                };
+                db.NotificationMsgs.Add(_objSubmited);
 
                 // send notifications to hod
 
                 // send notifications to reviewer
+                var getReviewer = (from m in db.PurchaseRequisitions
+                                   join n in db.PR_Reviewer on m.PRId equals n.PRId
+                                   //join o in db.Roles on n.roleId equals o.roleId
+                                   where m.PRId == PrId
+                                   select new PRModel()
+                                   {
+                                       UserId = n.reviewerId
+                                   }).ToList();
+                NotificationMsg objTask = new NotificationMsg()
+                {
+                    uuid = Guid.NewGuid(),
+                    message = PR.PRNo + " pending for your reviewal",
+                    fromUserId = UserId,
+                    msgDate = DateTime.Now,
+                    msgType = "Task",
+                    PRId = PrId
+                };
+                db.NotificationMsgs.Add(objTask);
+                db.SaveChanges();
+
+                foreach (var item in getReviewer)
+                {
+                    NotiGroup ReviewerTask = new NotiGroup()
+                    {
+                        uuid = Guid.NewGuid(),
+                        msgId = objTask.msgId,
+                        toUserId = item.UserId,
+                        resubmit = false
+                    };
+                    db.NotiGroups.Add(ReviewerTask);
+                    db.SaveChanges();
+                }
 
                 return Json("Scenario 1 success");
             }
