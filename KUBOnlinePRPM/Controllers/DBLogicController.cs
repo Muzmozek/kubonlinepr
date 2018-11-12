@@ -50,7 +50,7 @@ namespace KUBOnlinePRPM.Controllers
 
             var getAdminList = (from m in db.Users
                                 join n in db.Users_Roles on m.userId equals n.userId
-                                where n.roleId == "R05"
+                                where n.roleId == "R03"
                                 select new NewPRModel()
                                 {
                                     AdminId = m.userId,

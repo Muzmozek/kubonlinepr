@@ -1,7 +1,7 @@
 ﻿$(document).ready(function () {
     var Url;
 
-    if (ifAdmin !== "") {
+    if (ifProcurement !== "" || ifAdmin !== "") {
         PRItemTable = $('#PRItemTable').DataTable({
             serverSide: false,
             //dom: 'frtiS',
@@ -85,20 +85,20 @@
 
     });
     
-
+    //phase 1 reviewer approver approval logic
     $(document).on("click", ".approveRejectDetail", function (e) {
         e.preventDefault();
-        var Reviewer = false; var Approver = false; var RejectRemark = "";
-        if (ifReviewer !== "")
-            Reviewer = true;
-        if (ifApprover !== "")
+        /*var Reviewer = false;*/ var Approver = false; var RejectRemark = "";
+        //if (ifIT !== "" || ifPMO !== "" || ifHSE !== "")
+        //    Reviewer = true;
+        if (ifHOD !== "")
             Approver = true;
         if ($(this)[0].id === "ApprovePR") {
             Url = UrlApproved;
             $.post(Url, {
                 PRId: PRId,
                 PRType: POType,
-                Reviewer: Reviewer,
+                //Reviewer: Reviewer,
                 Approver: Approver
             }, function (resp) {
                 alert("The PR has been approved");
@@ -109,7 +109,7 @@
             $.post(Url, {
                 PRId: PRId,
                 PRType: POType,
-                Reviewer: Reviewer,
+                //Reviewer: Reviewer,
                 Approver: Approver,
                 RejectRemark: $("textarea#RejectRemark").val()
             }, function (resp) {

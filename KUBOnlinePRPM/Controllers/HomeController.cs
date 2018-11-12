@@ -83,12 +83,15 @@ namespace KUBOnlinePRPM.Controllers
                 Session["UserId"] = CheckUserId.UserId;
                 Session["Username"] = model.Username;
                 Session["ifRequestor"] = getRole.FirstOrDefault(x => x.roleId.Contains("R01"));
-                Session["ifReviewer"] = getRole.FirstOrDefault(x => x.roleId.Contains("R02"));
+                Session["ifHOD"] = getRole.FirstOrDefault(x => x.roleId.Contains("R02"));
                 Session["ifProcurement"] = getRole.FirstOrDefault(x => x.roleId.Contains("R03"));
-                Session["ifApprover"] = getRole.FirstOrDefault(x => x.roleId.Contains("R04"));
+                Session["ifHOC"] = getRole.FirstOrDefault(x => x.roleId.Contains("R04"));
                 Session["ifAdmin"] = getRole.FirstOrDefault(x => x.roleId.Contains("R05"));
                 Session["ifSuperAdmin"] = getRole.FirstOrDefault(x => x.roleId.Contains("R06"));
-                
+                Session["ifIT"] = getRole.FirstOrDefault(x => x.roleId.Contains("R07"));
+                Session["ifPMO"] = getRole.FirstOrDefault(x => x.roleId.Contains("R08"));
+                Session["ifHSE"] = getRole.FirstOrDefault(x => x.roleId.Contains("R09"));
+                Session["ifHOGPSS"] = getRole.FirstOrDefault(x => x.roleId.Contains("R10"));
                 Session["roles"] = db.Users_Roles.Where(x => x.userId == CheckUserId.UserId).ToList();
                 Session["FullName"] = CheckUserId.FullName;
                 Session["CompanyId"] = CheckUserId.CompanyId;

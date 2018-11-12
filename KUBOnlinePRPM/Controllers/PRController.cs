@@ -360,32 +360,19 @@ namespace KUBOnlinePRPM.Controllers
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
                 int UserId = Int32.Parse(Session["UserId"].ToString());
-                var ifSuperAdmin = Session["ifSuperAdmin"];
                 var ifRequestor = Session["ifRequestor"];
-                var ifReviewer = Session["ifReviewer"];
-                var ifApprover = Session["ifApprover"];
-                var ifAdmin = Session["ifAdmin"];
-                var ifHOD = Session["JobTitle"].ToString();
-
+                var ifHOD = Session["ifHOD"];
                 var ifProcurement = Session["ifProcurement"];
+                var ifHOC = Session["ifHOC"];
+                var ifAdmin = Session["ifAdmin"];
+                var ifSuperAdmin = Session["ifSuperAdmin"];                
+                var ifIT = Session["ifIT"];
+                var ifPMO = Session["ifPMO"];
+                var ifHSE = Session["ifHSE"];
+                var ifHOGPSS = Session["ifHOGPSS"];
                 //var ifProcurement = KUBHelper.CheckRole("R03") ? true : false;
-                
+
                 PRModel PRList = new PRModel();
-
-                //using (KUBOnlinePREntities context = new KUBOnlinePREntities())
-                //{
-                //    IEnumerable<PurchaseRequisition> empDetails = context.PurchaseRequisitions.SqlQuery<PurchaseRequisition>("exec GetEmployeeData").ToList();
-                //}
-
-                ////Querying with Object Services and Entity SQL
-                //string sqlString = "SELECT PRId,PRNo,PreparedDate,AmountRequired FROM PurchaseRequisition " +
-                //                    "WHERE [PreparedById] = " + UserId;
-
-                //var objctx = (db as IObjectContextAdapter).ObjectContext;
-
-                //ObjectQuery<PurchaseRequisition> generatePRLIst = objctx.CreateQuery<PurchaseRequisition>(sqlString);
-                //PurchaseRequisition PRLIst = generatePRLIst.First<PurchaseRequisition>();
-
                 while (ifSuperAdmin != null)
                 {
                     PRList.PRListObject = (from m in db.PurchaseRequisitions
@@ -442,7 +429,7 @@ namespace KUBOnlinePRPM.Controllers
                                                Status = p.status
                                            }).ToList();
                 }
-                else if (ifReviewer != null)
+                else if (ifIT != null || ifPMO != null || ifHSE != null)
                 {
                     PRList.PRListObject = (from m in db.PurchaseRequisitions
                                            join n in db.Users on m.PreparedById equals n.userId
@@ -464,7 +451,7 @@ namespace KUBOnlinePRPM.Controllers
                                                Status = p.status
                                            }).ToList();
                 }
-                else if (ifApprover != null && ifHOD == "HOD")
+                else if (ifHOD != null)
                 {
                     PRList.PRListObject = (from m in db.PurchaseRequisitions
                                            join n in db.Users on m.PreparedById equals n.userId
@@ -486,7 +473,7 @@ namespace KUBOnlinePRPM.Controllers
                                                Status = p.status
                                            }).ToList();
                 }
-                else if (ifApprover != null)
+                else if (ifHOC != null || ifHOGPSS != null)
                 {
                     PRList.PRListObject = (from m in db.PurchaseRequisitions
                                            join n in db.Users on m.PreparedById equals n.userId
@@ -1034,11 +1021,13 @@ namespace KUBOnlinePRPM.Controllers
             return File(fileData, "text", fileName);
         }
 
+        #region Approval & Rejected Phase 1
         [HttpPost]
-        public ActionResult Approval(int PRId, string PRType, bool Reviewer, bool Approver)
+        //public ActionResult Approval(int PRId, string PRType, bool Reviewer, bool Approver)
+        public ActionResult Approval(int PRId, string PRType, bool Approver)
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
-            {               
+            {
                 PurchaseRequisition objPRDetails = db.PurchaseRequisitions.First(m => m.PRId == PRId);
                 var objPRItemList = db.PR_Items.ToList().Where(m => m.PRId == PRId);
                 int UserId = Int32.Parse(Session["UserId"].ToString());
@@ -1050,84 +1039,84 @@ namespace KUBOnlinePRPM.Controllers
                                          MsgId = m.msgId
                                      }).First();
 
-                if (Reviewer == true)
-                {
-                    PR_Reviewer objGetReviewer = db.PR_Reviewer.First(m => m.PRId == PRId && m.reviewerId == UserId);
-                    objGetReviewer.reviewed = objGetReviewer.reviewed + 1;
-                    objGetReviewer.reviewedDate = DateTime.Now;
-                    objPRDetails.StatusId = "PR05";
+                //if (Reviewer == true)
+                //{
+                //    PR_Reviewer objGetReviewer = db.PR_Reviewer.First(m => m.PRId == PRId && m.reviewerId == UserId);
+                //    objGetReviewer.reviewed = objGetReviewer.reviewed + 1;
+                //    objGetReviewer.reviewedDate = DateTime.Now;
+                //    objPRDetails.StatusId = "PR05";
 
-                    NotificationMsg objNotification = new NotificationMsg()
-                    {
-                        uuid = Guid.NewGuid(),
-                        message = Session["FullName"].ToString() + " has reviewed the PR No: " + objPRDetails.PRNo + " application. ",
-                        fromUserId = UserId,
-                        msgDate = DateTime.Now,
-                        msgType = "Trail",
-                        PRId = PRId
-                    };
-                    db.NotificationMsgs.Add(objNotification);
-                    db.SaveChanges();
-                    
-                    NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == requestorDone.MsgId);
-                    getDone.done = true;
+                //    NotificationMsg objNotification = new NotificationMsg()
+                //    {
+                //        uuid = Guid.NewGuid(),
+                //        message = Session["FullName"].ToString() + " has reviewed the PR No: " + objPRDetails.PRNo + " application. ",
+                //        fromUserId = UserId,
+                //        msgDate = DateTime.Now,
+                //        msgType = "Trail",
+                //        PRId = PRId
+                //    };
+                //    db.NotificationMsgs.Add(objNotification);
+                //    db.SaveChanges();
 
-                    if (objPRDetails.AmountRequired < 20000)
-                    {
-                        var getHODApprover = db.PR_HOD.Select(m => new { HODId = m.HODId, PRId = m.PRId }).Where(m => m.PRId == PRId).ToList();
-                        foreach (var item in getHODApprover)
-                        {
-                            NotificationMsg objTask = new NotificationMsg()
-                            {
-                                uuid = Guid.NewGuid(),
-                                message = objPRDetails.PRNo + " pending for your approval",
-                                fromUserId = UserId,
-                                msgDate = DateTime.Now,
-                                msgType = "Task",
-                                PRId = PRId
-                            };
-                            db.NotificationMsgs.Add(objTask);
+                //    NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == requestorDone.MsgId);
+                //    getDone.done = true;
 
-                            NotiGroup Task = new NotiGroup()
-                            {
-                                uuid = Guid.NewGuid(),
-                                msgId = objTask.msgId,
-                                toUserId = item.HODId
-                            };
-                            db.NotiGroups.Add(Task);
-                            db.SaveChanges();
-                        }
-                    } else
-                    {
-                        var getApprover = db.PR_Approver.Select(m => new { ApproverId = m.approverId, PRId = m.PRId }).Where(m => m.PRId == PRId).ToList();
-                        foreach (var item in getApprover)
-                        {
-                            NotificationMsg objTask = new NotificationMsg()
-                            {
-                                uuid = Guid.NewGuid(),
-                                message = objPRDetails.PRNo + " pending for your approval",
-                                fromUserId = UserId,
-                                msgDate = DateTime.Now,
-                                msgType = "Task",
-                                PRId = PRId
-                            };
-                            db.NotificationMsgs.Add(objTask);
+                //    if (objPRDetails.AmountRequired < 20000)
+                //    {
+                //        var getHODApprover = db.PR_HOD.Select(m => new { HODId = m.HODId, PRId = m.PRId }).Where(m => m.PRId == PRId).ToList();
+                //        foreach (var item in getHODApprover)
+                //        {
+                //            NotificationMsg objTask = new NotificationMsg()
+                //            {
+                //                uuid = Guid.NewGuid(),
+                //                message = objPRDetails.PRNo + " pending for your approval",
+                //                fromUserId = UserId,
+                //                msgDate = DateTime.Now,
+                //                msgType = "Task",
+                //                PRId = PRId
+                //            };
+                //            db.NotificationMsgs.Add(objTask);
 
-                            NotiGroup Task = new NotiGroup()
-                            {
-                                uuid = Guid.NewGuid(),
-                                msgId = objTask.msgId,
-                                toUserId = item.ApproverId
-                            };
-                            db.NotiGroups.Add(Task);
-                            db.SaveChanges();
-                        }
-                    }
-                }
-                else if(Approver == true)
+                //            NotiGroup Task = new NotiGroup()
+                //            {
+                //                uuid = Guid.NewGuid(),
+                //                msgId = objTask.msgId,
+                //                toUserId = item.HODId
+                //            };
+                //            db.NotiGroups.Add(Task);
+                //            db.SaveChanges();
+                //        }
+                //    } else
+                //    {
+                //        var getApprover = db.PR_Approver.Select(m => new { ApproverId = m.approverId, PRId = m.PRId }).Where(m => m.PRId == PRId).ToList();
+                //        foreach (var item in getApprover)
+                //        {
+                //            NotificationMsg objTask = new NotificationMsg()
+                //            {
+                //                uuid = Guid.NewGuid(),
+                //                message = objPRDetails.PRNo + " pending for your approval",
+                //                fromUserId = UserId,
+                //                msgDate = DateTime.Now,
+                //                msgType = "Task",
+                //                PRId = PRId
+                //            };
+                //            db.NotificationMsgs.Add(objTask);
+
+                //            NotiGroup Task = new NotiGroup()
+                //            {
+                //                uuid = Guid.NewGuid(),
+                //                msgId = objTask.msgId,
+                //                toUserId = item.ApproverId
+                //            };
+                //            db.NotiGroups.Add(Task);
+                //            db.SaveChanges();
+                //        }
+                //    }
+                //}
+                if (Approver == true)
                 {
                     Project updateProject = db.Projects.First(m => m.projectId == objPRDetails.ProjectId);
-                    
+
                     if (objPRDetails.Phase1Completed == false)
                     {
                         PR_HOD getApprover = db.PR_HOD.First(m => m.PRId == PRId && m.HODId == UserId);
@@ -1153,7 +1142,7 @@ namespace KUBOnlinePRPM.Controllers
 
                         var getAdmin = (from m in db.Users
                                         join n in db.Users_Roles on m.userId equals n.userId
-                                        where n.roleId == "R05"
+                                        where n.roleId == "R03"
                                         select new PRModel()
                                         {
                                             UserId = m.userId
@@ -1182,41 +1171,42 @@ namespace KUBOnlinePRPM.Controllers
                             db.SaveChanges();
                         }
                     }
-                    else
-                    {
-                        if (objPRDetails.AmountRequired < 20000)
-                        {
-                            PR_HOD getHODApprover = db.PR_HOD.First(m => m.PRId == PRId && m.HODId == UserId);
-                            getHODApprover.HODApprovedP2 = getHODApprover.HODApprovedP2 + 1;
-                            getHODApprover.HODApprovedDate2 = DateTime.Now;
-                        } else
-                        {
-                            PR_Approver getApprover = db.PR_Approver.First(m => m.PRId == PRId && m.approverId == UserId);
-                            getApprover.approverApproved = getApprover.approverApproved + 1;
-                            getApprover.approverApprovedDate = DateTime.Now;
-                        }
-                        objPRDetails.StatusId = "PR06";
-                        objPRDetails.Phase2Completed = true;
-                        db.SaveChanges();
+                    //else
+                    //{
+                    //    if (objPRDetails.AmountRequired < 20000)
+                    //    {
+                    //        PR_HOD getHODApprover = db.PR_HOD.First(m => m.PRId == PRId && m.HODId == UserId);
+                    //        getHODApprover.HODApprovedP2 = getHODApprover.HODApprovedP2 + 1;
+                    //        getHODApprover.HODApprovedDate2 = DateTime.Now;
+                    //    }
+                    //    else
+                    //    {
+                    //        PR_Approver getApprover = db.PR_Approver.First(m => m.PRId == PRId && m.approverId == UserId);
+                    //        getApprover.approverApproved = getApprover.approverApproved + 1;
+                    //        getApprover.approverApprovedDate = DateTime.Now;
+                    //    }
+                    //    objPRDetails.StatusId = "PR06";
+                    //    objPRDetails.Phase2Completed = true;
+                    //    db.SaveChanges();
 
-                        NotificationMsg objNotification = new NotificationMsg()
-                        {
-                            uuid = Guid.NewGuid(),
-                            message = Session["FullName"].ToString() + " has approved the PR No: " + objPRDetails.PRNo + " procurement application. ",
-                            fromUserId = UserId,
-                            msgDate = DateTime.Now,
-                            msgType = "Trail",
-                            PRId = PRId
-                        };
-                        db.NotificationMsgs.Add(objNotification);                       
+                    //    NotificationMsg objNotification = new NotificationMsg()
+                    //    {
+                    //        uuid = Guid.NewGuid(),
+                    //        message = Session["FullName"].ToString() + " has approved the PR No: " + objPRDetails.PRNo + " procurement application. ",
+                    //        fromUserId = UserId,
+                    //        msgDate = DateTime.Now,
+                    //        msgType = "Trail",
+                    //        PRId = PRId
+                    //    };
+                    //    db.NotificationMsgs.Add(objNotification);                       
 
-                        NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == requestorDone.MsgId);
-                        getDone.done = true;
-                        db.SaveChanges();                       
-                    }
+                    //    NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == requestorDone.MsgId);
+                    //    getDone.done = true;
+                    //    db.SaveChanges();                       
+                    //}
 
                 }
-                
+
                 return Json(new { success = true });
             }
             else
@@ -1226,15 +1216,16 @@ namespace KUBOnlinePRPM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Rejected(int PRId, string PRType, bool Reviewer, bool Approver, string RejectRemark)
+        //public ActionResult Rejected(int PRId, string PRType, bool Reviewer, bool Approver, string RejectRemark)
+        public ActionResult Rejected(int PRId, string PRType, bool Approver, string RejectRemark)
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
                 PurchaseRequisition objPRDetails = db.PurchaseRequisitions.First(m => m.PRId == PRId);
                 int UserId = Int32.Parse(Session["UserId"].ToString());
-                    objPRDetails.Rejected = objPRDetails.Rejected + 1;
-                    objPRDetails.RejectedDate = DateTime.Now;
-                    objPRDetails.RejectedById = UserId;                                      
+                objPRDetails.Rejected = objPRDetails.Rejected + 1;
+                objPRDetails.RejectedDate = DateTime.Now;
+                objPRDetails.RejectedById = UserId;
                 objPRDetails.RejectedRemark = RejectRemark;
                 objPRDetails.StatusId = "PR07";
 
@@ -1255,9 +1246,9 @@ namespace KUBOnlinePRPM.Controllers
                                     join p in db.PurchaseRequisitions on m.userId equals p.PreparedById
                                     where p.PRId == PRId
                                     select new PRModel()
-                                   {
-                                       UserId = m.userId
-                                   }).First();
+                                    {
+                                        UserId = m.userId
+                                    }).First();
                 NotificationMsg objTask = new NotificationMsg()
                 {
                     uuid = Guid.NewGuid(),
@@ -1286,6 +1277,7 @@ namespace KUBOnlinePRPM.Controllers
                 return Redirect("~/Home/Index");
             }
         }
+        #endregion
         public ActionResult PRForm()
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
@@ -1482,7 +1474,6 @@ namespace KUBOnlinePRPM.Controllers
             }
             
         }
-
 
         public JsonResult SubmitPRProcurement()
         {

@@ -178,13 +178,6 @@ namespace KUBOnlinePRPM.Controllers
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
-                int UserId = Int32.Parse(Session["UserId"].ToString());
-                var ifSuperAdmin = Session["ifSuperAdmin"];
-                var ifRequestor = Session["ifRequestor"];
-                var ifReviewer = Session["ifReviewer"];
-                var ifApprover = Session["ifApprover"];
-                var ifAdmin = Session["ifAdmin"];
-
                 POModel POList = new POModel();
                 if (Type == "All")
                 {
