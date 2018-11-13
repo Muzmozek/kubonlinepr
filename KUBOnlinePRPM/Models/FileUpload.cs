@@ -18,7 +18,6 @@ namespace KUBOnlinePRPM.Models
         public FileUpload()
         {
             this.PRs_FileUpload = new HashSet<PRs_FileUpload>();
-            this.PurchaseRequisitions = new HashSet<PurchaseRequisition>();
         }
     
         public System.Guid uuid { get; set; }
@@ -35,7 +34,5 @@ namespace KUBOnlinePRPM.Models
         public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PRs_FileUpload> PRs_FileUpload { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PurchaseRequisition> PurchaseRequisitions { get; set; }
     }
 }

@@ -38,6 +38,8 @@ namespace KUBOnlinePRPM.Models
         public bool Unbudgeted { get; set; }
         public string PaperRefNo { get; set; }
         public string BidWaiverRefNo { get; set; }
+        public bool? PaperAttachment { get; set; }
+        public bool PaperVerified { get; set; }
 
         [Required]
         public int PurchaseTypeId { get; set; }

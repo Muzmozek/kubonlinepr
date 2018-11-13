@@ -249,6 +249,8 @@ namespace KUBOnlinePRPM.Controllers
                 model.NewPRForm.HODApproverId = db.Users.Select(m => new { SuperiorId = m.superiorId, UserId = m.userId }).Where(m => m.UserId == model.UserId).First().SuperiorId.Value;
                 DBLogicController.PRSaveDbLogic(model);
 
+                bool checkPaperVerified = db.Projects.FirstOrDefault(m => m.projectId == model.NewPRForm.ProjectId).paperVerified;
+
                 if (model.PaperRefNoFile != null && model.BidWaiverRefNoFile != null)
                 {
                     FileUpload fileUploadModel = new FileUpload();
@@ -326,6 +328,10 @@ namespace KUBOnlinePRPM.Controllers
                         msgType = "Trail"
                     };
                     db.NotificationMsgs.Add(_objSendMessage1);
+                    db.SaveChanges();
+
+                    PurchaseRequisition updatePaperAttachment = new PurchaseRequisition();
+                    updatePaperAttachment.PaperAttachment = true;
                     db.SaveChanges();
                 }
                 ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "projectName");
@@ -678,6 +684,8 @@ namespace KUBOnlinePRPM.Controllers
                                                  UtilizedToDate = d.utilizedToDate,
                                                  AmountRequired = a.AmountRequired,
                                                  BudgetBalance = d.budgetBalance,
+                                                 PaperAttachment = a.PaperAttachment,
+                                                 PaperVerified = d.paperVerified,
                                                  PreparedById = a.PreparedById,
                                                  PreparedDate = a.PreparedDate,
                                                  //HODApproverId = a.HODApproverId,
@@ -830,7 +838,7 @@ namespace KUBOnlinePRPM.Controllers
                 //               }).ToList();
                 DBLogicController.PRUpdateDbLogic(PRModel);
 
-                if (PRModel.PaperRefNoFile != null && PRModel.BidWaiverRefNoFile != null)
+                if (PRModel.PaperRefNoFile != null && PRModel.BidWaiverRefNoFile != null && PRModel.NewPRForm.PaperVerified == false && PRModel.NewPRForm.PaperAttachment == false)
                 {
                     FileUpload fileUploadModel = new FileUpload();
                     FileUpload fileUploadModel1 = new FileUpload();
@@ -907,6 +915,10 @@ namespace KUBOnlinePRPM.Controllers
                         msgType = "Trail"
                     };
                     db.NotificationMsgs.Add(_objSendMessage1);
+                    db.SaveChanges();
+
+                    PurchaseRequisition updatePaperAttachment = new PurchaseRequisition();
+                    updatePaperAttachment.PaperAttachment = true;
                     db.SaveChanges();
                 }
 
@@ -1117,7 +1129,7 @@ namespace KUBOnlinePRPM.Controllers
                 {
                     Project updateProject = db.Projects.First(m => m.projectId == objPRDetails.ProjectId);
 
-                    if (objPRDetails.Phase1Completed == false)
+                    if (Session["ifHOD"] != null && objPRDetails.Phase1Completed == false && objPRDetails.PaperAttachment == false)
                     {
                         PR_HOD getApprover = db.PR_HOD.First(m => m.PRId == PRId && m.HODId == UserId);
                         getApprover.HODApprovedP1 = getApprover.HODApprovedP1 + 1;
@@ -1171,6 +1183,115 @@ namespace KUBOnlinePRPM.Controllers
                             db.SaveChanges();
                         }
                     }
+                    else if (Session["ifHOD"] != null && objPRDetails.Phase1Completed == false && objPRDetails.PaperAttachment == true)
+                    {
+                        PR_HOD getApprover = db.PR_HOD.First(m => m.PRId == PRId && m.HODId == UserId);
+                        getApprover.HODApprovedP1 = getApprover.HODApprovedP1 + 1;
+                        getApprover.HODApprovedDate1 = DateTime.Now;
+                        objPRDetails.StatusId = "PR10";
+                        objPRDetails.Phase1Completed = false;
+
+                        NotificationMsg objNotification = new NotificationMsg()
+                        {
+                            uuid = Guid.NewGuid(),
+                            message = Session["FullName"].ToString() + " has approved the PR No: " + objPRDetails.PRNo + " application. ",
+                            fromUserId = Int32.Parse(Session["UserId"].ToString()),
+                            msgDate = DateTime.Now,
+                            msgType = "Trail",
+                            PRId = PRId
+                        };
+                        db.NotificationMsgs.Add(objNotification);
+                        db.SaveChanges();
+
+                        NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == requestorDone.MsgId);
+                        getDone.done = true;
+
+                        var getPaperApprover = (from m in db.Users
+                                        join n in db.Users_Roles on m.userId equals n.userId
+                                        where n.roleId == "R10"
+                                        select new PRModel()
+                                        {
+                                            UserId = m.userId
+                                        }).ToList();
+                        NotificationMsg objTask = new NotificationMsg()
+                        {
+                            uuid = Guid.NewGuid(),
+                            message = objPRDetails.PRNo + " pending for you to review the papers",
+                            fromUserId = Int32.Parse(Session["UserId"].ToString()),
+                            msgDate = DateTime.Now,
+                            msgType = "Task",
+                            PRId = PRId
+                        };
+                        db.NotificationMsgs.Add(objTask);
+                        db.SaveChanges();
+
+                        foreach (var item in getPaperApprover)
+                        {
+                            NotiGroup Task = new NotiGroup()
+                            {
+                                uuid = Guid.NewGuid(),
+                                msgId = objTask.msgId,
+                                toUserId = item.UserId
+                            };
+                            db.NotiGroups.Add(Task);
+                            db.SaveChanges();
+                        }
+                    }
+                    else if (Session["ifHOGPSS"] != null && objPRDetails.Phase1Completed == false && objPRDetails.PaperAttachment == true)
+                    {
+                        PR_PaperApprover getApprover = db.PR_PaperApprover.First(m => m.PRId == PRId && m.approverId == UserId);
+                        getApprover.approverApproved = getApprover.approverApproved + 1;
+                        getApprover.approverApprovedDate = DateTime.Now;
+                        objPRDetails.StatusId = "PR02";
+                        objPRDetails.Phase1Completed = true;
+
+                        NotificationMsg objNotification = new NotificationMsg()
+                        {
+                            uuid = Guid.NewGuid(),
+                            message = Session["FullName"].ToString() + " has verified BOD/GMD paper for the PR No: " + objPRDetails.PRNo,
+                            fromUserId = Int32.Parse(Session["UserId"].ToString()),
+                            msgDate = DateTime.Now,
+                            msgType = "Trail",
+                            PRId = PRId
+                        };
+                        db.NotificationMsgs.Add(objNotification);
+                        db.SaveChanges();
+
+                        NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == requestorDone.MsgId);
+                        getDone.done = true;
+
+                        var getAdmin = (from m in db.Users
+                                        join n in db.Users_Roles on m.userId equals n.userId
+                                        where n.roleId == "R03"
+                                        select new PRModel()
+                                        {
+                                            UserId = m.userId
+                                        }).ToList();
+                        NotificationMsg objTask = new NotificationMsg()
+                        {
+                            uuid = Guid.NewGuid(),
+                            message = objPRDetails.PRNo + " pending for you to procure",
+                            fromUserId = Int32.Parse(Session["UserId"].ToString()),
+                            msgDate = DateTime.Now,
+                            msgType = "Task",
+                            PRId = PRId
+                        };
+                        db.NotificationMsgs.Add(objTask);
+                        db.SaveChanges();
+
+                        foreach (var item in getAdmin)
+                        {
+                            NotiGroup Task = new NotiGroup()
+                            {
+                                uuid = Guid.NewGuid(),
+                                msgId = objTask.msgId,
+                                toUserId = item.UserId
+                            };
+                            db.NotiGroups.Add(Task);
+                            db.SaveChanges();
+                        }
+                    }
+                    
                     //else
                     //{
                     //    if (objPRDetails.AmountRequired < 20000)

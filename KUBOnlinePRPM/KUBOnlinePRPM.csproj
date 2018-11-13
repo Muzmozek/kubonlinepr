@@ -269,6 +269,9 @@
     <Compile Include="Models\PR_Items.cs">
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PR_PaperApprover.cs">
+      <DependentUpon>KUBOnlinePR.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PR_Recommender.cs">
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
     </Compile>

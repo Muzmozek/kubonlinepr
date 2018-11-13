@@ -18,13 +18,14 @@ namespace KUBOnlinePRPM.Models
         public PurchaseRequisition()
         {
             this.PR_Admin = new HashSet<PR_Admin>();
+            this.PR_Approver = new HashSet<PR_Approver>();
             this.PR_HOD = new HashSet<PR_HOD>();
             this.PR_Items = new HashSet<PR_Items>();
+            this.PR_PaperApprover = new HashSet<PR_PaperApprover>();
             this.PR_Recommender = new HashSet<PR_Recommender>();
             this.PR_Reviewer = new HashSet<PR_Reviewer>();
             this.PRs_FileUpload = new HashSet<PRs_FileUpload>();
             this.PurchaseOrders = new HashSet<PurchaseOrder>();
-            this.PR_Approver = new HashSet<PR_Approver>();
         }
     
         public System.Guid uuid { get; set; }
@@ -34,7 +35,9 @@ namespace KUBOnlinePRPM.Models
         public int ProjectId { get; set; }
         public bool Unbudgeted { get; set; }
         public string PaperRefNo { get; set; }
-        public Nullable<int> FileEntryId { get; set; }
+        public string BidWaiverRefNo { get; set; }
+        public Nullable<bool> PaperAttachment { get; set; }
+        public Nullable<int> PaperApproverId { get; set; }
         public int PurchaseTypeId { get; set; }
         public string BudgetDescription { get; set; }
         public string Justification { get; set; }
@@ -42,7 +45,6 @@ namespace KUBOnlinePRPM.Models
         public Nullable<int> VendorId { get; set; }
         public Nullable<int> VendorStaffId { get; set; }
         public string VendorQuoteNo { get; set; }
-        public string BidWaiverRefNo { get; set; }
         public System.DateTime PreparedDate { get; set; }
         public int PreparedById { get; set; }
         public Nullable<System.DateTime> LastModifyDate { get; set; }
@@ -54,23 +56,25 @@ namespace KUBOnlinePRPM.Models
         public string RejectedRemark { get; set; }
         public Nullable<int> RejectedById { get; set; }
         public Nullable<System.DateTime> RejectedDate { get; set; }
+        public bool Phase1Completed { get; set; }
         public string PRType { get; set; }
         public Nullable<int> POId { get; set; }
         public Nullable<decimal> AmountPOBalance { get; set; }
+        public bool Phase2Completed { get; set; }
         public Nullable<int> PRAging { get; set; }
         public string StatusId { get; set; }
-        public bool Phase1Completed { get; set; }
-        public bool Phase2Completed { get; set; }
-        public string SpecsReviewer { get; set; }
     
         public virtual Customer Customer { get; set; }
-        public virtual FileUpload FileUpload { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_Admin> PR_Admin { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PR_Approver> PR_Approver { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_HOD> PR_HOD { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_Items> PR_Items { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PR_PaperApprover> PR_PaperApprover { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_Recommender> PR_Recommender { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -85,7 +89,5 @@ namespace KUBOnlinePRPM.Models
         public virtual User User { get; set; }
         public virtual Vendor Vendor { get; set; }
         public virtual VendorStaff VendorStaff { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PR_Approver> PR_Approver { get; set; }
     }
 }
