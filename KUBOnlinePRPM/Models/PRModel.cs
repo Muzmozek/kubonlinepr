@@ -20,7 +20,9 @@ namespace KUBOnlinePRPM.Models
         public bool Done { get; set; }
         public NewPRModel NewPRForm { get; set; }
         public HttpPostedFileBase PaperRefNoFile { get; set; }
+        public string PaperRefNoFileName { get; set; }
         public HttpPostedFileBase BidWaiverRefNoFile { get; set; }
+        public string BidWaiverRefNoFileName { get; set; }
         public List<NotiListTable> NotiListObject { get; set; }
         public List<PRListTable> PRListObject { get; set; }
         public List<PRDocListTable> PRDocListObject { get; set; }
@@ -38,7 +40,7 @@ namespace KUBOnlinePRPM.Models
         public bool Unbudgeted { get; set; }
         public string PaperRefNo { get; set; }
         public string BidWaiverRefNo { get; set; }
-        public bool? PaperAttachment { get; set; }
+        public bool PaperAttachment { get; set; }
         public bool PaperVerified { get; set; }
 
         [Required]

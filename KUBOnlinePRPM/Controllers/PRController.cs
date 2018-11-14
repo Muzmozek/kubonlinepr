@@ -64,6 +64,7 @@ namespace KUBOnlinePRPM.Controllers
             var projectInfo = db.Projects.Select(m => new NewPRModel()
             {
                 ProjectId = m.projectId,
+                PaperVerified = m.paperVerified,
                 BudgetedAmount = m.budgetedAmount,
                 UtilizedToDate = m.utilizedToDate,
                 BudgetBalance = m.budgetBalance
@@ -215,11 +216,27 @@ namespace KUBOnlinePRPM.Controllers
                 //                             ApproverId = m.userId,
                 //                             ApproverName = m.firstName + " " + m.lastName
                 //                         }).First();
+                if (model.NewPRForm.PaperRefNo != null && model.PaperRefNoFile == null)
+                {
+                    ModelState.AddModelError("PaperRefNoFileName", "GMD paper attachment needed.");                    
+                }
+                if (model.NewPRForm.BidWaiverRefNo != null && model.BidWaiverRefNoFile == null)
+                {
+                    ModelState.AddModelError("BidWaiverRefNoFileName", "Bid Waiver attachment needed");
+                }
+                if (model.NewPRForm.PaperRefNo == null && model.PaperRefNoFile != null)
+                {
+                    ModelState.AddModelError("NewPRForm.PaperRefNo", "GMD paper ref no needed.");
+                }
+                if (model.NewPRForm.BidWaiverRefNo == null && model.BidWaiverRefNoFile != null)
+                {
+                    ModelState.AddModelError("NewPRForm.BidWaiverRefNo", "Bid Waiver ref no needed");
+                }
                 if (!ModelState.IsValid)
                 {
-                    ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "projectName");
-                    ViewBag.BudgetedList = new SelectList(BudgetedList.AsEnumerable(), "Value", "Text");
-                    ViewBag.PurchaseTypeList = new SelectList(PurchaseTypeQuery.AsEnumerable(), "purchaseTypeId", "purchaseType");
+                    ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "projectName",model.NewPRForm.ProjectId);
+                    ViewBag.BudgetedList = new SelectList(BudgetedList.AsEnumerable(), "Value", "Text",model.NewPRForm.Unbudgeted);
+                    ViewBag.PurchaseTypeList = new SelectList(PurchaseTypeQuery.AsEnumerable(), "purchaseTypeId", "purchaseType",model.NewPRForm.PurchaseTypeId);
                     //ViewBag.ReviewerNameList = new SelectList(ReviewerNameQuery.AsEnumerable(), "reviewerId", "reviewerName");
                     //ViewBag.ApproverNameList = new SelectList(ApproverNameQuery.AsEnumerable(), "approverId", "approverName");
                     var errors = ModelState.Select(x => x.Value.Errors)
@@ -234,6 +251,7 @@ namespace KUBOnlinePRPM.Controllers
                             exception = true,
                             type = model.Type,
                             PRId = model.PRId,
+                            ProjectId = model.NewPRForm.ProjectId,
                             Saved = model.NewPRForm.SelectSave,
                             Submited = model.NewPRForm.SelectSubmit,
                             NewPR = true,
@@ -250,22 +268,17 @@ namespace KUBOnlinePRPM.Controllers
                 DBLogicController.PRSaveDbLogic(model);
 
                 bool checkPaperVerified = db.Projects.FirstOrDefault(m => m.projectId == model.NewPRForm.ProjectId).paperVerified;
+                FileUpload fileUploadModel = new FileUpload();
+                FileUpload fileUploadModel1 = new FileUpload();
+                DateTime createDate = DateTime.Now;
 
-                if (model.PaperRefNoFile != null && model.BidWaiverRefNoFile != null)
+                if (model.PaperRefNoFile != null && model.NewPRForm.PaperRefNo != null)
                 {
-                    FileUpload fileUploadModel = new FileUpload();
-                    FileUpload fileUploadModel1 = new FileUpload();
-                    DateTime createDate = DateTime.Now;
                     string PaperRefNoFileFilename = model.PaperRefNoFile.FileName.Replace("\\", ",");
-                    string BidWaiverRefNoFile = model.BidWaiverRefNoFile.FileName.Replace("\\", ",");
                     string filename = PaperRefNoFileFilename.Split(',')[PaperRefNoFileFilename.Split(',').Length - 1].ToString();
-                    string filename1 = BidWaiverRefNoFile.Split(',')[BidWaiverRefNoFile.Split(',').Length - 1].ToString();
                     string fullPath = model.PaperRefNoFile.FileName;
-                    string fullPath1 = model.BidWaiverRefNoFile.FileName;
                     string extension = Path.GetExtension(fullPath);
-                    string extension1 = Path.GetExtension(fullPath1);
                     byte[] uploadFile = new byte[model.PaperRefNoFile.InputStream.Length];
-                    byte[] uploadFile1 = new byte[model.BidWaiverRefNoFile.InputStream.Length];
 
                     fileUploadModel.uuid = Guid.NewGuid();
                     fileUploadModel.uploadUserId = Int32.Parse(Session["UserId"].ToString());
@@ -279,32 +292,13 @@ namespace KUBOnlinePRPM.Controllers
                     db.FileUploads.Add(fileUploadModel);
                     db.SaveChanges();
 
-                    fileUploadModel1.uuid = Guid.NewGuid();
-                    fileUploadModel1.uploadUserId = Int32.Parse(Session["UserId"].ToString());
-                    fileUploadModel1.uploadDate = createDate;
-                    fileUploadModel1.FullPath = fullPath1;
-                    fileUploadModel1.FileName = filename1;
-                    fileUploadModel1.Extension = extension1;
-                    fileUploadModel1.archivedFlag = false;
-                    model.BidWaiverRefNoFile.InputStream.Read(uploadFile1, 0, uploadFile1.Length);
-                    fileUploadModel1.File = uploadFile1;
-                    db.FileUploads.Add(fileUploadModel1);
-                    db.SaveChanges();
-
                     PRs_FileUpload fileUploadModel2 = new PRs_FileUpload
                     {
                         uuid = Guid.NewGuid(),
                         fileEntryId = fileUploadModel.fileEntryId,
                         PRId = model.PRId
                     };
-                    PRs_FileUpload fileUploadModel3 = new PRs_FileUpload
-                    {
-                        uuid = Guid.NewGuid(),
-                        fileEntryId = fileUploadModel1.fileEntryId,
-                        PRId = model.PRId
-                    };
                     db.PRs_FileUpload.Add(fileUploadModel2);
-                        db.PRs_FileUpload.Add(fileUploadModel3);
                     db.SaveChanges();
 
                     NotificationMsg _objSendMessage = new NotificationMsg
@@ -317,6 +311,36 @@ namespace KUBOnlinePRPM.Controllers
                         msgType = "Trail"
                     };
                     db.NotificationMsgs.Add(_objSendMessage);
+                }
+                if (model.NewPRForm.BidWaiverRefNo == null && model.BidWaiverRefNoFile != null)
+                {                                     
+                    string BidWaiverRefNoFile = model.BidWaiverRefNoFile.FileName.Replace("\\", ",");                  
+                    string filename1 = BidWaiverRefNoFile.Split(',')[BidWaiverRefNoFile.Split(',').Length - 1].ToString();                   
+                    string fullPath1 = model.BidWaiverRefNoFile.FileName;                   
+                    string extension1 = Path.GetExtension(fullPath1);                   
+                    byte[] uploadFile1 = new byte[model.BidWaiverRefNoFile.InputStream.Length];
+
+                    fileUploadModel1.uuid = Guid.NewGuid();
+                    fileUploadModel1.uploadUserId = Int32.Parse(Session["UserId"].ToString());
+                    fileUploadModel1.uploadDate = createDate;
+                    fileUploadModel1.FullPath = fullPath1;
+                    fileUploadModel1.FileName = filename1;
+                    fileUploadModel1.Extension = extension1;
+                    fileUploadModel1.archivedFlag = false;
+                    model.BidWaiverRefNoFile.InputStream.Read(uploadFile1, 0, uploadFile1.Length);
+                    fileUploadModel1.File = uploadFile1;
+                    db.FileUploads.Add(fileUploadModel1);
+                    db.SaveChanges();
+                    
+                    PRs_FileUpload fileUploadModel3 = new PRs_FileUpload
+                    {
+                        uuid = Guid.NewGuid(),
+                        fileEntryId = fileUploadModel1.fileEntryId,
+                        PRId = model.PRId
+                    };
+                    
+                    db.PRs_FileUpload.Add(fileUploadModel3);
+                    db.SaveChanges();
 
                     NotificationMsg _objSendMessage1 = new NotificationMsg
                     {
@@ -328,10 +352,6 @@ namespace KUBOnlinePRPM.Controllers
                         msgType = "Trail"
                     };
                     db.NotificationMsgs.Add(_objSendMessage1);
-                    db.SaveChanges();
-
-                    PurchaseRequisition updatePaperAttachment = new PurchaseRequisition();
-                    updatePaperAttachment.PaperAttachment = true;
                     db.SaveChanges();
                 }
                 ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "projectName");
@@ -1036,7 +1056,7 @@ namespace KUBOnlinePRPM.Controllers
         #region Approval & Rejected Phase 1
         [HttpPost]
         //public ActionResult Approval(int PRId, string PRType, bool Reviewer, bool Approver)
-        public ActionResult Approval(int PRId, string PRType, bool Approver)
+        public ActionResult Approval(int PRId, string PRType, string Approver)
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
@@ -1125,10 +1145,10 @@ namespace KUBOnlinePRPM.Controllers
                 //        }
                 //    }
                 //}
-                if (Approver == true)
-                {
-                    Project updateProject = db.Projects.First(m => m.projectId == objPRDetails.ProjectId);
+                Project updateProject = db.Projects.First(m => m.projectId == objPRDetails.ProjectId);
 
+                if (Approver == "HOD")
+                {                    
                     if (Session["ifHOD"] != null && objPRDetails.Phase1Completed == false && objPRDetails.PaperAttachment == false)
                     {
                         PR_HOD getApprover = db.PR_HOD.First(m => m.PRId == PRId && m.HODId == UserId);
@@ -1207,12 +1227,13 @@ namespace KUBOnlinePRPM.Controllers
                         getDone.done = true;
 
                         var getPaperApprover = (from m in db.Users
-                                        join n in db.Users_Roles on m.userId equals n.userId
-                                        where n.roleId == "R10"
-                                        select new PRModel()
-                                        {
-                                            UserId = m.userId
-                                        }).ToList();
+                                                join n in db.Users_Roles on m.userId equals n.userId
+                                                where n.roleId == "R10"
+                                                select new PRModel()
+                                                {
+                                                    UserId = m.userId
+                                                }).ToList();
+                       
                         NotificationMsg objTask = new NotificationMsg()
                         {
                             uuid = Guid.NewGuid(),
@@ -1235,62 +1256,74 @@ namespace KUBOnlinePRPM.Controllers
                             };
                             db.NotiGroups.Add(Task);
                             db.SaveChanges();
-                        }
-                    }
-                    else if (Session["ifHOGPSS"] != null && objPRDetails.Phase1Completed == false && objPRDetails.PaperAttachment == true)
-                    {
-                        PR_PaperApprover getApprover = db.PR_PaperApprover.First(m => m.PRId == PRId && m.approverId == UserId);
-                        getApprover.approverApproved = getApprover.approverApproved + 1;
-                        getApprover.approverApprovedDate = DateTime.Now;
-                        objPRDetails.StatusId = "PR02";
-                        objPRDetails.Phase1Completed = true;
 
-                        NotificationMsg objNotification = new NotificationMsg()
-                        {
-                            uuid = Guid.NewGuid(),
-                            message = Session["FullName"].ToString() + " has verified BOD/GMD paper for the PR No: " + objPRDetails.PRNo,
-                            fromUserId = Int32.Parse(Session["UserId"].ToString()),
-                            msgDate = DateTime.Now,
-                            msgType = "Trail",
-                            PRId = PRId
-                        };
-                        db.NotificationMsgs.Add(objNotification);
-                        db.SaveChanges();
-
-                        NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == requestorDone.MsgId);
-                        getDone.done = true;
-
-                        var getAdmin = (from m in db.Users
-                                        join n in db.Users_Roles on m.userId equals n.userId
-                                        where n.roleId == "R03"
-                                        select new PRModel()
-                                        {
-                                            UserId = m.userId
-                                        }).ToList();
-                        NotificationMsg objTask = new NotificationMsg()
-                        {
-                            uuid = Guid.NewGuid(),
-                            message = objPRDetails.PRNo + " pending for you to procure",
-                            fromUserId = Int32.Parse(Session["UserId"].ToString()),
-                            msgDate = DateTime.Now,
-                            msgType = "Task",
-                            PRId = PRId
-                        };
-                        db.NotificationMsgs.Add(objTask);
-                        db.SaveChanges();
-
-                        foreach (var item in getAdmin)
-                        {
-                            NotiGroup Task = new NotiGroup()
+                            PR_PaperApprover _objHOGPSS = new PR_PaperApprover
                             {
                                 uuid = Guid.NewGuid(),
-                                msgId = objTask.msgId,
-                                toUserId = item.UserId
+                                approverId = item.UserId,
+                                PRId = PRId
                             };
-                            db.NotiGroups.Add(Task);
+                            db.PR_PaperApprover.Add(_objHOGPSS);
                             db.SaveChanges();
                         }
                     }
+                }
+                else if (Approver == "ifHOGPSS")
+                {
+                    PR_PaperApprover getApprover = db.PR_PaperApprover.First(m => m.PRId == PRId && m.approverId == UserId);
+                    getApprover.approverApproved = getApprover.approverApproved + 1;
+                    getApprover.approverApprovedDate = DateTime.Now;
+                    objPRDetails.StatusId = "PR02";
+                    objPRDetails.Phase1Completed = true;
+                    updateProject.paperVerified = true;
+                    db.SaveChanges();
+
+                    NotificationMsg objNotification = new NotificationMsg()
+                    {
+                        uuid = Guid.NewGuid(),
+                        message = Session["FullName"].ToString() + " has verified BOD/GMD paper for the PR No: " + objPRDetails.PRNo,
+                        fromUserId = Int32.Parse(Session["UserId"].ToString()),
+                        msgDate = DateTime.Now,
+                        msgType = "Trail",
+                        PRId = PRId
+                    };
+                    db.NotificationMsgs.Add(objNotification);
+                    db.SaveChanges();
+
+                    NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == requestorDone.MsgId);
+                    getDone.done = true;
+
+                    var getAdmin = (from m in db.Users
+                                    join n in db.Users_Roles on m.userId equals n.userId
+                                    where n.roleId == "R03"
+                                    select new PRModel()
+                                    {
+                                        UserId = m.userId
+                                    }).ToList();
+                    NotificationMsg objTask = new NotificationMsg()
+                    {
+                        uuid = Guid.NewGuid(),
+                        message = objPRDetails.PRNo + " pending for you to procure",
+                        fromUserId = Int32.Parse(Session["UserId"].ToString()),
+                        msgDate = DateTime.Now,
+                        msgType = "Task",
+                        PRId = PRId
+                    };
+                    db.NotificationMsgs.Add(objTask);
+                    db.SaveChanges();
+
+                    foreach (var item in getAdmin)
+                    {
+                        NotiGroup Task = new NotiGroup()
+                        {
+                            uuid = Guid.NewGuid(),
+                            msgId = objTask.msgId,
+                            toUserId = item.UserId
+                        };
+                        db.NotiGroups.Add(Task);
+                        db.SaveChanges();
+                    }
+                }
                     
                     //else
                     //{
@@ -1325,9 +1358,6 @@ namespace KUBOnlinePRPM.Controllers
                     //    getDone.done = true;
                     //    db.SaveChanges();                       
                     //}
-
-                }
-
                 return Json(new { success = true });
             }
             else
@@ -1584,7 +1614,9 @@ namespace KUBOnlinePRPM.Controllers
             String SpecsReviewer = Request["SpecsReviewer"];
 
             var PR = db.PurchaseRequisitions.First(x => x.PRId == PrId);
-            PR.SpecsReviewer = SpecsReviewer;
+
+            //Wait until Hassan add SpecReviewer table
+            //PR.SpecsReviewer = SpecsReviewer;
 
             if (db.SaveChanges() > 0)
             {
@@ -1605,13 +1637,14 @@ namespace KUBOnlinePRPM.Controllers
             String SpecsReviewer = Request["SpecsReviewer"];
 
             var PR = db.PurchaseRequisitions.First(x => x.PRId == PrId);
-            PR.SpecsReviewer = SpecsReviewer;
+            //Wait until Hassan add SpecReviewer table
+            //PR.SpecsReviewer = SpecsReviewer;
             db.SaveChanges();
 
             Debug.WriteLine("SubmitPRProcurement");
             decimal amountBudget = PR.AmountRequired;
 
-            if (PRService.CheckAmountScenarioOne(amountBudget) || PRService.IncludeInBudget(PR))
+            if (PRService.CheckAmountScenarioOne(amountBudget) && PRService.IncludeInBudget(PR))
             {
                 PR.StatusId = "PR03";
                 db.SaveChanges();
@@ -1665,7 +1698,7 @@ namespace KUBOnlinePRPM.Controllers
 
                 return Json("Scenario 1 success");
             }
-            else if (PRService.IncludeInBudget(PR) == false || PRService.CheckAmountScenarioTwo(amountBudget))
+            else if ((PRService.IncludeInBudget(PR) == false && PRService.CheckAmountScenarioOne(amountBudget)) || PRService.CheckAmountScenarioTwo(amountBudget))
             {
                 PR.StatusId = "PR03";
                 db.SaveChanges();

@@ -38,6 +38,12 @@ namespace KUBOnlinePRPM.Controllers
             db.PurchaseRequisitions.Add(_objNewPR);
             db.SaveChanges();
 
+            Project _updateProject = db.Projects.First(m => m.projectId == model.NewPRForm.ProjectId);
+            _updateProject.budgetedAmount = model.NewPRForm.BudgetedAmount;
+            _updateProject.utilizedToDate = model.NewPRForm.UtilizedToDate;
+            _updateProject.budgetBalance = model.NewPRForm.BudgetBalance;
+            db.SaveChanges();
+
             PurchaseRequisition generatePRNo = db.PurchaseRequisitions.First(m => m.PRId == _objNewPR.PRId);
             generatePRNo.PRNo = "PR-" + DateTime.Now.Year + "-" + string.Format("{0}{1}", 0, _objNewPR.PRId.ToString("D4"));
             NotificationMsg generateMsg = new NotificationMsg();
@@ -73,6 +79,17 @@ namespace KUBOnlinePRPM.Controllers
 
                 db.SaveChanges();
             }
+
+            PR_HOD _objHOD = new PR_HOD
+            {
+                uuid = Guid.NewGuid(),
+                HODId = model.NewPRForm.HODApproverId,
+                PRId = _objNewPR.PRId,
+                HODApprovedP1 = model.NewPRForm.HODApproverApprovedP1
+            };
+            db.PR_HOD.Add(_objHOD);
+            db.SaveChanges();
+
             if (model.NewPRForm.SelectSave == true)
             {
                 generateMsg.uuid = Guid.NewGuid();
@@ -88,6 +105,18 @@ namespace KUBOnlinePRPM.Controllers
                 generatePRNo.Submited = generatePRNo.Submited + 1;
                 generatePRNo.SubmitDate = DateTime.Now;
                 generatePRNo.PRAging = model.NewPRForm.PRAging;
+                if((model.PaperRefNoFile != null && model.NewPRForm.PaperRefNo != null) || (model.BidWaiverRefNoFile != null && model.NewPRForm.BidWaiverRefNo != null)){
+                    generatePRNo.PaperAttachment = true;
+                    PR_PaperApprover _objHOGPSS = new PR_PaperApprover
+                    {
+                        uuid = Guid.NewGuid(),
+                        approverId = model.NewPRForm.ApproverId,
+                        PRId = _objNewPR.PRId,
+                        approverApproved = model.NewPRForm.ApproverApproved
+                    };
+                    db.PR_HOD.Add(_objHOD);
+                    db.SaveChanges();
+                }                
                 generatePRNo.StatusId = "PR09";
                 generateMsg.uuid = Guid.NewGuid();
                 generateMsg.message = model.FullName + " has submit new PR  No. " + _objNewPR.PRNo;
@@ -96,16 +125,6 @@ namespace KUBOnlinePRPM.Controllers
                 generateMsg.fromUserId = model.NewPRForm.PreparedById;
                 generateMsg.msgType = "Trail";
                 db.NotificationMsgs.Add(generateMsg);
-
-                PR_HOD _objHOD = new PR_HOD
-                {
-                    uuid = Guid.NewGuid(),
-                    HODId = model.NewPRForm.HODApproverId,
-                    PRId = _objNewPR.PRId,
-                    HODApprovedP1 = model.NewPRForm.HODApproverApprovedP1
-                };
-                db.PR_HOD.Add(_objHOD);
-                db.SaveChanges();
 
                 var getApprover = (from m in db.Users
                                    join n in db.PR_HOD on m.userId equals n.HODId
@@ -174,8 +193,8 @@ namespace KUBOnlinePRPM.Controllers
                     };
                     db.NotiGroups.Add(ApproverTask);
                 }
-            }
-            db.SaveChanges();
+                db.SaveChanges();
+            }        
         }
         public static void PRUpdateDbLogic(PRModel x)
         {
@@ -269,6 +288,20 @@ namespace KUBOnlinePRPM.Controllers
                     db.NotificationMsgs.Add(_objDetails_BudgetDescription);
                     FormerPRDetails.BudgetDescription = x.NewPRForm.BudgetDescription;
                 }
+                if (updateProject.budgetedAmount != x.NewPRForm.BudgetedAmount)
+                {
+                    NotificationMsg _objDetails_BudgetedAmount = new NotificationMsg
+                    {
+                        uuid = Guid.NewGuid(),
+                        PRId = x.PRId,
+                        msgDate = DateTime.Now,
+                        fromUserId = x.UserId,
+                        msgType = "Trail",
+                        message = x.FullName + " change Budget Amount from " + updateProject.budgetedAmount + " to " + x.NewPRForm.BudgetedAmount + " for project: " + updateProject.projectName
+                    };
+                    db.NotificationMsgs.Add(_objDetails_BudgetedAmount);
+                    updateProject.budgetedAmount = x.NewPRForm.BudgetedAmount;
+                }
                 if (FormerPRDetails.AmountRequired != x.NewPRForm.AmountRequired)
                 {
                     NotificationMsg _objDetails_AmountRequired = new NotificationMsg
@@ -296,6 +329,34 @@ namespace KUBOnlinePRPM.Controllers
                     };
                     db.NotificationMsgs.Add(_objDetails_Justification);
                     FormerPRDetails.Justification = x.NewPRForm.Justification;
+                }
+                if (updateProject.utilizedToDate != x.NewPRForm.UtilizedToDate)
+                {
+                    NotificationMsg _objDetails_UtilizedToDate = new NotificationMsg
+                    {
+                        uuid = Guid.NewGuid(),
+                        PRId = x.PRId,
+                        msgDate = DateTime.Now,
+                        fromUserId = x.UserId,
+                        msgType = "Trail",
+                        message = x.FullName + " change Utilized To Date from " + updateProject.utilizedToDate + " to " + x.NewPRForm.UtilizedToDate + " for project: " + updateProject.projectName
+                    };
+                    db.NotificationMsgs.Add(_objDetails_UtilizedToDate);
+                    updateProject.utilizedToDate = x.NewPRForm.UtilizedToDate;
+                }
+                if (updateProject.budgetBalance != x.NewPRForm.BudgetBalance)
+                {
+                    NotificationMsg _objDetails_BudgetBalance = new NotificationMsg
+                    {
+                        uuid = Guid.NewGuid(),
+                        PRId = x.PRId,
+                        msgDate = DateTime.Now,
+                        fromUserId = x.UserId,
+                        msgType = "Trail",
+                        message = x.FullName + " change Budget Balance from " + updateProject.budgetBalance + " to " + x.NewPRForm.BudgetBalance + " for project: " + updateProject.projectName
+                    };
+                    db.NotificationMsgs.Add(_objDetails_BudgetBalance);
+                    updateProject.budgetBalance = x.NewPRForm.BudgetBalance;
                 }
                 if (FormerPRDetails.VendorId != x.NewPRForm.VendorId)
                 {
@@ -356,23 +417,23 @@ namespace KUBOnlinePRPM.Controllers
                     };
                     db.NotificationMsgs.Add(_objSaved);
                 }
-                else if (x.NewPRForm.SelectSave == true && x.NewPRForm.StatusId == "PR02")
-                {
-                    PR_Admin SaveAdminInfo = db.PR_Admin.First(m => m.PRId == x.PRId);
-                    SaveAdminInfo.adminSaved = SaveAdminInfo.adminSaved + 1;
-                    SaveAdminInfo.lastModifyDate = DateTime.Now;
-                    NotificationMsg _objSaved = new NotificationMsg
-                    {
-                        uuid = Guid.NewGuid(),
-                        PRId = x.PRId,
-                        msgDate = DateTime.Now,
-                        fromUserId = x.UserId,
-                        msgType = "Trail",
-                        message = x.FullName + " has saved PR application for PR No. " + FormerPRDetails.PRNo + " " + FormerPRDetails.Saved + " time."
-                    };
-                    db.NotificationMsgs.Add(_objSaved);
-                    db.SaveChanges();
-                }
+                //else if (x.NewPRForm.SelectSave == true && x.NewPRForm.StatusId == "PR02")
+                //{
+                //    PR_Admin SaveAdminInfo = db.PR_Admin.First(m => m.PRId == x.PRId);
+                //    SaveAdminInfo.adminSaved = SaveAdminInfo.adminSaved + 1;
+                //    SaveAdminInfo.lastModifyDate = DateTime.Now;
+                //    NotificationMsg _objSaved = new NotificationMsg
+                //    {
+                //        uuid = Guid.NewGuid(),
+                //        PRId = x.PRId,
+                //        msgDate = DateTime.Now,
+                //        fromUserId = x.UserId,
+                //        msgType = "Trail",
+                //        message = x.FullName + " has saved PR application for PR No. " + FormerPRDetails.PRNo + " " + FormerPRDetails.Saved + " time."
+                //    };
+                //    db.NotificationMsgs.Add(_objSaved);
+                //    db.SaveChanges();
+                //}
                 if (x.NewPRForm.SelectSubmit == true && (x.NewPRForm.StatusId == "PR01" || x.NewPRForm.StatusId == "PR07"))
                 {
                     FormerPRDetails.Submited = FormerPRDetails.Submited + 1;

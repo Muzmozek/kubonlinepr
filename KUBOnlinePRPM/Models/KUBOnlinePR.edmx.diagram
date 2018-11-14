@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="f75ac1c03b0e4f219d0cc65faa3d7b43" Name="Diagram1">
+      <Diagram DiagramId="f75ac1c03b0e4f219d0cc65faa3d7b43" Name="Diagram1" ZoomLevel="97">
         <EntityTypeShape EntityType="KUBOnlinePRModel.Customer" Width="1.5" PointX="3" PointY="38.75" IsExpanded="true" />
         <EntityTypeShape EntityType="KUBOnlinePRModel.FileUpload" Width="1.5" PointX="3" PointY="24.875" IsExpanded="true" />
         <EntityTypeShape EntityType="KUBOnlinePRModel.ItemCode" Width="1.5" PointX="3" PointY="21.375" IsExpanded="true" />

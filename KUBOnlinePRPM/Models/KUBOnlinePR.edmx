@@ -253,8 +253,7 @@
           <Property Name="Unbudgeted" Type="bit" Nullable="false" />
           <Property Name="PaperRefNo" Type="nvarchar" MaxLength="30" />
           <Property Name="BidWaiverRefNo" Type="nvarchar" MaxLength="30" />
-          <Property Name="PaperAttachment" Type="bit" />
-          <Property Name="PaperApproverId" Type="int" />
+          <Property Name="PaperAttachment" Type="bit" Nullable="false" />
           <Property Name="PurchaseTypeId" Type="int" Nullable="false" />
           <Property Name="BudgetDescription" Type="nvarchar" MaxLength="100" />
           <Property Name="Justification" Type="nvarchar" MaxLength="200" />
@@ -2099,8 +2098,7 @@
           <Property Name="Unbudgeted" Type="Boolean" Nullable="false" />
           <Property Name="PaperRefNo" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="BidWaiverRefNo" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="PaperAttachment" Type="Boolean" />
-          <Property Name="PaperApproverId" Type="Int32" />
+          <Property Name="PaperAttachment" Type="Boolean" Nullable="false" />
           <Property Name="PurchaseTypeId" Type="Int32" Nullable="false" />
           <Property Name="BudgetDescription" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Justification" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
@@ -2733,7 +2731,6 @@
                 <ScalarProperty Name="Justification" ColumnName="Justification" />
                 <ScalarProperty Name="BudgetDescription" ColumnName="BudgetDescription" />
                 <ScalarProperty Name="PurchaseTypeId" ColumnName="PurchaseTypeId" />
-                <ScalarProperty Name="PaperApproverId" ColumnName="PaperApproverId" />
                 <ScalarProperty Name="PaperAttachment" ColumnName="PaperAttachment" />
                 <ScalarProperty Name="BidWaiverRefNo" ColumnName="BidWaiverRefNo" />
                 <ScalarProperty Name="PaperRefNo" ColumnName="PaperRefNo" />

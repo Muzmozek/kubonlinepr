@@ -36,8 +36,7 @@ namespace KUBOnlinePRPM.Models
         public bool Unbudgeted { get; set; }
         public string PaperRefNo { get; set; }
         public string BidWaiverRefNo { get; set; }
-        public Nullable<bool> PaperAttachment { get; set; }
-        public Nullable<int> PaperApproverId { get; set; }
+        public bool PaperAttachment { get; set; }
         public int PurchaseTypeId { get; set; }
         public string BudgetDescription { get; set; }
         public string Justification { get; set; }

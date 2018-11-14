@@ -69,14 +69,35 @@
             method: 'GET',
             data: { projectId: $(this).val() },
             success: function (resp) {
+                if (resp.projectInfo.PaperVerified === false) {
+                    $("#PaperRefNo").prop("readonly", false);
+                    $("#BidWaiverRefNo").prop("readonly", false);
+                    $(".attachment").removeClass("d-none");
+                } else {
+                    $("#PaperRefNo").prop("readonly", true);
+                    $("#BidWaiverRefNo").prop("readonly", true);
+                    $(".attachment").addClass("d-none");
+                }
                 var BudgetedAmount = resp.projectInfo.BudgetedAmount;
                 var UtilizedToDate = resp.projectInfo.UtilizedToDate;
-                //var BudgetBalance = resp.projectInfo.BudgetBalance;
+                var BudgetBalance = resp.projectInfo.BudgetBalance;
                 $("#BudgetedAmount").val(BudgetedAmount);
                 $("#UtilizedToDate").val(UtilizedToDate);
-                //$("#BudgetBalance").val(BudgetBalance);
+                $("#BudgetBalance").val(BudgetBalance);
             }
         });
+    });
+
+    $(document).on("change", ".BudgetedAmount", function () {
+        var UtilizedToDate = $("#UtilizedToDate").val().replace(/,/g, '');
+        var BudgetBalance = $(this).val().replace(/,/g, '') - UtilizedToDate;
+        $("#BudgetBalance").val(BudgetBalance);
+    });
+
+    $(document).on("change", ".UtilizedToDate", function () {
+        var BudgetedAmount = $("#BudgetedAmount").val().replace(/,/g, '');
+        var BudgetBalance = BudgetedAmount - $(this).val().replace(/,/g, '');
+        $("#BudgetBalance").val(BudgetBalance);
     });
 
     $(document).on('click', '#PRItemTable tbody .RemovePRItem', function (e) {
@@ -176,8 +197,60 @@
                     //else if (result.type === "Blanket")
                     //    window.location = UrlBPRTabs + "?PRId=" + result.PRId + "#bpr-1";
                 } else if (resp.success === false && resp.exception === true) {
-                    alert("Exception occured. Please contact admin");
-                    $('.checkFiles').html(resp.view);
+                    alert("Validation error. Please see the validation messages.");
+                    $('#ContentWrapper').html(resp.view);
+                    $.ajax({
+                        url: UrlGetProjectInfo,
+                        method: 'GET',
+                        data: { projectId: resp.ProjectId },
+                        success: function (resp) {
+                            if (resp.projectInfo.PaperVerified === false) {
+                                $("#PaperRefNo").prop("readonly", false);
+                                $("#BidWaiverRefNo").prop("readonly", false);
+                                $(".attachment").removeClass("d-none");
+                            } else {
+                                $("#PaperRefNo").prop("readonly", true);
+                                $("#BidWaiverRefNo").prop("readonly", true);
+                                $(".attachment").addClass("d-none");
+                            }
+                            var BudgetedAmount = resp.projectInfo.BudgetedAmount;
+                            var UtilizedToDate = resp.projectInfo.UtilizedToDate;
+                            var BudgetBalance = resp.projectInfo.BudgetBalance;
+                            $("#BudgetedAmount").val(BudgetedAmount);
+                            $("#UtilizedToDate").val(UtilizedToDate);
+                            $("#BudgetBalance").val(BudgetBalance);                            
+                        }
+                    });
+                    $.HSCore.helpers.HSFileAttachments.init();
+                    $.HSCore.components.HSFileAttachment.init('.js-file-attachment');
+                    PRItemTable = $('#PRItemTable').DataTable({
+                        autoWidth: false,
+                        ordering: false,
+                        paging: false,
+                        searching: false,
+                        draw: true,
+                        deferRender: false,
+                        columnDefs: [
+                            { visible: false, targets: [0] },
+                            { width: "50%", targets: [2] }
+                        ],
+                        destroy: true,
+                        responsive: {
+                            breakpoints: [{
+                                name: 'desktop',
+                                width: 1024
+                            },
+                            {
+                                name: 'tablet',
+                                width: 768
+                            },
+                            {
+                                name: 'phone',
+                                width: 480
+                            }
+                            ]
+                        }
+                    });
                     $("body").removeClass("loading");
                 }
             }
