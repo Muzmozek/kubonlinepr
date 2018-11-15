@@ -110,13 +110,13 @@
     $(document).on("click", ".saveSubmit, .saveSubmitDetail", function (e) {       
         e.preventDefault();
         var fd = new FormData(); var other_data; var PRType; var URL;
-        if ($(this)[0].className.split(" ")[0] === "saveSubmitDetail") {
-            PRType = POType;
+        if ($(this).attr('class').split(" ")[0] === "saveSubmitDetail") {
+            PRType = POType;         
         } else {
-            PRType = $("#NewPR").find("#PRType").val(); 
-            fd.append("PaperRefNoFile", $(".checkFiles").find('[name="PaperRefNoFile"]')[0].files[0]);
-            fd.append("BidWaiverRefNoFile", $(".checkFiles").find('[name="BidWaiverRefNoFile"]')[0].files[0]);
+            PRType = $("#NewPR").find("#PRType").val();             
         }
+        fd.append("PaperRefNoFile", $(".checkFiles").find('[name="PaperRefNoFile"]')[0].files[0]);
+        fd.append("BidWaiverRefNoFile", $(".checkFiles").find('[name="BidWaiverRefNoFile"]')[0].files[0]);
         other_data = $(".checkFiles").serializeArray();        
         $.each(other_data, function (key, input) {
             //if (input.name === "NewPRForm.Unbudgeted" && input.value === "on")

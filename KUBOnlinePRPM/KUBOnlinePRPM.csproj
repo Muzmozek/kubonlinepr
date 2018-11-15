@@ -194,61 +194,19 @@
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\KUBOnlinePR.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>KUBOnlinePR.Context.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="Models\KUBOnlinePR.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="Models\KUBOnlinePR.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>KUBOnlinePR.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\KUBtelNav.Context.cs">
-      <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>KUBtelNav.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\KUBtelNav.cs">
       <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>KUBtelNav.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\KUBMNav.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>KUBMNav.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\KUB_Malaysia_Berhad_Contact.cs">
-      <DependentUpon>KUBtelNav.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\KUB_Malaysia_Berhad_Contact_Business_Relation.cs">
-      <DependentUpon>KUBtelNav.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\KUB_Malaysia_Berhad_Dimension_Value.cs">
-      <DependentUpon>KUBtelNav.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\KUB_Malaysia_Berhad_Fixed_Asset.cs">
-      <DependentUpon>KUBtelNav.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\KUB_Malaysia_Berhad_G_L_Account.cs">
-      <DependentUpon>KUBtelNav.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\KUB_Malaysia_Berhad_Item.cs">
-      <DependentUpon>KUBtelNav.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\KUB_Malaysia_Berhad_Job.cs">
-      <DependentUpon>KUBtelNav.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\KUB_Malaysia_Berhad_Job_Task.cs">
-      <DependentUpon>KUBtelNav.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\KUB_Malaysia_Berhad_Vendor.cs">
-      <DependentUpon>KUBtelNav.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\Notification.cs" />
@@ -5081,6 +5039,10 @@
     <Content Include="Assets\jquery-ui\ui\widgets\tooltip.js" />
     <Content Include="Assets\canvasjs2.2.js" />
     <Content Include="Assets\datatables\js\responsive.bootstrap.js" />
+    <EntityDeploy Include="Models\KUBOnlinePR.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>KUBOnlinePR.Designer.cs</LastGenOutput>
+    </EntityDeploy>
     <None Include="Assets\jquery-validate\jquery.validate-vsdoc.js" />
     <Content Include="Assets\jquery-validate\jquery.validate.js" />
     <Content Include="Assets\jquery-validate\jquery.validate.min.js" />
@@ -5131,24 +5093,17 @@
     <Content Include="Images\ajax_loader.gif" />
     <Content Include="Images\signature.png" />
     <Content Include="Models\KUBOnlinePR.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>KUBOnlinePR.edmx</DependentUpon>
+      <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>KUBOnlinePR.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\KUBOnlinePR.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
+    <Content Include="Models\KUBOnlinePR.edmx.diagram">
       <DependentUpon>KUBOnlinePR.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\KUBOnlinePR.tt">
+      <DependentUpon>KUBOnlinePR.edmx</DependentUpon>
+      <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>KUBOnlinePR.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\KUBtelNav.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>KUBMNav.edmx</DependentUpon>
-      <LastGenOutput>KUBtelNav.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\KUBtelNav.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>KUBMNav.edmx</DependentUpon>
-      <LastGenOutput>KUBtelNav.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\BPRPOList.js" />
     <Content Include="Scripts\Login.js" />
@@ -5609,20 +5564,6 @@
     <Content Include="Assets\robicch-jQueryGantt\res\icons.eot" />
     <Content Include="Assets\robicch-jQueryGantt\res\icons.ttf" />
     <Content Include="Assets\robicch-jQueryGantt\res\icons.woff" />
-    <EntityDeploy Include="Models\KUBOnlinePR.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>KUBOnlinePR.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\KUBOnlinePR.edmx.diagram">
-      <DependentUpon>KUBOnlinePR.edmx</DependentUpon>
-    </Content>
-    <EntityDeploy Include="Models\KUBMNav.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>KUBMNav.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\KUBMNav.edmx.diagram">
-      <DependentUpon>KUBMNav.edmx</DependentUpon>
-    </Content>
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\PR\PRDetails.cshtml" />

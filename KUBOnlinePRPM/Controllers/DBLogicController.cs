@@ -429,6 +429,10 @@ namespace KUBOnlinePRPM.Controllers
                 {
                     FormerPRDetails.Submited = FormerPRDetails.Submited + 1;
                     FormerPRDetails.SubmitDate = DateTime.Now;
+                    if ((x.PaperRefNoFile != null && x.NewPRForm.PaperRefNo != null) || (x.BidWaiverRefNoFile != null && x.NewPRForm.BidWaiverRefNo != null))
+                    {
+                        FormerPRDetails.PaperAttachment = true;
+                    }
                     FormerPRDetails.StatusId = "PR09";
                     NotificationMsg _objSubmited = new NotificationMsg
                     {

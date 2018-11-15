@@ -52,6 +52,23 @@
                 ]
             }
         });
+
+        //$.ajax({
+        //    url: UrlGetProjectInfo,
+        //    method: 'GET',
+        //    data: { projectId: $("#ProjectName").val() },
+        //    success: function (resp) {
+        //        if (resp.projectInfo.PaperVerified === false) {
+        //            $("#PaperRefNo").prop("readonly", false);
+        //            $("#BidWaiverRefNo").prop("readonly", false);
+        //            $(".attachment").removeClass("d-none");
+        //        } else {
+        //            $("#PaperRefNo").prop("readonly", true);
+        //            $("#BidWaiverRefNo").prop("readonly", true);
+        //            $(".attachment").addClass("d-none");
+        //        }
+        //    }
+        //});
     }
     
     $("#SavePreparedProcurement").click(function (e) {

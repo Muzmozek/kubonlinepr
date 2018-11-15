@@ -47,6 +47,7 @@ namespace KUBOnlinePRPM.Controllers
     public class PRController : Controller
     {
         private KUBOnlinePREntities db = new KUBOnlinePREntities();
+        //private KUBMEntities KUBMdb = new KUBMEntities();
         private KUBHelper KUBHelper = new KUBHelper();
         private PRService PRService = new PRService();
 
@@ -118,9 +119,17 @@ namespace KUBOnlinePRPM.Controllers
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
-                var ProjectNameQuery = db.Projects.Select(c => new { ProjectId = c.projectId, ProjectName = c.projectName })
-                        .OrderBy(c => c.ProjectName);
-                List<SelectListItem> BudgetedList = new List<SelectListItem>();
+                int CustId = Int32.Parse(Session["CompanyId"].ToString());
+                var ProjectNameQuery = (from m in db.Projects
+                                        where m.custId == CustId
+                                        select new
+                                        {
+                                            ProjectId = m.projectId,
+                                            Dimension = m.dimension,
+                                            Description = m.dimension + " - " + m.projectCode + " - " + m.projectName,
+                                            Code = m.projectCode,
+                                        }).OrderBy(c => c.Dimension).ThenBy(c => c.Code);
+                List <SelectListItem> BudgetedList = new List<SelectListItem>();
                 BudgetedList.Add(new SelectListItem
                 {
                     Text = "Yes",
@@ -149,7 +158,7 @@ namespace KUBOnlinePRPM.Controllers
                 //                             ApproverName = m.firstName + " " + m.lastName
                 //                         }).First();
 
-                ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "projectName");
+                ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "description");
                 ViewBag.BudgetedList = new SelectList(BudgetedList.AsEnumerable(), "Value", "Text");
                 ViewBag.PurchaseTypeList = new SelectList(PurchaseTypeQuery.AsEnumerable(), "purchaseTypeId", "purchaseType");
                 //ViewBag.ReviewerNameList = new SelectList(ReviewerNameQuery.AsEnumerable(), "reviewerId", "reviewerName");
@@ -185,8 +194,16 @@ namespace KUBOnlinePRPM.Controllers
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
-                var ProjectNameQuery = db.Projects.Select(c => new { ProjectId = c.projectId, ProjectName = c.projectName })
-                        .OrderBy(c => c.ProjectName);
+                int CustId = Int32.Parse(Session["CompanyId"].ToString());
+                var ProjectNameQuery = (from m in db.Projects
+                                        where m.custId == CustId
+                                        select new
+                                        {
+                                            ProjectId = m.projectId,
+                                            Dimension = m.dimension,
+                                            Description = m.dimension + " - " + m.projectCode + " - " + m.projectName,
+                                            Code = m.projectCode,
+                                        }).OrderBy(c => c.Dimension).ThenBy(c => c.Code);
                 var PurchaseTypeQuery = db.PurchaseTypes.Select(c => new { PurchaseTypeId = c.purchaseTypeId, PurchaseType = c.purchaseType1 }).OrderBy(c => c.PurchaseType);
                 List<SelectListItem> BudgetedList = new List<SelectListItem>();
 
@@ -242,7 +259,7 @@ namespace KUBOnlinePRPM.Controllers
                 }
                 if (!ModelState.IsValid)
                 {
-                    ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "projectName",model.NewPRForm.ProjectId);
+                    ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "description",model.NewPRForm.ProjectId);
                     ViewBag.BudgetedList = new SelectList(BudgetedList.AsEnumerable(), "Value", "Text",model.NewPRForm.Unbudgeted);
                     ViewBag.PurchaseTypeList = new SelectList(PurchaseTypeQuery.AsEnumerable(), "purchaseTypeId", "purchaseType",model.NewPRForm.PurchaseTypeId);
                     //ViewBag.ReviewerNameList = new SelectList(ReviewerNameQuery.AsEnumerable(), "reviewerId", "reviewerName");
@@ -362,7 +379,7 @@ namespace KUBOnlinePRPM.Controllers
                     db.NotificationMsgs.Add(_objSendMessage1);
                     db.SaveChanges();
                 }
-                ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "projectName");
+                ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "description");
                 ViewBag.BudgetedList = new SelectList(BudgetedList.AsEnumerable(), "Value", "Text");
                 ViewBag.PurchaseTypeList = new SelectList(PurchaseTypeQuery.AsEnumerable(), "purchaseTypeId", "purchaseType");
                 //ViewBag.ReviewerNameList = new SelectList(ReviewerNameQuery.AsEnumerable(), "reviewerId", "reviewerName");
@@ -639,8 +656,16 @@ namespace KUBOnlinePRPM.Controllers
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
-                var ProjectNameQuery = db.Projects.Select(c => new { ProjectId = c.projectId, ProjectName = c.projectName })
-                        .OrderBy(c => c.ProjectName);
+                int CustId = Int32.Parse(Session["CompanyId"].ToString());
+                var ProjectNameQuery = (from m in db.Projects
+                                        where m.custId == CustId
+                                        select new
+                                        {
+                                            ProjectId = m.projectId,
+                                            Dimension = m.dimension,
+                                            Description = m.dimension + " - " + m.projectCode + " - " + m.projectName,
+                                            Code = m.projectCode,
+                                        }).OrderBy(c => c.Dimension).ThenBy(c => c.Code);
                 List<SelectListItem> BudgetedList = new List<SelectListItem>();
                 BudgetedList.Add(new SelectListItem
                 {
@@ -770,7 +795,7 @@ namespace KUBOnlinePRPM.Controllers
                 //Session["Details_POIssueDate"] = PODetailList.POListDetail.Details_POIssueDate;
                 //Session["Details_Update"] = PODetailList.POListDetail.Details_Update;
 
-                ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "projectName", PRDetail.NewPRForm.ProjectId);
+                ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "Description", PRDetail.NewPRForm.ProjectId);
                 ViewBag.BudgetedList = new SelectList(BudgetedList.AsEnumerable(), "Value", "Text", PRDetail.NewPRForm.Value);
                 ViewBag.PurchaseTypeList = new SelectList(PurchaseTypeQuery.AsEnumerable(), "purchaseTypeId", "purchaseType", PRDetail.NewPRForm.PurchaseTypeId);
                 //ViewBag.ReviewerNameList = new SelectList(ReviewerNameQuery.AsEnumerable(), "reviewerId", "reviewerName", PRDetail.NewPRForm.ReviewerId);
@@ -797,8 +822,16 @@ namespace KUBOnlinePRPM.Controllers
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
-                var ProjectNameQuery = db.Projects.Select(c => new { ProjectId = c.projectId, ProjectName = c.projectName })
-                        .OrderBy(c => c.ProjectName);
+                int CustId = Int32.Parse(Session["CompanyId"].ToString());
+                var ProjectNameQuery = (from m in db.Projects
+                                        where m.custId == CustId
+                                        select new
+                                        {
+                                            ProjectId = m.projectId,
+                                            Dimension = m.dimension,
+                                            Description = m.dimension + " - " + m.projectCode + " - " + m.projectName,
+                                            Code = m.projectCode,
+                                        }).OrderBy(c => c.Dimension).ThenBy(c => c.Code);
                 List<SelectListItem> BudgetedList = new List<SelectListItem>();
                 BudgetedList.Add(new SelectListItem
                 {
@@ -849,7 +882,7 @@ namespace KUBOnlinePRPM.Controllers
                 int i = 1;
                 if (!ModelState.IsValid)
                 {
-                    ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "projectName", PRModel.NewPRForm.ProjectId);
+                    ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "Description", PRModel.NewPRForm.ProjectId);
                     ViewBag.BudgetedList = new SelectList(BudgetedList.AsEnumerable(), "Value", "Text", PRModel.NewPRForm.Value);
                     ViewBag.PurchaseTypeList = new SelectList(PurchaseTypeQuery.AsEnumerable(), "purchaseTypeId", "purchaseType", PRModel.NewPRForm.PurchaseTypeId);
                     //ViewBag.ReviewerNameList = new SelectList(ReviewerNameQuery.AsEnumerable(), "reviewerId", "reviewerName", PRModel.NewPRForm.ReviewerId);
@@ -889,21 +922,18 @@ namespace KUBOnlinePRPM.Controllers
                 //               }).ToList();
                 DBLogicController.PRUpdateDbLogic(PRModel);
 
-                if (PRModel.PaperRefNoFile != null && PRModel.BidWaiverRefNoFile != null && PRModel.NewPRForm.PaperVerified == false && PRModel.NewPRForm.PaperAttachment == false)
+                bool checkPaperVerified = db.Projects.FirstOrDefault(m => m.projectId == PRModel.NewPRForm.ProjectId).paperVerified;
+                FileUpload fileUploadModel = new FileUpload();
+                FileUpload fileUploadModel1 = new FileUpload();
+                DateTime createDate = DateTime.Now;
+
+                if (PRModel.PaperRefNoFile != null && PRModel.NewPRForm.PaperRefNo != null)
                 {
-                    FileUpload fileUploadModel = new FileUpload();
-                    FileUpload fileUploadModel1 = new FileUpload();
-                    DateTime createDate = DateTime.Now;
                     string PaperRefNoFileFilename = PRModel.PaperRefNoFile.FileName.Replace("\\", ",");
-                    string BidWaiverRefNoFile = PRModel.BidWaiverRefNoFile.FileName.Replace("\\", ",");
                     string filename = PaperRefNoFileFilename.Split(',')[PaperRefNoFileFilename.Split(',').Length - 1].ToString();
-                    string filename1 = BidWaiverRefNoFile.Split(',')[BidWaiverRefNoFile.Split(',').Length - 1].ToString();
                     string fullPath = PRModel.PaperRefNoFile.FileName;
-                    string fullPath1 = PRModel.BidWaiverRefNoFile.FileName;
                     string extension = Path.GetExtension(fullPath);
-                    string extension1 = Path.GetExtension(fullPath1);
                     byte[] uploadFile = new byte[PRModel.PaperRefNoFile.InputStream.Length];
-                    byte[] uploadFile1 = new byte[PRModel.BidWaiverRefNoFile.InputStream.Length];
 
                     fileUploadModel.uuid = Guid.NewGuid();
                     fileUploadModel.uploadUserId = Int32.Parse(Session["UserId"].ToString());
@@ -917,32 +947,13 @@ namespace KUBOnlinePRPM.Controllers
                     db.FileUploads.Add(fileUploadModel);
                     db.SaveChanges();
 
-                    fileUploadModel1.uuid = Guid.NewGuid();
-                    fileUploadModel1.uploadUserId = Int32.Parse(Session["UserId"].ToString());
-                    fileUploadModel1.uploadDate = createDate;
-                    fileUploadModel1.FullPath = fullPath1;
-                    fileUploadModel1.FileName = filename1;
-                    fileUploadModel1.Extension = extension1;
-                    fileUploadModel1.archivedFlag = false;
-                    PRModel.BidWaiverRefNoFile.InputStream.Read(uploadFile1, 0, uploadFile1.Length);
-                    fileUploadModel1.File = uploadFile1;
-                    db.FileUploads.Add(fileUploadModel1);
-                    db.SaveChanges();
-
                     PRs_FileUpload fileUploadModel2 = new PRs_FileUpload
                     {
                         uuid = Guid.NewGuid(),
                         fileEntryId = fileUploadModel.fileEntryId,
                         PRId = PRModel.PRId
                     };
-                    PRs_FileUpload fileUploadModel3 = new PRs_FileUpload
-                    {
-                        uuid = Guid.NewGuid(),
-                        fileEntryId = fileUploadModel1.fileEntryId,
-                        PRId = PRModel.PRId
-                    };
                     db.PRs_FileUpload.Add(fileUploadModel2);
-                    db.PRs_FileUpload.Add(fileUploadModel3);
                     db.SaveChanges();
 
                     NotificationMsg _objSendMessage = new NotificationMsg
@@ -955,6 +966,36 @@ namespace KUBOnlinePRPM.Controllers
                         msgType = "Trail"
                     };
                     db.NotificationMsgs.Add(_objSendMessage);
+                }
+                if (PRModel.NewPRForm.BidWaiverRefNo == null && PRModel.BidWaiverRefNoFile != null)
+                {
+                    string BidWaiverRefNoFile = PRModel.BidWaiverRefNoFile.FileName.Replace("\\", ",");
+                    string filename1 = BidWaiverRefNoFile.Split(',')[BidWaiverRefNoFile.Split(',').Length - 1].ToString();
+                    string fullPath1 = PRModel.BidWaiverRefNoFile.FileName;
+                    string extension1 = Path.GetExtension(fullPath1);
+                    byte[] uploadFile1 = new byte[PRModel.BidWaiverRefNoFile.InputStream.Length];
+
+                    fileUploadModel1.uuid = Guid.NewGuid();
+                    fileUploadModel1.uploadUserId = Int32.Parse(Session["UserId"].ToString());
+                    fileUploadModel1.uploadDate = createDate;
+                    fileUploadModel1.FullPath = fullPath1;
+                    fileUploadModel1.FileName = filename1;
+                    fileUploadModel1.Extension = extension1;
+                    fileUploadModel1.archivedFlag = false;
+                    PRModel.BidWaiverRefNoFile.InputStream.Read(uploadFile1, 0, uploadFile1.Length);
+                    fileUploadModel1.File = uploadFile1;
+                    db.FileUploads.Add(fileUploadModel1);
+                    db.SaveChanges();
+
+                    PRs_FileUpload fileUploadModel3 = new PRs_FileUpload
+                    {
+                        uuid = Guid.NewGuid(),
+                        fileEntryId = fileUploadModel1.fileEntryId,
+                        PRId = PRModel.PRId
+                    };
+
+                    db.PRs_FileUpload.Add(fileUploadModel3);
+                    db.SaveChanges();
 
                     NotificationMsg _objSendMessage1 = new NotificationMsg
                     {
@@ -967,13 +1008,9 @@ namespace KUBOnlinePRPM.Controllers
                     };
                     db.NotificationMsgs.Add(_objSendMessage1);
                     db.SaveChanges();
-
-                    PurchaseRequisition updatePaperAttachment = new PurchaseRequisition();
-                    updatePaperAttachment.PaperAttachment = true;
-                    db.SaveChanges();
                 }
 
-                ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "projectName", PRModel.NewPRForm.ProjectId);
+                ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "Description", PRModel.NewPRForm.ProjectId);
                 ViewBag.BudgetedList = new SelectList(BudgetedList.AsEnumerable(), "Value", "Text", PRModel.NewPRForm.Value);
                 ViewBag.PurchaseTypeList = new SelectList(PurchaseTypeQuery.AsEnumerable(), "purchaseTypeId", "purchaseType", PRModel.NewPRForm.PurchaseTypeId);
                 //ViewBag.ReviewerNameList = new SelectList(ReviewerNameQuery.AsEnumerable(), "reviewerId", "reviewerName", PRModel.NewPRForm.ReviewerId);

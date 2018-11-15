@@ -198,6 +198,9 @@
           </Key>
           <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="projectId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="custId" Type="int" Nullable="false" />
+          <Property Name="dimension" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="projectCode" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="projectName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="paperVerified" Type="bit" Nullable="false" />
           <Property Name="budgetedAmount" Type="numeric" Precision="18" Scale="2" Nullable="false" />
@@ -371,6 +374,18 @@
           <Property Name="createDate" Type="datetime" />
           <Property Name="lastModifyDate" Type="datetime" />
         </EntityType>
+        <Association Name="FK_Customer_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="Customer1" Type="Self.Customer" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="custId" />
+            </Principal>
+            <Dependent Role="Customer1">
+              <PropertyRef Name="custId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Customer_User">
           <End Role="User" Type="Self.User" Multiplicity="0..1" />
           <End Role="Customer" Type="Self.Customer" Multiplicity="*" />
@@ -644,6 +659,18 @@
             </Principal>
             <Dependent Role="PR_Reviewer">
               <PropertyRef Name="reviewerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Project_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="Project" Type="Self.Project" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="custId" />
+            </Principal>
+            <Dependent Role="Project">
+              <PropertyRef Name="custId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -938,6 +965,10 @@
           <EntitySet Name="Users_Roles" EntityType="Self.Users_Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Vendor" EntityType="Self.Vendor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VendorStaff" EntityType="Self.VendorStaff" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Customer_Customer" Association="Self.FK_Customer_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Customer1" EntitySet="Customer" />
+          </AssociationSet>
           <AssociationSet Name="FK_Customer_User" Association="Self.FK_Customer_User">
             <End Role="User" EntitySet="User" />
             <End Role="Customer" EntitySet="Customer" />
@@ -1029,6 +1060,10 @@
           <AssociationSet Name="FK_PR_Reviewer_User" Association="Self.FK_PR_Reviewer_User">
             <End Role="User" EntitySet="User" />
             <End Role="PR_Reviewer" EntitySet="PR_Reviewer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Project_Customer" Association="Self.FK_Project_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Project" EntitySet="Project" />
           </AssociationSet>
           <AssociationSet Name="FK_PRs_FileUpload_FileUpload" Association="Self.FK_PRs_FileUpload_FileUpload">
             <End Role="FileUpload" EntitySet="FileUpload" />
@@ -1144,6 +1179,9 @@
           <NavigationProperty Name="User1" Relationship="Self.FK_Customer_User1" FromRole="Customer" ToRole="User" />
           <NavigationProperty Name="Users" Relationship="Self.FK_User_Customer" FromRole="Customer" ToRole="User" />
           <NavigationProperty Name="PurchaseRequisitions" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_Customer" FromRole="Customer" ToRole="PurchaseRequisition" />
+          <NavigationProperty Name="Customer1" Relationship="KUBOnlinePRModel.FK_Customer_Customer" FromRole="Customer" ToRole="Customer1" />
+          <NavigationProperty Name="Customer2" Relationship="KUBOnlinePRModel.FK_Customer_Customer" FromRole="Customer1" ToRole="Customer" />
+          <NavigationProperty Name="Projects" Relationship="KUBOnlinePRModel.FK_Project_Customer" FromRole="Customer" ToRole="Project" />
         </EntityType>
         <EntityType Name="FileUpload">
           <Key>
@@ -1216,6 +1254,10 @@
           <Property Name="budgetBalance" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
           <NavigationProperty Name="PurchaseOrders" Relationship="Self.FK_PurchaseOrder_Project" FromRole="Project" ToRole="PurchaseOrder" />
           <NavigationProperty Name="PurchaseRequisitions" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_Project" FromRole="Project" ToRole="PurchaseRequisition" />
+          <Property Name="custId" Type="Int32" Nullable="false" />
+          <Property Name="dimension" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="projectCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Customer" Relationship="KUBOnlinePRModel.FK_Project_Customer" FromRole="Project" ToRole="Customer" />
         </EntityType>
         <EntityType Name="PRs_FileUpload">
           <Key>
@@ -1812,6 +1854,14 @@
             <End Role="VendorStaff" EntitySet="VendorStaffs" />
             <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
           </AssociationSet>
+          <AssociationSet Name="FK_Customer_Customer" Association="KUBOnlinePRModel.FK_Customer_Customer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="Customer1" EntitySet="Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Project_Customer" Association="KUBOnlinePRModel.FK_Project_Customer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="Project" EntitySet="Projects" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="ItemType">
           <Key>
@@ -2345,6 +2395,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Customer_Customer">
+          <End Type="KUBOnlinePRModel.Customer" Role="Customer" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.Customer" Role="Customer1" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="custId" />
+            </Principal>
+            <Dependent Role="Customer1">
+              <PropertyRef Name="custId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Project_Customer">
+          <End Type="KUBOnlinePRModel.Customer" Role="Customer" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.Project" Role="Project" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="custId" />
+            </Principal>
+            <Dependent Role="Project">
+              <PropertyRef Name="custId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2423,6 +2497,9 @@
           <EntitySetMapping Name="Projects">
             <EntityTypeMapping TypeName="KUBOnlinePRModel.Project">
               <MappingFragment StoreEntitySet="Project">
+                <ScalarProperty Name="projectCode" ColumnName="projectCode" />
+                <ScalarProperty Name="dimension" ColumnName="dimension" />
+                <ScalarProperty Name="custId" ColumnName="custId" />
                 <ScalarProperty Name="uuid" ColumnName="uuid" />
                 <ScalarProperty Name="projectId" ColumnName="projectId" />
                 <ScalarProperty Name="projectName" ColumnName="projectName" />

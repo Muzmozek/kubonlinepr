@@ -19,6 +19,7 @@ namespace KUBOnlinePRPM.Models
         {
             this.Users = new HashSet<User>();
             this.PurchaseRequisitions = new HashSet<PurchaseRequisition>();
+            this.Projects = new HashSet<Project>();
         }
     
         public System.Guid uuid { get; set; }
@@ -41,5 +42,9 @@ namespace KUBOnlinePRPM.Models
         public virtual ICollection<User> Users { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseRequisition> PurchaseRequisitions { get; set; }
+        public virtual Customer Customer1 { get; set; }
+        public virtual Customer Customer2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Project> Projects { get; set; }
     }
 }

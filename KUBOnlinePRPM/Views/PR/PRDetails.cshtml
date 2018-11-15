@@ -26,7 +26,7 @@
     <a id="UrlPRList" class="d-none" href="@Url.Action("PRList", "PR" )"></a>
     <div class="row">
         <div class="col-md-6">
-            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
                 <section>
                     <div class="row">
                         <div class="d-flex col-md-6 col-sm-6 formfield">
@@ -36,13 +36,13 @@
                             @if (Session["ifAdmin"] != null || Session["ifProcurement"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null)
                             {
                                 @Html.DropDownListFor(m => m.NewPRForm.ProjectId, (IEnumerable<SelectListItem>
-                            )ViewBag.ProjectNameList, "Select project here", new { @id = "ProjectName", @class = "custom-select g-width-100vw g-height-50 g-color-black g-color-primary--hover text-left g-rounded-20", @disabled = "disabled" })
+                            )ViewBag.ProjectNameList, "Select project here", new { @id = "ProjectName", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
                                 @Html.HiddenFor(m => m.NewPRForm.ProjectId)
                             }
                             else
                             {
                                 @Html.DropDownListFor(m => m.NewPRForm.ProjectId, (IEnumerable<SelectListItem>
-                                )ViewBag.ProjectNameList, "Select project here", new { @id = "ProjectName", @class = "custom-select g-width-100vw g-height-50 g-color-black g-color-primary--hover text-left g-rounded-20" })
+                                )ViewBag.ProjectNameList, "Select project here", new { @id = "ProjectName", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
 
                             }
                         </div>
@@ -54,9 +54,9 @@
                     </div>
                 </section>
             </div>
-            @if (Session["ifAdmin"] != null || Session["ifProcurement"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null || (Model.NewPRForm.PaperVerified == true || Model.NewPRForm.PaperAttachment == true))
+            @if (Session["ifAdmin"] != null || Session["ifProcurement"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null || (Model.NewPRForm.PaperVerified == true || Model.NewPRForm.PaperAttachment == true || Model.NewPRForm.StatusId == "PR09"))
             {
-                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
                     <section>
                         <div class="row">
                             <div class="col-md-4 col-sm-4 formfield">
@@ -68,12 +68,12 @@
                         </div>
                         <div class="row">
                             <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
-                                @Html.ValidationMessageFor(m => m.NewPRForm.PaperRefNo, null, new { @class = "note-error color-red" })
+                                @Html.ValidationMessageFor(m => m.NewPRForm.PaperRefNo, null, new { @class = "form-control-feedback" })
                             </div>
                         </div>
                     </section>
                 </div>
-                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
                     <section>
                         <div class="row">
                             <div class="col-md-4 col-sm-4 formfield">
@@ -85,7 +85,7 @@
                         </div>
                         <div class="row">
                             <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
-                                @Html.ValidationMessageFor(m => m.NewPRForm.BidWaiverRefNo, null, new { @class = "note-error color-red" })
+                                @Html.ValidationMessageFor(m => m.NewPRForm.BidWaiverRefNo, null, new { @class = "form-control-feedback" })
                             </div>
                         </div>
                     </section>
@@ -93,7 +93,7 @@
             }
             else
             {
-                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
                     <section>
                         <div class="row">
                             <div class="col-md-4 col-sm-4 formfield">
@@ -105,12 +105,12 @@
                         </div>
                         <div class="row">
                             <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
-                                @Html.ValidationMessageFor(m => m.NewPRForm.PaperRefNo, null, new { @class = "note-error color-red" })
+                                @Html.ValidationMessageFor(m => m.NewPRForm.PaperRefNo, null, new { @class = "form-control-feedback" })
                             </div>
                         </div>
                     </section>
                 </div>
-                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
                     <section>
                         <div class="row">
                             <div class="col-md-4 col-sm-4 formfield">
@@ -122,13 +122,13 @@
                         </div>
                         <div class="row">
                             <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
-                                @Html.ValidationMessageFor(m => m.NewPRForm.BidWaiverRefNo, null, new { @class = "note-error color-red" })
+                                @Html.ValidationMessageFor(m => m.NewPRForm.BidWaiverRefNo, null, new { @class = "form-control-feedback" })
                             </div>
                         </div>
                     </section>
                 </div>
             }
-            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
                 <section>
                     <div class="row">
                         <div class="d-flex col-md-4 col-sm-4 formfield">
@@ -138,19 +138,19 @@
                             @if (Session["ifAdmin"] != null || Session["ifProcurement"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null)
                             {
                                 @Html.DropDownListFor(m => m.NewPRForm.Value, (IEnumerable<SelectListItem>
-                                    )ViewBag.BudgetedList, "", new { @id = "Budgeted", @class = "custom-select g-width-100vw g-height-50 g-color-black g-color-primary--hover text-left g-rounded-20", @disabled = "disabled" })
+                                    )ViewBag.BudgetedList, "", new { @id = "Budgeted", @class = "custom-select g-width-100vw g-height-40 g-color-black g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
                                 @Html.HiddenFor(m => m.NewPRForm.Value)
                             }
                             else
                             {
                                 @Html.DropDownListFor(m => m.NewPRForm.Value, (IEnumerable<SelectListItem>
-                                        )ViewBag.BudgetedList, "", new { @id = "Budgeted", @class = "custom-select g-width-100vw g-height-50 g-color-black g-color-primary--hover text-left g-rounded-20" })
+                                        )ViewBag.BudgetedList, "", new { @id = "Budgeted", @class = "custom-select g-width-100vw g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
                             }
                         </div>
                     </div>
                 </section>
             </div>
-            @*<div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-10--md g-mb-30">
+            @*<div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-5--md g-mb-30">
             <section>
                 <div class="row">
                     <div class="col-md-4 col-sm-4 formfield">
@@ -160,13 +160,13 @@
                         @if (Session["ifAdmin"] != null || Session["ifReviewer"] != null || Session["ifApprover"] != null)
                         {
                         @Html.DropDownListFor(m => m.NewPRForm.ReviewerId, (IEnumerable<SelectListItem>
-                            )ViewBag.ReviewerNameList, new { @id = "Reviewer", @class = "custom-select g-width-100vw g-height-50 g-color-black g-color-primary--hover text-left g-rounded-20", @disabled = "disabled" })
+                            )ViewBag.ReviewerNameList, new { @id = "Reviewer", @class = "custom-select g-width-100vw g-height-40 g-color-black g-color-primary--hover text-left g-rounded-20", @disabled = "disabled" })
                             @Html.HiddenFor(m => m.NewPRForm.ReviewerId)
                             }
                             else
                             {
                             @Html.DropDownListFor(m => m.NewPRForm.ReviewerId, (IEnumerable<SelectListItem>
-                                )ViewBag.ReviewerNameList, "Select project here", new { @id = "Reviewer", @class = "custom-select g-width-100vw g-height-50 g-color-black g-color-primary--hover text-left g-rounded-20" })
+                                )ViewBag.ReviewerNameList, "Select project here", new { @id = "Reviewer", @class = "custom-select g-width-100vw g-height-40 g-color-black g-color-primary--hover text-left g-rounded-20" })
                                 }
                     </div>
                 </div>
@@ -174,7 +174,7 @@
         </div>*@
         </div>
         <div class="col-md-6">
-            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
                 <section>
                     <div class="row">
                         <div class="col-md-4 col-sm-4 formfield">
@@ -187,21 +187,21 @@
                     </div>
                     <div class="row">
                         <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
-                            @Html.ValidationMessageFor(m => m.NewPRForm.PRStatus, null, new { @class = "note-error color-red" })
+                            @Html.ValidationMessageFor(m => m.NewPRForm.PRStatus, null, new { @class = "form-control-feedback" })
                         </div>
                     </div>
                 </section>
             </div>
-            @if (Session["ifRequestor"] != null)
+            @if (Session["ifRequestor"] != null && Model.NewPRForm.StatusId == "PR01")
             {
-                <div class="attachment d-none col-md-12 col-sm-12 g-pa-10--md">
+                <div class="attachment col-md-12 col-sm-12 g-pa-5--md">
                     <section>
                         <div class="row">
                             <div class="col-md-4 col-sm-4 formfield">
                                 <label class="g-mb-10" for="Attachment1">Attachment</label>
                             </div>
                             <div class="col-md-8 col-sm-8 input-group u-file-attach-v1 g-brd-gray-light-v2">
-                                <input id="Attachment1" class="form-control form-control-md g-rounded-4" placeholder="If already have paper" readonly="" type="text">
+                                <input id="Attachment1" class="form-control form-control-md g-rounded-4" placeholder="" readonly="" type="text" value="@Model.PaperRefNoFileName">
 
                                 <div class="input-group-append">
                                     <button class="btn btn-md u-btn-blue rounded-0" type="submit">Browse</button>
@@ -209,16 +209,21 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row has-danger">
+                            <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                                @Html.ValidationMessageFor(m => m.PaperRefNoFileName, null, new { @class = "form-control-feedback" })
+                            </div>
+                        </div>
                     </section>
                 </div>
-                <div class="attachment d-none col-md-12 col-sm-12 g-pa-10--md">
+                <div class="attachment col-md-12 col-sm-12 g-pa-5--md">
                     <section>
                         <div class="row">
                             <div class="col-md-4 col-sm-4 formfield">
                                 <label class="g-mb-10" for="Attachment2">Attachment</label>
                             </div>
                             <div class="col-md-8 col-sm-8 input-group u-file-attach-v1 g-brd-gray-light-v2">
-                                <input id="Attachment2" class="form-control form-control-md g-rounded-4" placeholder="If already have paper" readonly="" type="text">
+                                <input id="Attachment2" class="form-control form-control-md g-rounded-4" placeholder="" readonly="" type="text" value="@Model.BidWaiverRefNoFileName">
 
                                 <div class="input-group-append">
                                     <button class="btn btn-md u-btn-blue rounded-0" type="submit">Browse</button>
@@ -226,10 +231,15 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row has-danger">
+                            <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                                @Html.ValidationMessageFor(m => m.BidWaiverRefNoFileName, null, new { @class = "form-control-feedback" })
+                            </div>
+                        </div>
                     </section>
                 </div>
             }
-            @*<div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md g-mb-20">
+            @*<div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md g-mb-20">
                     <section>
                         <div class="row">
                             <label class="form-check-inline u-check g-pl-25">
@@ -263,7 +273,7 @@
                         </div>
                     </section>
                 </div>*@
-            @*<div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-10--md g-mb-30">
+            @*<div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-5--md g-mb-30">
                     <section>
                         <div class="row">
                             <div class="col-md-4 col-sm-4 formfield">
@@ -273,13 +283,13 @@
                                 @if (Session["ifAdmin"] != null || Session["ifReviewer"] != null || Session["ifApprover"] != null)
                                 {
                                 @Html.DropDownListFor(m => m.NewPRForm.ApproverId, (IEnumerable<SelectListItem>
-                                    )ViewBag.ApproverNameList, new { @id = "Approver", @class = "custom-select g-width-100vw g-height-50 g-color-black g-color-primary--hover text-left g-rounded-20", @disabled = "disabled" })
+                                    )ViewBag.ApproverNameList, new { @id = "Approver", @class = "custom-select g-width-100vw g-height-40 g-color-black g-color-primary--hover text-left g-rounded-20", @disabled = "disabled" })
                                     @Html.HiddenFor(m => m.NewPRForm.ApproverId)
                                     }
                                     else
                                     {
                                     @Html.DropDownListFor(m => m.NewPRForm.ApproverId, (IEnumerable<SelectListItem>
-                                        )ViewBag.ApproverNameList, new { @id = "Approver", @class = "custom-select g-width-100vw g-height-50 g-color-black g-color-primary--hover text-left g-rounded-20" })
+                                        )ViewBag.ApproverNameList, new { @id = "Approver", @class = "custom-select g-width-100vw g-height-40 g-color-black g-color-primary--hover text-left g-rounded-20" })
                                         }
                             </div>
                         </div>
@@ -294,33 +304,33 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
                     <section>
                         <div class="row">
                             <div class="col-md-4 col-sm-4 formfield">
                                 <span>Company</span>
                             </div>
                             <div class="d-flex col-md-8 col-sm-8">
-                                @Html.DropDownListFor(m => m.NewPRForm.VendorId, (IEnumerable<SelectListItem>)ViewBag.VendorList, "Select vendor company here", new { @id = "VendorId", @class = "custom-select g-width-100vw g-height-50 g-color-black g-color-black--hover text-left g-rounded-20" })
+                                @Html.DropDownListFor(m => m.NewPRForm.VendorId, (IEnumerable<SelectListItem>)ViewBag.VendorList, "Select vendor company here", new { @id = "VendorId", @class = "custom-select g-width-100vw g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
                             </div>
                         </div>
                     </section>
                 </div>
-                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
                     <section>
                         <div class="row">
                             <div class="col-md-4 col-sm-4 formfield">
                                 <span>Contact Name</span>
                             </div>
                             <div class="d-flex col-md-8 col-sm-8">
-                                @Html.DropDownListFor(m => m.NewPRForm.VendorStaffId, (IEnumerable<SelectListItem>)ViewBag.VendorStaffList, "Select vendor contact name here", new { @id = "VendorStaffId", @class = "custom-select g-width-100vw g-height-50 g-color-black g-color-black--hover text-left g-rounded-20" })
+                                @Html.DropDownListFor(m => m.NewPRForm.VendorStaffId, (IEnumerable<SelectListItem>)ViewBag.VendorStaffList, "Select vendor contact name here", new { @id = "VendorStaffId", @class = "custom-select g-width-100vw g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
                             </div>
                         </div>
                     </section>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
                     <section>
                         <div class="row">
                             <div class="col-md-4 col-sm-4 formfield">
@@ -333,12 +343,12 @@
                         </div>
                         <div class="row">
                             <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
-                                @Html.ValidationMessageFor(m => m.NewPRForm.VendorEmail, null, new { @class = "note-error color-red" })
+                                @Html.ValidationMessageFor(m => m.NewPRForm.VendorEmail, null, new { @class = "form-control-feedback" })
                             </div>
                         </div>
                     </section>
                 </div>
-                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
                     <section>
                         <div class="row">
                             <div class="col-md-4 col-sm-4 formfield">
@@ -351,7 +361,7 @@
                         </div>
                         <div class="row">
                             <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
-                                @Html.ValidationMessageFor(m => m.NewPRForm.VendorContactNo, null, new { @class = "note-error color-red" })
+                                @Html.ValidationMessageFor(m => m.NewPRForm.VendorContactNo, null, new { @class = "form-control-feedback" })
                             </div>
                         </div>
                     </section>
@@ -364,7 +374,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
                 <section>
                     <div class="row">
                         <div class="col-md-4 col-sm-4 formfield">
@@ -374,13 +384,13 @@
                             @if (Session["ifAdmin"] != null || Session["ifProcurement"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null)
                             {
                                 @Html.DropDownListFor(m => m.NewPRForm.PurchaseTypeId, (IEnumerable<SelectListItem>
-                            )ViewBag.PurchaseTypeList, "Select Purchase type here", new { @id = "PurchaseType", @class = "custom-select g-width-100vw g-height-50 g-color-black g-color-primary--hover text-left g-rounded-20", @disabled = "disabled" })
+                            )ViewBag.PurchaseTypeList, "Select Purchase type here", new { @id = "PurchaseType", @class = "custom-select g-width-100vw g-height-40 g-color-black g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
                                 @Html.HiddenFor(m => m.NewPRForm.PurchaseTypeId)
                             }
                             else
                             {
                                 @Html.DropDownListFor(m => m.NewPRForm.PurchaseTypeId, (IEnumerable<SelectListItem>
-                                )ViewBag.PurchaseTypeList, "Select Purchase type here", new { @id = "PurchaseType", @class = "custom-select g-width-100vw g-height-50 g-color-black g-color-primary--hover text-left g-rounded-20" })
+                                )ViewBag.PurchaseTypeList, "Select Purchase type here", new { @id = "PurchaseType", @class = "custom-select g-width-100vw g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
                             }
                         </div>
                     </div>
@@ -391,7 +401,7 @@
                     </div>
                 </section>
             </div>
-            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
                 <section>
                     <div class="row">
                         <div class="col-md-4 col-sm-4 formfield">
@@ -416,7 +426,7 @@
                     </div>
                 </section>
             </div>
-            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
                 <section>
                     <div class="row">
                         <div class="col-md-4 col-sm-4 formfield">
@@ -441,7 +451,7 @@
                     </div>
                 </section>
             </div>
-            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
                 <section>
                     <div class="row">
                         <div class="col-md-4 col-sm-4 formfield">
@@ -469,7 +479,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
                 <section>
                     <div class="row">
                         <div class="col-md-4 col-sm-4 formfield">
@@ -491,7 +501,7 @@
             </div>
             @if (Session["ifAdmin"] != null || Session["ifProcurement"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null)
             {
-                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
                     <section>
                         <div class="row">
                             <div class="col-md-4 col-sm-4 formfield">
@@ -504,13 +514,13 @@
                         </div>
                         <div class="row">
                             <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
-                                @Html.ValidationMessageFor(m => m.NewPRForm.AmountRequired, null, new { @class = "note-error color-red" })
+                                @Html.ValidationMessageFor(m => m.NewPRForm.AmountRequired, null, new { @class = "form-control-feedback" })
                             </div>
                         </div>
                     </section>
                 </div>
             }
-            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-10--md">
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
                 <section>
                     <div class="row">
                         <div class="col-md-4 col-sm-4 formfield">
@@ -603,7 +613,7 @@
                                     if (Session["ifAdmin"] != null || Session["ifProcurement"] != null)
                                     {
                                         <td>
-                                            @Html.DropDownListFor(m => item.CodeId, (IEnumerable<SelectListItem>)ViewData["ItemCodeList" + i], "Select item code here", new { @id = CodeId, @class = "CodeId custom-select g-height-50 g-color-black g-color-primary--hover text-left g-rounded-20" })
+                                            @Html.DropDownListFor(m => item.CodeId, (IEnumerable<SelectListItem>)ViewData["ItemCodeList" + i], "Select item code here", new { @id = CodeId, @class = "CodeId custom-select g-height-40 g-color-black g-color-primary--hover text-left g-rounded-20" })
                                         </td>
                                     }
                                     <td>
