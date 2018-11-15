@@ -13,10 +13,10 @@ namespace KUBOnlinePRPM.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class KUB_TelEntities : DbContext
+    public partial class KUBMEntities : DbContext
     {
-        public KUB_TelEntities()
-            : base("name=KUB_TelEntities")
+        public KUBMEntities()
+            : base("name=KUBMEntities")
         {
         }
     
@@ -25,8 +25,14 @@ namespace KUBOnlinePRPM.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<KUB_Telekomunikasi_Sdn_Bhd_Contact> KUB_Telekomunikasi_Sdn_Bhd_Contact { get; set; }
-        public virtual DbSet<KUB_Telekomunikasi_Sdn_Bhd_Item> KUB_Telekomunikasi_Sdn_Bhd_Item { get; set; }
-        public virtual DbSet<KUB_Telekomunikasi_Sdn_Bhd_Vendor> KUB_Telekomunikasi_Sdn_Bhd_Vendor { get; set; }
+        public virtual DbSet<KUB_Malaysia_Berhad_Contact> KUB_Malaysia_Berhad_Contact { get; set; }
+        public virtual DbSet<KUB_Malaysia_Berhad_Contact_Business_Relation> KUB_Malaysia_Berhad_Contact_Business_Relation { get; set; }
+        public virtual DbSet<KUB_Malaysia_Berhad_Dimension_Value> KUB_Malaysia_Berhad_Dimension_Value { get; set; }
+        public virtual DbSet<KUB_Malaysia_Berhad_Fixed_Asset> KUB_Malaysia_Berhad_Fixed_Asset { get; set; }
+        public virtual DbSet<KUB_Malaysia_Berhad_G_L_Account> KUB_Malaysia_Berhad_G_L_Account { get; set; }
+        public virtual DbSet<KUB_Malaysia_Berhad_Item> KUB_Malaysia_Berhad_Item { get; set; }
+        public virtual DbSet<KUB_Malaysia_Berhad_Job> KUB_Malaysia_Berhad_Job { get; set; }
+        public virtual DbSet<KUB_Malaysia_Berhad_Job_Task> KUB_Malaysia_Berhad_Job_Task { get; set; }
+        public virtual DbSet<KUB_Malaysia_Berhad_Vendor> KUB_Malaysia_Berhad_Vendor { get; set; }
     }
 }

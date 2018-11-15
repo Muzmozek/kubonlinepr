@@ -226,11 +226,19 @@ namespace KUBOnlinePRPM.Controllers
                 }
                 if (model.NewPRForm.PaperRefNo == null && model.PaperRefNoFile != null)
                 {
-                    ModelState.AddModelError("NewPRForm.PaperRefNo", "GMD paper ref no needed.");
+                    ModelState.AddModelError("NewPRForm.PaperRefNo", "GMD paper ref no needed.");                    
                 }
                 if (model.NewPRForm.BidWaiverRefNo == null && model.BidWaiverRefNoFile != null)
                 {
-                    ModelState.AddModelError("NewPRForm.BidWaiverRefNo", "Bid Waiver ref no needed");
+                    ModelState.AddModelError("NewPRForm.BidWaiverRefNo", "Bid Waiver ref no needed");                   
+                }
+                if (model.PaperRefNoFile != null && Path.GetExtension(model.PaperRefNoFile.FileName) != ".pdf")
+                {
+                    ModelState.AddModelError("PaperRefNoFileName", "Only pdf file accepted.");
+                }
+                if (model.BidWaiverRefNoFile != null && Path.GetExtension(model.BidWaiverRefNoFile.FileName) != ".pdf")
+                {
+                    ModelState.AddModelError("BidWaiverRefNoFileName", "Only pdf file accepted.");
                 }
                 if (!ModelState.IsValid)
                 {
@@ -501,7 +509,8 @@ namespace KUBOnlinePRPM.Controllers
                 }
                 else if (ifHOC != null || ifHOGPSS != null)
                 {
-                    PRList.PRListObject = (from m in db.PurchaseRequisitions
+                    List<PRListTable> HOCList = new List<PRListTable>();
+                    HOCList = (from m in db.PurchaseRequisitions
                                            join n in db.Users on m.PreparedById equals n.userId
                                            join o in db.Vendors on m.VendorId equals o.vendorId into q
                                            join p in db.PRStatus on m.StatusId equals p.statusId
@@ -520,6 +529,28 @@ namespace KUBOnlinePRPM.Controllers
                                                //PRAging = m.aging,
                                                Status = p.status
                                            }).ToList();
+                    if (ifHOGPSS != null)
+                    {
+                        PRList.PRListObject = HOCList.Concat(from m in db.PurchaseRequisitions
+                                                      join n in db.Users on m.PreparedById equals n.userId
+                                                      join o in db.Vendors on m.VendorId equals o.vendorId into q
+                                                      join p in db.PRStatus on m.StatusId equals p.statusId
+                                                      join s in db.PR_PaperApprover on m.PRId equals s.PRId into t
+                                                      from r in q.DefaultIfEmpty()
+                                                      from u in t.DefaultIfEmpty()
+                                                      where m.PRType == type && u.approverId == UserId
+                                                      select new PRListTable()
+                                                      {
+                                                          PRId = m.PRId,
+                                                          PRNo = m.PRNo,
+                                                          PRDate = m.PreparedDate,
+                                                          RequestorName = n.firstName + " " + n.lastName,
+                                                          VendorCompany = r.name,
+                                                          AmountRequired = m.AmountRequired,
+                                                          //PRAging = m.aging,
+                                                          Status = p.status
+                                                      }).ToList();
+                    } else { PRList.PRListObject = HOCList; }
                 }
                 else if (ifProcurement != null)
                 {

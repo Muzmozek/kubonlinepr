@@ -218,18 +218,36 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>KUBtelNav.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\KUBtelNav.Designer.cs">
+    <Compile Include="Models\KUBMNav.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>KUBtelNav.edmx</DependentUpon>
+      <DependentUpon>KUBMNav.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\KUB_Telekomunikasi_Sdn_Bhd_Contact.cs">
+    <Compile Include="Models\KUB_Malaysia_Berhad_Contact.cs">
       <DependentUpon>KUBtelNav.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\KUB_Telekomunikasi_Sdn_Bhd_Item.cs">
+    <Compile Include="Models\KUB_Malaysia_Berhad_Contact_Business_Relation.cs">
       <DependentUpon>KUBtelNav.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\KUB_Telekomunikasi_Sdn_Bhd_Vendor.cs">
+    <Compile Include="Models\KUB_Malaysia_Berhad_Dimension_Value.cs">
+      <DependentUpon>KUBtelNav.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\KUB_Malaysia_Berhad_Fixed_Asset.cs">
+      <DependentUpon>KUBtelNav.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\KUB_Malaysia_Berhad_G_L_Account.cs">
+      <DependentUpon>KUBtelNav.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\KUB_Malaysia_Berhad_Item.cs">
+      <DependentUpon>KUBtelNav.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\KUB_Malaysia_Berhad_Job.cs">
+      <DependentUpon>KUBtelNav.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\KUB_Malaysia_Berhad_Job_Task.cs">
+      <DependentUpon>KUBtelNav.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\KUB_Malaysia_Berhad_Vendor.cs">
       <DependentUpon>KUBtelNav.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\LoginModel.cs" />
@@ -5124,12 +5142,12 @@
     </Content>
     <Content Include="Models\KUBtelNav.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>KUBtelNav.edmx</DependentUpon>
+      <DependentUpon>KUBMNav.edmx</DependentUpon>
       <LastGenOutput>KUBtelNav.Context.cs</LastGenOutput>
     </Content>
     <Content Include="Models\KUBtelNav.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>KUBtelNav.edmx</DependentUpon>
+      <DependentUpon>KUBMNav.edmx</DependentUpon>
       <LastGenOutput>KUBtelNav.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\BPRPOList.js" />
@@ -5598,12 +5616,12 @@
     <Content Include="Models\KUBOnlinePR.edmx.diagram">
       <DependentUpon>KUBOnlinePR.edmx</DependentUpon>
     </Content>
-    <EntityDeploy Include="Models\KUBtelNav.edmx">
+    <EntityDeploy Include="Models\KUBMNav.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>KUBtelNav.Designer.cs</LastGenOutput>
+      <LastGenOutput>KUBMNav.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Models\KUBtelNav.edmx.diagram">
-      <DependentUpon>KUBtelNav.edmx</DependentUpon>
+    <Content Include="Models\KUBMNav.edmx.diagram">
+      <DependentUpon>KUBMNav.edmx</DependentUpon>
     </Content>
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\User\Index.cshtml" />

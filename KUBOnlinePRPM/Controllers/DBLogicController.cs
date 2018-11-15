@@ -106,16 +106,7 @@ namespace KUBOnlinePRPM.Controllers
                 generatePRNo.SubmitDate = DateTime.Now;
                 generatePRNo.PRAging = model.NewPRForm.PRAging;
                 if((model.PaperRefNoFile != null && model.NewPRForm.PaperRefNo != null) || (model.BidWaiverRefNoFile != null && model.NewPRForm.BidWaiverRefNo != null)){
-                    generatePRNo.PaperAttachment = true;
-                    PR_PaperApprover _objHOGPSS = new PR_PaperApprover
-                    {
-                        uuid = Guid.NewGuid(),
-                        approverId = model.NewPRForm.ApproverId,
-                        PRId = _objNewPR.PRId,
-                        approverApproved = model.NewPRForm.ApproverApproved
-                    };
-                    db.PR_HOD.Add(_objHOD);
-                    db.SaveChanges();
+                    generatePRNo.PaperAttachment = true;                   
                 }                
                 generatePRNo.StatusId = "PR09";
                 generateMsg.uuid = Guid.NewGuid();
