@@ -470,11 +470,11 @@
                             }
                         </div>
                     </div>
-                    @*<div class="row">
-                            <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
-                                @Html.ValidationMessageFor(m => m.NewPRForm.Justification, null, new { @class = "note-error color-red" })
-                            </div>
-                        </div>*@
+                    <div class="row has-danger">
+                        <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                            @Html.ValidationMessageFor(m => m.NewPRForm.Justification, null, new { @class = "form-control-feedback" })
+                        </div>
+                    </div>
                 </section>
             </div>
         </div>

@@ -213,12 +213,12 @@
                                 $("#BidWaiverRefNo").prop("readonly", true);
                                 $(".attachment").addClass("d-none");
                             }
-                            var BudgetedAmount = resp.projectInfo.BudgetedAmount;
-                            var UtilizedToDate = resp.projectInfo.UtilizedToDate;
-                            var BudgetBalance = resp.projectInfo.BudgetBalance;
-                            $("#BudgetedAmount").val(BudgetedAmount);
-                            $("#UtilizedToDate").val(UtilizedToDate);
-                            $("#BudgetBalance").val(BudgetBalance);                            
+                            //var BudgetedAmount = resp.projectInfo.BudgetedAmount;
+                            //var UtilizedToDate = resp.projectInfo.UtilizedToDate;
+                            //var BudgetBalance = resp.projectInfo.BudgetBalance;
+                            //$("#BudgetedAmount").val(BudgetedAmount);
+                            //$("#UtilizedToDate").val(UtilizedToDate);
+                            //$("#BudgetBalance").val(BudgetBalance);                            
                         }
                     });
                     $.HSCore.helpers.HSFileAttachments.init();

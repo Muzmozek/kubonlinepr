@@ -51,6 +51,8 @@ namespace KUBOnlinePRPM.Models
         [StringLength(100, ErrorMessage = "* Must be at least {2} characters long and {1} characters max.", MinimumLength = 3)]
         public string BudgetDescription { get; set; }
         public decimal AmountRequired { get; set; }
+
+        [Required]
         public string Justification { get; set; }
 
         [Required]

@@ -126,7 +126,7 @@ namespace KUBOnlinePRPM.Controllers
                                         {
                                             ProjectId = m.projectId,
                                             Dimension = m.dimension,
-                                            Description = m.dimension + " - " + m.projectCode + " - " + m.projectName,
+                                            Description = m.dimension + " - " + m.projectCode,
                                             Code = m.projectCode,
                                         }).OrderBy(c => c.Dimension).ThenBy(c => c.Code);
                 List <SelectListItem> BudgetedList = new List<SelectListItem>();
@@ -201,7 +201,7 @@ namespace KUBOnlinePRPM.Controllers
                                         {
                                             ProjectId = m.projectId,
                                             Dimension = m.dimension,
-                                            Description = m.dimension + " - " + m.projectCode + " - " + m.projectName,
+                                            Description = m.dimension + " - " + m.projectCode,
                                             Code = m.projectCode,
                                         }).OrderBy(c => c.Dimension).ThenBy(c => c.Code);
                 var PurchaseTypeQuery = db.PurchaseTypes.Select(c => new { PurchaseTypeId = c.purchaseTypeId, PurchaseType = c.purchaseType1 }).OrderBy(c => c.PurchaseType);
@@ -337,7 +337,7 @@ namespace KUBOnlinePRPM.Controllers
                     };
                     db.NotificationMsgs.Add(_objSendMessage);
                 }
-                if (model.NewPRForm.BidWaiverRefNo == null && model.BidWaiverRefNoFile != null)
+                if (model.NewPRForm.BidWaiverRefNo != null && model.BidWaiverRefNoFile != null)
                 {                                     
                     string BidWaiverRefNoFile = model.BidWaiverRefNoFile.FileName.Replace("\\", ",");                  
                     string filename1 = BidWaiverRefNoFile.Split(',')[BidWaiverRefNoFile.Split(',').Length - 1].ToString();                   
@@ -663,7 +663,7 @@ namespace KUBOnlinePRPM.Controllers
                                         {
                                             ProjectId = m.projectId,
                                             Dimension = m.dimension,
-                                            Description = m.dimension + " - " + m.projectCode + " - " + m.projectName,
+                                            Description = m.dimension + " - " + m.projectCode,
                                             Code = m.projectCode,
                                         }).OrderBy(c => c.Dimension).ThenBy(c => c.Code);
                 List<SelectListItem> BudgetedList = new List<SelectListItem>();
@@ -829,7 +829,7 @@ namespace KUBOnlinePRPM.Controllers
                                         {
                                             ProjectId = m.projectId,
                                             Dimension = m.dimension,
-                                            Description = m.dimension + " - " + m.projectCode + " - " + m.projectName,
+                                            Description = m.dimension + " - " + m.projectCode,
                                             Code = m.projectCode,
                                         }).OrderBy(c => c.Dimension).ThenBy(c => c.Code);
                 List<SelectListItem> BudgetedList = new List<SelectListItem>();
@@ -927,6 +927,30 @@ namespace KUBOnlinePRPM.Controllers
                 FileUpload fileUploadModel1 = new FileUpload();
                 DateTime createDate = DateTime.Now;
 
+                if (PRModel.NewPRForm.PaperRefNo != null && PRModel.PaperRefNoFile == null)
+                {
+                    ModelState.AddModelError("PaperRefNoFileName", "GMD paper attachment needed.");
+                }
+                if (PRModel.NewPRForm.BidWaiverRefNo != null && PRModel.BidWaiverRefNoFile == null)
+                {
+                    ModelState.AddModelError("BidWaiverRefNoFileName", "Bid Waiver attachment needed");
+                }
+                if (PRModel.NewPRForm.PaperRefNo == null && PRModel.PaperRefNoFile != null)
+                {
+                    ModelState.AddModelError("NewPRForm.PaperRefNo", "GMD paper ref no needed.");
+                }
+                if (PRModel.NewPRForm.BidWaiverRefNo == null && PRModel.BidWaiverRefNoFile != null)
+                {
+                    ModelState.AddModelError("NewPRForm.BidWaiverRefNo", "Bid Waiver ref no needed");
+                }
+                if (PRModel.PaperRefNoFile != null && Path.GetExtension(PRModel.PaperRefNoFile.FileName) != ".pdf")
+                {
+                    ModelState.AddModelError("PaperRefNoFileName", "Only pdf file accepted.");
+                }
+                if (PRModel.BidWaiverRefNoFile != null && Path.GetExtension(PRModel.BidWaiverRefNoFile.FileName) != ".pdf")
+                {
+                    ModelState.AddModelError("BidWaiverRefNoFileName", "Only pdf file accepted.");
+                }
                 if (PRModel.PaperRefNoFile != null && PRModel.NewPRForm.PaperRefNo != null)
                 {
                     string PaperRefNoFileFilename = PRModel.PaperRefNoFile.FileName.Replace("\\", ",");
@@ -967,7 +991,7 @@ namespace KUBOnlinePRPM.Controllers
                     };
                     db.NotificationMsgs.Add(_objSendMessage);
                 }
-                if (PRModel.NewPRForm.BidWaiverRefNo == null && PRModel.BidWaiverRefNoFile != null)
+                if (PRModel.NewPRForm.BidWaiverRefNo != null && PRModel.BidWaiverRefNoFile != null)
                 {
                     string BidWaiverRefNoFile = PRModel.BidWaiverRefNoFile.FileName.Replace("\\", ",");
                     string filename1 = BidWaiverRefNoFile.Split(',')[BidWaiverRefNoFile.Split(',').Length - 1].ToString();

@@ -38,7 +38,7 @@ namespace KUBOnlinePRPM.Controllers
                                                   Done = m.done
                                               }).ToList();
 
-                return View(NewNotiList);
+                return PartialView(NewNotiList);
             }
             else
             {

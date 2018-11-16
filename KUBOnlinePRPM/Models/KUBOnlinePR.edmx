@@ -2151,7 +2151,7 @@
           <Property Name="PaperAttachment" Type="Boolean" Nullable="false" />
           <Property Name="PurchaseTypeId" Type="Int32" Nullable="false" />
           <Property Name="BudgetDescription" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Justification" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Justification" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="AmountRequired" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="VendorId" Type="Int32" />
           <Property Name="VendorStaffId" Type="Int32" />

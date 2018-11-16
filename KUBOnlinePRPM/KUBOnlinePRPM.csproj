@@ -5589,7 +5589,6 @@
     <Content Include="Views\PR\PRTabs.cshtml" />
     <Content Include="Views\PR\PRConversations.cshtml" />
     <Content Include="Views\PO\PODetails.cshtml" />
-    <Content Include="Views\PR\BPRPOList.cshtml" />
     <Content Include="Views\PR\PRFiles.cshtml" />
     <Content Include="Views\PO\Index.cshtml" />
     <Content Include="Views\Notification\Index.cshtml" />
