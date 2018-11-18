@@ -300,7 +300,7 @@
         {
             <div class="col-md-12">
                 <div class="media-body align-self-center text-left g-mb-30">
-                    <h3 class="g-font-weight-300 g-font-size-20 g-color-black">Potential Vendor</h3>
+                    <h3 class="g-font-weight-300 g-font-size-20 g-color-black">Vendor</h3>
                 </div>
             </div>
             <div class="col-md-6">
@@ -308,7 +308,7 @@
                     <section>
                         <div class="row">
                             <div class="col-md-4 col-sm-4 formfield">
-                                <span>Company</span>
+                                <span>Company Name</span>
                             </div>
                             <div class="d-flex col-md-8 col-sm-8">
                                 @Html.DropDownListFor(m => m.NewPRForm.VendorId, (IEnumerable<SelectListItem>)ViewBag.VendorList, "Select vendor company here", new { @id = "VendorId", @class = "custom-select g-width-100vw g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
@@ -320,10 +320,22 @@
                     <section>
                         <div class="row">
                             <div class="col-md-4 col-sm-4 formfield">
-                                <span>Contact Name</span>
+                                <span>Company ID</span>
                             </div>
                             <div class="d-flex col-md-8 col-sm-8">
-                                @Html.DropDownListFor(m => m.NewPRForm.VendorStaffId, (IEnumerable<SelectListItem>)ViewBag.VendorStaffList, "Select vendor contact name here", new { @id = "VendorStaffId", @class = "custom-select g-width-100vw g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                                <input type="text" name="company_id" value="" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10"/>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
+                    <section>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 formfield">
+                                <span>Quotation No</span>
+                            </div>
+                            <div class="d-flex col-md-8 col-sm-8">
+                                @Html.TextBoxFor(m => m.NewPRForm.VendorEmail, new { @id = "VendorEmail", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text"})
                             </div>
                         </div>
                     </section>
@@ -334,7 +346,7 @@
                     <section>
                         <div class="row">
                             <div class="col-md-4 col-sm-4 formfield">
-                                <span>Email</span>
+                                <span>Contact Name</span>
                             </div>
                             <div class="d-flex col-md-8 col-sm-8">
                                 @*<input id="inputGroup-3_1" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10" placeholder="" type="text">*@
@@ -353,6 +365,24 @@
                         <div class="row">
                             <div class="col-md-4 col-sm-4 formfield">
                                 <span>Contact No</span>
+                            </div>
+                            <div class="d-flex col-md-8 col-sm-8">
+                                @*<input id="inputGroup-3_1" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10" placeholder="Unit (RM)" type="text">*@
+                                @Html.TextBoxFor(m => m.NewPRForm.VendorContactNo, new { @id = "VendorContactNo", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "", @type = "text", @readonly = true })
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                                @Html.ValidationMessageFor(m => m.NewPRForm.VendorContactNo, null, new { @class = "form-control-feedback" })
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
+                    <section>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 formfield">
+                                <span>Email</span>
                             </div>
                             <div class="d-flex col-md-8 col-sm-8">
                                 @*<input id="inputGroup-3_1" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10" placeholder="Unit (RM)" type="text">*@
@@ -683,15 +713,27 @@
 
         @if (((Model.NewPRForm.StatusId == "PR02") && Session["ifProcurement"] != null) || (Model.NewPRForm.StatusId == "PR02" && Session["ifProcurement"] != null))
         {
-            <div class="col-md-12 col-sm-12">
-                <div class="row">
-                    <select id="SpecsReviewer">
-                        <option value="IT">IT</option>
-                        <option value="HSE">HSE</option>
-                        <option value="PMO">PMO</option>
-                    </select>
+            <div class="col-md-6 col-sm-6">
+
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
+                    <section>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 formfield">
+                                <span>Specs Reviewer</span>
+                            </div>
+                            <div class="d-flex col-md-8 col-sm-8">
+                                <select class="custom-select g-width-100vw g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" id="SpecsReviewer">
+                                    <option value="IT">IT</option>
+                                    <option value="HSE">HSE</option>
+                                    <option value="PMO">PMO</option>
+                                </select>
+                            </div>
+                        </div>
+                    </section>
                 </div>
+
             </div>
+            <div class="col-md-6 col-sm-6"></div>
         }
         <div class="col-md-12 col-sm-12">
             <div class="row">
