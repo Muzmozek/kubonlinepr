@@ -102,6 +102,72 @@
         });
 
     });
+
+    //Review IT/PMO/ start
+    $("#RejectPreparedReviewer").click(function (e) {
+
+        e.preventDefault();
+
+        Url = "/PR/RejectPRReview";
+        $.post(Url, {
+
+            PRId: PRId
+
+        }, function (resp) {
+            alert(resp);
+        });
+
+    });
+
+    $("#ReviewPreparedReviewer").click(function (e) {
+
+        e.preventDefault();
+
+        Url = "/PR/ApprovePRReview";
+        $.post(Url, {
+
+            PRId: PRId
+
+        }, function (resp) {
+            alert(resp);
+        });
+
+    });
+
+    //review end
+
+    //approver HOC start
+    $("#RejectPreparedApprover").click(function (e) {
+
+        e.preventDefault();
+
+        Url = "/PR/RejectPRApprover";
+        $.post(Url, {
+
+            PRId: PRId
+
+        }, function (resp) {
+            alert(resp);
+        });
+
+    });
+
+    $("#ApprovePreparedApprover").click(function (e) {
+
+        e.preventDefault();
+
+        Url = "/PR/ApprovePRApprover";
+        $.post(Url, {
+
+            PRId: PRId
+
+        }, function (resp) {
+            alert(resp);
+        });
+
+    });
+
+    //approver end
     
     //phase 1 reviewer approver approval logic
     $(document).on("click", ".approveRejectDetail", function (e) {

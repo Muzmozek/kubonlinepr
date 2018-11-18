@@ -756,6 +756,20 @@
                                     <a id="SubmitPreparedProcurement" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">SUBMIT</a>
                                 }
 
+                                @if (((Model.NewPRForm.StatusId == "PR03") && Session["ifAdmin"] != null) || (Model.NewPRForm.StatusId == "PR03" && Session["ifIT"] != null))
+                                {
+                                    <a id="RejectPreparedReviewer" class=" btn btn-md u-btn-white g-mr-5 g-mb-15">REJECT</a>
+
+                                    <a id="ReviewPreparedReviewer" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">REVIEWED</a>
+                                }
+
+                                @if (((Model.NewPRForm.StatusId == "PR05") && Session["ifAdmin"] != null) || (Model.NewPRForm.StatusId == "PR05" && Session["ifHOC"] != null))
+                                {
+                                    <a id="RejectPreparedApprover" class=" btn btn-md u-btn-white g-mr-5 g-mb-15">REJECT</a>
+
+                                    <a id="ApprovePreparedApprover" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">APPROVE</a>
+                                }
+
                                 @*Phase 1 approval & rejection view button *@
                                 @if (Model.NewPRForm.StatusId == "PR09" && Session["ifHOD"] != null)
                                 {
