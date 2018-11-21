@@ -37,8 +37,6 @@ namespace KUBOnlinePRPM.Models
         public Nullable<int> jobTaskNo { get; set; }
         public Nullable<System.DateTime> plannedReceiptDate { get; set; }
     
-        public virtual PR_Items PR_Items1 { get; set; }
-        public virtual PR_Items PR_Items2 { get; set; }
         public virtual ItemType ItemType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PO_Item> PO_Item { get; set; }

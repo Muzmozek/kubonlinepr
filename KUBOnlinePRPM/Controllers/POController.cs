@@ -303,6 +303,22 @@ namespace KUBOnlinePRPM.Controllers
                                    RoleId = n.roleId,
                                    RoleName = n.Role.name
                                }).ToList();
+                var PayToVendorQuery = (from m in db.Vendors
+                                        where m.custId == CustId
+                                        select new
+                                        {
+                                            VendorId = m.vendorId,
+                                            VendorName = m.vendorNo + " - " + m.name,
+                                            VendorNo = m.vendorNo,
+                                        }).OrderBy(c => c.VendorNo).ThenBy(c => c.VendorName);
+                var PaymentTermsCodeQuery = (from m in db.PaymentTerms
+                                        where m.custId == CustId
+                                        select new
+                                        {
+                                            PaymentTermsId = m.paymentTermsId,
+                                            PaymentDescription = m.paymentCode + " - " + m.paymentDescription,
+                                            PaymentCode = m.paymentCode,
+                                        }).OrderBy(c => c.PaymentCode).ThenBy(c => c.PaymentDescription);
 
                 POModel PODetail = new POModel
                 {
@@ -314,42 +330,50 @@ namespace KUBOnlinePRPM.Controllers
                 PODetail.NewPOForm = (from a in db.PurchaseOrders
                                       join b in db.Projects on a.projectId equals b.projectId
                                       join c in db.Vendors on a.vendorId equals c.vendorId
-                                      join d in db.VendorStaffs on a.vendorStaffId equals d.staffId
+                                      //join d in db.VendorStaffs on a.vendorStaffId equals d.staffId
                                       join e in db.PO_Item on a.POId equals e.POId
                                       join f in db.PopulateItemLists on e.codeId equals f.codeId
                                       join g in db.POStatus on a.StatusId equals g.statusId
+                                      join h in db.PurchaseRequisitions on a.PRId equals h.PRId
                                       where a.POId == PODetail.POId && f.custId == CustId
                                       select new NewPOModel()
                                       {
                                           PONo = a.PONo,
                                           ProjectName = b.projectName,
+                                          PRNo = h.PRNo,
+                                          PreparedDate = a.PreparedDate,
                                           VendorName = c.name,
-                                          VendorContactName = d.vendorContactName,
-                                          VendorEmail = d.vendorEmail,
-                                          VendorStaffId = d.staffId,
-                                          VendorContactNo = d.vendorContactNo,
+                                          VendorCode = c.vendorNo,
+                                          VendorQuoteNo = c.quotationNo,
+                                          //VendorContactName = d.vendorContactName,
+                                          //VendorEmail = d.vendorEmail,
+                                          //VendorStaffId = d.staffId,
+                                          //VendorContactNo = d.vendorContactNo,
                                           StatusId = a.StatusId,
                                           Status = g.status
                                           //Submited = a.Submited.Value
                                       }).FirstOrDefault();
                 PODetail.NewPOForm.POItemListObject = (from m in db.PO_Item
-                                                       join n in db.PopulateItemLists on m.codeId equals n.codeId into o
+                                                       join n in db.PopulateItemLists on m.codeId equals n.codeId
                                                        join p in db.PR_Items on m.itemsId equals p.itemsId
-                                                       from q in o.DefaultIfEmpty()
-                                                       where m.POId == PODetail.POId && q.custId == CustId
+                                                       where m.POId == PODetail.POId && n.custId == CustId
                                                        select new POItemsTable()
                                                        {
                                                            ItemsId = m.itemsId,
                                                            DateRequired = m.dateRequired,
-                                                           Description = m.description,
-                                                           ItemCode = q.ItemCode,
+                                                           ItemCode = n.ItemCode,
+                                                           Description = m.description,                                                          
                                                            CustPONo = m.custPONo,
                                                            Quantity = m.quantity,
                                                            OutStandingQuantity = p.outStandingQuantity.Value,
                                                            UnitPrice = m.unitPrice,
-                                                           TotalPrice = m.totalPrice,
-                                                           UOM = q.UoM
+                                                           TotalPrice = m.totalPrice
+                                                           //UOM = n.UoM
                                                        }).ToList();
+
+                ViewBag.PayToVendorList = new SelectList(PayToVendorQuery.AsEnumerable(), "VendorId", "VendorName");
+                ViewBag.PaymentTermsCodeList = new SelectList(PaymentTermsCodeQuery.AsEnumerable(), "PaymentTermsId", "PaymentDescription");
+
                 return View(PODetail);
             }
             else
@@ -411,6 +435,46 @@ namespace KUBOnlinePRPM.Controllers
             {
                 return Redirect("~/Home/Index");
             }
+        }
+
+        [HttpPost]
+        public JsonResult ComfirmPO()
+        {
+            //var VendorStaffIdInfo = db.VendorStaffs.Select(m => new NewPRModel()
+            //{
+            //    VendorStaffId = m.staffId,
+            //    VendorEmail = m.vendorEmail,
+            //    VendorContactNo = m.vendorContactNo
+            //}).Where(m => m.VendorStaffId == VendorStaffId).FirstOrDefault();
+            if (Request["PayToVendorId"] != "")
+            {
+                int PayToVendorId = Int32.Parse(Request["PayToVendorId"]);
+            }
+            if (Request["PaymentTermsId"] != "")
+            {
+                int PaymentTermsId = Int32.Parse(Request["PaymentTermsId"]);
+            }
+            //int CustId = Int32.Parse(Session["CompanyId"].ToString());
+            //var PayToVendorQuery = (from m in db.Vendors
+            //                        where m.custId == CustId
+            //                        select new
+            //                        {
+            //                            VendorId = m.vendorId,
+            //                            VendorName = m.vendorNo + " - " + m.name,
+            //                            VendorNo = m.vendorNo,
+            //                        }).OrderBy(c => c.VendorNo).ThenBy(c => c.VendorName);
+            //var PaymentTermsCodeQuery = (from m in db.PaymentTerms
+            //                             where m.custId == CustId
+            //                             select new
+            //                             {
+            //                                 PaymentTermsId = m.paymentTermsId,
+            //                                 PaymentDescription = m.paymentCode + " - " + m.paymentDescription,
+            //                                 PaymentCode = m.paymentCode,
+            //                             }).OrderBy(c => c.PaymentCode).ThenBy(c => c.PaymentDescription);
+            //ViewBag.PayToVendorList = new SelectList(PayToVendorQuery.AsEnumerable(), "VendorId", "VendorName");
+            //ViewBag.PaymentTermsCodeList = new SelectList(PaymentTermsCodeQuery.AsEnumerable(), "PaymentTermsId", "PaymentDescription");
+
+            return Json("The PO has been confirmed");
         }
     }
 }

@@ -108,4 +108,44 @@
             }
         });
     });
+    //$(document).on("click", "#ConfirmPO", function (e) {
+    $("#ConfirmPO").click(function (e) {
+        e.preventDefault();
+        //var PayToVendorId = $("#PayToVendor").find("option:selected").val();
+        //var PaymentTermsId = $("#PaymentTermsCode").find("option:selected").val();
+        //if (PayToVendorId === "") {
+        //    PayToVendorId = 0;
+        //}
+        //if (PaymentTermsId === "") {
+        //    PaymentTermsId = 0;
+        //}
+        $.post(UrlComfirmPO, {
+
+            PayToVendorId: $("#PayToVendor").find("option:selected").val(),
+            PaymentTermsId: $("#PaymentTermsCode").find("option:selected").val()
+
+        }, function (resp) {
+            alert(resp);
+        });
+        //$.ajax({
+        //    url: UrlComfirmPO,
+        //    type: 'POST',
+        //    data: { PayToVendorId: PayToVendorId, PaymentTermsId: PaymentTermsId },
+        //    beforeSend: function () {
+        //        $("body").addClass("loading");
+        //    },
+        //    dataType: "json",
+        //    success: function (resp) {
+        //        if (resp.success) {
+        //            alert("The PO has been confirmed");
+        //            $('#PODetails').html(resp.view);
+        //            $("body").removeClass("loading");
+        //        } else if (resp.success === false && resp.exception === true) {
+        //            alert("Exception occured. Please contact admin");
+        //            $('#PODetails').html(resp.view);
+        //            $("body").removeClass("loading");
+        //        }
+        //    }
+        //});
+    });
 });

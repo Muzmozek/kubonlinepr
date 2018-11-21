@@ -23,7 +23,9 @@ namespace KUBOnlinePRPM.Models
         public string PONo { get; set; }
         public int ProjectId { get; set; }
         public string ProjectName { get; set; }
+        public string PRNo { get; set; }
         public int? VendorId { get; set; }
+        public string VendorCode { get; set; }
         public int? VendorStaffId { get; set; }
         public decimal AmountRequired { get; set; }
         public string VendorName { get; set; }
@@ -42,6 +44,10 @@ namespace KUBOnlinePRPM.Models
         public int POAging { get; set; }
         public string StatusId { get; set; }
         public string Status { get; set; }
+        public int PayToVendorId { get; set; }
+        public string PayToVendorName { get; set; }
+        public int PaymentTermsId { get; set; }
+        public string PaymentTermsCode { get; set; }
         public List<POItemsTable> POItemListObject { get; set; }
     }
     public class POListTable

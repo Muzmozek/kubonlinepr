@@ -122,7 +122,7 @@ namespace KUBOnlinePRPM.Controllers
                                         VendorStaffId = n.staffId,
                                         VendorContactName = n.vendorContactName
                                     }).ToList();
-            string html = "<select class='custom-select g-width-100vw g-height-50 g- g-color-gray-light-v1 g-color-black--hover text-left g-rounded-20' data-val-required='The VendorId field is required.' id='VendorStaffId'><option value='' >Select vendor contact name here</option>";
+            string html = "<select class='custom-select g-height-50 g- g-color-gray-light-v1 g-color-black--hover text-left g-rounded-20' data-val-required='The VendorId field is required.' id='VendorStaffId'><option value='' >Select vendor contact name here</option>";
             foreach (var item in VendorStaffQuery)
             {
                 html += "<option value='" + item.VendorStaffId + "' >" + item.VendorContactName + "</option>";
