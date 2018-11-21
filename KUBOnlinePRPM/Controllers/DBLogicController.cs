@@ -697,10 +697,32 @@ namespace KUBOnlinePRPM.Controllers
                             db.NotificationMsgs.Add(_objDetails_Description);
                             objPRItemDetails.description = value.Description;
                         }
+                        if (objPRItemDetails.itemTypeId != value.ItemTypeId)
+                        {
+                            ItemType formerItemTypeId = db.ItemTypes.FirstOrDefault(m => m.itemTypeId == objPRItemDetails.itemTypeId);
+                            ItemType itemTypeIdChanges = db.ItemTypes.First(m => m.itemTypeId == value.ItemTypeId);
+
+                            NotificationMsg _objDetails_ItemTypeId = new NotificationMsg();
+                            _objDetails_ItemTypeId.uuid = Guid.NewGuid();
+                            _objDetails_ItemTypeId.PRId = x.PRId;
+                            _objDetails_ItemTypeId.msgDate = DateTime.Now;
+                            _objDetails_ItemTypeId.fromUserId = x.UserId;
+                            _objDetails_ItemTypeId.msgType = "Trail";
+                            if (formerItemTypeId == null)
+                            {
+                                _objDetails_ItemTypeId.message = x.FullName + " set ItemCode to " + itemTypeIdChanges.type + " in PRNo : " + FormerPRDetails.PRNo;
+                            }
+                            else
+                            {
+                                _objDetails_ItemTypeId.message = x.FullName + " change ItemCode in PRNo : " + FormerPRDetails.PRNo + " items from " + formerItemTypeId.type + " to " + itemTypeIdChanges.type;
+                            }
+                            db.NotificationMsgs.Add(_objDetails_ItemTypeId);
+                            objPRItemDetails.itemTypeId = value.ItemTypeId;
+                        }
                         if (objPRItemDetails.codeId != value.CodeId)
                         {
-                            ItemCode formerItemCode = db.ItemCodes.FirstOrDefault(m => m.codeId == objPRItemDetails.codeId);
-                            ItemCode itemCodeChanges = db.ItemCodes.First(m => m.codeId == value.CodeId);
+                            var formerItemCode = db.PopulateItemLists.FirstOrDefault(m => m.codeId == objPRItemDetails.codeId);
+                            var itemCodeChanges = db.PopulateItemLists.First(m => m.codeId == value.CodeId);
 
                             NotificationMsg _objDetails_CodeId = new NotificationMsg();
                             _objDetails_CodeId.uuid = Guid.NewGuid();
@@ -710,11 +732,11 @@ namespace KUBOnlinePRPM.Controllers
                             _objDetails_CodeId.msgType = "Trail";
                             if (formerItemCode == null)
                             {
-                                _objDetails_CodeId.message = x.FullName + " set ItemCode to " + itemCodeChanges.ItemCode1 + " in PRNo : " + FormerPRDetails.PRNo;
+                                _objDetails_CodeId.message = x.FullName + " set ItemCode to " + itemCodeChanges.ItemCode + " in PRNo : " + FormerPRDetails.PRNo;
                             }
                             else
                             {
-                                _objDetails_CodeId.message = x.FullName + " change ItemCode in PRNo : " + FormerPRDetails.PRNo + " items from " + formerItemCode.ItemCode1 + " to " + itemCodeChanges.ItemCode1;
+                                _objDetails_CodeId.message = x.FullName + " change ItemCode in PRNo : " + FormerPRDetails.PRNo + " items from " + formerItemCode.ItemCode + " to " + itemCodeChanges.ItemCode;
                             }
                             db.NotificationMsgs.Add(_objDetails_CodeId);
                             objPRItemDetails.codeId = value.CodeId;

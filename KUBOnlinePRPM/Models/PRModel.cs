@@ -131,6 +131,7 @@ namespace KUBOnlinePRPM.Models
     }
     public class PRItemsTable
     {
+        public int CustId { get; set; }
         public int ItemsId { get; set; }
         public int ItemTypeId { get; set; }
         public int PRId { get; set; }
@@ -144,6 +145,7 @@ namespace KUBOnlinePRPM.Models
         [StringLength(300, ErrorMessage = "* Must be at least {2} characters long and {1} characters max.", MinimumLength = 3)]
         public string Description { get; set; }
         public int? CodeId { get; set; }
+        public string ItemCode { get; set; }
         public string CustPONo { get; set; }
 
         [Required]

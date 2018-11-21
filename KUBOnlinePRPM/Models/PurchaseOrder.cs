@@ -36,6 +36,9 @@ namespace KUBOnlinePRPM.Models
         public Nullable<System.DateTime> LastModifyDate { get; set; }
         public Nullable<System.DateTime> SubmitDate { get; set; }
         public string StatusId { get; set; }
+        public Nullable<int> PayToVendorId { get; set; }
+        public Nullable<int> PaymentTermsCode { get; set; }
+        public Nullable<int> PaymentTermsId { get; set; }
     
         public virtual Project Project { get; set; }
         public virtual Vendor Vendor { get; set; }
@@ -44,5 +47,6 @@ namespace KUBOnlinePRPM.Models
         public virtual ICollection<PO_Item> PO_Item { get; set; }
         public virtual POStatu POStatu { get; set; }
         public virtual PurchaseRequisition PurchaseRequisition { get; set; }
+        public virtual PaymentTerm PaymentTerm { get; set; }
     }
 }

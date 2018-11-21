@@ -20,7 +20,6 @@ namespace KUBOnlinePRPM.Models
             this.Customers = new HashSet<Customer>();
             this.Customers1 = new HashSet<Customer>();
             this.FileUploads = new HashSet<FileUpload>();
-            this.ItemCodes = new HashSet<ItemCode>();
             this.Users_Roles = new HashSet<Users_Roles>();
             this.Vendors = new HashSet<Vendor>();
             this.Vendors1 = new HashSet<Vendor>();
@@ -33,6 +32,7 @@ namespace KUBOnlinePRPM.Models
             this.PR_Approver = new HashSet<PR_Approver>();
             this.PR_PaperApprover = new HashSet<PR_PaperApprover>();
             this.PurchaseRequisitions = new HashSet<PurchaseRequisition>();
+            this.FixedAssets = new HashSet<FixedAsset>();
         }
     
         public System.Guid uuid { get; set; }
@@ -75,8 +75,6 @@ namespace KUBOnlinePRPM.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<FileUpload> FileUploads { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ItemCode> ItemCodes { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Users_Roles> Users_Roles { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Vendor> Vendors { get; set; }
@@ -100,5 +98,7 @@ namespace KUBOnlinePRPM.Models
         public virtual ICollection<PR_PaperApprover> PR_PaperApprover { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseRequisition> PurchaseRequisitions { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<FixedAsset> FixedAssets { get; set; }
     }
 }

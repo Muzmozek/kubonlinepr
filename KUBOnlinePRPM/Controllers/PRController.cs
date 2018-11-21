@@ -71,16 +71,43 @@ namespace KUBOnlinePRPM.Controllers
                 BudgetBalance = m.budgetBalance
             }).Where(m => m.ProjectId == projectId).FirstOrDefault();
 
-            return Json(new { projectInfo }, JsonRequestBehavior.AllowGet);
+            int CustId = Int32.Parse(Session["CompanyId"].ToString());
 
+            //to do generate ItemCodelist base on projectId
+            //string ItemCodeList = "<select class='MaterialNo input-validation-error' data-val='true' data-val-number='The field appointmentId must be a number.' " +
+            //        "data-val-required='The appointmentId field is required.'><option value='' ></option>";
+
+            //var ItemCodeListQuery = (from a in db.PurchaseRequisitions
+            //                         join b in db.Projects on a.ProjectId equals b.projectId
+            //                         join c in db.PR_Items on a.PRId equals c.PRId
+            //                         join d in db.PopulateItemLists on c.codeId equals d.codeId
+            //                         where d.custId == CustId && b.projectId == projectId
+            //                         select new PRItemsTable()
+            //                         {
+            //                             UOM = d.UoM,
+            //                             CodeId = d.codeId,
+            //                             CustId = d.custId,
+            //                             ItemCode = d.ItemCode
+            //                         }).ToList();
+
+            //foreach (var item in ItemCodeListQuery)
+            //{
+            //    ItemCodeList += "<option value='" + item.CodeId + "' >" + item.ItemCode + "</option>";
+            //}
+
+            //ItemCodeList += "</select>";
+
+            return Json(new { projectInfo, /*ItemCodeList*/ }, JsonRequestBehavior.AllowGet);
         }
         public JsonResult GetItemCodeInfo(int CodeId)
         {
-            var ItemCodeInfo = db.ItemCodes.Select(m => new PRItemsTable()
+            int CustId = Int32.Parse(Session["CompanyId"].ToString());
+            var ItemCodeInfo = db.PopulateItemLists.Select(m => new PRItemsTable()
             {
                 UOM = m.UoM,
-                CodeId = m.codeId
-            }).Where(m => m.CodeId == CodeId).FirstOrDefault();
+                CodeId = m.codeId,
+                CustId = m.custId
+            }).Where(m => m.CodeId == CodeId && m.CustId == CustId).FirstOrDefault();
 
             return Json(new { ItemCodeInfo }, JsonRequestBehavior.AllowGet);
 
@@ -700,9 +727,16 @@ namespace KUBOnlinePRPM.Controllers
                     Value = false.ToString()
                 });
                 var PurchaseTypeQuery = db.PurchaseTypes.Select(c => new { PurchaseTypeId = c.purchaseTypeId, PurchaseType = c.purchaseType1 }).OrderBy(c => c.PurchaseType);
-                var VendorListQuery = db.Vendors.Select(c => new { VendorId = c.vendorId, VendorName = c.name }).OrderBy(c => c.VendorName);
+                var VendorListQuery = (from m in db.Vendors
+                                       where m.custId == CustId
+                                        select new
+                                        {
+                                            VendorId = m.vendorId,
+                                            VendorName = m.vendorNo + " - " + m.name,
+                                            VendorNo = m.vendorNo,
+                                        }).OrderBy(c => c.VendorNo).ThenBy(c => c.VendorName);
                 var VendorStaffQuery = db.VendorStaffs.Select(c => new { StaffId = c.staffId, VendorContactName = c.vendorContactName }).OrderBy(c => c.VendorContactName);
-                var ItemCodeListQuery = db.ItemCodes.Select(c => new { CodeId = c.codeId, ItemCode = c.ItemCode1 }).OrderBy(c => c.ItemCode);
+                var ItemCodeListQuery = db.PopulateItemLists.Select(c => new { CodeId = c.codeId, ItemCode = c.ItemCode, CustId = c.custId }).Where(c => c.CustId == CustId).OrderBy(c => c.ItemCode);
                 PRModel PRDetail = new PRModel
                 {
                     PRId = Int32.Parse(Session["PRId"].ToString()),
@@ -759,13 +793,13 @@ namespace KUBOnlinePRPM.Controllers
                                              join e in db.Vendors on a.VendorId equals e.vendorId into f
                                              join g in db.VendorStaffs on a.VendorStaffId equals g.staffId into l
                                              join h in db.PR_Items on a.PRId equals h.PRId
-                                             join j in db.ItemCodes on h.codeId equals j.codeId into k
+                                             join j in db.PopulateItemLists on h.codeId equals j.codeId into k
                                              from w in l.DefaultIfEmpty()
                                              from x in s.DefaultIfEmpty()
                                              from y in f.DefaultIfEmpty()
                                              from z in k.DefaultIfEmpty()
                                                 where a.PRId == PRDetail.PRId
-                                             select new NewPRModel()
+                                      select new NewPRModel()
                                              {
                                                  PRNo = a.PRNo,
                                                  ProjectId = a.ProjectId,
@@ -797,7 +831,7 @@ namespace KUBOnlinePRPM.Controllers
                                                  PRStatus = c.status
                                              }).FirstOrDefault();
                 PRDetail.NewPRForm.PRItemListObject = (from m in db.PR_Items
-                                                       join n in db.ItemCodes on m.codeId equals n.codeId into o
+                                                       join n in db.PopulateItemLists on m.codeId equals n.codeId into o
                                                        from p in o.DefaultIfEmpty()
                                                  where m.PRId == PRDetail.PRId
                                                  select new PRItemsTable()
@@ -866,9 +900,16 @@ namespace KUBOnlinePRPM.Controllers
                     Value = false.ToString()
                 });
                 var PurchaseTypeQuery = db.PurchaseTypes.Select(c => new { PurchaseTypeId = c.purchaseTypeId, PurchaseType = c.purchaseType1 }).OrderBy(c => c.PurchaseType);
-                var VendorListQuery = db.Vendors.Select(c => new { VendorId = c.vendorId, VendorName = c.name }).OrderBy(c => c.VendorName);
+                var VendorListQuery = (from m in db.Vendors
+                                       where m.custId == CustId
+                                       select new
+                                       {
+                                           VendorId = m.vendorId,
+                                           VendorName = m.vendorNo + " - " + m.name,
+                                           VendorNo = m.vendorNo,
+                                       }).OrderBy(c => c.VendorNo).ThenBy(c => c.VendorName);
                 var VendorStaffQuery = db.VendorStaffs.Select(c => new { StaffId = c.staffId, VendorContactName = c.vendorContactName }).OrderBy(c => c.VendorContactName);
-                var ItemCodeListQuery = db.ItemCodes.Select(c => new { CodeId = c.codeId, ItemCode = c.ItemCode1 }).OrderBy(c => c.ItemCode);
+                var ItemCodeListQuery = db.PopulateItemLists.Select(c => new { CodeId = c.codeId, ItemCode = c.ItemCode, CustId = c.custId }).Where(c=> c.CustId == CustId).OrderBy(c => c.ItemCode);
                 var ReviewerNameQuery = (from m in db.Users
                                          join n in db.PR_Reviewer on m.userId equals n.reviewerId
                                          where n.PRId == PRModel.PRId
@@ -1547,6 +1588,7 @@ namespace KUBOnlinePRPM.Controllers
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
+                int CustId = Int32.Parse(Session["CompanyId"].ToString());
                 PRModel PRDetail = new PRModel
                 {
                     PRId = Int32.Parse(Session["PRId"].ToString()),
@@ -1564,7 +1606,7 @@ namespace KUBOnlinePRPM.Controllers
                                           join e in db.Vendors on a.VendorId equals e.vendorId into f
                                           join g in db.VendorStaffs on a.VendorStaffId equals g.staffId into l
                                           join h in db.PR_Items on a.PRId equals h.PRId
-                                          join j in db.ItemCodes on h.codeId equals j.codeId into k
+                                          join j in db.PopulateItemLists on h.codeId equals j.codeId into k
                                           join m in db.PurchaseTypes on a.PurchaseTypeId equals m.purchaseTypeId
                                           join n in db.Customers on b.companyId equals n.custId
                                           join s in db.PR_HOD on a.PRId equals s.PRId
@@ -1623,7 +1665,7 @@ namespace KUBOnlinePRPM.Controllers
                                           join e in db.Vendors on a.VendorId equals e.vendorId into f
                                           join g in db.VendorStaffs on a.VendorStaffId equals g.staffId into l
                                           join h in db.PR_Items on a.PRId equals h.PRId
-                                          join j in db.ItemCodes on h.codeId equals j.codeId into k
+                                          join j in db.PopulateItemLists on h.codeId equals j.codeId into k
                                           join m in db.PurchaseTypes on a.PurchaseTypeId equals m.purchaseTypeId
                                           join n in db.Customers on b.companyId equals n.custId
                                           join o in db.PR_Reviewer on a.PRId equals o.PRId into p
@@ -1697,7 +1739,7 @@ namespace KUBOnlinePRPM.Controllers
                 }
 
                 PRDetail.NewPRForm.PRItemListObject = (from m in db.PR_Items
-                                                       join n in db.ItemCodes on m.codeId equals n.codeId into o
+                                                       join n in db.PopulateItemLists on m.codeId equals n.codeId into o
                                                        from p in o.DefaultIfEmpty()
                                                        where m.PRId == PRDetail.PRId
                                                        select new PRItemsTable()
@@ -1728,9 +1770,7 @@ namespace KUBOnlinePRPM.Controllers
             String SpecsReviewer = Request["SpecsReviewer"];
 
             var PR = db.PurchaseRequisitions.First(x => x.PRId == PrId);
-
-            //Wait until Hassan add SpecReviewer table
-            //PR.SpecsReviewer = SpecsReviewer;
+            PR.SpecsReviewer = SpecsReviewer;
 
             if (db.SaveChanges() > 0)
             {
@@ -1751,8 +1791,7 @@ namespace KUBOnlinePRPM.Controllers
             String SpecsReviewer = Request["SpecsReviewer"];
 
             var PR = db.PurchaseRequisitions.First(x => x.PRId == PrId);
-            //Wait until Hassan add SpecReviewer table
-            //PR.SpecsReviewer = SpecsReviewer;
+            PR.SpecsReviewer = SpecsReviewer;
             db.SaveChanges();
 
             Debug.WriteLine("SubmitPRProcurement");

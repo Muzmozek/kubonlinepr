@@ -38,14 +38,46 @@
           <Property Name="File" Type="varbinary(max)" Nullable="false" />
           <Property Name="archivedFlag" Type="bit" />
         </EntityType>
-        <EntityType Name="ItemCode">
+        <EntityType Name="FixedAsset">
           <Key>
             <PropertyRef Name="codeId" />
           </Key>
           <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="codeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ItemCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="itemTypeId" Type="int" Nullable="false" />
+          <Property Name="ItemCode" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="custId" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="UoM" Type="nvarchar" MaxLength="10" />
+          <Property Name="createDate" Type="datetime" />
+          <Property Name="createByUserId" Type="int" />
+        </EntityType>
+        <EntityType Name="GLs">
+          <Key>
+            <PropertyRef Name="codeId" />
+          </Key>
+          <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="codeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="itemTypeId" Type="int" Nullable="false" />
+          <Property Name="itemCode" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="custId" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="UoM" Type="nvarchar" MaxLength="10" />
+          <Property Name="createDate" Type="datetime" />
+          <Property Name="createByUserId" Type="int" />
+        </EntityType>
+        <EntityType Name="Items">
+          <Key>
+            <PropertyRef Name="codeId" />
+          </Key>
+          <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="codeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="itemTypeId" Type="int" Nullable="false" />
+          <Property Name="itemCode" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="custId" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="UoM" Type="nvarchar" MaxLength="10" />
+          <Property Name="unitPrice" Type="decimal" Precision="18" Scale="2" />
           <Property Name="createDate" Type="datetime" />
           <Property Name="createByUserId" Type="int" />
         </EntityType>
@@ -56,6 +88,15 @@
           <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="itemTypeId" Type="int" Nullable="false" />
           <Property Name="type" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="JobTask">
+          <Key>
+            <PropertyRef Name="uuid" />
+          </Key>
+          <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="jobNo" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="jobTaskNo" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="custId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="NotificationMsg">
           <Key>
@@ -79,6 +120,16 @@
           <Property Name="msgId" Type="int" Nullable="false" />
           <Property Name="toUserId" Type="int" Nullable="false" />
           <Property Name="resubmit" Type="bit" />
+        </EntityType>
+        <EntityType Name="PaymentTerms">
+          <Key>
+            <PropertyRef Name="paymentTermsId" />
+          </Key>
+          <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="paymentTermsId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="paymentCode" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="paymentDescription" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="custId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="PO_Item">
           <Key>
@@ -235,6 +286,8 @@
           <Property Name="projectId" Type="int" Nullable="false" />
           <Property Name="vendorId" Type="int" Nullable="false" />
           <Property Name="vendorStaffId" Type="int" />
+          <Property Name="PayToVendorId" Type="int" />
+          <Property Name="PaymentTermsId" Type="int" />
           <Property Name="Saved" Type="int" Nullable="false" />
           <Property Name="PreparedDate" Type="datetime" />
           <Property Name="PreparedById" Type="int" />
@@ -259,11 +312,12 @@
           <Property Name="PaperAttachment" Type="bit" Nullable="false" />
           <Property Name="PurchaseTypeId" Type="int" Nullable="false" />
           <Property Name="BudgetDescription" Type="nvarchar" MaxLength="100" />
-          <Property Name="Justification" Type="nvarchar" MaxLength="200" />
+          <Property Name="Justification" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="AmountRequired" Type="numeric" Precision="18" Scale="2" Nullable="false" />
           <Property Name="VendorId" Type="int" />
           <Property Name="VendorStaffId" Type="int" />
           <Property Name="VendorQuoteNo" Type="nvarchar" MaxLength="30" />
+          <Property Name="SpecsReviewer" Type="nvarchar" MaxLength="25" />
           <Property Name="PreparedDate" Type="datetime" Nullable="false" />
           <Property Name="PreparedById" Type="int" Nullable="false" />
           <Property Name="LastModifyDate" Type="datetime" />
@@ -353,7 +407,13 @@
           </Key>
           <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="vendorId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="vendorNo" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="custId" Type="int" Nullable="false" />
+          <Property Name="quotationNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="contactName" Type="nvarchar" MaxLength="50" />
+          <Property Name="telephoneNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="email" Type="nvarchar" MaxLength="50" />
           <Property Name="createByUserId" Type="int" />
           <Property Name="createDate" Type="datetime" />
           <Property Name="lastModifyByUserId" Type="int" />
@@ -373,6 +433,21 @@
           <Property Name="lastModifyByUserId" Type="int" />
           <Property Name="createDate" Type="datetime" />
           <Property Name="lastModifyDate" Type="datetime" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="PopulateItemList">
+          <Key>
+            <PropertyRef Name="codeId" />
+            <PropertyRef Name="itemTypeId" />
+            <PropertyRef Name="ItemCode" />
+            <PropertyRef Name="custId" />
+          </Key>
+          <Property Name="codeId" Type="int" Nullable="false" />
+          <Property Name="itemTypeId" Type="int" Nullable="false" />
+          <Property Name="ItemCode" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="custId" Type="int" Nullable="false" />
+          <Property Name="UoM" Type="nvarchar" MaxLength="10" />
         </EntityType>
         <Association Name="FK_Customer_Customer">
           <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
@@ -422,15 +497,87 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_GLs_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="GLs" Type="Self.GLs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="custId" />
+            </Principal>
+            <Dependent Role="GLs">
+              <PropertyRef Name="custId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GLs_ItemType">
+          <End Role="ItemType" Type="Self.ItemType" Multiplicity="1" />
+          <End Role="GLs" Type="Self.GLs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemType">
+              <PropertyRef Name="itemTypeId" />
+            </Principal>
+            <Dependent Role="GLs">
+              <PropertyRef Name="itemTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ItemCode_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="FixedAsset" Type="Self.FixedAsset" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="custId" />
+            </Principal>
+            <Dependent Role="FixedAsset">
+              <PropertyRef Name="custId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ItemCode_ItemType">
+          <End Role="ItemType" Type="Self.ItemType" Multiplicity="1" />
+          <End Role="FixedAsset" Type="Self.FixedAsset" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemType">
+              <PropertyRef Name="itemTypeId" />
+            </Principal>
+            <Dependent Role="FixedAsset">
+              <PropertyRef Name="itemTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ItemCodes_User">
           <End Role="User" Type="Self.User" Multiplicity="0..1" />
-          <End Role="ItemCode" Type="Self.ItemCode" Multiplicity="*" />
+          <End Role="FixedAsset" Type="Self.FixedAsset" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="userId" />
             </Principal>
-            <Dependent Role="ItemCode">
+            <Dependent Role="FixedAsset">
               <PropertyRef Name="createByUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Items_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="Items" Type="Self.Items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="custId" />
+            </Principal>
+            <Dependent Role="Items">
+              <PropertyRef Name="custId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Items_ItemType">
+          <End Role="ItemType" Type="Self.ItemType" Multiplicity="1" />
+          <End Role="Items" Type="Self.Items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemType">
+              <PropertyRef Name="itemTypeId" />
+            </Principal>
+            <Dependent Role="Items">
+              <PropertyRef Name="itemTypeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -458,11 +605,35 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PO_Item_ItemCodes">
-          <End Role="ItemCode" Type="Self.ItemCode" Multiplicity="1" />
+        <Association Name="FK_PO_Item_GLs">
+          <End Role="GLs" Type="Self.GLs" Multiplicity="1" />
           <End Role="PO_Item" Type="Self.PO_Item" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="ItemCode">
+            <Principal Role="GLs">
+              <PropertyRef Name="codeId" />
+            </Principal>
+            <Dependent Role="PO_Item">
+              <PropertyRef Name="codeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PO_Item_ItemCodes">
+          <End Role="FixedAsset" Type="Self.FixedAsset" Multiplicity="1" />
+          <End Role="PO_Item" Type="Self.PO_Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FixedAsset">
+              <PropertyRef Name="codeId" />
+            </Principal>
+            <Dependent Role="PO_Item">
+              <PropertyRef Name="codeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PO_Item_Items">
+          <End Role="Items" Type="Self.Items" Multiplicity="1" />
+          <End Role="PO_Item" Type="Self.PO_Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Items">
               <PropertyRef Name="codeId" />
             </Principal>
             <Dependent Role="PO_Item">
@@ -554,11 +725,35 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PR_Items_ItemCode">
-          <End Role="ItemCode" Type="Self.ItemCode" Multiplicity="0..1" />
+        <Association Name="FK_PR_Items_GLs">
+          <End Role="GLs" Type="Self.GLs" Multiplicity="0..1" />
           <End Role="PR_Items" Type="Self.PR_Items" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="ItemCode">
+            <Principal Role="GLs">
+              <PropertyRef Name="codeId" />
+            </Principal>
+            <Dependent Role="PR_Items">
+              <PropertyRef Name="codeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_Items_ItemCode">
+          <End Role="FixedAsset" Type="Self.FixedAsset" Multiplicity="0..1" />
+          <End Role="PR_Items" Type="Self.PR_Items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FixedAsset">
+              <PropertyRef Name="codeId" />
+            </Principal>
+            <Dependent Role="PR_Items">
+              <PropertyRef Name="codeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_Items_Items">
+          <End Role="Items" Type="Self.Items" Multiplicity="0..1" />
+          <End Role="PR_Items" Type="Self.PR_Items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Items">
               <PropertyRef Name="codeId" />
             </Principal>
             <Dependent Role="PR_Items">
@@ -695,6 +890,18 @@
             </Principal>
             <Dependent Role="PRs_FileUpload">
               <PropertyRef Name="PRId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchaseOrder_PaymentTerms">
+          <End Role="PaymentTerms" Type="Self.PaymentTerms" Multiplicity="0..1" />
+          <End Role="PurchaseOrder" Type="Self.PurchaseOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentTerms">
+              <PropertyRef Name="paymentTermsId" />
+            </Principal>
+            <Dependent Role="PurchaseOrder">
+              <PropertyRef Name="PaymentTermsId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -878,6 +1085,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Vendor_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="Vendor" Type="Self.Vendor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="custId" />
+            </Principal>
+            <Dependent Role="Vendor">
+              <PropertyRef Name="custId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Vendor_User">
           <End Role="User" Type="Self.User" Multiplicity="0..1" />
           <End Role="Vendor" Type="Self.Vendor" Multiplicity="*" />
@@ -926,25 +1145,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_VendorStaff_Vendor">
-          <End Role="Vendor" Type="Self.Vendor" Multiplicity="1" />
-          <End Role="VendorStaff" Type="Self.VendorStaff" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Vendor">
-              <PropertyRef Name="vendorId" />
-            </Principal>
-            <Dependent Role="VendorStaff">
-              <PropertyRef Name="vendorId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="KUBOnlinePRModelStoreContainer">
           <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FileUpload" EntityType="Self.FileUpload" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ItemCode" EntityType="Self.ItemCode" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FixedAsset" EntityType="Self.FixedAsset" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GLs" EntityType="Self.GLs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Items" EntityType="Self.Items" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ItemType" EntityType="Self.ItemType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JobTask" EntityType="Self.JobTask" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NotificationMsg" EntityType="Self.NotificationMsg" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NotiGroup" EntityType="Self.NotiGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PaymentTerms" EntityType="Self.PaymentTerms" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PO_Item" EntityType="Self.PO_Item" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="POStatus" EntityType="Self.POStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PR_Admin" EntityType="Self.PR_Admin" Schema="dbo" store:Type="Tables" />
@@ -965,6 +1176,15 @@
           <EntitySet Name="Users_Roles" EntityType="Self.Users_Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Vendor" EntityType="Self.Vendor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VendorStaff" EntityType="Self.VendorStaff" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PopulateItemList" EntityType="Self.PopulateItemList" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [PopulateItemList].[codeId] AS [codeId], 
+    [PopulateItemList].[itemTypeId] AS [itemTypeId], 
+    [PopulateItemList].[ItemCode] AS [ItemCode], 
+    [PopulateItemList].[custId] AS [custId], 
+    [PopulateItemList].[UoM] AS [UoM]
+    FROM [dbo].[PopulateItemList] AS [PopulateItemList]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_Customer_Customer" Association="Self.FK_Customer_Customer">
             <End Role="Customer" EntitySet="Customer" />
             <End Role="Customer1" EntitySet="Customer" />
@@ -981,9 +1201,33 @@
             <End Role="User" EntitySet="User" />
             <End Role="FileUpload" EntitySet="FileUpload" />
           </AssociationSet>
+          <AssociationSet Name="FK_GLs_Customer" Association="Self.FK_GLs_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="GLs" EntitySet="GLs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GLs_ItemType" Association="Self.FK_GLs_ItemType">
+            <End Role="ItemType" EntitySet="ItemType" />
+            <End Role="GLs" EntitySet="GLs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ItemCode_Customer" Association="Self.FK_ItemCode_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="FixedAsset" EntitySet="FixedAsset" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ItemCode_ItemType" Association="Self.FK_ItemCode_ItemType">
+            <End Role="ItemType" EntitySet="ItemType" />
+            <End Role="FixedAsset" EntitySet="FixedAsset" />
+          </AssociationSet>
           <AssociationSet Name="FK_ItemCodes_User" Association="Self.FK_ItemCodes_User">
             <End Role="User" EntitySet="User" />
-            <End Role="ItemCode" EntitySet="ItemCode" />
+            <End Role="FixedAsset" EntitySet="FixedAsset" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Items_Customer" Association="Self.FK_Items_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Items" EntitySet="Items" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Items_ItemType" Association="Self.FK_Items_ItemType">
+            <End Role="ItemType" EntitySet="ItemType" />
+            <End Role="Items" EntitySet="Items" />
           </AssociationSet>
           <AssociationSet Name="FK_NotiGroup_NotificationMsg" Association="Self.FK_NotiGroup_NotificationMsg">
             <End Role="NotificationMsg" EntitySet="NotificationMsg" />
@@ -993,8 +1237,16 @@
             <End Role="User" EntitySet="User" />
             <End Role="NotiGroup" EntitySet="NotiGroup" />
           </AssociationSet>
+          <AssociationSet Name="FK_PO_Item_GLs" Association="Self.FK_PO_Item_GLs">
+            <End Role="GLs" EntitySet="GLs" />
+            <End Role="PO_Item" EntitySet="PO_Item" />
+          </AssociationSet>
           <AssociationSet Name="FK_PO_Item_ItemCodes" Association="Self.FK_PO_Item_ItemCodes">
-            <End Role="ItemCode" EntitySet="ItemCode" />
+            <End Role="FixedAsset" EntitySet="FixedAsset" />
+            <End Role="PO_Item" EntitySet="PO_Item" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PO_Item_Items" Association="Self.FK_PO_Item_Items">
+            <End Role="Items" EntitySet="Items" />
             <End Role="PO_Item" EntitySet="PO_Item" />
           </AssociationSet>
           <AssociationSet Name="FK_PO_Item_PR_Items" Association="Self.FK_PO_Item_PR_Items">
@@ -1025,8 +1277,16 @@
             <End Role="User" EntitySet="User" />
             <End Role="PR_HOD" EntitySet="PR_HOD" />
           </AssociationSet>
+          <AssociationSet Name="FK_PR_Items_GLs" Association="Self.FK_PR_Items_GLs">
+            <End Role="GLs" EntitySet="GLs" />
+            <End Role="PR_Items" EntitySet="PR_Items" />
+          </AssociationSet>
           <AssociationSet Name="FK_PR_Items_ItemCode" Association="Self.FK_PR_Items_ItemCode">
-            <End Role="ItemCode" EntitySet="ItemCode" />
+            <End Role="FixedAsset" EntitySet="FixedAsset" />
+            <End Role="PR_Items" EntitySet="PR_Items" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_Items_Items" Association="Self.FK_PR_Items_Items">
+            <End Role="Items" EntitySet="Items" />
             <End Role="PR_Items" EntitySet="PR_Items" />
           </AssociationSet>
           <AssociationSet Name="FK_PR_Items_ItemType" Association="Self.FK_PR_Items_ItemType">
@@ -1072,6 +1332,10 @@
           <AssociationSet Name="FK_PRs_FileUpload_PurchaseRequisition" Association="Self.FK_PRs_FileUpload_PurchaseRequisition">
             <End Role="PurchaseRequisition" EntitySet="PurchaseRequisition" />
             <End Role="PRs_FileUpload" EntitySet="PRs_FileUpload" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchaseOrder_PaymentTerms" Association="Self.FK_PurchaseOrder_PaymentTerms">
+            <End Role="PaymentTerms" EntitySet="PaymentTerms" />
+            <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
           </AssociationSet>
           <AssociationSet Name="FK_PurchaseOrder_POStatus" Association="Self.FK_PurchaseOrder_POStatus">
             <End Role="POStatus" EntitySet="POStatus" />
@@ -1133,6 +1397,10 @@
             <End Role="User" EntitySet="User" />
             <End Role="Users_Roles" EntitySet="Users_Roles" />
           </AssociationSet>
+          <AssociationSet Name="FK_Vendor_Customer" Association="Self.FK_Vendor_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Vendor" EntitySet="Vendor" />
+          </AssociationSet>
           <AssociationSet Name="FK_Vendor_User" Association="Self.FK_Vendor_User">
             <End Role="User" EntitySet="User" />
             <End Role="Vendor" EntitySet="Vendor" />
@@ -1147,10 +1415,6 @@
           </AssociationSet>
           <AssociationSet Name="FK_VendorStaff_User1" Association="Self.FK_VendorStaff_User1">
             <End Role="User" EntitySet="User" />
-            <End Role="VendorStaff" EntitySet="VendorStaff" />
-          </AssociationSet>
-          <AssociationSet Name="FK_VendorStaff_Vendor" Association="Self.FK_VendorStaff_Vendor">
-            <End Role="Vendor" EntitySet="Vendor" />
             <End Role="VendorStaff" EntitySet="VendorStaff" />
           </AssociationSet>
         </EntityContainer>
@@ -1182,6 +1446,10 @@
           <NavigationProperty Name="Customer1" Relationship="KUBOnlinePRModel.FK_Customer_Customer" FromRole="Customer" ToRole="Customer1" />
           <NavigationProperty Name="Customer2" Relationship="KUBOnlinePRModel.FK_Customer_Customer" FromRole="Customer1" ToRole="Customer" />
           <NavigationProperty Name="Projects" Relationship="KUBOnlinePRModel.FK_Project_Customer" FromRole="Customer" ToRole="Project" />
+          <NavigationProperty Name="Vendors" Relationship="KUBOnlinePRModel.FK_Vendor_Customer" FromRole="Customer" ToRole="Vendor" />
+          <NavigationProperty Name="GLs" Relationship="KUBOnlinePRModel.FK_GLs_Customer" FromRole="Customer" ToRole="GL" />
+          <NavigationProperty Name="FixedAssets" Relationship="KUBOnlinePRModel.FK_ItemCode_Customer" FromRole="Customer" ToRole="FixedAsset" />
+          <NavigationProperty Name="Items" Relationship="KUBOnlinePRModel.FK_Items_Customer" FromRole="Customer" ToRole="Item" />
         </EntityType>
         <EntityType Name="FileUpload">
           <Key>
@@ -1200,20 +1468,6 @@
           <NavigationProperty Name="User" Relationship="Self.FK_FileUpload_User" FromRole="FileUpload" ToRole="User" />
           <NavigationProperty Name="PRs_FileUpload" Relationship="Self.FK_PRs_FileUpload_FileUpload" FromRole="FileUpload" ToRole="PRs_FileUpload" />
         </EntityType>
-        <EntityType Name="ItemCode">
-          <Key>
-            <PropertyRef Name="codeId" />
-          </Key>
-          <Property Name="uuid" Type="Guid" Nullable="false" />
-          <Property Name="codeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ItemCode1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="UoM" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="createDate" Type="DateTime" Precision="3" />
-          <Property Name="createByUserId" Type="Int32" />
-          <NavigationProperty Name="User" Relationship="Self.FK_ItemCodes_User" FromRole="ItemCode" ToRole="User" />
-          <NavigationProperty Name="PR_Items" Relationship="Self.FK_PR_Items_ItemCode" FromRole="ItemCode" ToRole="PR_Items" />
-          <NavigationProperty Name="PO_Item" Relationship="KUBOnlinePRModel.FK_PO_Item_ItemCodes" FromRole="ItemCode" ToRole="PO_Item" />
-        </EntityType>
         <EntityType Name="PR_Items">
           <Key>
             <PropertyRef Name="itemsId" />
@@ -1228,7 +1482,6 @@
           <Property Name="quantity" Type="Int32" Nullable="false" />
           <Property Name="unitPrice" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="totalPrice" Type="Decimal" Precision="18" Scale="2" />
-          <NavigationProperty Name="ItemCode" Relationship="Self.FK_PR_Items_ItemCode" FromRole="PR_Items" ToRole="ItemCode" />
           <NavigationProperty Name="PR_Items1" Relationship="Self.FK_PR_Items_PR_Items" FromRole="PR_Items" ToRole="PR_Items1" />
           <NavigationProperty Name="PR_Items2" Relationship="Self.FK_PR_Items_PR_Items" FromRole="PR_Items1" ToRole="PR_Items" />
           <Property Name="outStandingQuantity" Type="Int32" />
@@ -1240,6 +1493,9 @@
           <NavigationProperty Name="ItemType" Relationship="KUBOnlinePRModel.FK_PR_Items_ItemType" FromRole="PR_Items" ToRole="ItemType" />
           <NavigationProperty Name="PO_Item" Relationship="KUBOnlinePRModel.FK_PO_Item_PR_Items" FromRole="PR_Items" ToRole="PO_Item" />
           <NavigationProperty Name="PurchaseRequisition" Relationship="KUBOnlinePRModel.FK_PR_Items_PurchaseRequisition" FromRole="PR_Items" ToRole="PurchaseRequisition" />
+          <NavigationProperty Name="FixedAsset" Relationship="KUBOnlinePRModel.FK_PR_Items_ItemCode1" FromRole="PR_Items" ToRole="FixedAsset" />
+          <NavigationProperty Name="GL" Relationship="KUBOnlinePRModel.FK_PR_Items_GLs" FromRole="PR_Items" ToRole="GL" />
+          <NavigationProperty Name="Item" Relationship="KUBOnlinePRModel.FK_PR_Items_Items" FromRole="PR_Items" ToRole="Item" />
         </EntityType>
         <EntityType Name="Project">
           <Key>
@@ -1304,6 +1560,10 @@
           <Property Name="StatusId" Type="String" MaxLength="4" FixedLength="true" Unicode="true" />
           <NavigationProperty Name="POStatu" Relationship="KUBOnlinePRModel.FK_PurchaseOrder_POStatus" FromRole="PurchaseOrder" ToRole="POStatu" />
           <NavigationProperty Name="PurchaseRequisition" Relationship="KUBOnlinePRModel.FK_PurchaseOrder_PurchaseRequisition" FromRole="PurchaseOrder" ToRole="PurchaseRequisition" />
+          <Property Name="PayToVendorId" Type="Int32" />
+          <Property Name="PaymentTermsCode" Type="Int32" />
+          <Property Name="PaymentTermsId" Type="Int32" />
+          <NavigationProperty Name="PaymentTerm" Relationship="KUBOnlinePRModel.FK_PurchaseOrder_PaymentTerms" FromRole="PurchaseOrder" ToRole="PaymentTerm" />
         </EntityType>
         <EntityType Name="PurchaseType">
           <Key>
@@ -1365,7 +1625,6 @@
           <NavigationProperty Name="Customers1" Relationship="Self.FK_Customer_User1" FromRole="User" ToRole="Customer" />
           <NavigationProperty Name="Customer" Relationship="Self.FK_User_Customer" FromRole="User" ToRole="Customer" />
           <NavigationProperty Name="FileUploads" Relationship="Self.FK_FileUpload_User" FromRole="User" ToRole="FileUpload" />
-          <NavigationProperty Name="ItemCodes" Relationship="Self.FK_ItemCodes_User" FromRole="User" ToRole="ItemCode" />
           <NavigationProperty Name="Users_Roles" Relationship="Self.FK_Users_Roles_User" FromRole="User" ToRole="Users_Roles" />
           <NavigationProperty Name="Vendors" Relationship="Self.FK_Vendor_User" FromRole="User" ToRole="Vendor" />
           <NavigationProperty Name="Vendors1" Relationship="Self.FK_Vendor_User1" FromRole="User" ToRole="Vendor" />
@@ -1379,6 +1638,7 @@
           <NavigationProperty Name="PR_Approver" Relationship="KUBOnlinePRModel.FK_PR_Approver_User" FromRole="User" ToRole="PR_Approver" />
           <NavigationProperty Name="PR_PaperApprover" Relationship="KUBOnlinePRModel.FK_PR_PaperApprover_User" FromRole="User" ToRole="PR_PaperApprover" />
           <NavigationProperty Name="PurchaseRequisitions" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_User" FromRole="User" ToRole="PurchaseRequisition" />
+          <NavigationProperty Name="FixedAssets" Relationship="KUBOnlinePRModel.FK_ItemCodes_User1" FromRole="User" ToRole="FixedAsset" />
         </EntityType>
         <EntityType Name="Users_Roles">
           <Key>
@@ -1406,6 +1666,13 @@
           <NavigationProperty Name="User1" Relationship="Self.FK_Vendor_User1" FromRole="Vendor" ToRole="User" />
           <NavigationProperty Name="VendorStaffs" Relationship="Self.FK_VendorStaff_Vendor" FromRole="Vendor" ToRole="VendorStaff" />
           <NavigationProperty Name="PurchaseRequisitions" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_Vendor" FromRole="Vendor" ToRole="PurchaseRequisition" />
+          <Property Name="vendorNo" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="custId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Customer" Relationship="KUBOnlinePRModel.FK_Vendor_Customer" FromRole="Vendor" ToRole="Customer" />
+          <Property Name="quotationNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="contactName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="telephoneNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="VendorStaff">
           <Key>
@@ -1484,30 +1751,6 @@
             </Principal>
             <Dependent Role="PRs_FileUpload">
               <PropertyRef Name="fileEntryId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ItemCodes_User">
-          <End Role="User" Type="Self.User" Multiplicity="0..1" />
-          <End Role="ItemCode" Type="Self.ItemCode" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="userId" />
-            </Principal>
-            <Dependent Role="ItemCode">
-              <PropertyRef Name="createByUserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PR_Items_ItemCode">
-          <End Role="ItemCode" Type="Self.ItemCode" Multiplicity="0..1" />
-          <End Role="PR_Items" Type="Self.PR_Items" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ItemCode">
-              <PropertyRef Name="codeId" />
-            </Principal>
-            <Dependent Role="PR_Items">
-              <PropertyRef Name="codeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1646,7 +1889,6 @@
         <EntityContainer Name="KUBOnlinePREntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Customers" EntityType="Self.Customer" />
           <EntitySet Name="FileUploads" EntityType="Self.FileUpload" />
-          <EntitySet Name="ItemCodes" EntityType="Self.ItemCode" />
           <EntitySet Name="PR_Items" EntityType="Self.PR_Items" />
           <EntitySet Name="Projects" EntityType="Self.Project" />
           <EntitySet Name="PRs_FileUpload" EntityType="Self.PRs_FileUpload" />
@@ -1677,14 +1919,6 @@
           <AssociationSet Name="FK_PRs_FileUpload_FileUpload" Association="Self.FK_PRs_FileUpload_FileUpload">
             <End Role="FileUpload" EntitySet="FileUploads" />
             <End Role="PRs_FileUpload" EntitySet="PRs_FileUpload" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ItemCodes_User" Association="Self.FK_ItemCodes_User">
-            <End Role="User" EntitySet="Users" />
-            <End Role="ItemCode" EntitySet="ItemCodes" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PR_Items_ItemCode" Association="Self.FK_PR_Items_ItemCode">
-            <End Role="ItemCode" EntitySet="ItemCodes" />
-            <End Role="PR_Items" EntitySet="PR_Items" />
           </AssociationSet>
           <AssociationSet Name="FK_PR_Items_PR_Items" Association="Self.FK_PR_Items_PR_Items">
             <End Role="PR_Items" EntitySet="PR_Items" />
@@ -1736,10 +1970,6 @@
             <End Role="PR_Items" EntitySet="PR_Items" />
           </AssociationSet>
           <EntitySet Name="PO_Item" EntityType="KUBOnlinePRModel.PO_Item" />
-          <AssociationSet Name="FK_PO_Item_ItemCodes" Association="KUBOnlinePRModel.FK_PO_Item_ItemCodes">
-            <End Role="ItemCode" EntitySet="ItemCodes" />
-            <End Role="PO_Item" EntitySet="PO_Item" />
-          </AssociationSet>
           <AssociationSet Name="FK_PO_Item_PR_Items" Association="KUBOnlinePRModel.FK_PO_Item_PR_Items">
             <End Role="PR_Items" EntitySet="PR_Items" />
             <End Role="PO_Item" EntitySet="PO_Item" />
@@ -1862,6 +2092,72 @@
             <End Role="Customer" EntitySet="Customers" />
             <End Role="Project" EntitySet="Projects" />
           </AssociationSet>
+          <AssociationSet Name="FK_Vendor_Customer" Association="KUBOnlinePRModel.FK_Vendor_Customer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="Vendor" EntitySet="Vendors" />
+          </AssociationSet>
+          <EntitySet Name="FixedAssets" EntityType="KUBOnlinePRModel.FixedAsset" />
+          <EntitySet Name="GLs" EntityType="KUBOnlinePRModel.GL" />
+          <EntitySet Name="Items" EntityType="KUBOnlinePRModel.Item" />
+          <AssociationSet Name="FK_GLs_Customer" Association="KUBOnlinePRModel.FK_GLs_Customer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="GL" EntitySet="GLs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ItemCode_Customer" Association="KUBOnlinePRModel.FK_ItemCode_Customer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="FixedAsset" EntitySet="FixedAssets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Items_Customer" Association="KUBOnlinePRModel.FK_Items_Customer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="Item" EntitySet="Items" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ItemCode_ItemType" Association="KUBOnlinePRModel.FK_ItemCode_ItemType">
+            <End Role="ItemType" EntitySet="ItemTypes" />
+            <End Role="FixedAsset" EntitySet="FixedAssets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ItemCodes_User1" Association="KUBOnlinePRModel.FK_ItemCodes_User1">
+            <End Role="User" EntitySet="Users" />
+            <End Role="FixedAsset" EntitySet="FixedAssets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PO_Item_ItemCodes1" Association="KUBOnlinePRModel.FK_PO_Item_ItemCodes1">
+            <End Role="FixedAsset" EntitySet="FixedAssets" />
+            <End Role="PO_Item" EntitySet="PO_Item" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_Items_ItemCode1" Association="KUBOnlinePRModel.FK_PR_Items_ItemCode1">
+            <End Role="FixedAsset" EntitySet="FixedAssets" />
+            <End Role="PR_Items" EntitySet="PR_Items" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GLs_ItemType" Association="KUBOnlinePRModel.FK_GLs_ItemType">
+            <End Role="ItemType" EntitySet="ItemTypes" />
+            <End Role="GL" EntitySet="GLs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PO_Item_GLs" Association="KUBOnlinePRModel.FK_PO_Item_GLs">
+            <End Role="GL" EntitySet="GLs" />
+            <End Role="PO_Item" EntitySet="PO_Item" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_Items_GLs" Association="KUBOnlinePRModel.FK_PR_Items_GLs">
+            <End Role="GL" EntitySet="GLs" />
+            <End Role="PR_Items" EntitySet="PR_Items" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Items_ItemType" Association="KUBOnlinePRModel.FK_Items_ItemType">
+            <End Role="ItemType" EntitySet="ItemTypes" />
+            <End Role="Item" EntitySet="Items" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PO_Item_Items" Association="KUBOnlinePRModel.FK_PO_Item_Items">
+            <End Role="Item" EntitySet="Items" />
+            <End Role="PO_Item" EntitySet="PO_Item" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_Items_Items" Association="KUBOnlinePRModel.FK_PR_Items_Items">
+            <End Role="Item" EntitySet="Items" />
+            <End Role="PR_Items" EntitySet="PR_Items" />
+          </AssociationSet>
+          <EntitySet Name="JobTasks" EntityType="KUBOnlinePRModel.JobTask" />
+          <EntitySet Name="PopulateItemLists" EntityType="KUBOnlinePRModel.PopulateItemList" />
+          <EntitySet Name="PaymentTerms" EntityType="KUBOnlinePRModel.PaymentTerm" />
+          <AssociationSet Name="FK_PurchaseOrder_PaymentTerms" Association="KUBOnlinePRModel.FK_PurchaseOrder_PaymentTerms">
+            <End Role="PaymentTerm" EntitySet="PaymentTerms" />
+            <End Role="PurchaseOrder" EntitySet="PurchaseOrders" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="ItemType">
           <Key>
@@ -1871,6 +2167,9 @@
           <Property Name="itemTypeId" Type="Int32" Nullable="false" />
           <Property Name="type" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="PR_Items" Relationship="KUBOnlinePRModel.FK_PR_Items_ItemType" FromRole="ItemType" ToRole="PR_Items" />
+          <NavigationProperty Name="FixedAssets" Relationship="KUBOnlinePRModel.FK_ItemCode_ItemType" FromRole="ItemType" ToRole="FixedAsset" />
+          <NavigationProperty Name="GLs" Relationship="KUBOnlinePRModel.FK_GLs_ItemType" FromRole="ItemType" ToRole="GL" />
+          <NavigationProperty Name="Items" Relationship="KUBOnlinePRModel.FK_Items_ItemType" FromRole="ItemType" ToRole="Item" />
         </EntityType>
         <Association Name="FK_PR_Items_ItemType">
           <End Type="KUBOnlinePRModel.ItemType" Role="ItemType" Multiplicity="0..1" />
@@ -1898,22 +2197,12 @@
           <Property Name="quantity" Type="Int32" Nullable="false" />
           <Property Name="unitPrice" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="totalPrice" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <NavigationProperty Name="ItemCode" Relationship="KUBOnlinePRModel.FK_PO_Item_ItemCodes" FromRole="PO_Item" ToRole="ItemCode" />
           <NavigationProperty Name="PR_Items" Relationship="KUBOnlinePRModel.FK_PO_Item_PR_Items" FromRole="PO_Item" ToRole="PR_Items" />
           <NavigationProperty Name="PurchaseOrder" Relationship="KUBOnlinePRModel.FK_PO_Item_PurchaseOrder" FromRole="PO_Item" ToRole="PurchaseOrder" />
+          <NavigationProperty Name="FixedAsset" Relationship="KUBOnlinePRModel.FK_PO_Item_ItemCodes1" FromRole="PO_Item" ToRole="FixedAsset" />
+          <NavigationProperty Name="GL" Relationship="KUBOnlinePRModel.FK_PO_Item_GLs" FromRole="PO_Item" ToRole="GL" />
+          <NavigationProperty Name="Item" Relationship="KUBOnlinePRModel.FK_PO_Item_Items" FromRole="PO_Item" ToRole="Item" />
         </EntityType>
-        <Association Name="FK_PO_Item_ItemCodes">
-          <End Type="KUBOnlinePRModel.ItemCode" Role="ItemCode" Multiplicity="1" />
-          <End Type="KUBOnlinePRModel.PO_Item" Role="PO_Item" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ItemCode">
-              <PropertyRef Name="codeId" />
-            </Principal>
-            <Dependent Role="PO_Item">
-              <PropertyRef Name="codeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_PO_Item_PR_Items">
           <End Type="KUBOnlinePRModel.PR_Items" Role="PR_Items" Multiplicity="1" />
           <End Type="KUBOnlinePRModel.PO_Item" Role="PO_Item" Multiplicity="*" />
@@ -2190,6 +2479,7 @@
           <NavigationProperty Name="User" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_User" FromRole="PurchaseRequisition" ToRole="User" />
           <NavigationProperty Name="Vendor" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_Vendor" FromRole="PurchaseRequisition" ToRole="Vendor" />
           <NavigationProperty Name="VendorStaff" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_VendorStaff" FromRole="PurchaseRequisition" ToRole="VendorStaff" />
+          <Property Name="SpecsReviewer" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_PurchaseRequisition_Customer">
           <End Type="KUBOnlinePRModel.Customer" Role="Customer" Multiplicity="1" />
@@ -2419,6 +2709,275 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Vendor_Customer">
+          <End Type="KUBOnlinePRModel.Customer" Role="Customer" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.Vendor" Role="Vendor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="custId" />
+            </Principal>
+            <Dependent Role="Vendor">
+              <PropertyRef Name="custId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="FixedAsset">
+          <Key>
+            <PropertyRef Name="codeId" />
+          </Key>
+          <Property Name="uuid" Type="Guid" Nullable="false" />
+          <Property Name="codeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="itemTypeId" Type="Int32" Nullable="false" />
+          <Property Name="ItemCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="custId" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UoM" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="createDate" Type="DateTime" Precision="3" />
+          <Property Name="createByUserId" Type="Int32" />
+          <NavigationProperty Name="Customer" Relationship="KUBOnlinePRModel.FK_ItemCode_Customer" FromRole="FixedAsset" ToRole="Customer" />
+          <NavigationProperty Name="ItemType" Relationship="KUBOnlinePRModel.FK_ItemCode_ItemType" FromRole="FixedAsset" ToRole="ItemType" />
+          <NavigationProperty Name="User" Relationship="KUBOnlinePRModel.FK_ItemCodes_User1" FromRole="FixedAsset" ToRole="User" />
+          <NavigationProperty Name="PO_Item" Relationship="KUBOnlinePRModel.FK_PO_Item_ItemCodes1" FromRole="FixedAsset" ToRole="PO_Item" />
+          <NavigationProperty Name="PR_Items" Relationship="KUBOnlinePRModel.FK_PR_Items_ItemCode1" FromRole="FixedAsset" ToRole="PR_Items" />
+        </EntityType>
+        <EntityType Name="GL">
+          <Key>
+            <PropertyRef Name="codeId" />
+          </Key>
+          <Property Name="uuid" Type="Guid" Nullable="false" />
+          <Property Name="codeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="itemTypeId" Type="Int32" Nullable="false" />
+          <Property Name="itemCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="custId" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UoM" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="createDate" Type="DateTime" Precision="3" />
+          <Property Name="createByUserId" Type="Int32" />
+          <NavigationProperty Name="Customer" Relationship="KUBOnlinePRModel.FK_GLs_Customer" FromRole="GL" ToRole="Customer" />
+          <NavigationProperty Name="ItemType" Relationship="KUBOnlinePRModel.FK_GLs_ItemType" FromRole="GL" ToRole="ItemType" />
+          <NavigationProperty Name="PO_Item" Relationship="KUBOnlinePRModel.FK_PO_Item_GLs" FromRole="GL" ToRole="PO_Item" />
+          <NavigationProperty Name="PR_Items" Relationship="KUBOnlinePRModel.FK_PR_Items_GLs" FromRole="GL" ToRole="PR_Items" />
+        </EntityType>
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="codeId" />
+          </Key>
+          <Property Name="uuid" Type="Guid" Nullable="false" />
+          <Property Name="codeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="itemTypeId" Type="Int32" Nullable="false" />
+          <Property Name="itemCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="custId" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UoM" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="createDate" Type="DateTime" Precision="3" />
+          <Property Name="createByUserId" Type="Int32" />
+          <NavigationProperty Name="Customer" Relationship="KUBOnlinePRModel.FK_Items_Customer" FromRole="Item" ToRole="Customer" />
+          <NavigationProperty Name="ItemType" Relationship="KUBOnlinePRModel.FK_Items_ItemType" FromRole="Item" ToRole="ItemType" />
+          <NavigationProperty Name="PO_Item" Relationship="KUBOnlinePRModel.FK_PO_Item_Items" FromRole="Item" ToRole="PO_Item" />
+          <NavigationProperty Name="PR_Items" Relationship="KUBOnlinePRModel.FK_PR_Items_Items" FromRole="Item" ToRole="PR_Items" />
+          <Property Name="unitPrice" Type="Decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <Association Name="FK_GLs_Customer">
+          <End Type="KUBOnlinePRModel.Customer" Role="Customer" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.GL" Role="GL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="custId" />
+            </Principal>
+            <Dependent Role="GL">
+              <PropertyRef Name="custId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ItemCode_Customer">
+          <End Type="KUBOnlinePRModel.Customer" Role="Customer" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.FixedAsset" Role="FixedAsset" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="custId" />
+            </Principal>
+            <Dependent Role="FixedAsset">
+              <PropertyRef Name="custId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Items_Customer">
+          <End Type="KUBOnlinePRModel.Customer" Role="Customer" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.Item" Role="Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="custId" />
+            </Principal>
+            <Dependent Role="Item">
+              <PropertyRef Name="custId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ItemCode_ItemType">
+          <End Type="KUBOnlinePRModel.ItemType" Role="ItemType" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.FixedAsset" Role="FixedAsset" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemType">
+              <PropertyRef Name="itemTypeId" />
+            </Principal>
+            <Dependent Role="FixedAsset">
+              <PropertyRef Name="itemTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ItemCodes_User1">
+          <End Type="KUBOnlinePRModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="KUBOnlinePRModel.FixedAsset" Role="FixedAsset" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="FixedAsset">
+              <PropertyRef Name="createByUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PO_Item_ItemCodes1">
+          <End Type="KUBOnlinePRModel.FixedAsset" Role="FixedAsset" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.PO_Item" Role="PO_Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FixedAsset">
+              <PropertyRef Name="codeId" />
+            </Principal>
+            <Dependent Role="PO_Item">
+              <PropertyRef Name="codeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_Items_ItemCode1">
+          <End Type="KUBOnlinePRModel.FixedAsset" Role="FixedAsset" Multiplicity="0..1" />
+          <End Type="KUBOnlinePRModel.PR_Items" Role="PR_Items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FixedAsset">
+              <PropertyRef Name="codeId" />
+            </Principal>
+            <Dependent Role="PR_Items">
+              <PropertyRef Name="codeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GLs_ItemType">
+          <End Type="KUBOnlinePRModel.ItemType" Role="ItemType" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.GL" Role="GL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemType">
+              <PropertyRef Name="itemTypeId" />
+            </Principal>
+            <Dependent Role="GL">
+              <PropertyRef Name="itemTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PO_Item_GLs">
+          <End Type="KUBOnlinePRModel.GL" Role="GL" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.PO_Item" Role="PO_Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GL">
+              <PropertyRef Name="codeId" />
+            </Principal>
+            <Dependent Role="PO_Item">
+              <PropertyRef Name="codeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_Items_GLs">
+          <End Type="KUBOnlinePRModel.GL" Role="GL" Multiplicity="0..1" />
+          <End Type="KUBOnlinePRModel.PR_Items" Role="PR_Items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GL">
+              <PropertyRef Name="codeId" />
+            </Principal>
+            <Dependent Role="PR_Items">
+              <PropertyRef Name="codeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Items_ItemType">
+          <End Type="KUBOnlinePRModel.ItemType" Role="ItemType" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.Item" Role="Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemType">
+              <PropertyRef Name="itemTypeId" />
+            </Principal>
+            <Dependent Role="Item">
+              <PropertyRef Name="itemTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PO_Item_Items">
+          <End Type="KUBOnlinePRModel.Item" Role="Item" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.PO_Item" Role="PO_Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Item">
+              <PropertyRef Name="codeId" />
+            </Principal>
+            <Dependent Role="PO_Item">
+              <PropertyRef Name="codeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_Items_Items">
+          <End Type="KUBOnlinePRModel.Item" Role="Item" Multiplicity="0..1" />
+          <End Type="KUBOnlinePRModel.PR_Items" Role="PR_Items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Item">
+              <PropertyRef Name="codeId" />
+            </Principal>
+            <Dependent Role="PR_Items">
+              <PropertyRef Name="codeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="JobTask">
+          <Key>
+            <PropertyRef Name="uuid" />
+          </Key>
+          <Property Name="uuid" Type="Guid" Nullable="false" />
+          <Property Name="jobNo" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="jobTaskNo" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="custId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PopulateItemList">
+          <Key>
+            <PropertyRef Name="codeId" />
+            <PropertyRef Name="itemTypeId" />
+            <PropertyRef Name="ItemCode" />
+            <PropertyRef Name="custId" />
+          </Key>
+          <Property Name="codeId" Type="Int32" Nullable="false" />
+          <Property Name="itemTypeId" Type="Int32" Nullable="false" />
+          <Property Name="ItemCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="custId" Type="Int32" Nullable="false" />
+          <Property Name="UoM" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="PaymentTerm">
+          <Key>
+            <PropertyRef Name="paymentTermsId" />
+          </Key>
+          <Property Name="uuid" Type="Guid" Nullable="false" />
+          <Property Name="paymentTermsId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="paymentCode" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="paymentDescription" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="custId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="PurchaseOrders" Relationship="KUBOnlinePRModel.FK_PurchaseOrder_PaymentTerms" FromRole="PaymentTerm" ToRole="PurchaseOrder" />
+        </EntityType>
+        <Association Name="FK_PurchaseOrder_PaymentTerms">
+          <End Type="KUBOnlinePRModel.PaymentTerm" Role="PaymentTerm" Multiplicity="0..1" />
+          <End Type="KUBOnlinePRModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentTerm">
+              <PropertyRef Name="paymentTermsId" />
+            </Principal>
+            <Dependent Role="PurchaseOrder">
+              <PropertyRef Name="PaymentTermsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2457,18 +3016,6 @@
                 <ScalarProperty Name="Extension" ColumnName="Extension" />
                 <ScalarProperty Name="File" ColumnName="File" />
                 <ScalarProperty Name="archivedFlag" ColumnName="archivedFlag" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ItemCodes">
-            <EntityTypeMapping TypeName="KUBOnlinePRModel.ItemCode">
-              <MappingFragment StoreEntitySet="ItemCode">
-                <ScalarProperty Name="uuid" ColumnName="uuid" />
-                <ScalarProperty Name="codeId" ColumnName="codeId" />
-                <ScalarProperty Name="ItemCode1" ColumnName="ItemCode" />
-                <ScalarProperty Name="UoM" ColumnName="UoM" />
-                <ScalarProperty Name="createDate" ColumnName="createDate" />
-                <ScalarProperty Name="createByUserId" ColumnName="createByUserId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2531,6 +3078,8 @@
           <EntitySetMapping Name="PurchaseOrders">
             <EntityTypeMapping TypeName="KUBOnlinePRModel.PurchaseOrder">
               <MappingFragment StoreEntitySet="PurchaseOrder">
+                <ScalarProperty Name="PaymentTermsId" ColumnName="PaymentTermsId" />
+                <ScalarProperty Name="PayToVendorId" ColumnName="PayToVendorId" />
                 <ScalarProperty Name="StatusId" ColumnName="StatusId" />
                 <ScalarProperty Name="SubmitDate" ColumnName="SubmitDate" />
                 <ScalarProperty Name="LastModifyDate" ColumnName="LastModifyDate" />
@@ -2621,6 +3170,12 @@
           <EntitySetMapping Name="Vendors">
             <EntityTypeMapping TypeName="KUBOnlinePRModel.Vendor">
               <MappingFragment StoreEntitySet="Vendor">
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="telephoneNo" ColumnName="telephoneNo" />
+                <ScalarProperty Name="contactName" ColumnName="contactName" />
+                <ScalarProperty Name="quotationNo" ColumnName="quotationNo" />
+                <ScalarProperty Name="custId" ColumnName="custId" />
+                <ScalarProperty Name="vendorNo" ColumnName="vendorNo" />
                 <ScalarProperty Name="uuid" ColumnName="uuid" />
                 <ScalarProperty Name="vendorId" ColumnName="vendorId" />
                 <ScalarProperty Name="name" ColumnName="name" />
@@ -2783,6 +3338,7 @@
           <EntitySetMapping Name="PurchaseRequisitions">
             <EntityTypeMapping TypeName="KUBOnlinePRModel.PurchaseRequisition">
               <MappingFragment StoreEntitySet="PurchaseRequisition">
+                <ScalarProperty Name="SpecsReviewer" ColumnName="SpecsReviewer" />
                 <ScalarProperty Name="StatusId" ColumnName="StatusId" />
                 <ScalarProperty Name="PRAging" ColumnName="PRAging" />
                 <ScalarProperty Name="Phase2Completed" ColumnName="Phase2Completed" />
@@ -2816,6 +3372,84 @@
                 <ScalarProperty Name="PRNo" ColumnName="PRNo" />
                 <ScalarProperty Name="CustId" ColumnName="CustId" />
                 <ScalarProperty Name="PRId" ColumnName="PRId" />
+                <ScalarProperty Name="uuid" ColumnName="uuid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FixedAssets">
+            <EntityTypeMapping TypeName="KUBOnlinePRModel.FixedAsset">
+              <MappingFragment StoreEntitySet="FixedAsset">
+                <ScalarProperty Name="createByUserId" ColumnName="createByUserId" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="UoM" ColumnName="UoM" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="custId" ColumnName="custId" />
+                <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
+                <ScalarProperty Name="itemTypeId" ColumnName="itemTypeId" />
+                <ScalarProperty Name="codeId" ColumnName="codeId" />
+                <ScalarProperty Name="uuid" ColumnName="uuid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GLs">
+            <EntityTypeMapping TypeName="KUBOnlinePRModel.GL">
+              <MappingFragment StoreEntitySet="GLs">
+                <ScalarProperty Name="createByUserId" ColumnName="createByUserId" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="UoM" ColumnName="UoM" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="custId" ColumnName="custId" />
+                <ScalarProperty Name="itemCode" ColumnName="itemCode" />
+                <ScalarProperty Name="itemTypeId" ColumnName="itemTypeId" />
+                <ScalarProperty Name="codeId" ColumnName="codeId" />
+                <ScalarProperty Name="uuid" ColumnName="uuid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Items">
+            <EntityTypeMapping TypeName="KUBOnlinePRModel.Item">
+              <MappingFragment StoreEntitySet="Items">
+                <ScalarProperty Name="unitPrice" ColumnName="unitPrice" />
+                <ScalarProperty Name="createByUserId" ColumnName="createByUserId" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="UoM" ColumnName="UoM" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="custId" ColumnName="custId" />
+                <ScalarProperty Name="itemCode" ColumnName="itemCode" />
+                <ScalarProperty Name="itemTypeId" ColumnName="itemTypeId" />
+                <ScalarProperty Name="codeId" ColumnName="codeId" />
+                <ScalarProperty Name="uuid" ColumnName="uuid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobTasks">
+            <EntityTypeMapping TypeName="KUBOnlinePRModel.JobTask">
+              <MappingFragment StoreEntitySet="JobTask">
+                <ScalarProperty Name="custId" ColumnName="custId" />
+                <ScalarProperty Name="jobTaskNo" ColumnName="jobTaskNo" />
+                <ScalarProperty Name="jobNo" ColumnName="jobNo" />
+                <ScalarProperty Name="uuid" ColumnName="uuid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PopulateItemLists">
+            <EntityTypeMapping TypeName="KUBOnlinePRModel.PopulateItemList">
+              <MappingFragment StoreEntitySet="PopulateItemList">
+                <ScalarProperty Name="UoM" ColumnName="UoM" />
+                <ScalarProperty Name="custId" ColumnName="custId" />
+                <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
+                <ScalarProperty Name="itemTypeId" ColumnName="itemTypeId" />
+                <ScalarProperty Name="codeId" ColumnName="codeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PaymentTerms">
+            <EntityTypeMapping TypeName="KUBOnlinePRModel.PaymentTerm">
+              <MappingFragment StoreEntitySet="PaymentTerms">
+                <ScalarProperty Name="custId" ColumnName="custId" />
+                <ScalarProperty Name="paymentDescription" ColumnName="paymentDescription" />
+                <ScalarProperty Name="paymentCode" ColumnName="paymentCode" />
+                <ScalarProperty Name="paymentTermsId" ColumnName="paymentTermsId" />
                 <ScalarProperty Name="uuid" ColumnName="uuid" />
               </MappingFragment>
             </EntityTypeMapping>

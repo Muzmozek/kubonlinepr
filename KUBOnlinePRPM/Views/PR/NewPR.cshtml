@@ -36,12 +36,12 @@
                         </div>
                         <div class="d-flex col-md-6 col-sm-6">
                             @Html.DropDownListFor(m => m.NewPRForm.ProjectId, (IEnumerable<SelectListItem>)ViewBag.ProjectNameList, "Select project here", new { @id = "ProjectName", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
-                            @*<select class="custom-select g-width-100vw g-height-40 g-color-gray-light-v1 g-color-primary--hover text-left g-rounded-20">
-                                    <option selected="">Select project name</option>
-                                    <option value="OR">Orlando</option>
-                                    <option value="TO">Toronto</option>
-                                    <option value="VA">Vancouver</option>
-                                </select>*@
+                            @*<select class="custom-select g-width-100vw g-height-40 g-color-gray-light-v1 g-color-black--hover text-left g-rounded-20">
+                                <option selected="">Select project name</option>
+                                <option value="OR">Orlando</option>
+                                <option value="TO">Toronto</option>
+                                <option value="VA">Vancouver</option>
+                            </select>*@
                         </div>
                     </div>
                     <div class="row has-danger">
@@ -93,12 +93,12 @@
                         </div>
                         <div class="d-flex col-md-8 col-sm-8">
                             @Html.DropDownListFor(m => m.NewPRForm.Value, (IEnumerable<SelectListItem>)ViewBag.BudgetedList, "", new { @id = "Budgeted", @class = "custom-select g-width-100vw g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
-                            @*<select class="custom-select g-width-100vw g-height-40 g-color-gray-light-v1 g-color-primary--hover text-left g-rounded-20">
-                                    <option selected="">Select project name</option>
-                                    <option value="OR">Orlando</option>
-                                    <option value="TO">Toronto</option>
-                                    <option value="VA">Vancouver</option>
-                                </select>*@
+                            @*<select class="custom-select g-width-100vw g-height-40 g-color-gray-light-v1 g-color-black--hover text-left g-rounded-20">
+                                <option selected="">Select project name</option>
+                                <option value="OR">Orlando</option>
+                                <option value="TO">Toronto</option>
+                                <option value="VA">Vancouver</option>
+                            </select>*@
                         </div>
                     </div>
                     <div class="row has-danger">
@@ -119,7 +119,7 @@
                         <div class="col-md-4 col-sm-4 formfield">
                             <label class="g-mb-10" for="Attachment1">Attachment</label>
                         </div>
-                        @*@{ 
+                        @*@{
                             string Filename = "";
                             if (Model.PaperRefNoFile != null)
                             {
@@ -165,48 +165,48 @@
                 </section>
             </div>
             @*<div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md g-mb-20">
-                    <section>
-                        <div class="row">
-                            <label class="form-check-inline u-check g-pl-25">
-                                <input id="Unbudgeted" name="NewPRForm.Unbudgeted" class="g-hidden-xs-up g-pos-abs g-top-0 g-left-0" type="checkbox">
-                                <div class="u-check-icon-checkbox-v4 g-absolute-centered--y g-left-0">
-                                    <i class="fa" data-check-icon="&#xf00c"></i>
-                                </div>
-                                Unbudgeted
-                            </label>
-                        </div>
-                    </section>
-                </div>*@
+                <section>
+                    <div class="row">
+                        <label class="form-check-inline u-check g-pl-25">
+                            <input id="Unbudgeted" name="NewPRForm.Unbudgeted" class="g-hidden-xs-up g-pos-abs g-top-0 g-left-0" type="checkbox">
+                            <div class="u-check-icon-checkbox-v4 g-absolute-centered--y g-left-0">
+                                <i class="fa" data-check-icon="&#xf00c"></i>
+                            </div>
+                            Unbudgeted
+                        </label>
+                    </div>
+                </section>
+            </div>*@
             @*<div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
-                <section>*@
+            <section>*@
             @*<div class="row">
-                <div class="col-md-4 col-sm-4 formfield">
-                    <label class="g-mb-10" for="inputGroup1_2">File input</label>
+            <div class="col-md-4 col-sm-4 formfield">
+                <label class="g-mb-10" for="inputGroup1_2">File input</label>
+            </div>
+            <div class="d-flex col-md-8 col-sm-8">
+                <div class="input-group u-file-attach-v1 g-brd-gray-light-v2">
+                    <input id="inputGroup1_2" class="form-control form-control-md g-rounded-4" placeholder="If already have paper" readonly="" type="text">
+
+                    <div class="input-group-append">
+                        <button class="btn btn-md u-btn-blue rounded-0" type="submit">Browse</button>
+                        <input name="file" type="file">
+                    </div>
                 </div>
-                <div class="d-flex col-md-8 col-sm-8">
-                    <div class="input-group u-file-attach-v1 g-brd-gray-light-v2">
-                        <input id="inputGroup1_2" class="form-control form-control-md g-rounded-4" placeholder="If already have paper" readonly="" type="text">
-
-                        <div class="input-group-append">
-                            <button class="btn btn-md u-btn-blue rounded-0" type="submit">Browse</button>
-                            <input name="file" type="file">
-                        </div>
-                    </div>
-                </div>*@
+            </div>*@
             @*<div class="form-group">
-                    <label class="g-mb-10" for="inputGroup1_2">File input</label>
+                <label class="g-mb-10" for="inputGroup1_2">File input</label>
 
-                    <div class="input-group u-file-attach-v1 g-brd-gray-light-v2">
-                        <input id="inputGroup1_2" class="form-control form-control-md rounded-0" placeholder="Text in field" readonly="" type="text">
+                <div class="input-group u-file-attach-v1 g-brd-gray-light-v2">
+                    <input id="inputGroup1_2" class="form-control form-control-md rounded-0" placeholder="Text in field" readonly="" type="text">
 
-                        <div class="input-group-append">
-                            <button id="PRAttachment" class="btn btn-md u-btn-primary rounded-0" type="submit">Browse</button>
-                            <input id="FileName" name="file"  type="file">
-                        </div>
+                    <div class="input-group-append">
+                        <button id="PRAttachment" class="btn btn-md u-btn-primary rounded-0" type="submit">Browse</button>
+                        <input id="FileName" name="file"  type="file">
                     </div>
-                </div>*@
+                </div>
+            </div>*@
             @*</div>
-                </section>*@
+            </section>*@
         </div>
         <div class="col-md-12">
             <div class="media-body align-self-center text-left g-mb-30">
@@ -222,12 +222,12 @@
                         </div>
                         <div class="d-flex col-md-8 col-sm-8">
                             @Html.DropDownListFor(m => m.NewPRForm.PurchaseTypeId, (IEnumerable<SelectListItem>)ViewBag.PurchaseTypeList, "Select Purchase type here", new { @id = "PurchaseType", @class = "custom-select g-width-100vw g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
-                            @*<select class="custom-select g-width-100vw g-height-40 g-color-gray-light-v1 g-color-primary--hover text-left g-rounded-20">
-                                    <option selected="">Select purchase type</option>
-                                    <option value="OR">Orlando</option>
-                                    <option value="TO">Toronto</option>
-                                    <option value="VA">Vancouver</option>
-                                </select>*@
+                            @*<select class="custom-select g-width-100vw g-height-40 g-color-gray-light-v1 g-color-black--hover text-left g-rounded-20">
+                                <option selected="">Select purchase type</option>
+                                <option value="OR">Orlando</option>
+                                <option value="TO">Toronto</option>
+                                <option value="VA">Vancouver</option>
+                            </select>*@
                         </div>
                     </div>
                     <div class="row has-danger">
@@ -312,40 +312,40 @@
                 </section>
             </div>
             @*<div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
-                    <section>
-                        <div class="row">
-                            <div class="col-md-4 col-sm-4 formfield">
-                                <span>Amount Required</span>
-                            </div>
-                            <div class="d-flex col-md-8 col-sm-8">
-                                <input id="inputGroup-3_1" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10" placeholder="Unit (RM)" type="text">
-                                @Html.TextBoxFor(m => m.NewPRForm.AmountRequired, new { @id = "AmountRequired", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "Unit (RM)", @type = "text" })
-                            </div>
+                <section>
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4 formfield">
+                            <span>Amount Required</span>
                         </div>
-                        <div class="row">
-                            <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
-                                @Html.ValidationMessageFor(m => m.NewPRForm.AmountRequired, null, new { @class = "note-error color-red" })
-                            </div>
+                        <div class="d-flex col-md-8 col-sm-8">
+                            <input id="inputGroup-3_1" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10" placeholder="Unit (RM)" type="text">
+                            @Html.TextBoxFor(m => m.NewPRForm.AmountRequired, new { @id = "AmountRequired", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "Unit (RM)", @type = "text" })
                         </div>
-                    </section>
-                </div>*@
+                    </div>
+                    <div class="row">
+                        <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                            @Html.ValidationMessageFor(m => m.NewPRForm.AmountRequired, null, new { @class = "note-error color-red" })
+                        </div>
+                    </div>
+                </section>
+            </div>*@
             <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
-                    <section>
-                        <div class="row">
-                            <div class="col-md-4 col-sm-4 formfield">
-                                <span>Budget Balance</span>
-                            </div>
-                            <div class="d-flex col-md-8 col-sm-8">
-                                @Html.TextBoxFor(m => m.NewPRForm.BudgetBalance, new { @id = "BudgetBalance", @class = "BudgetBalance form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "Unit (RM)", @type = "text", @readonly = true })
-                            </div>
+                <section>
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4 formfield">
+                            <span>Budget Balance</span>
                         </div>
-                        <div class="row has-danger">
-                                <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
-                                    @Html.ValidationMessageFor(m => m.NewPRForm.BudgetBalance, null, new { @class = "form-control-feedback" })
-                                </div>
-                            </div>
-                    </section>
-                </div>
+                        <div class="d-flex col-md-8 col-sm-8">
+                            @Html.TextBoxFor(m => m.NewPRForm.BudgetBalance, new { @id = "BudgetBalance", @class = "BudgetBalance form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "Unit (RM)", @type = "text", @readonly = true })
+                        </div>
+                    </div>
+                    <div class="row has-danger">
+                        <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                            @Html.ValidationMessageFor(m => m.NewPRForm.BudgetBalance, null, new { @class = "form-control-feedback" })
+                        </div>
+                    </div>
+                </section>
+            </div>
         </div>
         <div class="col-xs-12 col-md-12 g-mb-30 g-mt-40">
 
@@ -365,10 +365,10 @@
                             </div>
                         </th>
                         @*<th class="desktop">
-                                <div class="media">
-                                    <div class="d-flex align-self-center">Item Code</div>
-                                </div>
-                            </th>*@
+                            <div class="media">
+                                <div class="d-flex align-self-center">Item Code</div>
+                            </div>
+                        </th>*@
                         <th class="desktop">
                             <div class="media">
                                 <div class="d-flex align-self-center">Cust PO No</div>
@@ -380,10 +380,10 @@
                             </div>
                         </th>
                         @*<th class="desktop">
-                                <div class="media">
-                                    <div class="d-flex align-self-center">UM</div>
-                                </div>
-                            </th>*@
+                            <div class="media">
+                                <div class="d-flex align-self-center">UM</div>
+                            </div>
+                        </th>*@
                         <th class="all">
                         </th>
                     </tr>
@@ -409,13 +409,13 @@
                                 </div>
                             </td>
                             @*<td>
-                                        <select id="ItemCode" class="newSelect custom-select g-height-45 g-color-gray-light-v1 g-color-primary--hover text-left g-rounded-20">
-                                            <option selected="">Item Code</option>
-                                            <option value="OR">Orlando</option>
-                                            <option value="TO">Toronto</option>
-                                            <option value="VA">Vancouver</option>
-                                        </select>
-                                </td>*@
+                                    <select id="ItemCode" class="newSelect custom-select g-height-45 g-color-gray-light-v1 g-color-black--hover text-left g-rounded-20">
+                                        <option selected="">Item Code</option>
+                                        <option value="OR">Orlando</option>
+                                        <option value="TO">Toronto</option>
+                                        <option value="VA">Vancouver</option>
+                                    </select>
+                            </td>*@
                             <td>
                                 <input id="CustPONo" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="CustPONo" type="text">
                             </td>
@@ -428,8 +428,8 @@
 
                             </td>
                             @*<td>
-                                    <input id="UM" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="UM" type="text">
-                                </td>*@
+                                <input id="UM" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="UM" type="text">
+                            </td>*@
                             <td>
                                 <div class="g-width-70 row">
                                     <a class="g-color-gray-dark-v5 g-text-underline--none--hover g-pa-5 AddPRItem" data-toggle="tooltip" data-placement="top" data-original-title="Add">
@@ -450,33 +450,33 @@
         </div>
         <div id="counter" class="d-none">@j</div>
         @*<div class="col-md-6">
-                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-5--md g-mb-30">
-                    <section>
-                        <div class="row">
-                            <div class="col-md-4 col-sm-4 formfield">
-                                <span>Reviewer</span>
-                            </div>
-                            <div class="d-flex col-md-8 col-sm-8">
-                                @Html.DropDownListFor(m => m.NewPRForm.ReviewerId, (IEnumerable<SelectListItem>)ViewBag.ReviewerNameList, new { @id = "Reviewer", @class = "custom-select g-width-100vw g-height-40 g-color-gray-light-v1 g-color-primary--hover text-left g-rounded-20" })
-                            </div>
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-5--md g-mb-30">
+                <section>
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4 formfield">
+                            <span>Reviewer</span>
                         </div>
-                    </section>
-                </div>
-            </div>*@
+                        <div class="d-flex col-md-8 col-sm-8">
+                            @Html.DropDownListFor(m => m.NewPRForm.ReviewerId, (IEnumerable<SelectListItem>)ViewBag.ReviewerNameList, new { @id = "Reviewer", @class = "custom-select g-width-100vw g-height-40 g-color-gray-light-v1 g-color-black--hover text-left g-rounded-20" })
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>*@
         @*<div class="col-md-6">
-                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-5--md g-mb-30">
-                    <section>
-                        <div class="row">
-                            <div class="col-md-4 col-sm-4 formfield">
-                                <span>Approver</span>
-                            </div>
-                            <div class="d-flex col-md-8 col-sm-8">
-                                @Html.DropDownListFor(m => m.NewPRForm.ApproverId, (IEnumerable<SelectListItem>)ViewBag.ApproverNameList, new { @id = "Approver", @class = "custom-select g-width-100vw g-height-40 g-color-gray-light-v1 g-color-primary--hover text-left g-rounded-20" })
-                            </div>
+            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-5--md g-mb-30">
+                <section>
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4 formfield">
+                            <span>Approver</span>
                         </div>
-                    </section>
-                </div>
-            </div>*@
+                        <div class="d-flex col-md-8 col-sm-8">
+                            @Html.DropDownListFor(m => m.NewPRForm.ApproverId, (IEnumerable<SelectListItem>)ViewBag.ApproverNameList, new { @id = "Approver", @class = "custom-select g-width-100vw g-height-40 g-color-gray-light-v1 g-color-primary--hover text-left g-rounded-20" })
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>*@
         <div class="col-md-12 col-sm-12">
             <div class="row">
                 @*<div class="col-md-9 col-sm-8"></div>*@

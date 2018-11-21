@@ -40,7 +40,7 @@
                             <span>Project Name</span>
                         </div>
                         <div class="d-flex col-md-8 col-sm-8">
-                            @Html.DropDownListFor(m => m.NewPOForm.ProjectId, (IEnumerable<SelectListItem>)ViewBag.ProjectNameList, "Select project here", new { @id = "ProjectName", @class = "custom-select g-width-100vw g-height-50 g-color-gray-light-v1 g-color-primary--hover text-left g-rounded-20", @disabled = "disabled" })
+                            @Html.DropDownListFor(m => m.NewPOForm.ProjectId, (IEnumerable<SelectListItem>)ViewBag.ProjectNameList, "Select project here", new { @id = "ProjectName", @class = "custom-select g-width-100vw g-height-50 g-color-gray-light-v1 g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
                             @Html.HiddenFor(m => m.NewPOForm.ProjectId)
                         </div>
                     </div>
@@ -186,7 +186,7 @@
                                 <td>
                                     <input id="@CodeId" class="d-none" placeholder="" name="CodeId" value="@item.CodeId" type="text" readonly>
                                     <input id="@ItemCode" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="ItemCode" value="@item.ItemCode" type="text" readonly>
-                                    @*@Html.DropDownListFor(m => item.CodeId, (IEnumerable<SelectListItem>)ViewData["ItemCodeList" + i], new { @id = CodeId, @class = "CodeId custom-select g-height-50 g-color-black g-color-primary--hover text-left g-rounded-20", @disabled = "disabled" })*@
+                                    @*@Html.DropDownListFor(m => item.CodeId, (IEnumerable<SelectListItem>)ViewData["ItemCodeList" + i], new { @id = CodeId, @class = "CodeId custom-select g-height-50 g-color-black g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })*@
                                     @*@Html.HiddenFor(m => item.CodeId)*@
                                 </td>
                                 <td>

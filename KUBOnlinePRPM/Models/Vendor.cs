@@ -29,6 +29,12 @@ namespace KUBOnlinePRPM.Models
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<int> lastModifyByUserId { get; set; }
         public Nullable<System.DateTime> lastModifyDate { get; set; }
+        public string vendorNo { get; set; }
+        public int custId { get; set; }
+        public string quotationNo { get; set; }
+        public string contactName { get; set; }
+        public string telephoneNo { get; set; }
+        public string email { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; }
@@ -38,5 +44,6 @@ namespace KUBOnlinePRPM.Models
         public virtual ICollection<VendorStaff> VendorStaffs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseRequisition> PurchaseRequisitions { get; set; }
+        public virtual Customer Customer { get; set; }
     }
 }

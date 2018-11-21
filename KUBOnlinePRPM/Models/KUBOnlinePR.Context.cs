@@ -27,7 +27,6 @@ namespace KUBOnlinePRPM.Models
     
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<FileUpload> FileUploads { get; set; }
-        public virtual DbSet<ItemCode> ItemCodes { get; set; }
         public virtual DbSet<PR_Items> PR_Items { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
         public virtual DbSet<PRs_FileUpload> PRs_FileUpload { get; set; }
@@ -51,5 +50,11 @@ namespace KUBOnlinePRPM.Models
         public virtual DbSet<POStatu> POStatus { get; set; }
         public virtual DbSet<PR_PaperApprover> PR_PaperApprover { get; set; }
         public virtual DbSet<PurchaseRequisition> PurchaseRequisitions { get; set; }
+        public virtual DbSet<FixedAsset> FixedAssets { get; set; }
+        public virtual DbSet<GL> GLs { get; set; }
+        public virtual DbSet<Item> Items { get; set; }
+        public virtual DbSet<JobTask> JobTasks { get; set; }
+        public virtual DbSet<PopulateItemList> PopulateItemLists { get; set; }
+        public virtual DbSet<PaymentTerm> PaymentTerms { get; set; }
     }
 }

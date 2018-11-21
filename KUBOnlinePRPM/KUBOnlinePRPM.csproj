@@ -187,10 +187,19 @@
     <Compile Include="Models\FileUpload.cs">
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ItemCode.cs">
+    <Compile Include="Models\FixedAsset.cs">
+      <DependentUpon>KUBOnlinePR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GL.cs">
+      <DependentUpon>KUBOnlinePR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Item.cs">
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ItemType.cs">
+      <DependentUpon>KUBOnlinePR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\JobTask.cs">
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\KUBOnlinePR.Context.cs">
@@ -216,7 +225,13 @@
     <Compile Include="Models\NotiGroup.cs">
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PaymentTerm.cs">
+      <DependentUpon>KUBOnlinePR.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\POModel.cs" />
+    <Compile Include="Models\PopulateItemList.cs">
+      <DependentUpon>KUBOnlinePR.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\POStatu.cs">
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
     </Compile>
@@ -5558,7 +5573,6 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\PR\Index.cshtml" />
-    <Content Include="Views\PM\ProjectDetail.cshtml" />
     <Content Include="Assets\robicch-jQueryGantt\composer.json" />
     <Content Include="Assets\robicch-jQueryGantt\README.md" />
     <Content Include="Assets\robicch-jQueryGantt\res\icons.eot" />
@@ -5567,24 +5581,13 @@
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\PR\PRDetails.cshtml" />
-    <Content Include="Views\PM\DODetails.cshtml" />
     <Content Include="Views\Shared\PRFormLayout.cshtml" />
     <Content Include="Views\PR\PRForm.cshtml" />
     <Content Include="Views\PO\POList.cshtml" />
     <Content Include="Views\PR\NewPR.cshtml" />
-    <Content Include="Views\PM\ProjectOverview.cshtml" />
-    <Content Include="Views\PM\ProjectSchedules.cshtml" />
-    <Content Include="Views\PM\ProjectFinance.cshtml" />
-    <Content Include="Views\PM\ProjectDO.cshtml" />
-    <Content Include="Views\PM\ProjectIssues.cshtml" />
-    <Content Include="Views\PM\ProjectReport.cshtml" />
-    <Content Include="Views\PM\ProjectFiles.cshtml" />
-    <Content Include="Views\PM\ProjectConversation.cshtml" />
     <Content Include="Views\PR\PRList.cshtml" />
     <Content Include="Views\PO\NewPO.cshtml" />
-    <Content Include="Views\PM\NewPM.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\PM\Index.cshtml" />
     <Content Include="Views\Shared\_LoginLayout.cshtml" />
     <Content Include="Views\PR\PRTabs.cshtml" />
     <Content Include="Views\PR\PRConversations.cshtml" />

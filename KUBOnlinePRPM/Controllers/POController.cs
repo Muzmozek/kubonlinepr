@@ -19,9 +19,24 @@ namespace KUBOnlinePRPM.Controllers
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
-                var ProjectNameQuery = db.Projects.Select(c => new { ProjectId = c.projectId, ProjectName = c.projectName })
-                        .OrderBy(c => c.ProjectName);
-                var VendorListQuery = db.Vendors.Select(c => new { VendorId = c.vendorId, VendorName = c.name }).OrderBy(c => c.VendorName);
+                int CustId = Int32.Parse(Session["CompanyId"].ToString());
+                var ProjectNameQuery = (from m in db.Projects
+                                        where m.custId == CustId
+                                        select new
+                                        {
+                                            ProjectId = m.projectId,
+                                            Dimension = m.dimension,
+                                            Description = m.dimension + " - " + m.projectCode,
+                                            Code = m.projectCode,
+                                        }).OrderBy(c => c.Dimension).ThenBy(c => c.Code);
+                var VendorListQuery = (from m in db.Vendors
+                                       where m.custId == CustId
+                                       select new
+                                       {
+                                           VendorId = m.vendorId,
+                                           VendorName = m.vendorNo + " - " + m.name,
+                                           VendorNo = m.vendorNo,
+                                       }).OrderBy(c => c.VendorNo).ThenBy(c => c.VendorName);
                 var VendorStaffQuery = db.VendorStaffs.Select(c => new { StaffId = c.staffId, VendorContactName = c.vendorContactName }).OrderBy(c => c.VendorContactName);
 
                 int UserId = Int32.Parse(Session["UserId"].ToString());
@@ -48,7 +63,7 @@ namespace KUBOnlinePRPM.Controllers
                                    join e in db.Vendors on a.VendorId equals e.vendorId into f
                                    join g in db.VendorStaffs on a.VendorStaffId equals g.staffId into l
                                    join h in db.PR_Items on a.PRId equals h.PRId
-                                   join j in db.ItemCodes on h.codeId equals j.codeId into k
+                                   join j in db.PopulateItemLists on h.codeId equals j.codeId into k
                                    from w in l.DefaultIfEmpty()
                                    from x in s.DefaultIfEmpty()
                                    from y in f.DefaultIfEmpty()
@@ -69,7 +84,7 @@ namespace KUBOnlinePRPM.Controllers
                                        //StatusId = a.StatusId.Trim()
                                    }).FirstOrDefault();
                 NewPO.NewPOForm.POItemListObject = (from m in db.PR_Items
-                                                    join n in db.ItemCodes on m.codeId equals n.codeId into o
+                                                    join n in db.PopulateItemLists on m.codeId equals n.codeId into o
                                                     from p in o.DefaultIfEmpty()
                                                     where m.PRId == PRId
                                                     select new POItemsTable()
@@ -78,7 +93,7 @@ namespace KUBOnlinePRPM.Controllers
                                                         DateRequired = m.dateRequired,
                                                         Description = m.description,
                                                         CodeId = p.codeId,
-                                                        ItemCode = p.ItemCode1,
+                                                        ItemCode = p.ItemCode,
                                                         OutStandingQuantity = m.outStandingQuantity.Value,
                                                         UnitPrice = m.unitPrice.Value,
                                                         //TotalPrice = m.totalPrice,
@@ -108,9 +123,24 @@ namespace KUBOnlinePRPM.Controllers
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
-                var ProjectNameQuery = db.Projects.Select(c => new { ProjectId = c.projectId, ProjectName = c.projectName })
-                        .OrderBy(c => c.ProjectName);
-                var VendorListQuery = db.Vendors.Select(c => new { VendorId = c.vendorId, VendorName = c.name }).OrderBy(c => c.VendorName);
+                int CustId = Int32.Parse(Session["CompanyId"].ToString());
+                var ProjectNameQuery = (from m in db.Projects
+                                        where m.custId == CustId
+                                        select new
+                                        {
+                                            ProjectId = m.projectId,
+                                            Dimension = m.dimension,
+                                            Description = m.dimension + " - " + m.projectCode,
+                                            Code = m.projectCode,
+                                        }).OrderBy(c => c.Dimension).ThenBy(c => c.Code);
+                var VendorListQuery = (from m in db.Vendors
+                                       where m.custId == CustId
+                                       select new
+                                       {
+                                           VendorId = m.vendorId,
+                                           VendorName = m.vendorNo + " - " + m.name,
+                                           VendorNo = m.vendorNo,
+                                       }).OrderBy(c => c.VendorNo).ThenBy(c => c.VendorName);
                 var VendorStaffQuery = db.VendorStaffs.Select(c => new { StaffId = c.staffId, VendorContactName = c.vendorContactName }).OrderBy(c => c.VendorContactName);
 
                 if (!ModelState.IsValid)
@@ -264,6 +294,7 @@ namespace KUBOnlinePRPM.Controllers
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
                 int UserId = Int32.Parse(Session["UserId"].ToString());
+                int CustId = Int32.Parse(Session["CompanyId"].ToString());
                 var getRole = (from m in db.Users
                                join n in db.Users_Roles on m.userId equals n.userId
                                where m.userId == UserId
@@ -285,9 +316,9 @@ namespace KUBOnlinePRPM.Controllers
                                       join c in db.Vendors on a.vendorId equals c.vendorId
                                       join d in db.VendorStaffs on a.vendorStaffId equals d.staffId
                                       join e in db.PO_Item on a.POId equals e.POId
-                                      join f in db.ItemCodes on e.codeId equals f.codeId
+                                      join f in db.PopulateItemLists on e.codeId equals f.codeId
                                       join g in db.POStatus on a.StatusId equals g.statusId
-                                      where a.POId == PODetail.POId
+                                      where a.POId == PODetail.POId && f.custId == CustId
                                       select new NewPOModel()
                                       {
                                           PONo = a.PONo,
@@ -302,16 +333,16 @@ namespace KUBOnlinePRPM.Controllers
                                           //Submited = a.Submited.Value
                                       }).FirstOrDefault();
                 PODetail.NewPOForm.POItemListObject = (from m in db.PO_Item
-                                                       join n in db.ItemCodes on m.codeId equals n.codeId into o
+                                                       join n in db.PopulateItemLists on m.codeId equals n.codeId into o
                                                        join p in db.PR_Items on m.itemsId equals p.itemsId
                                                        from q in o.DefaultIfEmpty()
-                                                       where m.POId == PODetail.POId
+                                                       where m.POId == PODetail.POId && q.custId == CustId
                                                        select new POItemsTable()
                                                        {
                                                            ItemsId = m.itemsId,
                                                            DateRequired = m.dateRequired,
                                                            Description = m.description,
-                                                           ItemCode = q.ItemCode1,
+                                                           ItemCode = q.ItemCode,
                                                            CustPONo = m.custPONo,
                                                            Quantity = m.quantity,
                                                            OutStandingQuantity = p.outStandingQuantity.Value,

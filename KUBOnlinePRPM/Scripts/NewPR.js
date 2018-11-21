@@ -84,6 +84,9 @@
                 $("#BudgetedAmount").val(BudgetedAmount);
                 $("#UtilizedToDate").val(UtilizedToDate);
                 $("#BudgetBalance").val(BudgetBalance);
+
+                //to do - generate itemcode when select projectId
+                //$(".CodeId").select(resp.ItemCodeList);
             }
         });
     });
