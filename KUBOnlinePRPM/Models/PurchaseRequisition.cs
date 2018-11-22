@@ -63,6 +63,7 @@ namespace KUBOnlinePRPM.Models
         public Nullable<int> PRAging { get; set; }
         public string StatusId { get; set; }
         public string SpecsReviewer { get; set; }
+        public int Scenario { get; set; }
     
         public virtual Customer Customer { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

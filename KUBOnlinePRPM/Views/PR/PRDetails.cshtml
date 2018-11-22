@@ -756,11 +756,26 @@
                                     <a id="SubmitPreparedProcurement" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">SUBMIT</a>
                                 }
 
-                                @if (((Model.NewPRForm.StatusId == "PR03") && Session["ifAdmin"] != null) || (Model.NewPRForm.StatusId == "PR03" && Session["ifIT"] != null))
+                                @if ((Model.NewPRForm.Scenario == 1) && (Model.NewPRForm.StatusId == "PR03") && (Session["ifAdmin"] != null || Session["ifIT"] != null))
+                                {
+                                    <a id="RejectPreparedReviewer" class=" btn btn-md u-btn-white g-mr-5 g-mb-15">REJECT 213</a>
+
+                                    <a id="ReviewPreparedReviewer" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">REVIEWED</a>
+                                }
+
+                                @if ((Model.NewPRForm.Scenario == 2) && (Model.NewPRForm.StatusId == "PR03") && (Session["ifAdmin"] != null || Session["ifHOGPSS"] != null))
                                 {
                                     <a id="RejectPreparedReviewer" class=" btn btn-md u-btn-white g-mr-5 g-mb-15">REJECT</a>
 
                                     <a id="ReviewPreparedReviewer" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">REVIEWED</a>
+                                }
+
+                                @if (((Model.NewPRForm.StatusId == "PR04") && Session["ifAdmin"] != null) || (Model.NewPRForm.StatusId == "PR04" && Session["ifIT"] != null))
+                                {
+
+                                    <a id="RejectPreparedRecommended" class=" btn btn-md u-btn-white g-mr-5 g-mb-15">REJECT</a>
+
+                                    <a id="RecommendedPreparedRecommended" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">RECOMMENDED</a>
                                 }
 
                                 @if (((Model.NewPRForm.StatusId == "PR05") && Session["ifAdmin"] != null) || (Model.NewPRForm.StatusId == "PR05" && Session["ifHOC"] != null))

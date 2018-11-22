@@ -516,7 +516,7 @@ namespace KUBOnlinePRPM.Controllers
                                            join s in db.PR_Reviewer on m.PRId equals s.PRId into t
                                            from r in q.DefaultIfEmpty()
                                            from u in t.DefaultIfEmpty()
-                                           where m.PRType == type && p.statusId == "PR03"
+                                           where m.PRType == type && (p.statusId == "PR03" || p.statusId == "PR04")
                                            select new PRListTable()
                                            {
                                                PRId = m.PRId,
@@ -828,7 +828,8 @@ namespace KUBOnlinePRPM.Controllers
                                                  Submited = a.Submited,
                                                  Rejected = a.Rejected,
                                                  StatusId = a.StatusId.Trim(),
-                                                 PRStatus = c.status
+                                                 PRStatus = c.status,
+                                                 Scenario = a.Scenario
                                              }).FirstOrDefault();
                 PRDetail.NewPRForm.PRItemListObject = (from m in db.PR_Items
                                                        join n in db.PopulateItemLists on m.codeId equals n.codeId into o
@@ -1800,6 +1801,7 @@ namespace KUBOnlinePRPM.Controllers
             if (PRService.CheckAmountScenarioOne(amountBudget) && PRService.IncludeInBudget(PR))
             {
                 PR.StatusId = "PR03";
+                PR.Scenario = 1;
                 db.SaveChanges();
                 // send notifications to requestor
                 NotificationMsg _objSubmited = new NotificationMsg
@@ -1853,7 +1855,8 @@ namespace KUBOnlinePRPM.Controllers
             }
             else if ((PRService.IncludeInBudget(PR) == false && PRService.CheckAmountScenarioOne(amountBudget)) || PRService.CheckAmountScenarioTwo(amountBudget))
             {
-                PR.StatusId = "PR03";
+                PR.StatusId = "PR04";
+                PR.Scenario = 2;
                 db.SaveChanges();
 
                 return Json("Scenario 2 success");
@@ -1861,6 +1864,7 @@ namespace KUBOnlinePRPM.Controllers
             else if (PRService.CheckAmountScenarioThree(amountBudget))
             {
                 PR.StatusId = "PR03";
+                PR.Scenario = 3;
                 db.SaveChanges();
 
                 return Json("Scenario 3 success");
@@ -1888,7 +1892,7 @@ namespace KUBOnlinePRPM.Controllers
             db.SaveChanges();
             // todo the session must be IT / PMO /
 
-            return Json("Successfully approve");
+            return Json("Successfully reviewed");
         }
 
         public JsonResult RejectPRApprover()
@@ -1910,6 +1914,31 @@ namespace KUBOnlinePRPM.Controllers
             // todo the session must be HOC
 
             return Json("Successfully approve");
+        }
+
+        public JsonResult RejectPreparedRecommended()
+        {
+            // todo the session must be IT / HSE / PMO
+            int PrId = Int32.Parse(Request["PrId"]);
+            var PR = db.PurchaseRequisitions.First(x => x.PRId == PrId);
+
+            PR.StatusId = "PR07";
+            db.SaveChanges();
+            return Json("Successfully reject");
+        }
+
+        public JsonResult RecommendedPreparedRecommended()
+        {
+            // todo the session must be IT / HSE / PMO
+            // set status to PR03 and head of GPSS will proceed
+
+            int PrId = Int32.Parse(Request["PrId"]);
+            var PR = db.PurchaseRequisitions.First(x => x.PRId == PrId);
+            PR.StatusId = "PR03";
+
+            db.SaveChanges();            
+
+            return Json("Successfully recommend");
         }
     }
 }
