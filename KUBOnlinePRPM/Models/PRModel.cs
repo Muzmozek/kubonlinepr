@@ -133,7 +133,7 @@ namespace KUBOnlinePRPM.Models
     {
         public int CustId { get; set; }
         public int ItemsId { get; set; }
-        public int ItemTypeId { get; set; }
+        public int? ItemTypeId { get; set; }
         public int PRId { get; set; }
 
         [Required(ErrorMessage = "Date and time cannot be empty")]

@@ -282,6 +282,7 @@
           <Property Name="POId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PRId" Type="int" />
           <Property Name="PONo" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="CustId" Type="int" Nullable="false" />
           <Property Name="PODate" Type="datetime" Nullable="false" />
           <Property Name="projectId" Type="int" Nullable="false" />
           <Property Name="vendorId" Type="int" Nullable="false" />
@@ -289,7 +290,7 @@
           <Property Name="PayToVendorId" Type="int" />
           <Property Name="PaymentTermsId" Type="int" />
           <Property Name="Saved" Type="int" Nullable="false" />
-          <Property Name="PreparedDate" Type="datetime" />
+          <Property Name="PreparedDate" Type="datetime" Nullable="false" />
           <Property Name="PreparedById" Type="int" />
           <Property Name="LastModifyDate" Type="datetime" />
           <Property Name="Submited" Type="bit" Nullable="false" />
@@ -2874,6 +2875,7 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <NavigationProperty Name="PurchaseRequisition" Relationship="KUBOnlinePRModel.FK_PurchaseOrder_PurchaseRequisition" FromRole="PurchaseOrder" ToRole="PurchaseRequisition" />
           <NavigationProperty Name="Vendor" Relationship="KUBOnlinePRModel.FK_PurchaseOrder_Vendor" FromRole="PurchaseOrder" ToRole="Vendor" />
           <NavigationProperty Name="VendorStaff" Relationship="KUBOnlinePRModel.FK_PurchaseOrder_VendorStaff" FromRole="PurchaseOrder" ToRole="VendorStaff" />
+          <Property Name="CustId" Type="Int32" Nullable="false" />
         </EntityType>
         <Association Name="FK_PurchaseOrder_PaymentTerms">
           <End Type="KUBOnlinePRModel.PaymentTerm" Role="PaymentTerm" Multiplicity="0..1" />
@@ -3414,6 +3416,7 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <EntitySetMapping Name="PurchaseOrders">
             <EntityTypeMapping TypeName="KUBOnlinePRModel.PurchaseOrder">
               <MappingFragment StoreEntitySet="PurchaseOrder">
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
                 <ScalarProperty Name="StatusId" ColumnName="StatusId" />
                 <ScalarProperty Name="POAging" ColumnName="POAging" />
                 <ScalarProperty Name="SubmitDate" ColumnName="SubmitDate" />

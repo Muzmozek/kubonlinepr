@@ -285,7 +285,7 @@
                                         <span>Pay To Vendor</span>
                                     </div>
                                     <div class="d-flex col-md-8 col-sm-8">
-                                        @Html.DropDownListFor(m => m.NewPOForm.PayToVendorId, (IEnumerable<SelectListItem>)ViewBag.PayToVendorList, "", new { @id = "PayToVendor", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                                        @Html.DropDownListFor(m => m.NewPOForm.PayToVendorId, (IEnumerable<SelectListItem>)ViewBag.PayToVendorList, "Select Vendor here", new { @id = "PayToVendor", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
                                     </div>
                                 </div>
                                 <div class="row has-danger">

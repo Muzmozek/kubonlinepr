@@ -301,6 +301,10 @@
     <Compile Include="ViewModel\UserRoleViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\KUBOnlinePR.mdf" />
+    <Content Include="App_Data\KUBOnlinePR_log.ldf">
+      <DependentUpon>KUBOnlinePR.mdf</DependentUpon>
+    </Content>
     <Content Include="Assets\animate.css" />
     <Content Include="Assets\appear.js" />
     <Content Include="Assets\blog-masonry.js" />
@@ -5608,9 +5612,7 @@
     <Content Include="Views\Roles\Edit.cshtml" />
     <Content Include="Views\Roles\Index.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

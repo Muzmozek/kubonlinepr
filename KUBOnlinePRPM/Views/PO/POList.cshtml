@@ -23,82 +23,162 @@
 </div>
 <div class="g-bg-white g-brd-1 g-brd-gray-light-v3 g-brd-style-solid rounded g-mb-40">
     <div class="container-fluid g-pa-20">
-        <table id="POListTable" class="table table-striped table-bordered dt-responsive nowrap table-hover" style="width:100%">
-            <thead>
-                <tr>
-                    <th class="d-none">PO Id</th>
-                    <th class="g-first-child all">
-                        <div class="media">
-                            <div class="d-flex align-self-center">PO No.</div>
-                        </div>
-                    </th>
-                    <th class="desktop">
-                        <div class="media">
-                            <div class="d-flex align-self-center">PO Date</div>
-                        </div>
-                    </th>
-                    <th class="desktop">
-                        <div class="media">
-                            <div class="d-flex align-self-center">PR No.</div>
-                        </div>
-                    </th>
-                    <th class="desktop">
-                        <div class="media">
-                            <div class="d-flex align-self-center">Vendor Company</div>
-                        </div>
-                    </th>
-                    <th class="desktop">
-                        <div class="media">
-                            <div class="d-flex align-self-center">Amount Required (RM)</div>
-                        </div>
-                    </th>
-                    <th class="all">
-                        <div class="media">
-                            <div class="d-flex align-self-center">PO Aging (days)</div>
-                        </div>
-                    </th>
-                    <th class="desktop">
-                        <div class="media">
-                            <div class="d-flex align-self-center">PO Type</div>
-                        </div>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @{
-                    foreach (var item in Model.POListObject)
-                    {
-                        <tr>
-                            <th class="d-none">@Html.DisplayFor(modelItem => item.POId)</th>
-                            <td class="all">@Html.DisplayFor(modelItem => item.PONo)</td>
-                            <td class="desktop">@Html.DisplayFor(modelItem => item.PODate)</td>
-                            <td class="desktop">@Html.DisplayFor(modelItem => item.PRNo)</td>
-                            <td class="desktop">@Html.DisplayFor(modelItem => item.VendorCompany)</td>
-                            <td class="desktop">@Html.DisplayFor(modelItem => item.AmountRequired)</td>
-                            <td class="all">@Html.DisplayFor(modelItem => item.POAging)</td>
-                            <td class="desktop">@Html.DisplayFor(modelItem => item.POType)</td>
-                        </tr>
+        @if (Model.Type != "Blanket")
+        {
+            <table id="POListTable" class="table table-striped table-bordered dt-responsive nowrap table-hover" style="width:100%">
+                <thead>
+                    <tr>
+                        <th class="d-none">PO Id</th>
+                        <th class="g-first-child all">
+                            <div class="media">
+                                <div class="d-flex align-self-center">PO No.</div>
+                            </div>
+                        </th>
+                        <th class="desktop">
+                            <div class="media">
+                                <div class="d-flex align-self-center">PO Date</div>
+                            </div>
+                        </th>
+                        <th class="desktop">
+                            <div class="media">
+                                <div class="d-flex align-self-center">PR No.</div>
+                            </div>
+                        </th>
+                        <th class="desktop">
+                            <div class="media">
+                                <div class="d-flex align-self-center">Company</div>
+                            </div>
+                        </th>
+                        <th class="tablet">
+                            <div class="media">
+                                <div class="d-flex align-self-center">Requestor Name</div>
+                            </div>
+                        </th>
+                        <th class="tablet">
+                            <div class="media">
+                                <div class="d-flex align-self-center">Vendor ID</div>
+                            </div>
+                        </th>
+                        <th class="tablet">
+                            <div class="media">
+                                <div class="d-flex align-self-center">Vendor Name</div>
+                            </div>
+                        </th>
+                        <th class="desktop">
+                            <div class="media">
+                                <div class="d-flex align-self-center">Amount Required (RM)</div>
+                            </div>
+                        </th>
+                        <th class="all">
+                            <div class="media">
+                                <div class="d-flex align-self-center">PO Aging (days)</div>
+                            </div>
+                        </th>
+                        <th class="all">
+                            <div class="media">
+                                <div class="d-flex align-self-center">Status</div>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (var item in Model.POListObject)
+                        {
+                            <tr>
+                                <th class="d-none">@Html.DisplayFor(modelItem => item.POId)</th>
+                                <td class="all">@Html.DisplayFor(modelItem => item.PONo)</td>
+                                <td class="desktop">@Html.DisplayFor(modelItem => item.PODate)</td>
+                                <td class="desktop">@Html.DisplayFor(modelItem => item.PRNo)</td>
+                                <td class="desktop">@Html.DisplayFor(modelItem => item.Company)</td>
+                                <td class="desktop">@Html.DisplayFor(modelItem => item.RequestedName)</td>
+                                <td class="desktop">@Html.DisplayFor(modelItem => item.VendorId)</td>
+                                <td class="desktop">@Html.DisplayFor(modelItem => item.VendorCompany)</td>
+                                <td class="desktop">@Html.DisplayFor(modelItem => item.AmountRequired)</td>
+                                <td class="all">@Html.DisplayFor(modelItem => item.POAging)</td>
+                                <td class="desktop">@Html.DisplayFor(modelItem => item.Status)</td>
+                            </tr>
+                        }
                     }
-                }                
-            </tbody>
-        </table>
-@if (Model.Type == "Blanket" && Session["ifRequestor"] != null && Model.OutstandingQty != 0 && Model.StatusId == "PR06")
-{
-    <div class="col-md-12 col-sm-12">
-        <div class="row">
-            @*<div class="col-md-9 col-sm-8"></div>*@
-            <div class="col-md-3 offset-md-9 col-sm-4 offset-sm-8">
-                <div class="media">
-                    <div class="d-flex u-main-nav--push-right text-right">
-                        <div class="row">
-                            <a id="NewPO" href="~/PO/NewPO?type=Blanket" class="btn btn-md u-btn-blue g-mr-5 g-mb-15">NEW PO</a>
+                </tbody>
+            </table>
+        }
+        @if (Model.Type == "Blanket" && Session["ifRequestor"] != null && Model.OutstandingQty != 0 && Model.StatusId == "PR06")
+        {
+            <table id="POListTable" class="table table-striped table-bordered dt-responsive nowrap table-hover" style="width:100%">
+                <thead>
+                    <tr>
+                        <th class="d-none">PO Id</th>
+                        <th class="g-first-child all">
+                            <div class="media">
+                                <div class="d-flex align-self-center">PO No.</div>
+                            </div>
+                        </th>
+                        <th class="desktop">
+                            <div class="media">
+                                <div class="d-flex align-self-center">PO Date</div>
+                            </div>
+                        </th>
+                        <th class="desktop">
+                            <div class="media">
+                                <div class="d-flex align-self-center">Item</div>
+                            </div>
+                        </th>
+                        <th class="desktop">
+                            <div class="media">
+                                <div class="d-flex align-self-center">Quantity</div>
+                            </div>
+                        </th>
+                        <th class="desktop">
+                            <div class="media">
+                                <div class="d-flex align-self-center">Total Price (RM)</div>
+                            </div>
+                        </th>
+                        <th class="all">
+                            <div class="media">
+                                <div class="d-flex align-self-center">PO Aging (days)</div>
+                            </div>
+                        </th>
+                        <th class="desktop">
+                            <div class="media">
+                                <div class="d-flex align-self-center">Status</div>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (var item in Model.POListObject)
+                        {
+                    <tr>
+                        <th class="d-none">@Html.DisplayFor(modelItem => item.POId)</th>
+                        <td class="all">@Html.DisplayFor(modelItem => item.PONo)</td>
+                        <td class="desktop">@Html.DisplayFor(modelItem => item.PODate)</td>
+                        <td class="desktop">@Html.DisplayFor(modelItem => item.POItem)</td>
+                        <td class="desktop">@Html.DisplayFor(modelItem => item.Quantity)</td>
+                        <td class="desktop">@Html.DisplayFor(modelItem => item.TotalPrice)</td>
+                        <td class="all">@Html.DisplayFor(modelItem => item.POAging)</td>
+                        <td class="desktop">@Html.DisplayFor(modelItem => item.Status)</td>
+                    </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+            <div class="col-md-12 col-sm-12">
+                <div class="row">
+                    @*<div class="col-md-9 col-sm-8"></div>*@
+                    <div class="col-md-3 offset-md-9 col-sm-4 offset-sm-8">
+                        <div class="media">
+                            <div class="d-flex u-main-nav--push-right text-right">
+                                <div class="row">
+                                    <a id="NewPO" href="~/PO/NewPO?type=Blanket" class="btn btn-md u-btn-blue g-mr-5 g-mb-15">NEW PO</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-}
+        }
     </div>
 </div>
 

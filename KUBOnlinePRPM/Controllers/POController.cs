@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace KUBOnlinePRPM.Controllers
 {
@@ -214,15 +216,22 @@ namespace KUBOnlinePRPM.Controllers
                     POList.POListObject = (from m in db.PurchaseOrders
                                            join n in db.Vendors on m.vendorId equals n.vendorId
                                            join o in db.PurchaseRequisitions on m.PRId equals o.PRId
+                                           join p in db.Users on m.PreparedById equals p.userId
+                                           join q in db.POStatus on m.StatusId equals q.statusId
+                                           join r in db.Customers on m.CustId equals r.custId
                                            select new POListTable()
                                            {
                                                POId = m.POId,
                                                PONo = m.PONo,
                                                PODate = m.PODate,
                                                PRNo = o.PRNo,
+                                               Company = r.name,
+                                               RequestedName = p.userName,
+                                               VendorId = n.vendorNo,
                                                VendorCompany = n.name,
                                                AmountRequired = o.AmountRequired,
                                                POAging = m.POAging,
+                                               Status = q.status,
                                                POType = o.PRType
                                            }).ToList();
                     POList.Type = Type;
@@ -235,15 +244,16 @@ namespace KUBOnlinePRPM.Controllers
                     POList.POListObject = (from m in db.PurchaseOrders
                                            join n in db.Vendors on m.vendorId equals n.vendorId
                                            join o in db.PurchaseRequisitions on m.PRId equals o.PRId
+                                           join p in db.PO_Item on m.POId equals p.POId
                                            where o.PRType == "Blanket" && o.PRId == PRId
                                            select new POListTable()
                                            {
                                                POId = m.POId,
                                                PONo = m.PONo,
                                                PODate = m.PODate,
-                                               PRNo = o.PRNo,
-                                               VendorCompany = n.name,
-                                               AmountRequired = o.AmountRequired,
+                                               POItem = o.PRNo,
+                                               Quantity = p.quantity,
+                                               TotalPrice = p.totalPrice,
                                                POAging = m.POAging,
                                                POType = o.PRType
                                            }).ToList();
@@ -339,7 +349,7 @@ namespace KUBOnlinePRPM.Controllers
                                       select new NewPOModel()
                                       {
                                           PONo = a.PONo,
-                                          ProjectName = b.projectName,
+                                          ProjectName = b.projectCode,
                                           PRNo = h.PRNo,
                                           PreparedDate = a.PreparedDate,
                                           VendorName = c.name,
@@ -349,6 +359,8 @@ namespace KUBOnlinePRPM.Controllers
                                           //VendorEmail = d.vendorEmail,
                                           //VendorStaffId = d.staffId,
                                           //VendorContactNo = d.vendorContactNo,
+                                          PayToVendorId = a.PayToVendorId,
+                                          PaymentTermsId = a.PaymentTermsId,
                                           StatusId = a.StatusId,
                                           Status = g.status
                                           //Submited = a.Submited.Value
@@ -371,8 +383,8 @@ namespace KUBOnlinePRPM.Controllers
                                                            //UOM = n.UoM
                                                        }).ToList();
 
-                ViewBag.PayToVendorList = new SelectList(PayToVendorQuery.AsEnumerable(), "VendorId", "VendorName");
-                ViewBag.PaymentTermsCodeList = new SelectList(PaymentTermsCodeQuery.AsEnumerable(), "PaymentTermsId", "PaymentDescription");
+                ViewBag.PayToVendorList = new SelectList(PayToVendorQuery.AsEnumerable(), "VendorId", "VendorName", PODetail.NewPOForm.PayToVendorId);
+                ViewBag.PaymentTermsCodeList = new SelectList(PaymentTermsCodeQuery.AsEnumerable(), "PaymentTermsId", "PaymentDescription", PODetail.NewPOForm.PaymentTermsId);
 
                 return View(PODetail);
             }
@@ -440,41 +452,76 @@ namespace KUBOnlinePRPM.Controllers
         [HttpPost]
         public JsonResult ComfirmPO()
         {
-            //var VendorStaffIdInfo = db.VendorStaffs.Select(m => new NewPRModel()
-            //{
-            //    VendorStaffId = m.staffId,
-            //    VendorEmail = m.vendorEmail,
-            //    VendorContactNo = m.vendorContactNo
-            //}).Where(m => m.VendorStaffId == VendorStaffId).FirstOrDefault();
+            int? PayToVendorId = null; int? PaymentTermsId = null;
             if (Request["PayToVendorId"] != "")
             {
-                int PayToVendorId = Int32.Parse(Request["PayToVendorId"]);
+                PayToVendorId = Int32.Parse(Request["PayToVendorId"]);
             }
             if (Request["PaymentTermsId"] != "")
             {
-                int PaymentTermsId = Int32.Parse(Request["PaymentTermsId"]);
+                PaymentTermsId = Int32.Parse(Request["PaymentTermsId"]);
             }
-            //int CustId = Int32.Parse(Session["CompanyId"].ToString());
-            //var PayToVendorQuery = (from m in db.Vendors
-            //                        where m.custId == CustId
-            //                        select new
-            //                        {
-            //                            VendorId = m.vendorId,
-            //                            VendorName = m.vendorNo + " - " + m.name,
-            //                            VendorNo = m.vendorNo,
-            //                        }).OrderBy(c => c.VendorNo).ThenBy(c => c.VendorName);
-            //var PaymentTermsCodeQuery = (from m in db.PaymentTerms
-            //                             where m.custId == CustId
-            //                             select new
-            //                             {
-            //                                 PaymentTermsId = m.paymentTermsId,
-            //                                 PaymentDescription = m.paymentCode + " - " + m.paymentDescription,
-            //                                 PaymentCode = m.paymentCode,
-            //                             }).OrderBy(c => c.PaymentCode).ThenBy(c => c.PaymentDescription);
-            //ViewBag.PayToVendorList = new SelectList(PayToVendorQuery.AsEnumerable(), "VendorId", "VendorName");
-            //ViewBag.PaymentTermsCodeList = new SelectList(PaymentTermsCodeQuery.AsEnumerable(), "PaymentTermsId", "PaymentDescription");
+            int POId = Int32.Parse(Request["POId"]);
+            int CustId = Int32.Parse(Session["CompanyId"].ToString());
+            PurchaseOrder updatePO = db.PurchaseOrders.First(m => m.POId == POId);
+            updatePO.PayToVendorId = PayToVendorId;
+            updatePO.PaymentTermsId = PaymentTermsId;
+            updatePO.StatusId = "PO03";
 
-            return Json("The PO has been confirmed");
+            var POItemList = (from m in db.PO_Item
+                              join n in db.PopulateItemLists on m.codeId equals n.codeId
+                              join p in db.PR_Items on m.itemsId equals p.itemsId
+                              where m.POId == POId && n.custId == CustId
+                              select new POItemsTable()
+                              {
+                                  ItemsId = m.itemsId,
+                                  DateRequired = m.dateRequired,
+                                  ItemCode = n.ItemCode,
+                                  Description = m.description,
+                                  CustPONo = m.custPONo,
+                                  Quantity = m.quantity,
+                                  OutStandingQuantity = p.outStandingQuantity.Value,
+                                  UnitPrice = m.unitPrice,
+                                  TotalPrice = m.totalPrice
+                                  //UOM = n.UoM
+                              }).ToList();
+
+            if (db.SaveChanges() > 0)
+            {
+                XmlWriterSettings setting = new XmlWriterSettings();
+                setting.ConformanceLevel = ConformanceLevel.Auto;
+                using (XmlWriter writer = XmlWriter.Create(@"D:\test.xml", setting))
+                {
+                    writer.WriteStartElement("PurchaseOrderDetails");
+                    writer.WriteElementString("PONo", updatePO.PONo);
+                    writer.WriteElementString("CustId", updatePO.CustId.ToString());
+                    writer.WriteElementString("PODate", updatePO.PODate.ToString());
+                    writer.WriteElementString("ProjectId", updatePO.projectId.ToString());
+                    writer.WriteElementString("VendorId", updatePO.vendorId.ToString());
+                    writer.WriteElementString("StatusId", updatePO.StatusId.ToString());
+
+                    foreach (var item in POItemList)
+                    {
+                        writer.WriteStartElement("POItemFor-" + updatePO.PONo);
+                        writer.WriteElementString("DateRequired", item.DateRequired.ToString());
+                        writer.WriteElementString("ItemCode", item.ItemCode);
+                        writer.WriteElementString("Description", item.Description);
+                        writer.WriteElementString("CustPONo", item.CustPONo);
+                        writer.WriteElementString("Quantity", item.Quantity.ToString());
+                        writer.WriteElementString("UnitPrice", item.UnitPrice.ToString());
+                        writer.WriteElementString("TotalPrice", item.TotalPrice.ToString());
+                        writer.WriteEndElement();
+                    }
+                    writer.WriteEndElement();
+                    writer.Flush();
+                }
+                return Json("The PO has been confirmed");
+            }
+            else
+            {
+                return Json("Exception error occured. Please contact admin.");
+            }
+
         }
     }
 }

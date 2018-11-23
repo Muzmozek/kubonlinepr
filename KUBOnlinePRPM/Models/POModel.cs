@@ -44,9 +44,9 @@ namespace KUBOnlinePRPM.Models
         public int POAging { get; set; }
         public string StatusId { get; set; }
         public string Status { get; set; }
-        public int PayToVendorId { get; set; }
+        public int? PayToVendorId { get; set; }
         public string PayToVendorName { get; set; }
-        public int PaymentTermsId { get; set; }
+        public int? PaymentTermsId { get; set; }
         public string PaymentTermsCode { get; set; }
         public List<POItemsTable> POItemListObject { get; set; }
     }
@@ -57,8 +57,15 @@ namespace KUBOnlinePRPM.Models
         public DateTime PODate { get; set; }
         public string PRNo { get; set; }
         public string VendorCompany { get; set; }
+        public string VendorId { get; set; }
+        public string Company { get; set; }
+        public string RequestedName { get; set; }
+        public string POItem { get; set; }
+        public int Quantity { get; set; }
+        public decimal TotalPrice { get; set; }
         public decimal? AmountRequired { get; set; }
         public int POAging { get; set; }
+        public string Status { get; set; }
         public string POType { get; set; }
     }
     public class POItemsTable

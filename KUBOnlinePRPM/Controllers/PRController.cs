@@ -338,6 +338,7 @@ namespace KUBOnlinePRPM.Controllers
                     fileUploadModel.FullPath = fullPath;
                     fileUploadModel.FileName = filename;
                     fileUploadModel.Extension = extension;
+                    fileUploadModel.description = model.NewPRForm.PaperRefNo;
                     fileUploadModel.archivedFlag = false;
                     model.PaperRefNoFile.InputStream.Read(uploadFile, 0, uploadFile.Length);
                     fileUploadModel.File = uploadFile;
@@ -378,6 +379,7 @@ namespace KUBOnlinePRPM.Controllers
                     fileUploadModel1.FullPath = fullPath1;
                     fileUploadModel1.FileName = filename1;
                     fileUploadModel1.Extension = extension1;
+                    fileUploadModel1.description = model.NewPRForm.BidWaiverRefNo;
                     fileUploadModel1.archivedFlag = false;
                     model.BidWaiverRefNoFile.InputStream.Read(uploadFile1, 0, uploadFile1.Length);
                     fileUploadModel1.File = uploadFile1;
@@ -1028,6 +1030,7 @@ namespace KUBOnlinePRPM.Controllers
                     fileUploadModel.FullPath = fullPath;
                     fileUploadModel.FileName = filename;
                     fileUploadModel.Extension = extension;
+                    fileUploadModel.description = PRModel.NewPRForm.PaperRefNo;
                     fileUploadModel.archivedFlag = false;
                     PRModel.PaperRefNoFile.InputStream.Read(uploadFile, 0, uploadFile.Length);
                     fileUploadModel.File = uploadFile;
@@ -1068,6 +1071,7 @@ namespace KUBOnlinePRPM.Controllers
                     fileUploadModel1.FullPath = fullPath1;
                     fileUploadModel1.FileName = filename1;
                     fileUploadModel1.Extension = extension1;
+                    fileUploadModel1.description = PRModel.NewPRForm.BidWaiverRefNo;
                     fileUploadModel1.archivedFlag = false;
                     PRModel.BidWaiverRefNoFile.InputStream.Read(uploadFile1, 0, uploadFile1.Length);
                     fileUploadModel1.File = uploadFile1;

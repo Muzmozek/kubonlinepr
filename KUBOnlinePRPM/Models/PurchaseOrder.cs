@@ -38,6 +38,7 @@ namespace KUBOnlinePRPM.Models
         public Nullable<System.DateTime> SubmitDate { get; set; }
         public int POAging { get; set; }
         public string StatusId { get; set; }
+        public int CustId { get; set; }
     
         public virtual PaymentTerm PaymentTerm { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
