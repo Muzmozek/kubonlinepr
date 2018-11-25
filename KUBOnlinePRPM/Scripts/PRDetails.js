@@ -200,6 +200,23 @@
         });
 
     });
+
+    $("#ApprovePreparedJointRecommended").click(function (e) {
+
+        e.preventDefault();
+
+        Url = "/PR/ApprovePreparedJointRecommended";
+        $.post(Url, {
+
+            PRId: PRId
+
+        }, function (resp) {
+            alert(resp);
+        });
+
+    });
+
+    
     
     //phase 1 reviewer approver approval logic
     $(document).on("click", ".approveRejectDetail", function (e) {

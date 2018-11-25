@@ -538,7 +538,7 @@ namespace KUBOnlinePRPM.Controllers
                                            join s in db.PR_Reviewer on m.PRId equals s.PRId into t
                                            from r in q.DefaultIfEmpty()
                                            from u in t.DefaultIfEmpty()
-                                           where m.PRType == type && p.statusId == "PR05"
+                                           where m.PRType == type && p.statusId == "PR05" || p.statusId == "PR11"
                                            select new PRListTable()
                                            {
                                                PRId = m.PRId,
@@ -1863,7 +1863,7 @@ namespace KUBOnlinePRPM.Controllers
             }
             else if (PRService.CheckAmountScenarioThree(amountBudget))
             {
-                PR.StatusId = "PR03";
+                PR.StatusId = "PR04";
                 PR.Scenario = 3;
                 db.SaveChanges();
 
@@ -1934,11 +1934,31 @@ namespace KUBOnlinePRPM.Controllers
 
             int PrId = Int32.Parse(Request["PrId"]);
             var PR = db.PurchaseRequisitions.First(x => x.PRId == PrId);
-            PR.StatusId = "PR03";
+
+            if (PR.Scenario == 3) {
+                PR.StatusId = "PR11";
+            }
+            else {
+                //scenario 2, review by head of GPSS
+                PR.StatusId = "PR03";
+            }
+            
 
             db.SaveChanges();            
 
             return Json("Successfully recommend");
+        }
+
+        public JsonResult ApprovePreparedJointRecommended()
+        {
+            int PrId = Int32.Parse(Request["PrId"]);
+            var PR = db.PurchaseRequisitions.First(x => x.PRId == PrId);
+            PR.StatusId = "PR03";
+
+            db.SaveChanges();
+            // todo the session must be HOC
+
+            return Json("Successfully joint recommended");
         }
     }
 }
