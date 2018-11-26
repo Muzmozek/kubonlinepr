@@ -335,9 +335,9 @@
           <Property Name="POId" Type="int" />
           <Property Name="AmountPOBalance" Type="numeric" Precision="18" Scale="2" />
           <Property Name="Phase2Completed" Type="bit" Nullable="false" />
+          <Property Name="Scenario" Type="int" />
           <Property Name="PRAging" Type="int" />
           <Property Name="StatusId" Type="nchar" MaxLength="4" Nullable="false" />
-          <Property Name="Scenario" Type="int" />
         </EntityType>
         <EntityType Name="PurchaseType">
           <Key>
@@ -435,6 +435,25 @@
           <Property Name="lastModifyByUserId" Type="int" />
           <Property Name="createDate" Type="datetime" />
           <Property Name="lastModifyDate" Type="datetime" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'KUBOnlinePR.dbo.MessageList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="MessageList">
+          <Key>
+            <PropertyRef Name="msgId" />
+            <PropertyRef Name="msgDate" />
+            <PropertyRef Name="message" />
+          </Key>
+          <Property Name="fromUserId" Type="int" />
+          <Property Name="FromUserName" Type="nvarchar" MaxLength="151" />
+          <Property Name="msgId" Type="int" Nullable="false" />
+          <Property Name="msgDate" Type="datetime" Nullable="false" />
+          <Property Name="PRId" Type="int" />
+          <Property Name="PRNo" Type="nvarchar" MaxLength="30" />
+          <Property Name="message" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="msgType" Type="nvarchar" MaxLength="10" />
+          <Property Name="toUserId" Type="int" />
+          <Property Name="ToUserName" Type="nvarchar" MaxLength="151" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -1178,6 +1197,20 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <EntitySet Name="Users_Roles" EntityType="Self.Users_Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Vendor" EntityType="Self.Vendor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VendorStaff" EntityType="Self.VendorStaff" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MessageList" EntityType="Self.MessageList" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [MessageList].[fromUserId] AS [fromUserId], 
+    [MessageList].[FromUserName] AS [FromUserName], 
+    [MessageList].[msgId] AS [msgId], 
+    [MessageList].[msgDate] AS [msgDate], 
+    [MessageList].[PRId] AS [PRId], 
+    [MessageList].[PRNo] AS [PRNo], 
+    [MessageList].[message] AS [message], 
+    [MessageList].[msgType] AS [msgType], 
+    [MessageList].[toUserId] AS [toUserId], 
+    [MessageList].[ToUserName] AS [ToUserName]
+    FROM [dbo].[MessageList] AS [MessageList]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="PopulateItemList" EntityType="Self.PopulateItemList" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [PopulateItemList].[codeId] AS [codeId], 
@@ -2075,6 +2108,7 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
             <End Role="VendorStaff" EntitySet="VendorStaffs" />
             <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
           </AssociationSet>
+          <EntitySet Name="MessageLists" EntityType="KUBOnlinePRModel.MessageList" />
         </EntityContainer>
         <EntityType Name="ItemType">
           <Key>
@@ -2963,6 +2997,23 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="MessageList">
+          <Key>
+            <PropertyRef Name="msgId" />
+            <PropertyRef Name="msgDate" />
+            <PropertyRef Name="message" />
+          </Key>
+          <Property Name="fromUserId" Type="Int32" />
+          <Property Name="FromUserName" Type="String" MaxLength="151" FixedLength="false" Unicode="true" />
+          <Property Name="msgId" Type="Int32" Nullable="false" />
+          <Property Name="msgDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="PRId" Type="Int32" />
+          <Property Name="PRNo" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="message" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="msgType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="toUserId" Type="Int32" />
+          <Property Name="ToUserName" Type="String" MaxLength="151" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3438,6 +3489,22 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
                 <ScalarProperty Name="CustId" ColumnName="CustId" />
                 <ScalarProperty Name="PRId" ColumnName="PRId" />
                 <ScalarProperty Name="uuid" ColumnName="uuid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MessageLists">
+            <EntityTypeMapping TypeName="KUBOnlinePRModel.MessageList">
+              <MappingFragment StoreEntitySet="MessageList">
+                <ScalarProperty Name="ToUserName" ColumnName="ToUserName" />
+                <ScalarProperty Name="toUserId" ColumnName="toUserId" />
+                <ScalarProperty Name="msgType" ColumnName="msgType" />
+                <ScalarProperty Name="message" ColumnName="message" />
+                <ScalarProperty Name="PRNo" ColumnName="PRNo" />
+                <ScalarProperty Name="PRId" ColumnName="PRId" />
+                <ScalarProperty Name="msgDate" ColumnName="msgDate" />
+                <ScalarProperty Name="msgId" ColumnName="msgId" />
+                <ScalarProperty Name="FromUserName" ColumnName="FromUserName" />
+                <ScalarProperty Name="fromUserId" ColumnName="fromUserId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

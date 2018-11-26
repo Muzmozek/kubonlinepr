@@ -1,6 +1,9 @@
 ﻿using KUBOnlinePRPM.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -1118,6 +1121,103 @@ namespace KUBOnlinePRPM.Controllers
                 }
                 db.SaveChanges();
             }
+        }
+        public static SqlConnection OpenDBConnection()
+        {
+            SqlConnection conn = null;
+            try
+            {
+
+                conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["MainConnectionString"].ConnectionString);
+                //conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["ADConnectionString"].ConnectionString);
+                conn.Open();
+                //Debug.Print("Connected")
+            }
+            catch
+            {
+                if (conn.State == System.Data.ConnectionState.Open)
+                {
+                    conn.Close();
+                }
+
+                conn = null;
+                Debug.Print("Failed");
+            }
+            return conn;
+        }
+        public static List<QuestionAnswerModels> getMessageList(int PRId, int UserId)
+        {
+            SqlConnection conn = null;
+            DataSet returnDS = new DataSet("MessageList");
+            string info = "";
+            try
+            {
+                SqlDataAdapter SQLDataADP = new SqlDataAdapter();
+                SQLDataADP.TableMappings.Add("Table", "MessageList");
+                conn = OpenDBConnection();
+                conn.InfoMessage += (object obj, SqlInfoMessageEventArgs e) =>
+                {
+                    info = e.Message.ToString();
+                };
+                string sql = "";
+                    sql = "SELECT DISTINCT [PRId], " +
+                                            "[FromUserName], " +
+                                            "[msgDate], " +
+                                            "[PRNo], " +
+                                            "[message], " +
+                                            "[msgType], " +
+                                            "Stuff((SELECT ',' + [ToUserName] " +
+                                                   "FROM   messagelist " +
+                                                   "WHERE  [msgId] = a.[msgId] " +
+                                                   "FOR xml path ('')), 1, 1, '') AS [ToUserName] " +
+                            "FROM   messagelist AS a " +
+                            "WHERE PRId = @PRId " +
+                            "ORDER by [msgDate] DESC ";
+
+                SqlCommand SQLcmd = new SqlCommand(sql, conn)
+                {
+                    CommandType = CommandType.Text
+                };
+                SQLDataADP.SelectCommand = SQLcmd;
+
+                SQLcmd.Parameters.Add("@PRId", SqlDbType.Int);
+                SQLcmd.Parameters["@PRId"].Value = PRId;
+
+                SQLDataADP.Fill(returnDS);
+            }
+            catch (Exception ex)
+            {
+                Debug.Print("Report - " + ex.Message);
+            }
+            finally
+            {
+                CloseDBConnection(conn);
+            }
+
+            var MessageList = returnDS.Tables[0].AsEnumerable().Select(
+            dataRow => new QuestionAnswerModels
+            {
+                //Uid = uid,
+                //ChatId = dataRow.Field<int>("chatid"),
+                PRId = dataRow.Field<int>("PRId"),
+                FromUserName = dataRow.Field<string>("fromusername"),
+                MsgDate = dataRow.Field<DateTime>("msgDate"),
+                PRNo = dataRow.Field<string>("PRNo"),
+                ToUserName = dataRow.Field<string>("ToUserName"),
+                Message = dataRow.Field<string>("message"),
+                MsgType = dataRow.Field<string>("msgType")
+            }).ToList();
+
+            return MessageList;
+        }
+
+        public static void CloseDBConnection(SqlConnection conn)
+        {
+            if ((conn != null))
+            {
+                conn.Close();
+            }
+            //Debug.Print("Connection Closed")
         }
     }
 }

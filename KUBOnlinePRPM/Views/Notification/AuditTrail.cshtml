@@ -1,0 +1,88 @@
+﻿@model KUBOnlinePRPM.Models.NotiModel
+
+<div class="row g-bg-white g-pa-20">
+    <div class="col-md-12">
+        <div class="media-body align-self-center text-left g-mb-30">
+            <h3 class="g-font-weight-400 g-font-size-20 g-color-black">Audit Trail</h3>
+        </div>
+    </div>
+    <div class="container-fluid-v3 col-xs-12 g-mb-30 g-mt-10">
+        <table id="AuditTrailTable" class="table table-striped table-bordered nowrap dt-responsive table-hover" style="width:100%">
+            <thead>
+                <tr>
+                    <th class="d-none">MsgId</th>
+                    <th class="d-none">PRId</th>
+                    <th class="d-none">POId</th>
+                    <th class="all">
+                        <div class="media">
+                            <div class="d-flex align-self-center">From</div>
+                        </div>
+                    </th>
+                    <th class="desktop">
+                        <div class="media">
+                            <div class="d-flex align-self-center">To</div>
+                        </div>
+                    </th>
+                    <th class="desktop">
+                        <div class="media">
+                            <div class="d-flex align-self-center">Message</div>
+                        </div>
+                    </th>
+                    <th class="desktop">
+                        <div class="media">
+                            <div class="d-flex align-self-center">Message Date</div>
+                        </div>
+                    </th>
+                    <th class="all">
+                        <div class="media">
+                            <div class="d-flex align-self-center">Status</div>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int i = 1;
+                    foreach (var item in Model.NotiListObject)
+                    {
+                        <tr>
+                            <td class="d-none">@Html.DisplayFor(modelItem => item.MsgId)</td>
+                            <td class="d-none">@Html.DisplayFor(modelItem => item.PRId)</td>
+                            <td class="d-none">@Html.DisplayFor(modelItem => item.POId)</td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FromFullName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ToFullName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Message)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MsgDate)
+                            </td>
+
+
+                            @if (item.Done == true)
+                            {
+                                <td>Done</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        </tr>
+                        i++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        var AuditTrailTable;
+    </script>
+    <script src="~/Scripts/AuditTrail.js"></script>
+}

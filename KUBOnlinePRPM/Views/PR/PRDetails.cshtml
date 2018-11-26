@@ -761,7 +761,7 @@
 
                                 @if ((Model.NewPRForm.Scenario == 1) && (Model.NewPRForm.StatusId == "PR03") && (Session["ifAdmin"] != null || Session["ifIT"] != null))
                                 {
-                                    <a id="RejectPreparedReviewer" class=" btn btn-md u-btn-white g-mr-5 g-mb-15">REJECT 213</a>
+                                    <a id="RejectPreparedReviewer" class=" btn btn-md u-btn-white g-mr-5 g-mb-15">REJECT</a>
 
                                     <a id="ReviewPreparedReviewer" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">REVIEWED</a>
                                 }
@@ -798,11 +798,18 @@
                                     <a id="ApprovePreparedJointRecommended" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">JOINTLY RECOMMENDED</a>
                                 }
 
-                                @if (((Model.NewPRForm.StatusId == "PR05") && Session["ifAdmin"] != null) || (Model.NewPRForm.StatusId == "PR05" && Session["ifHOC"] != null))
+                                @if (((Model.NewPRForm.StatusId == "PR05") && Session["ifAdmin"] != null) && Model.NewPRForm.Scenario == 3 || (Model.NewPRForm.StatusId == "PR05" && Session["ifHOC"] != null && Model.NewPRForm.Scenario == 3))
                                 {
                                     <a id="RejectPreparedApprover" class=" btn btn-md u-btn-white g-mr-5 g-mb-15">REJECT</a>
 
                                     <a id="ApprovePreparedJointRecommended" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">APPROVE</a>
+                                }
+
+                                @if (((Model.NewPRForm.StatusId == "PR05") && Session["ifAdmin"] != null) && Model.NewPRForm.Scenario == 1 || (Model.NewPRForm.StatusId == "PR05" && Session["ifHOC"] != null && Model.NewPRForm.Scenario == 1))
+                                {
+                                    <a id="RejectPreparedReviewer" class=" btn btn-md u-btn-white g-mr-5 g-mb-15">REJECT</a>
+
+                                    <a id="ApprovePreparedApprover" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">APPROVE</a>
                                 }
 
                                 @*Phase 1 approval & rejection view button *@

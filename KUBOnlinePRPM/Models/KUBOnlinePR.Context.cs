@@ -56,5 +56,6 @@ namespace KUBOnlinePRPM.Models
         public virtual DbSet<PaymentTerm> PaymentTerms { get; set; }
         public virtual DbSet<PurchaseOrder> PurchaseOrders { get; set; }
         public virtual DbSet<PurchaseRequisition> PurchaseRequisitions { get; set; }
+        public virtual DbSet<MessageList> MessageLists { get; set; }
     }
 }

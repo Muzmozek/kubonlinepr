@@ -1174,34 +1174,26 @@ namespace KUBOnlinePRPM.Controllers
         }
         public ActionResult PRConversations()
         {
-            NotiModel NewNotiList = new NotiModel();
             int userId = Int32.Parse(Session["UserId"].ToString());
             int PRId = Int32.Parse(Session["PRId"].ToString());
+            int CustId = Int32.Parse(Session["CompanyId"].ToString());
+
+            NotiModel NewNotiList = new NotiModel()
+            {
+                MessageListModel = DBLogicController.getMessageList(PRId, userId)
+            };           
             //var haha = db.NotificationMsgs.ToList();
-            NewNotiList.NotiListObject = (from m in db.NotificationMsgs
-                                          join n in db.Users on m.fromUserId equals n.userId
-                                          join o in db.NotiGroups on m.msgId equals o.msgId into p           
-                                          join r in db.PurchaseRequisitions on m.PRId equals r.PRId into s
-                                          from q in p.DefaultIfEmpty()
-                                          from t in s.DefaultIfEmpty()
-                                          join u in db.Users on q.toUserId equals u.userId into v
-                                          from w in v.DefaultIfEmpty()
-                                          where t.PRId == PRId
-                                          select new NotiListTable()
-                                          {
-                                              MsgId = m.msgId,
-                                              Message = m.message,
-                                              PRId = m.PRId,
-                                              //RequestorName = n.firstName + " " + n.lastName,
-                                              POId = m.POId,
-                                              FromUserId = m.fromUserId,
-                                              FromFullName = n.firstName + " " + n.lastName,
-                                              ToUserId = q.toUserId,
-                                              ToFullName = w.firstName + " " + w.lastName,
-                                              MsgDate = m.msgDate,
-                                              PRType = t.PRType,
-                                              Done = m.done
-                                          }).ToList();
+            var NotiMemberList = (from m in db.Users
+                                  join n in db.Customers on m.companyId equals n.custId into gy
+                                  from x in gy.DefaultIfEmpty()
+                                  where m.status == true && m.companyId == CustId
+                                  select new NotiMemberList()
+                                  {
+                                      Id = m.userId,
+                                      Name = m.firstName + " " + m.lastName
+                                  }).ToList().OrderBy(c => c.Name);
+
+            ViewBag.NotiMemberList = new MultiSelectList(NotiMemberList, "Id", "Name");
 
             return PartialView(NewNotiList);
         }

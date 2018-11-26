@@ -95,6 +95,7 @@
         <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseRequisition_User" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseRequisition_Vendor" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseRequisition_VendorStaff" />
+        <EntityTypeShape EntityType="KUBOnlinePRModel.MessageList" Width="1.5" PointX="0.75" PointY="3.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
