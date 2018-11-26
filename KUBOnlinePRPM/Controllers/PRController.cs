@@ -287,7 +287,7 @@ namespace KUBOnlinePRPM.Controllers
                 if (!ModelState.IsValid)
                 {
                     ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "description",model.NewPRForm.ProjectId);
-                    ViewBag.BudgetedList = new SelectList(BudgetedList.AsEnumerable(), "Value", "Text",model.NewPRForm.Unbudgeted);
+                    ViewBag.BudgetedList = new SelectList(BudgetedList.AsEnumerable(), "Value", "Text",model.NewPRForm.Budgeted);
                     ViewBag.PurchaseTypeList = new SelectList(PurchaseTypeQuery.AsEnumerable(), "purchaseTypeId", "purchaseType",model.NewPRForm.PurchaseTypeId);
                     //ViewBag.ReviewerNameList = new SelectList(ReviewerNameQuery.AsEnumerable(), "reviewerId", "reviewerName");
                     //ViewBag.ApproverNameList = new SelectList(ApproverNameQuery.AsEnumerable(), "approverId", "approverName");
@@ -453,7 +453,7 @@ namespace KUBOnlinePRPM.Controllers
                 //var ifProcurement = KUBHelper.CheckRole("R03") ? true : false;
 
                 PRModel PRList = new PRModel();
-                while (ifSuperAdmin != null)
+                while (ifSuperAdmin != null || ifAdmin != null)
                 {
                     PRList.PRListObject = (from m in db.PurchaseRequisitions
                                            join n in db.Users on m.PreparedById equals n.userId into ah
@@ -626,26 +626,6 @@ namespace KUBOnlinePRPM.Controllers
                                            join n in db.Users on m.PreparedById equals n.userId
                                            join o in db.Vendors on m.VendorId equals o.vendorId into q
                                            join p in db.PRStatus on m.StatusId equals p.statusId
-                                           from r in q.DefaultIfEmpty()
-                                           where m.PRType == type && p.statusId == "PR02"
-                                           select new PRListTable()
-                                           {
-                                               PRId = m.PRId,
-                                               PRNo = m.PRNo,
-                                               PRDate = m.PreparedDate,
-                                               RequestorName = n.firstName + " " + n.lastName,
-                                               VendorCompany = r.name,
-                                               AmountRequired = m.AmountRequired,
-                                               //PRAging = m.aging,
-                                               Status = p.status
-                                           }).ToList();
-                }
-                else if (ifAdmin != null)
-                {
-                    PRList.PRListObject = (from m in db.PurchaseRequisitions
-                                           join n in db.Users on m.PreparedById equals n.userId
-                                           join o in db.Vendors on m.VendorId equals o.vendorId into q
-                                           join p in db.PRStatus on m.StatusId equals p.statusId
                                            join s in db.PR_Admin on m.PRId equals s.PRId into t
                                            from r in q.DefaultIfEmpty()
                                            from u in t.DefaultIfEmpty()
@@ -728,6 +708,23 @@ namespace KUBOnlinePRPM.Controllers
                     Text = "No",
                     Value = false.ToString()
                 });
+                List<SelectListItem> SpecReviewerList = new List<SelectListItem>();
+                SpecReviewerList.Add(new SelectListItem
+                {
+                    Text = "IT",
+                    Value = "IT"
+                });
+                SpecReviewerList.Add(new SelectListItem
+                {
+                    Text = "HSE",
+                    Value = "HSE"
+                });
+                SpecReviewerList.Add(new SelectListItem
+                {
+                    Text = "PMO",
+                    Value = "PMO"
+                });
+
                 var PurchaseTypeQuery = db.PurchaseTypes.Select(c => new { PurchaseTypeId = c.purchaseTypeId, PurchaseType = c.purchaseType1 }).OrderBy(c => c.PurchaseType);
                 var VendorListQuery = (from m in db.Vendors
                                        where m.custId == CustId
@@ -743,7 +740,8 @@ namespace KUBOnlinePRPM.Controllers
                 {
                     PRId = Int32.Parse(Session["PRId"].ToString()),
                     UserId = Int32.Parse(Session["UserId"].ToString()),
-                    Type = Session["PRType"].ToString()
+                    Type = Session["PRType"].ToString(),
+                    CustId = CustId
                     //RoleIdList = getRole
                 };
                 var ReviewerNameQuery = (from m in db.Users
@@ -806,7 +804,7 @@ namespace KUBOnlinePRPM.Controllers
                                                  PRNo = a.PRNo,
                                                  ProjectId = a.ProjectId,
                                                  //PaperRefNo = a.PaperRefNo,
-                                                 Value = a.Unbudgeted,
+                                                 Value = a.Budgeted,
                                                  VendorId = a.VendorId,
                                                  VendorEmail = w.vendorEmail,
                                                  VendorStaffId = w.staffId,
@@ -833,29 +831,50 @@ namespace KUBOnlinePRPM.Controllers
                                                  PRStatus = c.status,
                                                  Scenario = a.Scenario
                                              }).FirstOrDefault();
-                PRDetail.NewPRForm.PRItemListObject = (from m in db.PR_Items
-                                                       join n in db.PopulateItemLists on m.codeId equals n.codeId into o
-                                                       from p in o.DefaultIfEmpty()
-                                                 where m.PRId == PRDetail.PRId
-                                                 select new PRItemsTable()
-                                                 {
-                                                     ItemsId = m.itemsId,
-                                                     DateRequired = m.dateRequired,
-                                                     Description = m.description,
-                                                     CodeId = p.codeId,
-                                                     CustPONo = m.custPONo,
-                                                     Quantity = m.quantity,
-                                                     UnitPrice = m.unitPrice,
-                                                     TotalPrice = m.totalPrice,
-                                                     UOM = p.UoM
-                                                 }).ToList();
-
-                
+                if (PRDetail.NewPRForm.StatusId == "PR01" || PRDetail.NewPRForm.StatusId == "PR02" || PRDetail.NewPRForm.StatusId == "PR09" || PRDetail.NewPRForm.StatusId == "PR10")
+                {
+                    PRDetail.NewPRForm.PRItemListObject = (from m in db.PR_Items
+                                                           join n in db.PopulateItemLists on m.codeId equals n.codeId into o
+                                                           from p in o.DefaultIfEmpty()
+                                                           where m.PRId == PRDetail.PRId
+                                                           select new PRItemsTable()
+                                                           {
+                                                               ItemsId = m.itemsId,
+                                                               DateRequired = m.dateRequired,
+                                                               Description = m.description,
+                                                               CodeId = p.codeId,
+                                                               CustPONo = m.custPONo,
+                                                               Quantity = m.quantity,
+                                                               UnitPrice = m.unitPrice,
+                                                               TotalPrice = m.totalPrice,
+                                                               UOM = p.UoM
+                                                           }).ToList();
+                } else
+                {
+                    PRDetail.NewPRForm.PRItemListObject = (from m in db.PR_Items
+                                                           join n in db.PopulateItemLists on m.codeId equals n.codeId into o
+                                                           from p in o.DefaultIfEmpty()
+                                                           where m.PRId == PRDetail.PRId && p.custId == PRDetail.CustId
+                                                           select new PRItemsTable()
+                                                           {
+                                                               ItemsId = m.itemsId,
+                                                               DateRequired = m.dateRequired,
+                                                               Description = m.description,
+                                                               CodeId = p.codeId,
+                                                               CustPONo = m.custPONo,
+                                                               Quantity = m.quantity,
+                                                               UnitPrice = m.unitPrice,
+                                                               TotalPrice = m.totalPrice,
+                                                               UOM = p.UoM
+                                                           }).ToList();
+                }
+                                
                 //Session["Details_POIssueDate"] = PODetailList.POListDetail.Details_POIssueDate;
                 //Session["Details_Update"] = PODetailList.POListDetail.Details_Update;
 
                 ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "Description", PRDetail.NewPRForm.ProjectId);
                 ViewBag.BudgetedList = new SelectList(BudgetedList.AsEnumerable(), "Value", "Text", PRDetail.NewPRForm.Value);
+                ViewBag.SpecReviewerList = new SelectList(SpecReviewerList.AsEnumerable(), "Value", "Text", PRDetail.NewPRForm.SpecReviewer);
                 ViewBag.PurchaseTypeList = new SelectList(PurchaseTypeQuery.AsEnumerable(), "purchaseTypeId", "purchaseType", PRDetail.NewPRForm.PurchaseTypeId);
                 //ViewBag.ReviewerNameList = new SelectList(ReviewerNameQuery.AsEnumerable(), "reviewerId", "reviewerName", PRDetail.NewPRForm.ReviewerId);
                 //ViewBag.ApproverNameList = new SelectList(ApproverNameQuery.AsEnumerable(), "approverId", "approverName", PRDetail.NewPRForm.ApproverId);
@@ -901,6 +920,22 @@ namespace KUBOnlinePRPM.Controllers
                 {
                     Text = "No",
                     Value = false.ToString()
+                });
+                List<SelectListItem> SpecReviewerList = new List<SelectListItem>();
+                SpecReviewerList.Add(new SelectListItem
+                {
+                    Text = "IT",
+                    Value = "IT"
+                });
+                SpecReviewerList.Add(new SelectListItem
+                {
+                    Text = "HSE",
+                    Value = "HSE"
+                });
+                SpecReviewerList.Add(new SelectListItem
+                {
+                    Text = "PMO",
+                    Value = "PMO"
                 });
                 var PurchaseTypeQuery = db.PurchaseTypes.Select(c => new { PurchaseTypeId = c.purchaseTypeId, PurchaseType = c.purchaseType1 }).OrderBy(c => c.PurchaseType);
                 var VendorListQuery = (from m in db.Vendors
@@ -951,6 +986,7 @@ namespace KUBOnlinePRPM.Controllers
                     ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "Description", PRModel.NewPRForm.ProjectId);
                     ViewBag.BudgetedList = new SelectList(BudgetedList.AsEnumerable(), "Value", "Text", PRModel.NewPRForm.Value);
                     ViewBag.PurchaseTypeList = new SelectList(PurchaseTypeQuery.AsEnumerable(), "purchaseTypeId", "purchaseType", PRModel.NewPRForm.PurchaseTypeId);
+                    ViewBag.SpecReviewerList = new SelectList(SpecReviewerList.AsEnumerable(), "Value", "Text", PRModel.NewPRForm.SpecReviewer);
                     //ViewBag.ReviewerNameList = new SelectList(ReviewerNameQuery.AsEnumerable(), "reviewerId", "reviewerName", PRModel.NewPRForm.ReviewerId);
                     //ViewBag.ApproverNameList = new SelectList(ApproverNameQuery.AsEnumerable(), "approverId", "approverName", PRModel.NewPRForm.ApproverId);
                     ViewBag.VendorList = new SelectList(VendorListQuery.AsEnumerable(), "vendorId", "VendorName", PRModel.NewPRForm.VendorId);
@@ -1104,6 +1140,7 @@ namespace KUBOnlinePRPM.Controllers
 
                 ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "Description", PRModel.NewPRForm.ProjectId);
                 ViewBag.BudgetedList = new SelectList(BudgetedList.AsEnumerable(), "Value", "Text", PRModel.NewPRForm.Value);
+                ViewBag.SpecReviewerList = new SelectList(SpecReviewerList.AsEnumerable(), "Value", "Text", PRModel.NewPRForm.SpecReviewer);
                 ViewBag.PurchaseTypeList = new SelectList(PurchaseTypeQuery.AsEnumerable(), "purchaseTypeId", "purchaseType", PRModel.NewPRForm.PurchaseTypeId);
                 //ViewBag.ReviewerNameList = new SelectList(ReviewerNameQuery.AsEnumerable(), "reviewerId", "reviewerName", PRModel.NewPRForm.ReviewerId);
                 //ViewBag.ApproverNameList = new SelectList(ApproverNameQuery.AsEnumerable(), "approverId", "approverName", PRModel.NewPRForm.ApproverId);
@@ -1609,14 +1646,14 @@ namespace KUBOnlinePRPM.Controllers
                                           join c in db.PRStatus on a.StatusId equals c.statusId
                                           join d in db.Projects on a.ProjectId equals d.projectId
                                           join e in db.Vendors on a.VendorId equals e.vendorId into f
-                                          join g in db.VendorStaffs on a.VendorStaffId equals g.staffId into l
+                                          //join g in db.VendorStaffs on a.VendorStaffId equals g.staffId into l
                                           join h in db.PR_Items on a.PRId equals h.PRId
                                           join j in db.PopulateItemLists on h.codeId equals j.codeId into k
                                           join m in db.PurchaseTypes on a.PurchaseTypeId equals m.purchaseTypeId
                                           join n in db.Customers on b.companyId equals n.custId
                                           join s in db.PR_HOD on a.PRId equals s.PRId
                                           join t in db.Users on s.HODId equals t.userId
-                                          from x in l.DefaultIfEmpty()
+                                          //from x in l.DefaultIfEmpty()
                                           from y in f.DefaultIfEmpty()
                                           from z in k.DefaultIfEmpty()
                                           where a.PRId == PRDetail.PRId
@@ -1629,13 +1666,13 @@ namespace KUBOnlinePRPM.Controllers
                                               PRNo = a.PRNo,
                                               ProjectId = a.ProjectId,
                                               PaperRefNo = a.PaperRefNo,
-                                              Unbudgeted = a.Unbudgeted,
+                                              Budgeted = a.Budgeted,
                                               VendorId = a.VendorId,
                                               VendorName = y.name,
-                                              VendorEmail = x.vendorEmail,
-                                              VendorStaffId = x.staffId,
-                                              VendorContactName = x.vendorContactName,
-                                              VendorContactNo = x.vendorContactNo,
+                                              //VendorEmail = x.vendorEmail,
+                                              //VendorStaffId = x.staffId,
+                                              //VendorContactName = x.vendorContactName,
+                                              //VendorContactNo = x.vendorContactNo,
                                               PurchaseTypeId = a.PurchaseTypeId,
                                               PurchaseType = m.purchaseType1,
                                               BudgetDescription = a.BudgetDescription,
@@ -1649,17 +1686,17 @@ namespace KUBOnlinePRPM.Controllers
                                               HODApproverId = s.HODId,
                                               HODApproverName = t.firstName + " " + t.lastName,
                                               HODApprovedDate1 = s.HODApprovedDate1.Value,
-                                              HODApprovedDate2 = s.HODApprovedDate2.Value,
+                                              //HODApprovedDate2 = s.HODApprovedDate2.Value,
                                               Saved = a.Saved,
                                               Submited = a.Submited,
                                               Rejected = a.Rejected,
                                               StatusId = a.StatusId.Trim()
                                           }).FirstOrDefault();
-                    PR_Reviewer getReviewer = db.PR_Reviewer.First(m => m.PRId == PRDetail.PRId && m.reviewed == 1);
-                    PRDetail.NewPRForm.ReviewerId = getReviewer.reviewerId;
+                    //PR_Reviewer getReviewer = db.PR_Reviewer.First(m => m.PRId == PRDetail.PRId && m.reviewed == 1);
+                    //PRDetail.NewPRForm.ReviewerId = getReviewer.reviewerId;
 
-                    User getReviewerName = db.Users.First(m => m.userId == getReviewer.reviewerId);
-                    PRDetail.NewPRForm.ReviewerName = getReviewerName.firstName + " " + getReviewerName.lastName;
+                    //User getReviewerName = db.Users.First(m => m.userId == getReviewer.reviewerId);
+                    //PRDetail.NewPRForm.ReviewerName = getReviewerName.firstName + " " + getReviewerName.lastName;
                     PRDetail.NewPRForm.ApproverName = PRDetail.NewPRForm.HODApproverName;
                 } else
                 {
@@ -1668,7 +1705,7 @@ namespace KUBOnlinePRPM.Controllers
                                           join c in db.PRStatus on a.StatusId equals c.statusId
                                           join d in db.Projects on a.ProjectId equals d.projectId
                                           join e in db.Vendors on a.VendorId equals e.vendorId into f
-                                          join g in db.VendorStaffs on a.VendorStaffId equals g.staffId into l
+                                          //join g in db.VendorStaffs on a.VendorStaffId equals g.staffId into l
                                           join h in db.PR_Items on a.PRId equals h.PRId
                                           join j in db.PopulateItemLists on h.codeId equals j.codeId into k
                                           join m in db.PurchaseTypes on a.PurchaseTypeId equals m.purchaseTypeId
@@ -1680,7 +1717,7 @@ namespace KUBOnlinePRPM.Controllers
                                           join u in db.PR_Recommender on a.PRId equals u.PRId into aa
                                           from v in r.DefaultIfEmpty()
                                           from w in p.DefaultIfEmpty()
-                                          from x in l.DefaultIfEmpty()
+                                          //from x in l.DefaultIfEmpty()
                                           from y in f.DefaultIfEmpty()
                                           from z in k.DefaultIfEmpty()
                                           from ab in aa.DefaultIfEmpty()
@@ -1694,13 +1731,13 @@ namespace KUBOnlinePRPM.Controllers
                                               PRNo = a.PRNo,
                                               ProjectId = a.ProjectId,
                                               PaperRefNo = a.PaperRefNo,
-                                              Unbudgeted = a.Unbudgeted,
+                                              Budgeted = a.Budgeted,
                                               VendorId = a.VendorId,
                                               VendorName = y.name,
-                                              VendorEmail = x.vendorEmail,
-                                              VendorStaffId = x.staffId,
-                                              VendorContactName = x.vendorContactName,
-                                              VendorContactNo = x.vendorContactNo,
+                                              //VendorEmail = x.vendorEmail,
+                                              //VendorStaffId = x.staffId,
+                                              //VendorContactName = x.vendorContactName,
+                                              //VendorContactNo = x.vendorContactNo,
                                               PurchaseTypeId = a.PurchaseTypeId,
                                               PurchaseType = m.purchaseType1,
                                               BudgetDescription = a.BudgetDescription,
@@ -1787,20 +1824,36 @@ namespace KUBOnlinePRPM.Controllers
             
         }
 
-        public JsonResult SubmitPRProcurement()
+        public JsonResult SubmitPRProcurement(PRModel PRModel)
         {
             // todo check session if login as procurement or admin only
 
             int PrId = Int32.Parse(Request["PrId"]); int UserId = Int32.Parse(Session["UserId"].ToString());
             var getFullName = db.Users.First(m => m.userId == UserId);
-            String SpecsReviewer = Request["SpecsReviewer"];
+            //String SpecsReviewer = Request["SpecsReviewer"];
 
             var PR = db.PurchaseRequisitions.First(x => x.PRId == PrId);
-            PR.SpecsReviewer = SpecsReviewer;
+            PR.SpecsReviewer = PRModel.NewPRForm.SpecReviewer;
+            PR.AmountRequired = PRModel.NewPRForm.AmountRequired;
+            PR.VendorId = PRModel.NewPRForm.VendorId;
+            PR.PRAging = PRModel.NewPRForm.PRAging;
             db.SaveChanges();
 
+            foreach (var value in PRModel.NewPRForm.PRItemListObject)
+            {
+                PR_Items _objNewPRItem = db.PR_Items.FirstOrDefault(m => m.PRId == PrId);
+                _objNewPRItem.codeId = value.CodeId.Value;
+                _objNewPRItem.unitPrice = value.UnitPrice.Value;
+                _objNewPRItem.totalPrice = value.TotalPrice.Value;
+                db.SaveChanges();
+
+                PR_Items _objUpdatePRItem = db.PR_Items.First(m => m.itemsId == value.ItemsId);
+                _objUpdatePRItem.outStandingQuantity = _objUpdatePRItem.outStandingQuantity - _objNewPRItem.quantity;
+                db.SaveChanges();
+            }
+
             Debug.WriteLine("SubmitPRProcurement");
-            decimal amountBudget = PR.AmountRequired;
+            decimal amountBudget = PRModel.NewPRForm.AmountRequired;
 
             if (PRService.CheckAmountScenarioOne(amountBudget) && PRService.IncludeInBudget(PR))
             {
@@ -1822,13 +1875,24 @@ namespace KUBOnlinePRPM.Controllers
                 // send notifications to hod
 
                 // send notifications to reviewer
-                var getReviewer = (from m in db.PurchaseRequisitions
-                                   join n in db.PR_Reviewer on m.PRId equals n.PRId
+                //get
+                //PR_Reviewer _objReviewer = new PR_Reviewer
+                //{
+                //    uuid = Guid.NewGuid(),
+                //    HODId = model.NewPRForm.HODApproverId,
+                //    PRId = _objNewPR.PRId,
+                //    HODApprovedP1 = model.NewPRForm.HODApproverApprovedP1
+                //};
+                //db.PR_HOD.Add(_objHOD);
+                //db.SaveChanges();
+
+                var getReviewer = (from m in db.Users
+                                   join n in db.Users_Roles on m.userId equals n.userId
                                    //join o in db.Roles on n.roleId equals o.roleId
-                                   where m.PRId == PrId
+                                   where (n.roleId == "R07" || n.roleId == "R08" || n.roleId == "R09") && m.companyId == PR.CustId
                                    select new PRModel()
                                    {
-                                       UserId = n.reviewerId
+                                       UserId = n.userId
                                    }).ToList();
                 NotificationMsg objTask = new NotificationMsg()
                 {
@@ -1867,7 +1931,7 @@ namespace KUBOnlinePRPM.Controllers
             }
             else if (PRService.CheckAmountScenarioThree(amountBudget))
             {
-                PR.StatusId = "PR03";
+                PR.StatusId = "PR04";
                 PR.Scenario = 3;
                 db.SaveChanges();
 
@@ -1908,11 +1972,11 @@ namespace KUBOnlinePRPM.Controllers
             return Json("Successfully reject");
         }
 
-        public JsonResult ApprovePreparedApprover()
+        public JsonResult ApprovePRApprover()
         {
             int PrId = Int32.Parse(Request["PrId"]);
             var PR = db.PurchaseRequisitions.First(x => x.PRId == PrId);
-            PR.StatusId = "PR05";
+            PR.StatusId = "PR06";
 
             db.SaveChanges();
             // todo the session must be HOC
@@ -1920,7 +1984,7 @@ namespace KUBOnlinePRPM.Controllers
             return Json("Successfully approve");
         }
 
-        public JsonResult RejectPreparedRecommended()
+        public JsonResult RejectPRRecommended()
         {
             // todo the session must be IT / HSE / PMO
             int PrId = Int32.Parse(Request["PrId"]);
@@ -1931,7 +1995,7 @@ namespace KUBOnlinePRPM.Controllers
             return Json("Successfully reject");
         }
 
-        public JsonResult RecommendedPreparedRecommended()
+        public JsonResult RecommendedPRRecommended()
         {
             // todo the session must be IT / HSE / PMO
             // set status to PR03 and head of GPSS will proceed

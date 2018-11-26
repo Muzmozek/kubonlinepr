@@ -21,7 +21,7 @@ namespace KUBOnlinePRPM.Controllers
                 CustId = model.CustId,
                 PaperRefNo = model.NewPRForm.PaperRefNo,
                 BidWaiverRefNo = model.NewPRForm.BidWaiverRefNo,
-                Unbudgeted = model.NewPRForm.Value,
+                Budgeted = model.NewPRForm.Value,
                 PurchaseTypeId = model.NewPRForm.PurchaseTypeId,
                 BudgetDescription = model.NewPRForm.BudgetDescription,
                 AmountRequired = model.NewPRForm.AmountRequired,
@@ -106,7 +106,9 @@ namespace KUBOnlinePRPM.Controllers
                 generatePRNo.SubmitDate = DateTime.Now;
                 generatePRNo.PRAging = model.NewPRForm.PRAging;
                 if((model.PaperRefNoFile != null && model.NewPRForm.PaperRefNo != null) || (model.BidWaiverRefNoFile != null && model.NewPRForm.BidWaiverRefNo != null)){
-                    generatePRNo.PaperAttachment = true;                   
+                    generatePRNo.PaperAttachment = true;
+                    generatePRNo.BidWaiverRefNo = model.NewPRForm.BidWaiverRefNo;
+                    generatePRNo.PaperRefNo = model.NewPRForm.PaperRefNo;
                 }                
                 generatePRNo.StatusId = "PR09";
                 generateMsg.uuid = Guid.NewGuid();
@@ -217,7 +219,7 @@ namespace KUBOnlinePRPM.Controllers
                     db.NotificationMsgs.Add(_objDetails_ProjectId);
                     FormerPRDetails.ProjectId = x.NewPRForm.ProjectId;
                 }
-                if (FormerPRDetails.Unbudgeted != x.NewPRForm.Value)
+                if (FormerPRDetails.Budgeted != x.NewPRForm.Value)
                 {
                     NotificationMsg _objDetails_ProjectId = new NotificationMsg
                     {
@@ -226,10 +228,10 @@ namespace KUBOnlinePRPM.Controllers
                         msgDate = DateTime.Now,
                         fromUserId = x.UserId,
                         msgType = "Trail",
-                        message = x.FullName + " change Budgeted value from " + FormerPRDetails.Unbudgeted + " to " + x.NewPRForm.Value + " for PR No: " + FormerPRDetails.PRNo
+                        message = x.FullName + " change Budgeted value from " + FormerPRDetails.Budgeted + " to " + x.NewPRForm.Value + " for PR No: " + FormerPRDetails.PRNo
                     };
                     db.NotificationMsgs.Add(_objDetails_ProjectId);
-                    FormerPRDetails.Unbudgeted = x.NewPRForm.Value;
+                    FormerPRDetails.Budgeted = x.NewPRForm.Value;
                 }
                 //if (FormerPRDetails.Unbudgeted != x.NewPRForm.Unbudgeted)
                 //{
@@ -432,6 +434,8 @@ namespace KUBOnlinePRPM.Controllers
                     if ((x.PaperRefNoFile != null && x.NewPRForm.PaperRefNo != null) || (x.BidWaiverRefNoFile != null && x.NewPRForm.BidWaiverRefNo != null))
                     {
                         FormerPRDetails.PaperAttachment = true;
+                        FormerPRDetails.BidWaiverRefNo = x.NewPRForm.BidWaiverRefNo;
+                        FormerPRDetails.PaperRefNo = x.NewPRForm.PaperRefNo;
                     }
                     FormerPRDetails.StatusId = "PR09";
                     NotificationMsg _objSubmited = new NotificationMsg
@@ -842,10 +846,11 @@ namespace KUBOnlinePRPM.Controllers
                 uuid = Guid.NewGuid(),
                 PRId = x.PRId,
                 PONo = "dummyset",
+                CustId = x.CustId,
                 PODate = DateTime.Now,
                 projectId = x.NewPRForm.ProjectId,
                 vendorId = x.NewPRForm.VendorId.Value,
-                vendorStaffId = x.NewPRForm.VendorStaffId,
+                //vendorStaffId = x.NewPRForm.VendorStaffId,
                 StatusId = "PO01",
                 POAging = 0
             };

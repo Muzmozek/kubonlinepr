@@ -122,9 +122,9 @@
         fd.append("BidWaiverRefNoFile", $(".checkFiles").find('[name="BidWaiverRefNoFile"]')[0].files[0]);
         other_data = $(".checkFiles").serializeArray();        
         $.each(other_data, function (key, input) {
-            //if (input.name === "NewPRForm.Unbudgeted" && input.value === "on")
+            //if (input.name === "NewPRForm.Budgeted" && input.value === "on")
             //    fd.append(input.name, true);
-            //else if (input.name === "NewPRForm.Unbudgeted" && input.value === "off")
+            //else if (input.name === "NewPRForm.Budgeted" && input.value === "off")
             //    fd.append(input.name, false);
             //else
                 fd.append(input.name, input.value);

@@ -450,6 +450,68 @@ namespace KUBOnlinePRPM.Controllers
         }
 
         [HttpPost]
+        public JsonResult IssuePOGeneric(PRModel PRModel)
+        {
+            try
+            {
+                PurchaseRequisition updatePR = db.PurchaseRequisitions.First(m => m.PRId == PRModel.PRId);
+                updatePR.StatusId = "PR14";
+                db.SaveChanges();
+
+                PurchaseOrder newPO = new PurchaseOrder();
+                newPO.uuid = Guid.NewGuid();
+                newPO.PRId = PRModel.PRId;
+                newPO.PONo = "dummyset";
+                newPO.CustId = PRModel.CustId;
+                newPO.PODate = DateTime.Now;
+                newPO.projectId = PRModel.NewPRForm.ProjectId;
+                newPO.vendorId = PRModel.NewPRForm.VendorId.Value;
+                //newPO.vendorStaffId = PRModel.NewPRForm.VendorStaffId;
+                newPO.PreparedById = Int32.Parse(Session["UserId"].ToString());
+                newPO.PreparedDate = DateTime.Now;
+                newPO.Saved = 0;
+                newPO.Submited = true;
+                newPO.SubmitDate = DateTime.Now;
+                newPO.POAging = 0;
+                newPO.StatusId = "PO01";
+                db.PurchaseOrders.Add(newPO);
+                db.SaveChanges();
+                newPO.PONo = "PO-" + DateTime.Now.Year + "-" + string.Format("{0}{1}", 0, newPO.POId.ToString("D4"));
+
+                db.SaveChanges();
+
+                foreach (var value in PRModel.NewPRForm.PRItemListObject)
+                {
+                    PO_Item _objNewPOItem = new PO_Item
+                    {
+                        uuid = Guid.NewGuid(),
+                        POId = newPO.POId,
+                        itemsId = value.ItemsId,
+                        dateRequired = value.DateRequired,
+                        description = value.Description,
+                        codeId = value.CodeId.Value,
+                        custPONo = value.CustPONo,
+                        quantity = value.Quantity,
+                        unitPrice = value.UnitPrice.Value,
+                        totalPrice = value.TotalPrice.Value
+                    };
+                    db.PO_Item.Add(_objNewPOItem);
+                    db.SaveChanges();
+
+                    PR_Items _objUpdatePRItem = db.PR_Items.First(m => m.itemsId == value.ItemsId);
+                    _objUpdatePRItem.outStandingQuantity = _objUpdatePRItem.outStandingQuantity - _objNewPOItem.quantity;
+                    newPO.POAging = 0;
+                    db.SaveChanges();
+                }
+                return Json("The PO has been confirmed");
+            }
+            catch
+            {
+                return Json("Exception error occured. Please contact admin.");
+            }
+        }
+
+        [HttpPost]
         public JsonResult ComfirmPO()
         {
             int? PayToVendorId = null; int? PaymentTermsId = null;

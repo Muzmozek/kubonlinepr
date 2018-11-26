@@ -33,7 +33,6 @@ namespace KUBOnlinePRPM.Models
         public int CustId { get; set; }
         public string PRNo { get; set; }
         public int ProjectId { get; set; }
-        public bool Unbudgeted { get; set; }
         public string PaperRefNo { get; set; }
         public string BidWaiverRefNo { get; set; }
         public bool PaperAttachment { get; set; }
@@ -44,6 +43,7 @@ namespace KUBOnlinePRPM.Models
         public Nullable<int> VendorId { get; set; }
         public Nullable<int> VendorStaffId { get; set; }
         public string VendorQuoteNo { get; set; }
+        public string SpecsReviewer { get; set; }
         public System.DateTime PreparedDate { get; set; }
         public int PreparedById { get; set; }
         public Nullable<System.DateTime> LastModifyDate { get; set; }
@@ -62,8 +62,8 @@ namespace KUBOnlinePRPM.Models
         public bool Phase2Completed { get; set; }
         public Nullable<int> PRAging { get; set; }
         public string StatusId { get; set; }
-        public string SpecsReviewer { get; set; }
-        public int Scenario { get; set; }
+        public Nullable<int> Scenario { get; set; }
+        public bool Budgeted { get; set; }
     
         public virtual Customer Customer { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -84,11 +84,11 @@ namespace KUBOnlinePRPM.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PRs_FileUpload> PRs_FileUpload { get; set; }
         public virtual PRStatu PRStatu { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; }
         public virtual PurchaseType PurchaseType { get; set; }
         public virtual User User { get; set; }
         public virtual Vendor Vendor { get; set; }
         public virtual VendorStaff VendorStaff { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; }
     }
 }

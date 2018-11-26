@@ -18,12 +18,12 @@ namespace KUBOnlinePRPM.Models
         public Customer()
         {
             this.Users = new HashSet<User>();
-            this.PurchaseRequisitions = new HashSet<PurchaseRequisition>();
             this.Projects = new HashSet<Project>();
             this.Vendors = new HashSet<Vendor>();
             this.GLs = new HashSet<GL>();
             this.FixedAssets = new HashSet<FixedAsset>();
             this.Items = new HashSet<Item>();
+            this.PurchaseRequisitions = new HashSet<PurchaseRequisition>();
         }
     
         public System.Guid uuid { get; set; }
@@ -44,8 +44,6 @@ namespace KUBOnlinePRPM.Models
         public virtual User User1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<User> Users { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PurchaseRequisition> PurchaseRequisitions { get; set; }
         public virtual Customer Customer1 { get; set; }
         public virtual Customer Customer2 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -58,5 +56,7 @@ namespace KUBOnlinePRPM.Models
         public virtual ICollection<FixedAsset> FixedAssets { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Item> Items { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PurchaseRequisition> PurchaseRequisitions { get; set; }
     }
 }

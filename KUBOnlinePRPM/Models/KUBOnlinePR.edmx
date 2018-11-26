@@ -307,7 +307,7 @@
           <Property Name="CustId" Type="int" Nullable="false" />
           <Property Name="PRNo" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="ProjectId" Type="int" Nullable="false" />
-          <Property Name="Unbudgeted" Type="bit" Nullable="false" />
+          <Property Name="Budgeted" Type="bit" Nullable="false" />
           <Property Name="PaperRefNo" Type="nvarchar" MaxLength="30" />
           <Property Name="BidWaiverRefNo" Type="nvarchar" MaxLength="30" />
           <Property Name="PaperAttachment" Type="bit" Nullable="false" />
@@ -337,7 +337,7 @@
           <Property Name="Phase2Completed" Type="bit" Nullable="false" />
           <Property Name="PRAging" Type="int" />
           <Property Name="StatusId" Type="nchar" MaxLength="4" Nullable="false" />
-          <Property Name="Scenario" Type="int" Nullable="false" />
+          <Property Name="Scenario" Type="int" />
         </EntityType>
         <EntityType Name="PurchaseType">
           <Key>
@@ -1444,7 +1444,6 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <NavigationProperty Name="User" Relationship="Self.FK_Customer_User" FromRole="Customer" ToRole="User" />
           <NavigationProperty Name="User1" Relationship="Self.FK_Customer_User1" FromRole="Customer" ToRole="User" />
           <NavigationProperty Name="Users" Relationship="Self.FK_User_Customer" FromRole="Customer" ToRole="User" />
-          <NavigationProperty Name="PurchaseRequisitions" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_Customer" FromRole="Customer" ToRole="PurchaseRequisition" />
           <NavigationProperty Name="Customer1" Relationship="KUBOnlinePRModel.FK_Customer_Customer" FromRole="Customer" ToRole="Customer1" />
           <NavigationProperty Name="Customer2" Relationship="KUBOnlinePRModel.FK_Customer_Customer" FromRole="Customer1" ToRole="Customer" />
           <NavigationProperty Name="Projects" Relationship="KUBOnlinePRModel.FK_Project_Customer" FromRole="Customer" ToRole="Project" />
@@ -1452,6 +1451,7 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <NavigationProperty Name="GLs" Relationship="KUBOnlinePRModel.FK_GLs_Customer" FromRole="Customer" ToRole="GL" />
           <NavigationProperty Name="FixedAssets" Relationship="KUBOnlinePRModel.FK_ItemCode_Customer" FromRole="Customer" ToRole="FixedAsset" />
           <NavigationProperty Name="Items" Relationship="KUBOnlinePRModel.FK_Items_Customer" FromRole="Customer" ToRole="Item" />
+          <NavigationProperty Name="PurchaseRequisitions" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_Customer" FromRole="Customer" ToRole="PurchaseRequisition" />
         </EntityType>
         <EntityType Name="FileUpload">
           <Key>
@@ -1492,10 +1492,10 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <Property Name="plannedReceiptDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="ItemType" Relationship="KUBOnlinePRModel.FK_PR_Items_ItemType" FromRole="PR_Items" ToRole="ItemType" />
           <NavigationProperty Name="PO_Item" Relationship="KUBOnlinePRModel.FK_PO_Item_PR_Items" FromRole="PR_Items" ToRole="PO_Item" />
-          <NavigationProperty Name="PurchaseRequisition" Relationship="KUBOnlinePRModel.FK_PR_Items_PurchaseRequisition" FromRole="PR_Items" ToRole="PurchaseRequisition" />
           <NavigationProperty Name="FixedAsset" Relationship="KUBOnlinePRModel.FK_PR_Items_ItemCode1" FromRole="PR_Items" ToRole="FixedAsset" />
           <NavigationProperty Name="GL" Relationship="KUBOnlinePRModel.FK_PR_Items_GLs" FromRole="PR_Items" ToRole="GL" />
           <NavigationProperty Name="Item" Relationship="KUBOnlinePRModel.FK_PR_Items_Items" FromRole="PR_Items" ToRole="Item" />
+          <NavigationProperty Name="PurchaseRequisition" Relationship="KUBOnlinePRModel.FK_PR_Items_PurchaseRequisition" FromRole="PR_Items" ToRole="PurchaseRequisition" />
         </EntityType>
         <EntityType Name="Project">
           <Key>
@@ -1508,12 +1508,12 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <Property Name="budgetedAmount" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="utilizedToDate" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="budgetBalance" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
-          <NavigationProperty Name="PurchaseRequisitions" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_Project" FromRole="Project" ToRole="PurchaseRequisition" />
           <Property Name="custId" Type="Int32" Nullable="false" />
           <Property Name="dimension" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="projectCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Customer" Relationship="KUBOnlinePRModel.FK_Project_Customer" FromRole="Project" ToRole="Customer" />
           <NavigationProperty Name="PurchaseOrders" Relationship="KUBOnlinePRModel.FK_PurchaseOrder_Project" FromRole="Project" ToRole="PurchaseOrder" />
+          <NavigationProperty Name="PurchaseRequisitions" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_Project" FromRole="Project" ToRole="PurchaseRequisition" />
         </EntityType>
         <EntityType Name="PRs_FileUpload">
           <Key>
@@ -1606,8 +1606,8 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <NavigationProperty Name="PR_Reviewer" Relationship="KUBOnlinePRModel.FK_PR_Reviewer_User" FromRole="User" ToRole="PR_Reviewer" />
           <NavigationProperty Name="PR_Approver" Relationship="KUBOnlinePRModel.FK_PR_Approver_User" FromRole="User" ToRole="PR_Approver" />
           <NavigationProperty Name="PR_PaperApprover" Relationship="KUBOnlinePRModel.FK_PR_PaperApprover_User" FromRole="User" ToRole="PR_PaperApprover" />
-          <NavigationProperty Name="PurchaseRequisitions" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_User" FromRole="User" ToRole="PurchaseRequisition" />
           <NavigationProperty Name="FixedAssets" Relationship="KUBOnlinePRModel.FK_ItemCodes_User1" FromRole="User" ToRole="FixedAsset" />
+          <NavigationProperty Name="PurchaseRequisitions" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_User" FromRole="User" ToRole="PurchaseRequisition" />
         </EntityType>
         <EntityType Name="Users_Roles">
           <Key>
@@ -1633,7 +1633,6 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <NavigationProperty Name="User" Relationship="Self.FK_Vendor_User" FromRole="Vendor" ToRole="User" />
           <NavigationProperty Name="User1" Relationship="Self.FK_Vendor_User1" FromRole="Vendor" ToRole="User" />
           <NavigationProperty Name="VendorStaffs" Relationship="Self.FK_VendorStaff_Vendor" FromRole="Vendor" ToRole="VendorStaff" />
-          <NavigationProperty Name="PurchaseRequisitions" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_Vendor" FromRole="Vendor" ToRole="PurchaseRequisition" />
           <Property Name="vendorNo" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="custId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Customer" Relationship="KUBOnlinePRModel.FK_Vendor_Customer" FromRole="Vendor" ToRole="Customer" />
@@ -1642,6 +1641,7 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <Property Name="telephoneNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="PurchaseOrders" Relationship="KUBOnlinePRModel.FK_PurchaseOrder_Vendor" FromRole="Vendor" ToRole="PurchaseOrder" />
+          <NavigationProperty Name="PurchaseRequisitions" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_Vendor" FromRole="Vendor" ToRole="PurchaseRequisition" />
         </EntityType>
         <EntityType Name="VendorStaff">
           <Key>
@@ -1660,8 +1660,8 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <NavigationProperty Name="User" Relationship="Self.FK_VendorStaff_User" FromRole="VendorStaff" ToRole="User" />
           <NavigationProperty Name="User1" Relationship="Self.FK_VendorStaff_User1" FromRole="VendorStaff" ToRole="User" />
           <NavigationProperty Name="Vendor" Relationship="Self.FK_VendorStaff_Vendor" FromRole="VendorStaff" ToRole="Vendor" />
-          <NavigationProperty Name="PurchaseRequisitions" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_VendorStaff" FromRole="VendorStaff" ToRole="PurchaseRequisition" />
           <NavigationProperty Name="PurchaseOrders" Relationship="KUBOnlinePRModel.FK_PurchaseOrder_VendorStaff" FromRole="VendorStaff" ToRole="PurchaseOrder" />
+          <NavigationProperty Name="PurchaseRequisitions" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_VendorStaff" FromRole="VendorStaff" ToRole="PurchaseRequisition" />
         </EntityType>
         <Association Name="FK_Customer_User">
           <End Role="User" Type="Self.User" Multiplicity="0..1" />
@@ -1911,70 +1911,9 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           </AssociationSet>
           <EntitySet Name="POStatus" EntityType="KUBOnlinePRModel.POStatu" />
           <EntitySet Name="PR_PaperApprover" EntityType="KUBOnlinePRModel.PR_PaperApprover" />
-          <EntitySet Name="PurchaseRequisitions" EntityType="KUBOnlinePRModel.PurchaseRequisition" />
-          <AssociationSet Name="FK_PurchaseRequisition_Customer" Association="KUBOnlinePRModel.FK_PurchaseRequisition_Customer">
-            <End Role="Customer" EntitySet="Customers" />
-            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PR_Admin_PurchaseRequisition" Association="KUBOnlinePRModel.FK_PR_Admin_PurchaseRequisition">
-            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
-            <End Role="PR_Admin" EntitySet="PR_Admin" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PR_Approver_PurchaseRequisition" Association="KUBOnlinePRModel.FK_PR_Approver_PurchaseRequisition">
-            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
-            <End Role="PR_Approver" EntitySet="PR_Approver" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PR_HOD_PurchaseRequisition" Association="KUBOnlinePRModel.FK_PR_HOD_PurchaseRequisition">
-            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
-            <End Role="PR_HOD" EntitySet="PR_HOD" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PR_Items_PurchaseRequisition" Association="KUBOnlinePRModel.FK_PR_Items_PurchaseRequisition">
-            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
-            <End Role="PR_Items" EntitySet="PR_Items" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PR_PaperApprover_PurchaseRequisition" Association="KUBOnlinePRModel.FK_PR_PaperApprover_PurchaseRequisition">
-            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
-            <End Role="PR_PaperApprover" EntitySet="PR_PaperApprover" />
-          </AssociationSet>
           <AssociationSet Name="FK_PR_PaperApprover_User" Association="KUBOnlinePRModel.FK_PR_PaperApprover_User">
             <End Role="User" EntitySet="Users" />
             <End Role="PR_PaperApprover" EntitySet="PR_PaperApprover" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PR_Recommender_PurchaseRequisition" Association="KUBOnlinePRModel.FK_PR_Recommender_PurchaseRequisition">
-            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
-            <End Role="PR_Recommender" EntitySet="PR_Recommender" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PR_Reviewer_PurchaseRequisition" Association="KUBOnlinePRModel.FK_PR_Reviewer_PurchaseRequisition">
-            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
-            <End Role="PR_Reviewer" EntitySet="PR_Reviewer" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PurchaseRequisition_Project" Association="KUBOnlinePRModel.FK_PurchaseRequisition_Project">
-            <End Role="Project" EntitySet="Projects" />
-            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PRs_FileUpload_PurchaseRequisition" Association="KUBOnlinePRModel.FK_PRs_FileUpload_PurchaseRequisition">
-            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
-            <End Role="PRs_FileUpload" EntitySet="PRs_FileUpload" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PurchaseRequisition_PRStatus" Association="KUBOnlinePRModel.FK_PurchaseRequisition_PRStatus">
-            <End Role="PRStatu" EntitySet="PRStatus" />
-            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PurchaseRequisition_PurchaseType" Association="KUBOnlinePRModel.FK_PurchaseRequisition_PurchaseType">
-            <End Role="PurchaseType" EntitySet="PurchaseTypes" />
-            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PurchaseRequisition_User" Association="KUBOnlinePRModel.FK_PurchaseRequisition_User">
-            <End Role="User" EntitySet="Users" />
-            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PurchaseRequisition_Vendor" Association="KUBOnlinePRModel.FK_PurchaseRequisition_Vendor">
-            <End Role="Vendor" EntitySet="Vendors" />
-            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PurchaseRequisition_VendorStaff" Association="KUBOnlinePRModel.FK_PurchaseRequisition_VendorStaff">
-            <End Role="VendorStaff" EntitySet="VendorStaffs" />
-            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
           </AssociationSet>
           <AssociationSet Name="FK_Customer_Customer" Association="KUBOnlinePRModel.FK_Customer_Customer">
             <End Role="Customer" EntitySet="Customers" />
@@ -2063,10 +2002,6 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
             <End Role="Project" EntitySet="Projects" />
             <End Role="PurchaseOrder" EntitySet="PurchaseOrders" />
           </AssociationSet>
-          <AssociationSet Name="FK_PurchaseOrder_PurchaseRequisition" Association="KUBOnlinePRModel.FK_PurchaseOrder_PurchaseRequisition">
-            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
-            <End Role="PurchaseOrder" EntitySet="PurchaseOrders" />
-          </AssociationSet>
           <AssociationSet Name="FK_PurchaseOrder_Vendor" Association="KUBOnlinePRModel.FK_PurchaseOrder_Vendor">
             <End Role="Vendor" EntitySet="Vendors" />
             <End Role="PurchaseOrder" EntitySet="PurchaseOrders" />
@@ -2074,6 +2009,71 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <AssociationSet Name="FK_PurchaseOrder_VendorStaff" Association="KUBOnlinePRModel.FK_PurchaseOrder_VendorStaff">
             <End Role="VendorStaff" EntitySet="VendorStaffs" />
             <End Role="PurchaseOrder" EntitySet="PurchaseOrders" />
+          </AssociationSet>
+          <EntitySet Name="PurchaseRequisitions" EntityType="KUBOnlinePRModel.PurchaseRequisition" />
+          <AssociationSet Name="FK_PurchaseRequisition_Customer" Association="KUBOnlinePRModel.FK_PurchaseRequisition_Customer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_Admin_PurchaseRequisition" Association="KUBOnlinePRModel.FK_PR_Admin_PurchaseRequisition">
+            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
+            <End Role="PR_Admin" EntitySet="PR_Admin" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_Approver_PurchaseRequisition" Association="KUBOnlinePRModel.FK_PR_Approver_PurchaseRequisition">
+            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
+            <End Role="PR_Approver" EntitySet="PR_Approver" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_HOD_PurchaseRequisition" Association="KUBOnlinePRModel.FK_PR_HOD_PurchaseRequisition">
+            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
+            <End Role="PR_HOD" EntitySet="PR_HOD" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_Items_PurchaseRequisition" Association="KUBOnlinePRModel.FK_PR_Items_PurchaseRequisition">
+            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
+            <End Role="PR_Items" EntitySet="PR_Items" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_PaperApprover_PurchaseRequisition" Association="KUBOnlinePRModel.FK_PR_PaperApprover_PurchaseRequisition">
+            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
+            <End Role="PR_PaperApprover" EntitySet="PR_PaperApprover" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_Recommender_PurchaseRequisition" Association="KUBOnlinePRModel.FK_PR_Recommender_PurchaseRequisition">
+            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
+            <End Role="PR_Recommender" EntitySet="PR_Recommender" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_Reviewer_PurchaseRequisition" Association="KUBOnlinePRModel.FK_PR_Reviewer_PurchaseRequisition">
+            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
+            <End Role="PR_Reviewer" EntitySet="PR_Reviewer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchaseRequisition_Project" Association="KUBOnlinePRModel.FK_PurchaseRequisition_Project">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PRs_FileUpload_PurchaseRequisition" Association="KUBOnlinePRModel.FK_PRs_FileUpload_PurchaseRequisition">
+            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
+            <End Role="PRs_FileUpload" EntitySet="PRs_FileUpload" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchaseRequisition_PRStatus" Association="KUBOnlinePRModel.FK_PurchaseRequisition_PRStatus">
+            <End Role="PRStatu" EntitySet="PRStatus" />
+            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchaseOrder_PurchaseRequisition" Association="KUBOnlinePRModel.FK_PurchaseOrder_PurchaseRequisition">
+            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
+            <End Role="PurchaseOrder" EntitySet="PurchaseOrders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchaseRequisition_PurchaseType" Association="KUBOnlinePRModel.FK_PurchaseRequisition_PurchaseType">
+            <End Role="PurchaseType" EntitySet="PurchaseTypes" />
+            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchaseRequisition_User" Association="KUBOnlinePRModel.FK_PurchaseRequisition_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchaseRequisition_Vendor" Association="KUBOnlinePRModel.FK_PurchaseRequisition_Vendor">
+            <End Role="Vendor" EntitySet="Vendors" />
+            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchaseRequisition_VendorStaff" Association="KUBOnlinePRModel.FK_PurchaseRequisition_VendorStaff">
+            <End Role="VendorStaff" EntitySet="VendorStaffs" />
+            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="ItemType">
@@ -2315,138 +2315,9 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <Property Name="PRId" Type="Int32" Nullable="false" />
           <Property Name="approverApproved" Type="Int32" Nullable="false" />
           <Property Name="approverApprovedDate" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="PurchaseRequisition" Relationship="KUBOnlinePRModel.FK_PR_PaperApprover_PurchaseRequisition" FromRole="PR_PaperApprover" ToRole="PurchaseRequisition" />
           <NavigationProperty Name="User" Relationship="KUBOnlinePRModel.FK_PR_PaperApprover_User" FromRole="PR_PaperApprover" ToRole="User" />
+          <NavigationProperty Name="PurchaseRequisition" Relationship="KUBOnlinePRModel.FK_PR_PaperApprover_PurchaseRequisition" FromRole="PR_PaperApprover" ToRole="PurchaseRequisition" />
         </EntityType>
-        <EntityType Name="PurchaseRequisition">
-          <Key>
-            <PropertyRef Name="PRId" />
-          </Key>
-          <Property Name="uuid" Type="Guid" Nullable="false" />
-          <Property Name="PRId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CustId" Type="Int32" Nullable="false" />
-          <Property Name="PRNo" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="ProjectId" Type="Int32" Nullable="false" />
-          <Property Name="Unbudgeted" Type="Boolean" Nullable="false" />
-          <Property Name="PaperRefNo" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="BidWaiverRefNo" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="PaperAttachment" Type="Boolean" Nullable="false" />
-          <Property Name="PurchaseTypeId" Type="Int32" Nullable="false" />
-          <Property Name="BudgetDescription" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Justification" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="AmountRequired" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="VendorId" Type="Int32" />
-          <Property Name="VendorStaffId" Type="Int32" />
-          <Property Name="VendorQuoteNo" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="PreparedDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="PreparedById" Type="Int32" Nullable="false" />
-          <Property Name="LastModifyDate" Type="DateTime" Precision="3" />
-          <Property Name="Saved" Type="Int32" Nullable="false" />
-          <Property Name="Submited" Type="Int32" Nullable="false" />
-          <Property Name="SubmitDate" Type="DateTime" Precision="3" />
-          <Property Name="LastSubmitedDate" Type="DateTime" Precision="3" />
-          <Property Name="Rejected" Type="Int32" Nullable="false" />
-          <Property Name="RejectedRemark" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
-          <Property Name="RejectedById" Type="Int32" />
-          <Property Name="RejectedDate" Type="DateTime" Precision="3" />
-          <Property Name="Phase1Completed" Type="Boolean" Nullable="false" />
-          <Property Name="PRType" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="POId" Type="Int32" />
-          <Property Name="AmountPOBalance" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Phase2Completed" Type="Boolean" Nullable="false" />
-          <Property Name="PRAging" Type="Int32" />
-          <Property Name="StatusId" Type="String" Nullable="false" MaxLength="4" FixedLength="true" Unicode="true" />
-          <NavigationProperty Name="Customer" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_Customer" FromRole="PurchaseRequisition" ToRole="Customer" />
-          <NavigationProperty Name="PR_Admin" Relationship="KUBOnlinePRModel.FK_PR_Admin_PurchaseRequisition" FromRole="PurchaseRequisition" ToRole="PR_Admin" />
-          <NavigationProperty Name="PR_Approver" Relationship="KUBOnlinePRModel.FK_PR_Approver_PurchaseRequisition" FromRole="PurchaseRequisition" ToRole="PR_Approver" />
-          <NavigationProperty Name="PR_HOD" Relationship="KUBOnlinePRModel.FK_PR_HOD_PurchaseRequisition" FromRole="PurchaseRequisition" ToRole="PR_HOD" />
-          <NavigationProperty Name="PR_Items" Relationship="KUBOnlinePRModel.FK_PR_Items_PurchaseRequisition" FromRole="PurchaseRequisition" ToRole="PR_Items" />
-          <NavigationProperty Name="PR_PaperApprover" Relationship="KUBOnlinePRModel.FK_PR_PaperApprover_PurchaseRequisition" FromRole="PurchaseRequisition" ToRole="PR_PaperApprover" />
-          <NavigationProperty Name="PR_Recommender" Relationship="KUBOnlinePRModel.FK_PR_Recommender_PurchaseRequisition" FromRole="PurchaseRequisition" ToRole="PR_Recommender" />
-          <NavigationProperty Name="PR_Reviewer" Relationship="KUBOnlinePRModel.FK_PR_Reviewer_PurchaseRequisition" FromRole="PurchaseRequisition" ToRole="PR_Reviewer" />
-          <NavigationProperty Name="Project" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_Project" FromRole="PurchaseRequisition" ToRole="Project" />
-          <NavigationProperty Name="PRs_FileUpload" Relationship="KUBOnlinePRModel.FK_PRs_FileUpload_PurchaseRequisition" FromRole="PurchaseRequisition" ToRole="PRs_FileUpload" />
-          <NavigationProperty Name="PRStatu" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_PRStatus" FromRole="PurchaseRequisition" ToRole="PRStatu" />
-          <NavigationProperty Name="PurchaseType" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_PurchaseType" FromRole="PurchaseRequisition" ToRole="PurchaseType" />
-          <NavigationProperty Name="User" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_User" FromRole="PurchaseRequisition" ToRole="User" />
-          <NavigationProperty Name="Vendor" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_Vendor" FromRole="PurchaseRequisition" ToRole="Vendor" />
-          <NavigationProperty Name="VendorStaff" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_VendorStaff" FromRole="PurchaseRequisition" ToRole="VendorStaff" />
-          <Property Name="SpecsReviewer" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="PurchaseOrders" Relationship="KUBOnlinePRModel.FK_PurchaseOrder_PurchaseRequisition" FromRole="PurchaseRequisition" ToRole="PurchaseOrder" />
-          <Property Name="Scenario" Type="Int32" Nullable="false" />
-        </EntityType>
-        <Association Name="FK_PurchaseRequisition_Customer">
-          <End Type="KUBOnlinePRModel.Customer" Role="Customer" Multiplicity="1" />
-          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Customer">
-              <PropertyRef Name="custId" />
-            </Principal>
-            <Dependent Role="PurchaseRequisition">
-              <PropertyRef Name="CustId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PR_Admin_PurchaseRequisition">
-          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="1" />
-          <End Type="KUBOnlinePRModel.PR_Admin" Role="PR_Admin" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PurchaseRequisition">
-              <PropertyRef Name="PRId" />
-            </Principal>
-            <Dependent Role="PR_Admin">
-              <PropertyRef Name="PRId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PR_Approver_PurchaseRequisition">
-          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="1" />
-          <End Type="KUBOnlinePRModel.PR_Approver" Role="PR_Approver" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PurchaseRequisition">
-              <PropertyRef Name="PRId" />
-            </Principal>
-            <Dependent Role="PR_Approver">
-              <PropertyRef Name="PRId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PR_HOD_PurchaseRequisition">
-          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="1" />
-          <End Type="KUBOnlinePRModel.PR_HOD" Role="PR_HOD" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PurchaseRequisition">
-              <PropertyRef Name="PRId" />
-            </Principal>
-            <Dependent Role="PR_HOD">
-              <PropertyRef Name="PRId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PR_Items_PurchaseRequisition">
-          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="1" />
-          <End Type="KUBOnlinePRModel.PR_Items" Role="PR_Items" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PurchaseRequisition">
-              <PropertyRef Name="PRId" />
-            </Principal>
-            <Dependent Role="PR_Items">
-              <PropertyRef Name="PRId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PR_PaperApprover_PurchaseRequisition">
-          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="1" />
-          <End Type="KUBOnlinePRModel.PR_PaperApprover" Role="PR_PaperApprover" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PurchaseRequisition">
-              <PropertyRef Name="PRId" />
-            </Principal>
-            <Dependent Role="PR_PaperApprover">
-              <PropertyRef Name="PRId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_PR_PaperApprover_User">
           <End Type="KUBOnlinePRModel.User" Role="User" Multiplicity="1" />
           <End Type="KUBOnlinePRModel.PR_PaperApprover" Role="PR_PaperApprover" Multiplicity="*" />
@@ -2456,114 +2327,6 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
             </Principal>
             <Dependent Role="PR_PaperApprover">
               <PropertyRef Name="approverId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PR_Recommender_PurchaseRequisition">
-          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="1" />
-          <End Type="KUBOnlinePRModel.PR_Recommender" Role="PR_Recommender" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PurchaseRequisition">
-              <PropertyRef Name="PRId" />
-            </Principal>
-            <Dependent Role="PR_Recommender">
-              <PropertyRef Name="PRId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PR_Reviewer_PurchaseRequisition">
-          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="1" />
-          <End Type="KUBOnlinePRModel.PR_Reviewer" Role="PR_Reviewer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PurchaseRequisition">
-              <PropertyRef Name="PRId" />
-            </Principal>
-            <Dependent Role="PR_Reviewer">
-              <PropertyRef Name="PRId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PurchaseRequisition_Project">
-          <End Type="KUBOnlinePRModel.Project" Role="Project" Multiplicity="1" />
-          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Project">
-              <PropertyRef Name="projectId" />
-            </Principal>
-            <Dependent Role="PurchaseRequisition">
-              <PropertyRef Name="ProjectId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PRs_FileUpload_PurchaseRequisition">
-          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="1" />
-          <End Type="KUBOnlinePRModel.PRs_FileUpload" Role="PRs_FileUpload" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PurchaseRequisition">
-              <PropertyRef Name="PRId" />
-            </Principal>
-            <Dependent Role="PRs_FileUpload">
-              <PropertyRef Name="PRId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PurchaseRequisition_PRStatus">
-          <End Type="KUBOnlinePRModel.PRStatu" Role="PRStatu" Multiplicity="1" />
-          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PRStatu">
-              <PropertyRef Name="statusId" />
-            </Principal>
-            <Dependent Role="PurchaseRequisition">
-              <PropertyRef Name="StatusId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PurchaseRequisition_PurchaseType">
-          <End Type="KUBOnlinePRModel.PurchaseType" Role="PurchaseType" Multiplicity="1" />
-          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PurchaseType">
-              <PropertyRef Name="purchaseTypeId" />
-            </Principal>
-            <Dependent Role="PurchaseRequisition">
-              <PropertyRef Name="PurchaseTypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PurchaseRequisition_User">
-          <End Type="KUBOnlinePRModel.User" Role="User" Multiplicity="1" />
-          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="userId" />
-            </Principal>
-            <Dependent Role="PurchaseRequisition">
-              <PropertyRef Name="PreparedById" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PurchaseRequisition_Vendor">
-          <End Type="KUBOnlinePRModel.Vendor" Role="Vendor" Multiplicity="0..1" />
-          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Vendor">
-              <PropertyRef Name="vendorId" />
-            </Principal>
-            <Dependent Role="PurchaseRequisition">
-              <PropertyRef Name="VendorId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PurchaseRequisition_VendorStaff">
-          <End Type="KUBOnlinePRModel.VendorStaff" Role="VendorStaff" Multiplicity="0..1" />
-          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="VendorStaff">
-              <PropertyRef Name="staffId" />
-            </Principal>
-            <Dependent Role="PurchaseRequisition">
-              <PropertyRef Name="VendorStaffId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2874,10 +2637,10 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <NavigationProperty Name="PO_Item" Relationship="KUBOnlinePRModel.FK_PO_Item_PurchaseOrder" FromRole="PurchaseOrder" ToRole="PO_Item" />
           <NavigationProperty Name="POStatu" Relationship="KUBOnlinePRModel.FK_PurchaseOrder_POStatus" FromRole="PurchaseOrder" ToRole="POStatu" />
           <NavigationProperty Name="Project" Relationship="KUBOnlinePRModel.FK_PurchaseOrder_Project" FromRole="PurchaseOrder" ToRole="Project" />
-          <NavigationProperty Name="PurchaseRequisition" Relationship="KUBOnlinePRModel.FK_PurchaseOrder_PurchaseRequisition" FromRole="PurchaseOrder" ToRole="PurchaseRequisition" />
           <NavigationProperty Name="Vendor" Relationship="KUBOnlinePRModel.FK_PurchaseOrder_Vendor" FromRole="PurchaseOrder" ToRole="Vendor" />
           <NavigationProperty Name="VendorStaff" Relationship="KUBOnlinePRModel.FK_PurchaseOrder_VendorStaff" FromRole="PurchaseOrder" ToRole="VendorStaff" />
           <Property Name="CustId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="PurchaseRequisition" Relationship="KUBOnlinePRModel.FK_PurchaseOrder_PurchaseRequisition" FromRole="PurchaseOrder" ToRole="PurchaseRequisition" />
         </EntityType>
         <Association Name="FK_PurchaseOrder_PaymentTerms">
           <End Type="KUBOnlinePRModel.PaymentTerm" Role="PaymentTerm" Multiplicity="0..1" />
@@ -2927,18 +2690,6 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PurchaseOrder_PurchaseRequisition">
-          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="0..1" />
-          <End Type="KUBOnlinePRModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PurchaseRequisition">
-              <PropertyRef Name="PRId" />
-            </Principal>
-            <Dependent Role="PurchaseOrder">
-              <PropertyRef Name="PRId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_PurchaseOrder_Vendor">
           <End Type="KUBOnlinePRModel.Vendor" Role="Vendor" Multiplicity="1" />
           <End Type="KUBOnlinePRModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="*" />
@@ -2960,6 +2711,255 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
             </Principal>
             <Dependent Role="PurchaseOrder">
               <PropertyRef Name="vendorStaffId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PurchaseRequisition">
+          <Key>
+            <PropertyRef Name="PRId" />
+          </Key>
+          <Property Name="uuid" Type="Guid" Nullable="false" />
+          <Property Name="PRId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustId" Type="Int32" Nullable="false" />
+          <Property Name="PRNo" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="ProjectId" Type="Int32" Nullable="false" />
+          <Property Name="PaperRefNo" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="BidWaiverRefNo" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="PaperAttachment" Type="Boolean" Nullable="false" />
+          <Property Name="PurchaseTypeId" Type="Int32" Nullable="false" />
+          <Property Name="BudgetDescription" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Justification" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AmountRequired" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="VendorId" Type="Int32" />
+          <Property Name="VendorStaffId" Type="Int32" />
+          <Property Name="VendorQuoteNo" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="SpecsReviewer" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="PreparedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="PreparedById" Type="Int32" Nullable="false" />
+          <Property Name="LastModifyDate" Type="DateTime" Precision="3" />
+          <Property Name="Saved" Type="Int32" Nullable="false" />
+          <Property Name="Submited" Type="Int32" Nullable="false" />
+          <Property Name="SubmitDate" Type="DateTime" Precision="3" />
+          <Property Name="LastSubmitedDate" Type="DateTime" Precision="3" />
+          <Property Name="Rejected" Type="Int32" Nullable="false" />
+          <Property Name="RejectedRemark" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="RejectedById" Type="Int32" />
+          <Property Name="RejectedDate" Type="DateTime" Precision="3" />
+          <Property Name="Phase1Completed" Type="Boolean" Nullable="false" />
+          <Property Name="PRType" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="POId" Type="Int32" />
+          <Property Name="AmountPOBalance" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Phase2Completed" Type="Boolean" Nullable="false" />
+          <Property Name="PRAging" Type="Int32" />
+          <Property Name="StatusId" Type="String" Nullable="false" MaxLength="4" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Customer" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_Customer" FromRole="PurchaseRequisition" ToRole="Customer" />
+          <NavigationProperty Name="PR_Admin" Relationship="KUBOnlinePRModel.FK_PR_Admin_PurchaseRequisition" FromRole="PurchaseRequisition" ToRole="PR_Admin" />
+          <NavigationProperty Name="PR_Approver" Relationship="KUBOnlinePRModel.FK_PR_Approver_PurchaseRequisition" FromRole="PurchaseRequisition" ToRole="PR_Approver" />
+          <NavigationProperty Name="PR_HOD" Relationship="KUBOnlinePRModel.FK_PR_HOD_PurchaseRequisition" FromRole="PurchaseRequisition" ToRole="PR_HOD" />
+          <NavigationProperty Name="PR_Items" Relationship="KUBOnlinePRModel.FK_PR_Items_PurchaseRequisition" FromRole="PurchaseRequisition" ToRole="PR_Items" />
+          <NavigationProperty Name="PR_PaperApprover" Relationship="KUBOnlinePRModel.FK_PR_PaperApprover_PurchaseRequisition" FromRole="PurchaseRequisition" ToRole="PR_PaperApprover" />
+          <NavigationProperty Name="PR_Recommender" Relationship="KUBOnlinePRModel.FK_PR_Recommender_PurchaseRequisition" FromRole="PurchaseRequisition" ToRole="PR_Recommender" />
+          <NavigationProperty Name="PR_Reviewer" Relationship="KUBOnlinePRModel.FK_PR_Reviewer_PurchaseRequisition" FromRole="PurchaseRequisition" ToRole="PR_Reviewer" />
+          <NavigationProperty Name="Project" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_Project" FromRole="PurchaseRequisition" ToRole="Project" />
+          <NavigationProperty Name="PRs_FileUpload" Relationship="KUBOnlinePRModel.FK_PRs_FileUpload_PurchaseRequisition" FromRole="PurchaseRequisition" ToRole="PRs_FileUpload" />
+          <NavigationProperty Name="PRStatu" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_PRStatus" FromRole="PurchaseRequisition" ToRole="PRStatu" />
+          <NavigationProperty Name="PurchaseOrders" Relationship="KUBOnlinePRModel.FK_PurchaseOrder_PurchaseRequisition" FromRole="PurchaseRequisition" ToRole="PurchaseOrder" />
+          <NavigationProperty Name="PurchaseType" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_PurchaseType" FromRole="PurchaseRequisition" ToRole="PurchaseType" />
+          <NavigationProperty Name="User" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_User" FromRole="PurchaseRequisition" ToRole="User" />
+          <NavigationProperty Name="Vendor" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_Vendor" FromRole="PurchaseRequisition" ToRole="Vendor" />
+          <NavigationProperty Name="VendorStaff" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_VendorStaff" FromRole="PurchaseRequisition" ToRole="VendorStaff" />
+          <Property Name="Scenario" Type="Int32" />
+          <Property Name="Budgeted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_PurchaseRequisition_Customer">
+          <End Type="KUBOnlinePRModel.Customer" Role="Customer" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="custId" />
+            </Principal>
+            <Dependent Role="PurchaseRequisition">
+              <PropertyRef Name="CustId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_Admin_PurchaseRequisition">
+          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.PR_Admin" Role="PR_Admin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseRequisition">
+              <PropertyRef Name="PRId" />
+            </Principal>
+            <Dependent Role="PR_Admin">
+              <PropertyRef Name="PRId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_Approver_PurchaseRequisition">
+          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.PR_Approver" Role="PR_Approver" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseRequisition">
+              <PropertyRef Name="PRId" />
+            </Principal>
+            <Dependent Role="PR_Approver">
+              <PropertyRef Name="PRId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_HOD_PurchaseRequisition">
+          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.PR_HOD" Role="PR_HOD" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseRequisition">
+              <PropertyRef Name="PRId" />
+            </Principal>
+            <Dependent Role="PR_HOD">
+              <PropertyRef Name="PRId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_Items_PurchaseRequisition">
+          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.PR_Items" Role="PR_Items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseRequisition">
+              <PropertyRef Name="PRId" />
+            </Principal>
+            <Dependent Role="PR_Items">
+              <PropertyRef Name="PRId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_PaperApprover_PurchaseRequisition">
+          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.PR_PaperApprover" Role="PR_PaperApprover" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseRequisition">
+              <PropertyRef Name="PRId" />
+            </Principal>
+            <Dependent Role="PR_PaperApprover">
+              <PropertyRef Name="PRId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_Recommender_PurchaseRequisition">
+          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.PR_Recommender" Role="PR_Recommender" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseRequisition">
+              <PropertyRef Name="PRId" />
+            </Principal>
+            <Dependent Role="PR_Recommender">
+              <PropertyRef Name="PRId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_Reviewer_PurchaseRequisition">
+          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.PR_Reviewer" Role="PR_Reviewer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseRequisition">
+              <PropertyRef Name="PRId" />
+            </Principal>
+            <Dependent Role="PR_Reviewer">
+              <PropertyRef Name="PRId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchaseRequisition_Project">
+          <End Type="KUBOnlinePRModel.Project" Role="Project" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="projectId" />
+            </Principal>
+            <Dependent Role="PurchaseRequisition">
+              <PropertyRef Name="ProjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PRs_FileUpload_PurchaseRequisition">
+          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.PRs_FileUpload" Role="PRs_FileUpload" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseRequisition">
+              <PropertyRef Name="PRId" />
+            </Principal>
+            <Dependent Role="PRs_FileUpload">
+              <PropertyRef Name="PRId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchaseRequisition_PRStatus">
+          <End Type="KUBOnlinePRModel.PRStatu" Role="PRStatu" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRStatu">
+              <PropertyRef Name="statusId" />
+            </Principal>
+            <Dependent Role="PurchaseRequisition">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchaseOrder_PurchaseRequisition">
+          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="0..1" />
+          <End Type="KUBOnlinePRModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseRequisition">
+              <PropertyRef Name="PRId" />
+            </Principal>
+            <Dependent Role="PurchaseOrder">
+              <PropertyRef Name="PRId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchaseRequisition_PurchaseType">
+          <End Type="KUBOnlinePRModel.PurchaseType" Role="PurchaseType" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseType">
+              <PropertyRef Name="purchaseTypeId" />
+            </Principal>
+            <Dependent Role="PurchaseRequisition">
+              <PropertyRef Name="PurchaseTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchaseRequisition_User">
+          <End Type="KUBOnlinePRModel.User" Role="User" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="PurchaseRequisition">
+              <PropertyRef Name="PreparedById" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchaseRequisition_Vendor">
+          <End Type="KUBOnlinePRModel.Vendor" Role="Vendor" Multiplicity="0..1" />
+          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vendor">
+              <PropertyRef Name="vendorId" />
+            </Principal>
+            <Dependent Role="PurchaseRequisition">
+              <PropertyRef Name="VendorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchaseRequisition_VendorStaff">
+          <End Type="KUBOnlinePRModel.VendorStaff" Role="VendorStaff" Multiplicity="0..1" />
+          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VendorStaff">
+              <PropertyRef Name="staffId" />
+            </Principal>
+            <Dependent Role="PurchaseRequisition">
+              <PropertyRef Name="VendorStaffId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3296,48 +3296,6 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="PurchaseRequisitions">
-            <EntityTypeMapping TypeName="KUBOnlinePRModel.PurchaseRequisition">
-              <MappingFragment StoreEntitySet="PurchaseRequisition">
-                <ScalarProperty Name="Scenario" ColumnName="Scenario" />
-                <ScalarProperty Name="SpecsReviewer" ColumnName="SpecsReviewer" />
-                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
-                <ScalarProperty Name="PRAging" ColumnName="PRAging" />
-                <ScalarProperty Name="Phase2Completed" ColumnName="Phase2Completed" />
-                <ScalarProperty Name="AmountPOBalance" ColumnName="AmountPOBalance" />
-                <ScalarProperty Name="POId" ColumnName="POId" />
-                <ScalarProperty Name="PRType" ColumnName="PRType" />
-                <ScalarProperty Name="Phase1Completed" ColumnName="Phase1Completed" />
-                <ScalarProperty Name="RejectedDate" ColumnName="RejectedDate" />
-                <ScalarProperty Name="RejectedById" ColumnName="RejectedById" />
-                <ScalarProperty Name="RejectedRemark" ColumnName="RejectedRemark" />
-                <ScalarProperty Name="Rejected" ColumnName="Rejected" />
-                <ScalarProperty Name="LastSubmitedDate" ColumnName="LastSubmitedDate" />
-                <ScalarProperty Name="SubmitDate" ColumnName="SubmitDate" />
-                <ScalarProperty Name="Submited" ColumnName="Submited" />
-                <ScalarProperty Name="Saved" ColumnName="Saved" />
-                <ScalarProperty Name="LastModifyDate" ColumnName="LastModifyDate" />
-                <ScalarProperty Name="PreparedById" ColumnName="PreparedById" />
-                <ScalarProperty Name="PreparedDate" ColumnName="PreparedDate" />
-                <ScalarProperty Name="VendorQuoteNo" ColumnName="VendorQuoteNo" />
-                <ScalarProperty Name="VendorStaffId" ColumnName="VendorStaffId" />
-                <ScalarProperty Name="VendorId" ColumnName="VendorId" />
-                <ScalarProperty Name="AmountRequired" ColumnName="AmountRequired" />
-                <ScalarProperty Name="Justification" ColumnName="Justification" />
-                <ScalarProperty Name="BudgetDescription" ColumnName="BudgetDescription" />
-                <ScalarProperty Name="PurchaseTypeId" ColumnName="PurchaseTypeId" />
-                <ScalarProperty Name="PaperAttachment" ColumnName="PaperAttachment" />
-                <ScalarProperty Name="BidWaiverRefNo" ColumnName="BidWaiverRefNo" />
-                <ScalarProperty Name="PaperRefNo" ColumnName="PaperRefNo" />
-                <ScalarProperty Name="Unbudgeted" ColumnName="Unbudgeted" />
-                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
-                <ScalarProperty Name="PRNo" ColumnName="PRNo" />
-                <ScalarProperty Name="CustId" ColumnName="CustId" />
-                <ScalarProperty Name="PRId" ColumnName="PRId" />
-                <ScalarProperty Name="uuid" ColumnName="uuid" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="FixedAssets">
             <EntityTypeMapping TypeName="KUBOnlinePRModel.FixedAsset">
               <MappingFragment StoreEntitySet="FixedAsset">
@@ -3437,6 +3395,48 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
                 <ScalarProperty Name="PONo" ColumnName="PONo" />
                 <ScalarProperty Name="PRId" ColumnName="PRId" />
                 <ScalarProperty Name="POId" ColumnName="POId" />
+                <ScalarProperty Name="uuid" ColumnName="uuid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PurchaseRequisitions">
+            <EntityTypeMapping TypeName="KUBOnlinePRModel.PurchaseRequisition">
+              <MappingFragment StoreEntitySet="PurchaseRequisition">
+                <ScalarProperty Name="Budgeted" ColumnName="Budgeted" />
+                <ScalarProperty Name="Scenario" ColumnName="Scenario" />
+                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+                <ScalarProperty Name="PRAging" ColumnName="PRAging" />
+                <ScalarProperty Name="Phase2Completed" ColumnName="Phase2Completed" />
+                <ScalarProperty Name="AmountPOBalance" ColumnName="AmountPOBalance" />
+                <ScalarProperty Name="POId" ColumnName="POId" />
+                <ScalarProperty Name="PRType" ColumnName="PRType" />
+                <ScalarProperty Name="Phase1Completed" ColumnName="Phase1Completed" />
+                <ScalarProperty Name="RejectedDate" ColumnName="RejectedDate" />
+                <ScalarProperty Name="RejectedById" ColumnName="RejectedById" />
+                <ScalarProperty Name="RejectedRemark" ColumnName="RejectedRemark" />
+                <ScalarProperty Name="Rejected" ColumnName="Rejected" />
+                <ScalarProperty Name="LastSubmitedDate" ColumnName="LastSubmitedDate" />
+                <ScalarProperty Name="SubmitDate" ColumnName="SubmitDate" />
+                <ScalarProperty Name="Submited" ColumnName="Submited" />
+                <ScalarProperty Name="Saved" ColumnName="Saved" />
+                <ScalarProperty Name="LastModifyDate" ColumnName="LastModifyDate" />
+                <ScalarProperty Name="PreparedById" ColumnName="PreparedById" />
+                <ScalarProperty Name="PreparedDate" ColumnName="PreparedDate" />
+                <ScalarProperty Name="SpecsReviewer" ColumnName="SpecsReviewer" />
+                <ScalarProperty Name="VendorQuoteNo" ColumnName="VendorQuoteNo" />
+                <ScalarProperty Name="VendorStaffId" ColumnName="VendorStaffId" />
+                <ScalarProperty Name="VendorId" ColumnName="VendorId" />
+                <ScalarProperty Name="AmountRequired" ColumnName="AmountRequired" />
+                <ScalarProperty Name="Justification" ColumnName="Justification" />
+                <ScalarProperty Name="BudgetDescription" ColumnName="BudgetDescription" />
+                <ScalarProperty Name="PurchaseTypeId" ColumnName="PurchaseTypeId" />
+                <ScalarProperty Name="PaperAttachment" ColumnName="PaperAttachment" />
+                <ScalarProperty Name="BidWaiverRefNo" ColumnName="BidWaiverRefNo" />
+                <ScalarProperty Name="PaperRefNo" ColumnName="PaperRefNo" />
+                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+                <ScalarProperty Name="PRNo" ColumnName="PRNo" />
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="PRId" ColumnName="PRId" />
                 <ScalarProperty Name="uuid" ColumnName="uuid" />
               </MappingFragment>
             </EntityTypeMapping>

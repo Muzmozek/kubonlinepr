@@ -35,7 +35,7 @@ namespace KUBOnlinePRPM.Service
 
         public bool IncludeInBudget(PurchaseRequisition purchaseRequisition)
         {
-            return (purchaseRequisition.Unbudgeted) ? false : true;
+            return (purchaseRequisition.Budgeted) ? true : false;
         }
 
 

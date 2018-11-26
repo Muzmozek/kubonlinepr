@@ -45,8 +45,8 @@ namespace KUBOnlinePRPM.Models
         public virtual ICollection<PO_Item> PO_Item { get; set; }
         public virtual POStatu POStatu { get; set; }
         public virtual Project Project { get; set; }
-        public virtual PurchaseRequisition PurchaseRequisition { get; set; }
         public virtual Vendor Vendor { get; set; }
         public virtual VendorStaff VendorStaff { get; set; }
+        public virtual PurchaseRequisition PurchaseRequisition { get; set; }
     }
 }

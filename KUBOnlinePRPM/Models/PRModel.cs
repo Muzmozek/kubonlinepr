@@ -37,7 +37,7 @@ namespace KUBOnlinePRPM.Models
 
         [Required]
         public bool Value { get; set; }
-        public bool Unbudgeted { get; set; }
+        public bool Budgeted { get; set; }
         public string PaperRefNo { get; set; }
         public string BidWaiverRefNo { get; set; }
         public bool PaperAttachment { get; set; }
@@ -88,6 +88,7 @@ namespace KUBOnlinePRPM.Models
         public DateTime RecommendDate { get; set; }
         public int AdminId { get; set; }
         public string AdminName { get; set; }
+        public string SpecReviewer { get; set; }
         public bool SelectSave { get; set; }
         public int Saved { get; set; }
         public bool SelectSubmit { get; set; }
