@@ -337,6 +337,7 @@
           <Property Name="Phase2Completed" Type="bit" Nullable="false" />
           <Property Name="PRAging" Type="int" />
           <Property Name="StatusId" Type="nchar" MaxLength="4" Nullable="false" />
+          <Property Name="Scenario" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="PurchaseType">
           <Key>
@@ -2372,6 +2373,7 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <NavigationProperty Name="VendorStaff" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_VendorStaff" FromRole="PurchaseRequisition" ToRole="VendorStaff" />
           <Property Name="SpecsReviewer" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="PurchaseOrders" Relationship="KUBOnlinePRModel.FK_PurchaseOrder_PurchaseRequisition" FromRole="PurchaseRequisition" ToRole="PurchaseOrder" />
+          <Property Name="Scenario" Type="Int32" Nullable="false" />
         </EntityType>
         <Association Name="FK_PurchaseRequisition_Customer">
           <End Type="KUBOnlinePRModel.Customer" Role="Customer" Multiplicity="1" />
@@ -3297,6 +3299,7 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <EntitySetMapping Name="PurchaseRequisitions">
             <EntityTypeMapping TypeName="KUBOnlinePRModel.PurchaseRequisition">
               <MappingFragment StoreEntitySet="PurchaseRequisition">
+                <ScalarProperty Name="Scenario" ColumnName="Scenario" />
                 <ScalarProperty Name="SpecsReviewer" ColumnName="SpecsReviewer" />
                 <ScalarProperty Name="StatusId" ColumnName="StatusId" />
                 <ScalarProperty Name="PRAging" ColumnName="PRAging" />

@@ -103,6 +103,7 @@
 
     });
 
+    // scenario 1
     //Review IT/PMO/ start
     $("#RejectPreparedReviewer").click(function (e) {
 
@@ -168,6 +169,37 @@
     });
 
     //approver end
+
+    //scenario 2
+    $("#RejectPreparedRecommended").click(function (e) {
+
+        e.preventDefault();
+
+        Url = "/PR/RejectPreparedRecommended";
+        $.post(Url, {
+
+            PRId: PRId
+
+        }, function (resp) {
+            alert(resp);
+        });
+
+    });
+
+    $("#RecommendedPreparedRecommended").click(function (e) {
+
+        e.preventDefault();
+
+        Url = "/PR/RecommendedPreparedRecommended";
+        $.post(Url, {
+
+            PRId: PRId
+
+        }, function (resp) {
+            alert(resp);
+        });
+
+    });
     
     //phase 1 reviewer approver approval logic
     $(document).on("click", ".approveRejectDetail", function (e) {
