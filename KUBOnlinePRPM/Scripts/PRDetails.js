@@ -271,93 +271,22 @@
 
     });
 
-    $("#IssuePO").click(function (e) {
+    $("#ApprovePreparedJointRecommended").click(function (e) {
 
         e.preventDefault();
 
-        var fd = new FormData(); var other_data; var PRType; var URL;
-        other_data = $(".checkFiles").serializeArray();
-        $.each(other_data, function (key, input) {
-            fd.append(input.name, input.value);
-        });
-        var data = PRItemTable.$("tr");
-        var ItemsId;
-        $.each(data, function (i, input) {
-            if ($(PRItemTable.row(i).data()[0]).val() === "") {
-                ItemsId = 0;
-            } else {
-                ItemsId = $(PRItemTable.row(i).data()[0]).val();
-            }
-            var unitPrice = $(input).find("input[name='UnitPrice']").val(); var totalPrice = $(input).find("input[name='TotalPrice']").val();
-            var UoM = $(input).find("input[name='UoM']").val(); var CodeId = $(input).find(".CodeId option:selected").val();
-            if (unitPrice === undefined)
-                unitPrice = "";
-            if (totalPrice === undefined)
-                totalPrice = "";
-            if (UoM === undefined)
-                UoM = "";
-            if (CodeId === undefined)
-                CodeId = "";
-            fd.append("NewPRForm.PRItemListObject[" + i + "].ItemsId", ItemsId);
-            fd.append("NewPRForm.PRItemListObject[" + i + "].DateRequired", $(input).find("input[name='DateRequired']").val());
-            fd.append("NewPRForm.PRItemListObject[" + i + "].Description", $(input).find("input[name='Description']").val());
-            fd.append("NewPRForm.PRItemListObject[" + i + "].CodeId", CodeId);
-            fd.append("NewPRForm.PRItemListObject[" + i + "].CustPONo", $(input).find("input[name='CustPONo']").val());
-            fd.append("NewPRForm.PRItemListObject[" + i + "].Quantity", $(input).find("input[name='Quantity']").val());
-            fd.append("NewPRForm.PRItemListObject[" + i + "].UOM", UoM);
-            fd.append("NewPRForm.PRItemListObject[" + i + "].UnitPrice", unitPrice);
-            fd.append("NewPRForm.PRItemListObject[" + i + "].TotalPrice", totalPrice);
-        });
+        Url = "/PR/ApprovePreparedJointRecommended";
+        $.post(Url, {
 
-        Url = "/PO/IssuePOGeneric";
-        $.ajax({
-            url: Url,
-            type: 'POST',
-            data: fd,
-            contentType: false,
-            processData: false,
-            cache: false,
-            beforeSend: function () {
-                $("body").addClass("loading");
-            },
-            dataType: "json",
-            success: function (resp) {
-                    $.HSCore.helpers.HSFileAttachments.init();
-                    $.HSCore.components.HSFileAttachment.init('.js-file-attachment');
-                    PRItemTable = $('#PRItemTable').DataTable({
-                        autoWidth: false,
-                        ordering: false,
-                        paging: false,
-                        searching: false,
-                        draw: true,
-                        deferRender: false,
-                        columnDefs: [
-                            { visible: false, targets: [0] },
-                            { width: "50%", targets: [2] }
-                        ],
-                        destroy: true,
-                        responsive: {
-                            breakpoints: [{
-                                name: 'desktop',
-                                width: 1024
-                            },
-                            {
-                                name: 'tablet',
-                                width: 768
-                            },
-                            {
-                                name: 'phone',
-                                width: 480
-                            }
-                            ]
-                        }
-                    });
-                $("body").removeClass("loading");
-                alert(resp);
-                }
+            PRId: PRId
+
+        }, function (resp) {
+            alert(resp);
         });
 
     });
+
+    
     
     //phase 1 reviewer approver approval logic
     $(document).on("click", ".approveRejectDetail", function (e) {

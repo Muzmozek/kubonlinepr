@@ -1931,7 +1931,7 @@ namespace KUBOnlinePRPM.Controllers
             }
             else if (PRService.CheckAmountScenarioThree(amountBudget))
             {
-                PR.StatusId = "PR04";
+                PR.StatusId = "PR03";
                 PR.Scenario = 3;
                 db.SaveChanges();
 
