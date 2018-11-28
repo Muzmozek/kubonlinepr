@@ -36,6 +36,7 @@ namespace KUBOnlinePRPM.Controllers
                 Submited = model.NewPRForm.Submited,
                 Rejected = model.NewPRForm.Rejected,
                 PRType = model.Type,
+                Scenario = model.NewPRForm.Scenario,
                 StatusId = "PR01"
             };
             db.PurchaseRequisitions.Add(_objNewPR);

@@ -109,7 +109,7 @@ namespace KUBOnlinePRPM.Models
         public string Designation { get; set; }
         public int? AmountPOBalance { get; set; }
         public List<PRItemsTable> PRItemListObject { get; set; }
-        public int? Scenario { get; set; }
+        public int Scenario { get; set; }
     }
     public class PRDocListTable
     {

@@ -1,107 +1,97 @@
 ﻿@model KUBOnlinePRPM.Models.NotiModel
 
 @*<div class="row g-bg-white g-pa-20">*@
-    <div class="col-md-12">
-        <div class="media-body align-self-center text-left g-mb-30">
-            <h3 class="g-font-weight-400 g-font-size-20 g-color-black">PR Conversations &amp; Updates</h3>
-        </div>
+<div class="col-md-12">
+    <div class="media-body align-self-center text-left g-mb-30">
+        <h3 class="g-font-weight-400 g-font-size-20 g-color-black">PR Conversations &amp; Updates</h3>
     </div>
-    <div class="container-fluid-v3 col-xs-12 g-mb-30 g-mt-10">
-        <div class="col-md-12">
-            <!-- Default Panel -->
-            <div class="panel panel-u">
-                <div class="panel-body panel-height">
-                    @foreach (var MessageList in Model.MessageListModel)
-                    {
-                        if (@MessageList.MsgType == "Task")
-                        {
-                            <div class="row margin-left-10 margin-bottom-5">
-                                <div class="col-md-8">
-                                    @*27 Jun 2015 12:15 PM [Muzhafar send to Unknown, Saiful, Azimah]*@
-                                    @*<div id="UserIds"class="hidden">@MessageList.Uid</div>*@
-                                    @MessageList.MsgDate [@MessageList.FromUserName send to @MessageList.ToUserName]
-                                </div>
-                                <div class="col-md-8">
-                                    @*<div><b>Muzhafar :</b> Hai apa khabar</div>*@
-                                    <div><b>@MessageList.FromUserName</b> : @MessageList.Message</div>
-                                </div>
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="row margin-left-10 margin-bottom-5">
-                                <div class="col-md-10">
-                                    @*27 Jun 2015 12:15 PM [Muzhafar send to Unknown, Saiful, Azimah]*@
-                                    @*<div id="UserIds"class="hidden">@MessageList.Uid</div>*@
-                                    @MessageList.MsgDate <b>[@MessageList.PRNo]</b> [<b>@MessageList.FromUserName</b> @MessageList.Message]
-                                </div>
-                            </div>
-                        }
-                        //MessageList.
-                        <hr />
-                    }
-                </div>
-            </div>
-            <!-- End Default Panel -->
-        </div>
-        <div id="UserIds" class="hidden">@Model.UserId</div>
-        <button id="triggerButton" type="button" class="hidden"></button>
-        <div class="col-md-10">
-            @*<form class="sky-form" action="#">*@
-            <label class="label h4">Put your updates here</label>
-            <label class="textarea">
-                <i class="icon-append fa fa-comment"></i>
-                <textarea id="MessageContent" rows="2"></textarea>
-            </label>
-            <div class="margin-bottom-20"><hr></div>
-            <div class="row container-fluid btn-FloatRight">
-                @*<button id="UploadPOFile" class="btn-u" type="button">Upload File</button>*@
-                <button class="btn-u btn-success margin-bottom-25" type="button" data-toggle="modal" data-target="#POQNA_Modal">
-                    <i class="fa fa-tags"></i> Submit message
-                </button>
-            </div>
-            <div class="modal fade responsive" id="POQNA_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div id="result" class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close closeButton" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title">Please select the recipient:</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row container">
-                                <label class="control-label">Select users: (Ctrl + left click to select multiple users)</label>
-                                <label class="select select-multiple form-control-popup">
-                                    @*<select multiple id="selMultiple">
-                                        <option value="2">muzhafar</option>
-                                        <option value="12">m.faizal</option>
-                                        <option value="22">saiful</option>
-                                        <option value="32">azimah</option>
-                                    </select>*@
-                                    @Html.ListBox("userIds", (MultiSelectList)ViewBag.NotiMemberList, new { @id = "POselMultiple" })
-                                    @*@Html.ListBoxFor(m => m.UserID, Model.MessageListModel, new { size = 5 })*@
-                                </label>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn-u btn-success btn-FloatRight" type="button" id="POSendMessage">
-                                <i class="fa fa-tags"></i> Submit message
-                            </button>
-                        </div>
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-                                0% Complete
-                            </div>
-                        </div>
+</div>
+<div class="container-fluid-v3 col-xs-12 g-mb-30 g-mt-10">
+    <div id="MessagePanel" class="u-shadow-v2 g-brd-around g-brd-gray-light-v4 g-line-height-2 g-pa-40 g-mb-30" role="alert">
+        @foreach (var MessageList in Model.MessageListModel)
+        {
+            if (@MessageList.MsgType == "Task" || @MessageList.MsgType == "Message")
+            {
+                <div class="row margin-left-10 margin-bottom-5">
+                    <div class="col-md-8">
+                        @*27 Jun 2015 12:15 PM [Muzhafar send to Unknown, Saiful, Azimah]*@
+                        @*<div id="UserIds"class="hidden">@MessageList.Uid</div>*@
+                        @MessageList.MsgDate <b>[@MessageList.PRNo]</b> [@MessageList.FromUserName send to @MessageList.ToUserName]
+                    </div>
+                    <div class="col-md-8">
+                        @*<div><b>Muzhafar :</b> Hai apa khabar</div>*@
+                        <div><b>@MessageList.FromUserName</b> : @MessageList.Message</div>
                     </div>
                 </div>
+            }
+            else
+            {
+                <div class="row margin-left-10 margin-bottom-5">
+                    <div class="col-md-10">
+                        @*27 Jun 2015 12:15 PM [Muzhafar send to Unknown, Saiful, Azimah]*@
+                        @*<div id="UserIds"class="hidden">@MessageList.Uid</div>*@
+                        @MessageList.MsgDate <b>[@MessageList.PRNo]</b> [@MessageList.Message]
+                    </div>
+                </div>
+            }
+            //MessageList.
+            <hr />
+        }
+    </div>
+    @Html.TextBoxFor(m => m.UserId, new { @id = "UserId", @class = "d-none", @type = "text" })
+    <button id="triggerButton" type="button" class="d-none"></button>
+    <div class="col-md-12">
+        @*<form class="sky-form" action="#">*@
+        @*<label class="label h4">Put your updates here</label>*@
+        @*<label class="textarea">
+                <i class="icon-append fa fa-comment"></i>
+                <textarea id="MessageContent" rows="2"></textarea>
+            </label>*@
+        <!-- Textarea Input with Left Appended Icon -->
+        <div class="form-group g-mb-20">
+            <label class="g-mb-10">Put your message here</label>
+            <div class="input-group g-brd-primary--focus">
+                <div class="input-group-prepend">
+                    <span class="input-group-text rounded-0 g-bg-white g-color-gray-light-v1"><i class="icon-user"></i></span>
+                </div>
+                <textarea id="MessageContent" class="form-control form-control-md border-left-0 g-resize-none rounded-0 pl-0" rows="3" placeholder=""></textarea>
             </div>
         </div>
-    </div>
-@*</div*@>
+        <!-- End Textarea Input with Left Appended Icon -->
+        <div class="col-md-1 offset-md-10 col-sm-2 offset-sm-10">
+            <div class="media">
+                <div class="d-flex u-main-nav--push-right text-right">
+                    @*<button id="UploadPOFile" class="btn-u" type="button">Upload File</button>*@
+                    <a id="SubmitPR" class="btn btn-md text-white u-btn-blue g-mr-5 g-mb-15" href="#SendMessageModal" data-modal-target="#SendMessageModal" data-modal-effect="fadein">SUBMIT MESSAGE</a>
+                </div>
+            </div>
+        </div>
 
+    </div>
+</div>
+@*</div*@>
+<div id="SendMessageModal" class="text-left g-max-width-800 g-bg-white g-overflow-y-auto g-pa-20" style="display: none;">
+    <button type="button" class="close" onclick="Custombox.modal.close();">
+        <i class="hs-icon hs-icon-close"></i>
+    </button>
+        <h4 class="modal-title">Please select the recipient:</h4>
+        <div class="row container form-group">
+            <label class="control-label">Select users: (Ctrl + left click to select multiple users)</label>
+            @*<label class="select select-multiple form-control rounded-0">*@
+                @Html.ListBox("userIds", (MultiSelectList)ViewBag.NotiMemberList, new { @id = "SelMultipleUser", @multiple = "", @class = "select select-multiple form-control rounded-0" })
+                @*@Html.ListBoxFor(m => m.UserID, Model.MessageListModel, new { size = 5 })*@
+            @*</label>*@
+        </div>
+        <a id="SendMessage" class="approveRejectDetail btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">SUBMIT MESSAGE</a>
+    @*<div class="progress">
+        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+            0% Complete
+        </div>
+    </div>*@
+</div>
 @*@section scripts {
-    <script type="text/javascript">
-        var NotiConversationTable;
-    </script>
-    <script src="~/Scripts/PRConversations.js"></script>
-}*@
+        <script type="text/javascript">
+            var NotiConversationTable;
+        </script>
+        <script src="~/Scripts/PRConversations.js"></script>
+    }*@

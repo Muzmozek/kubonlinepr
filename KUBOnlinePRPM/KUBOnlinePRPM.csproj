@@ -218,6 +218,9 @@
       <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\MessageList.cs">
+      <DependentUpon>KUBOnlinePR.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Notification.cs" />
     <Compile Include="Models\NotificationMsg.cs">
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
@@ -5124,6 +5127,7 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>KUBOnlinePR.cs</LastGenOutput>
     </Content>
+    <Content Include="Scripts\AuditTrail.js" />
     <Content Include="Scripts\BPRPOList.js" />
     <Content Include="Scripts\Login.js" />
     <Content Include="Scripts\NewPO.js" />
@@ -5611,6 +5615,7 @@
     <Content Include="Views\Roles\Details.cshtml" />
     <Content Include="Views\Roles\Edit.cshtml" />
     <Content Include="Views\Roles\Index.cshtml" />
+    <Content Include="Views\Notification\AuditTrail.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

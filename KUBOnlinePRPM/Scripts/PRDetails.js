@@ -74,9 +74,7 @@
     $("#SavePreparedProcurement").click(function (e) {
 
         e.preventDefault();
-        
-        Url = "/PR/UpdatePRProcurement";
-        $.post(Url, {
+        $.post(UrlSavePreparedProcurement, {
 
             PRId: PRId,
             SpecsReviewer: $("#SpecsReviewer").val()
@@ -124,9 +122,8 @@
             fd.append("NewPRForm.PRItemListObject[" + i + "].TotalPrice", totalPrice);
         });
 
-        Url = "/PR/SubmitPRProcurement";
         $.ajax({
-            url: Url,
+            url: UrlSubmitPreparedProcurement,
             type: 'POST',
             data: fd,
             contentType: false,
@@ -178,9 +175,7 @@
     $("#RejectPreparedReviewer").click(function (e) {
 
         e.preventDefault();
-
-        Url = "/PR/RejectPRReview";
-        $.post(Url, {
+        $.post(UrlRejectPreparedReviewer, {
 
             PRId: PRId
 
@@ -194,8 +189,7 @@
 
         e.preventDefault();
 
-        Url = "/PR/ApprovePRReview";
-        $.post(Url, {
+        $.post(UrlReviewPreparedReviewer, {
 
             PRId: PRId
 
@@ -211,9 +205,7 @@
     $("#RejectPreparedApprover").click(function (e) {
 
         e.preventDefault();
-
-        Url = "/PR/RejectPRApprover";
-        $.post(Url, {
+        $.post(UrlRejectPreparedApprover, {
 
             PRId: PRId
 
@@ -226,9 +218,7 @@
     $("#ApprovePreparedApprover").click(function (e) {
 
         e.preventDefault();
-
-        Url = "/PR/ApprovePRApprover";
-        $.post(Url, {
+        $.post(UrlApprovePreparedApprover, {
 
             PRId: PRId
 
@@ -244,9 +234,7 @@
     $("#RejectPreparedRecommended").click(function (e) {
 
         e.preventDefault();
-
-        Url = "/PR/RejectPreparedRecommended";
-        $.post(Url, {
+        $.post(UrlRejectPreparedRecommended, {
 
             PRId: PRId
 
@@ -259,9 +247,7 @@
     $("#RecommendedPreparedRecommended").click(function (e) {
 
         e.preventDefault();
-
-        Url = "/PR/RecommendedPreparedRecommended";
-        $.post(Url, {
+        $.post(UrlRecommendedPreparedRecommended, {
 
             PRId: PRId
 
@@ -274,15 +260,13 @@
     $("#ApprovePreparedJointRecommended").click(function (e) {
 
         e.preventDefault();
+        $.post(UrlApprovePreparedJointRecommended, {
 
-        Url = "/PR/ApprovePreparedJointRecommended";
-        $.post(Url, {
+                PRId: PRId
 
-            PRId: PRId
-
-        }, function (resp) {
-            alert(resp);
-        });
+            }, function (resp) {
+                alert(resp);
+            });
 
     });
   

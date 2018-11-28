@@ -53,7 +53,7 @@
         </div>
     }
     <div class="tab-pane fade show" id="nav-4-1-primary-hor-center--Conversations" role="tabpanel">
-        <div class="container-fluid">
+        <div id="ConversationsTab" class="container-fluid">
             @{ Html.RenderAction("PRConversations", "PR"); }
         </div>
     </div>
@@ -89,10 +89,21 @@
         var touchtime = 0;
         var UrlPODetails = "@Url.Action("ViewPODetails", "PO")";
         var UrlDownloadFile = "@Url.Action("FileDownload", "PR")";
+        var UrlSavePreparedProcurement = "@Url.Action("UpdatePRProcurement", "PR")";
+        var UrlSubmitPreparedProcurement = "@Url.Action("SubmitPRProcurement", "PR")";
+        var UrlRejectPreparedReviewer = "@Url.Action("RejectPRReview", "PR")";
+        var UrlReviewPreparedReviewer = "@Url.Action("ApprovePRReview", "PR")";
+        var UrlRejectPreparedApprover = "@Url.Action("RejectPRApprover", "PR")";
+        var UrlApprovePreparedApprover = "@Url.Action("ApprovePRApprover", "PR")";
+        var UrlRejectPreparedRecommended = "@Url.Action("RejectPreparedRecommended", "PR")";
+        var UrlRecommendedPreparedRecommended = "@Url.Action("RecommendedPreparedRecommended", "PR")";
+        var UrlApprovePreparedJointRecommended = "@Url.Action("ApprovePreparedJointRecommended", "PR")";
+        var UrlSendMessage = "@Url.Action("SendMessages", "PR")";
+        var UrlPRTabs = "@Url.Action("PRTabs", "PR")";
     </script>
     <script src="~/Scripts/PRDetails.js"></script>
     <script src="~/Scripts/PRFile.js"></script>
     <script src="~/Scripts/NewPR.js"></script>
-    @*<script src="~/Scripts/PRConversations.js"></script>*@
+    <script src="~/Scripts/PRConversations.js"></script>
     <script src="~/Scripts/POList.js"></script>
 }

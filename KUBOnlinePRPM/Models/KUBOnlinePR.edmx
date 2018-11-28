@@ -2802,7 +2802,7 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <NavigationProperty Name="User" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_User" FromRole="PurchaseRequisition" ToRole="User" />
           <NavigationProperty Name="Vendor" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_Vendor" FromRole="PurchaseRequisition" ToRole="Vendor" />
           <NavigationProperty Name="VendorStaff" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_VendorStaff" FromRole="PurchaseRequisition" ToRole="VendorStaff" />
-          <Property Name="Scenario" Type="Int32" />
+          <Property Name="Scenario" Type="Int32" Nullable="false" />
           <Property Name="Budgeted" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="FK_PurchaseRequisition_Customer">

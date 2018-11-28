@@ -18,6 +18,7 @@ using System.Net;
 using System.Globalization;
 using KUBOnlinePRPM.Service;
 using System.Diagnostics;
+using System.Net.Mail;
 
 namespace KUBOnlinePRPM.Controllers
 {
@@ -1186,7 +1187,8 @@ namespace KUBOnlinePRPM.Controllers
             var NotiMemberList = (from m in db.Users
                                   join n in db.Customers on m.companyId equals n.custId into gy
                                   from x in gy.DefaultIfEmpty()
-                                  where m.status == true && m.companyId == CustId
+                                      //where m.status == true && m.companyId == CustId
+                                  where m.companyId == CustId
                                   select new NotiMemberList()
                                   {
                                       Id = m.userId,
@@ -1196,6 +1198,97 @@ namespace KUBOnlinePRPM.Controllers
             ViewBag.NotiMemberList = new MultiSelectList(NotiMemberList, "Id", "Name");
 
             return PartialView(NewNotiList);
+        }
+
+        [HttpPost]
+        public JsonResult SendMessages(int PRId, string Message, List<int> SelectedUserId)
+        {
+            int fromUserID = Int32.Parse(Session["UserId"].ToString());
+            int custId = Int32.Parse(Session["CompanyId"].ToString());
+            var myEmail = db.Users.SingleOrDefault(x => x.userId == fromUserID);
+
+            NotificationMsg _objSendMessage = new NotificationMsg
+            {
+                uuid = Guid.NewGuid(),
+                PRId = PRId,
+                msgDate = DateTime.Now,
+                fromUserId = fromUserID,
+                message = Message,
+                msgType = "Message"
+                //flag = 0
+            };
+            db.NotificationMsgs.Add(_objSendMessage);
+            db.SaveChanges();
+
+            foreach (var model in SelectedUserId)
+            {
+                //toUserId = Int32.Parse(((string[])(selectedUserId))[i].Split(',')[0]);
+                //var UserEmail = db.Users.SingleOrDefault(x => x.userId == model);
+                //var POInfo = (from m in db.PurchaseRequisitions
+                //              join n in db.Users on m.PreparedById equals n.userId
+                //              join o in db.Projects on m.ProjectId equals o.projectId
+                //              join p in db.Customers on o.custId equals p.custId
+                //              //join p in db.OpportunityTypes on m.typeId equals p.typeId
+                //              where m.PRId == PRId
+                //              select new MailModel()
+                //              {
+                //                  CustName = p.name + " (" + p.abbreviation + ")",
+                //                  CustAbbreviation = p.abbreviation,
+                //                  ContractName = o.name,
+                //                  Description = o.description,
+                //                  PODescription = m.Details_projectDescription,
+                //                  PONo = m.Details_PONo,
+                //                  //ContractType = p.type,
+                //                  AssignTo = n.firstName + " " + n.lastName
+                //              }).FirstOrDefault();
+
+                //string templateFile = System.IO.File.ReadAllText(HttpContext.Server.MapPath("~/Views/Shared/POEmailTemplate.cshtml"));
+                //POInfo.Content = Content;
+                //POInfo.FromName = myEmail.emailAddress;
+                //POInfo.BackLink = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority,
+                //    Url.Content("~/POList/ViewPO") + "?cId=" + cId + "&pId=" + pId + "#POQuestionAnswer-1");
+                //var result = Engine.Razor.RunCompile(new LoadedTemplateSource(templateFile), "POTemplateKey", null, POInfo);
+
+                //MailMessage mail = new MailMessage
+                //{
+                //    From = new MailAddress("hr@kubtel.com")
+                //};
+                ////mail.From = new MailAddress("hr@kubtel.com");
+                //mail.To.Add(new MailAddress(UserEmail.emailAddress));
+                ////mail.To.Add(new MailAddress("hr@kubtel.com"));
+                //mail.Subject = "OCM: Updates on " + POInfo.ContractName + " for " + POInfo.CustAbbreviation;
+                //mail.Body = result;
+                //mail.IsBodyHtml = true;
+                //SmtpClient smtp = new SmtpClient
+                //{
+                //    //smtp.Host = "pops.kub.com";
+                //    Host = "outlook.office365.com",
+                //    //smtp.Host = "smtp.gmail.com";
+                //    Port = 587,
+                //    //smtp.Port = 25;
+                //    EnableSsl = true,
+                //    Credentials = new System.Net.NetworkCredential("hr@kubtel.com", "welcome123$")
+                //};
+                ////smtp.Credentials = new System.Net.NetworkCredential("ocm@kubtel.com", "welcome123$");
+                //smtp.Send(mail);
+
+                NotiGroup _objSendToUserId = new NotiGroup
+                {
+                    uuid = Guid.NewGuid(),
+                    msgId = _objSendMessage.msgId,
+                    toUserId = model
+                };
+                db.NotiGroups.Add(_objSendToUserId);
+            }
+
+            if (db.SaveChanges() > 0)
+            {
+                return Json("Sucessfully update");
+            }
+            else
+            {
+                return Json("Something is wrong");
+            }
         }
         public ActionResult PRFiles()
         {

@@ -62,7 +62,7 @@ namespace KUBOnlinePRPM.Models
         public bool Phase2Completed { get; set; }
         public Nullable<int> PRAging { get; set; }
         public string StatusId { get; set; }
-        public Nullable<int> Scenario { get; set; }
+        public int Scenario { get; set; }
         public bool Budgeted { get; set; }
     
         public virtual Customer Customer { get; set; }

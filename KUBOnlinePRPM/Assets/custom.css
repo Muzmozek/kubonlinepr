@@ -153,6 +153,11 @@ body.loading {
   line-height: 40px;
 }
 
+hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
 /*.hide {
     display:none;
 }*/
