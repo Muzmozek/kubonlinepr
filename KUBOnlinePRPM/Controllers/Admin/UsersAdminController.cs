@@ -9,12 +9,26 @@ using System.Web;
 using System.Web.Mvc;
 using KUBOnlinePRPM.Models;
 using KUBOnlinePRPM.ViewModel;
+using KUBOnlinePRPM.Service;
 
 namespace KUBOnlinePRPM.Controllers.Admin
 {
     public class UsersAdminController : Controller
     {
         private KUBOnlinePREntities db = new KUBOnlinePREntities();
+        private PRService PRService = new PRService();
+
+        // GET: UsersAdmin
+        public async Task<ActionResult> Heirarchy()
+        {
+            var users = PRService.populateUserList();
+
+            
+
+            
+
+            return View(users);
+        }
 
         // GET: UsersAdmin
         public async Task<ActionResult> Index()

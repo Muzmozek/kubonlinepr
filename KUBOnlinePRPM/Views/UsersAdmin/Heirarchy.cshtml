@@ -1,0 +1,99 @@
+﻿@model KUBOnlinePRPM.Service.HeirarchyModel
+
+@{
+    ViewBag.Title = "Heirarchy";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Users Heirarchy</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Super Admin
+            </th>
+            <th>
+                Head Of GPSS
+            </th>
+        </tr>
+    
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Model.SuperAdmin.firstName</td>
+            <td>@Model.HeadOfGPSS.firstName</td>
+        </tr>
+    </tbody>
+
+</table>
+
+<h5>Users</h5>
+
+@foreach (var member in Model.Members)
+{
+<h3>@member.SubsidiaryName</h3>
+
+    
+
+    <table class="table table-light table-striped">
+        <thead>
+            <tr>
+                <th>
+                    Type
+                </th>
+                <th>
+                    Names
+                </th>
+            </tr>
+
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    HOC
+                </td>
+                <td>
+                    <ol>
+                        @foreach (var x in member.HOCs)
+                        {
+                            <li>@x.firstName</li>
+                        }
+                    </ol>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    HOD
+                </td>
+                <td>
+                    <ol>
+                        @foreach (var x in member.HODs)
+                        {
+                            <li>@x.firstName</li>
+                        }
+                    </ol>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Requestors
+                </td>
+                <td>
+                    <ol>
+                        @foreach (var x in member.Requestors)
+                        {
+                            <li>@x.firstName</li>
+                        }
+                    </ol>
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+}

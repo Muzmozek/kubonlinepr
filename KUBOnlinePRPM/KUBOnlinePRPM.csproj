@@ -301,6 +301,7 @@
     <Compile Include="Service\KUBHelper.cs" />
     <Compile Include="Service\PRService.cs" />
     <Compile Include="Controllers\Admin\UsersAdminController.cs" />
+    <Compile Include="ViewModel\HierarchyModel.cs" />
     <Compile Include="ViewModel\UserRoleViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -5616,6 +5617,7 @@
     <Content Include="Views\Roles\Edit.cshtml" />
     <Content Include="Views\Roles\Index.cshtml" />
     <Content Include="Views\Notification\AuditTrail.cshtml" />
+    <Content Include="Views\UsersAdmin\Heirarchy.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

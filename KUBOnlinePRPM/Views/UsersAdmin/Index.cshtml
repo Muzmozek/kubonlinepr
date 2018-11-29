@@ -71,6 +71,7 @@
             @Html.DisplayFor(modelItem => item.superiorId)
         </td>
         <td>
+            <h5>@item.Customer.name ( @item.Customer.abbreviation )</h5>
             <ol>
 
                 @foreach (var x in item.Users_Roles)

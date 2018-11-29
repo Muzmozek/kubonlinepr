@@ -11,4 +11,11 @@ namespace KUBOnlinePRPM.ViewModel
         public string roleId { get; set; }
         public string roleName { get; set; }
     }
+
+    public class UserViewModel
+    {
+        public int userId { get; set; }
+        public string firstName { get; set; }
+        public string lastName { get; set; }
+    }
 }
