@@ -17,5 +17,8 @@ namespace KUBOnlinePRPM.ViewModel
         public int userId { get; set; }
         public string firstName { get; set; }
         public string lastName { get; set; }
+        public Nullable<int> superiorId { get; set; }
+        public string superiorFirstName { get; set; }
+        public string superiorLastName { get; set; }
     }
 }
