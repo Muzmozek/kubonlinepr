@@ -24,7 +24,7 @@ namespace KUBOnlinePRPM.Controllers
                                               join r in db.PurchaseRequisitions on m.PRId equals r.PRId into s
                                               from q in p.DefaultIfEmpty()
                                               from t in s.DefaultIfEmpty()
-                                              where q.toUserId == userId
+                                              where q.toUserId == userId && m.msgType == "Task"
                                               select new NotiListTable()
                                               {
                                                   MsgId = m.msgId,
@@ -36,7 +36,7 @@ namespace KUBOnlinePRPM.Controllers
                                                   MsgDate = m.msgDate,
                                                   PRType = t.PRType,
                                                   Done = m.done
-                                              }).ToList();
+                                              }).OrderByDescending(m => m.MsgDate).ToList();
 
                 return PartialView(NewNotiList);
             }
@@ -59,6 +59,8 @@ namespace KUBOnlinePRPM.Controllers
                                               join r in db.PurchaseRequisitions on m.PRId equals r.PRId into s
                                               from q in p.DefaultIfEmpty()
                                               from t in s.DefaultIfEmpty()
+                                              join u in db.Users on q.toUserId equals u.userId into v
+                                              from w in v.DefaultIfEmpty()
                                               select new NotiListTable()
                                               {
                                                   MsgId = m.msgId,
@@ -66,11 +68,12 @@ namespace KUBOnlinePRPM.Controllers
                                                   PRId = m.PRId,
                                                   //RequestorName = n.firstName + " " + n.lastName,
                                                   POId = m.POId,
-                                                  FromUserId = m.fromUserId,
+                                                  FromFullName = n.firstName + " " + n.lastName,
+                                                  ToFullName = w.firstName + " " + w.lastName,
                                                   MsgDate = m.msgDate,
                                                   PRType = t.PRType,
                                                   Done = m.done
-                                              }).ToList();
+                                              }).OrderByDescending(m => m.MsgDate).ToList();
 
                 return View(NewNotiList);
             }

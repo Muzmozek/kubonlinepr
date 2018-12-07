@@ -22,9 +22,9 @@
     @Html.TextBoxFor(m => m.Type, new { @id = "POType", @class = "d-none", @type = "text" })
     @*@Html.TextBoxFor(m => m.NewPOForm.AmountRequired, new { @id = "AmountRequired", @class = "d-none", @type = "text" })*@
     @*@Html.TextBoxFor(m => m.NewPOForm.TotalAmountRequired, new { @id = "TotalAmountRequired", @class = "d-none", @type = "text" })*@
-    <a id="UrlViewPOTabs" class="d-none" href="@Url.Action("ViewPOTabs", "PO")"></a>
+    <a id="ViewPODetails" class="d-none" href="@Url.Action("ViewPODetails", "PO")"></a>
     <a id="UrlPOTabs" class="d-none" href="@Url.Action("POTabs", "PO")"></a>
-    <a id="UrlPOList" class="d-none" href="@Url.Action("ViewPRTabs", "PR" )"></a>
+    <a id="UrlPOList" class="d-none" href="@Url.Action("POList", "PO" )"></a>
 
     <div class="row g-brd--black g-brd-style-solid g-bg-white g-pa-20">
         <div class="col-md-12">
@@ -40,7 +40,7 @@
                             <span>Project Name</span>
                         </div>
                         <div class="d-flex col-md-8 col-sm-8">
-                            @Html.DropDownListFor(m => m.NewPOForm.ProjectId, (IEnumerable<SelectListItem>)ViewBag.ProjectNameList, "Select project here", new { @id = "ProjectName", @class = "custom-select g-width-100vw g-height-50 g-color-gray-light-v1 g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
+                            @Html.DropDownListFor(m => m.NewPOForm.ProjectId, (IEnumerable<SelectListItem>)ViewBag.ProjectNameList, "Select project here", new { @id = "ProjectName", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
                             @Html.HiddenFor(m => m.NewPOForm.ProjectId)
                         </div>
                     </div>
@@ -60,7 +60,7 @@
                             <span>Company</span>
                         </div>
                         <div class="d-flex col-md-8 col-sm-8">
-                            @Html.DropDownListFor(m => m.NewPOForm.VendorId, (IEnumerable<SelectListItem>)ViewBag.VendorList, "Select vendor company here", new { @id = "VendorId", @class = "custom-select g-width-100vw g-height-50 g- g-color-gray-light-v1 g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
+                            @Html.DropDownListFor(m => m.NewPOForm.VendorId, (IEnumerable<SelectListItem>)ViewBag.VendorList, "Select vendor company here", new { @id = "VendorId", @class = "custom-select g-height-40 g- g-color-black g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
                             @Html.HiddenFor(m => m.NewPOForm.VendorId)
                         </div>
                     </div>
@@ -73,7 +73,7 @@
                             <span>Contact Name</span>
                         </div>
                         <div class="d-flex col-md-8 col-sm-8">
-                            @Html.DropDownListFor(m => m.NewPOForm.VendorStaffId, (IEnumerable<SelectListItem>)ViewBag.VendorStaffList, "Select vendor contact name here", new { @id = "VendorStaffId", @class = "custom-select g-width-100vw g-height-50 g- g-color-gray-light-v1 g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
+                            @Html.DropDownListFor(m => m.NewPOForm.VendorStaffId, (IEnumerable<SelectListItem>)ViewBag.VendorStaffList, "Select vendor contact name here", new { @id = "VendorStaffId", @class = "custom-select g-height-40 g- g-color-gray-light-v1 g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
                             @Html.HiddenFor(m => m.NewPOForm.VendorStaffId)
                         </div>
                     </div>
@@ -170,11 +170,11 @@
                 </thead>
                 <tbody>
                     @{
-                            int i = 1;
-                            foreach (var item in Model.NewPOForm.POItemListObject)
-                            {
-                                var ItemsId = "ItemsId" + i; var DateRequired = "DateRequired" + i; var Description = "Description" + i; var CustPONo = "CustPONo" + i; var OutStandingQuantity = "OutStandingQuantity" + i;
-                        var Quantity = "Quantity" + i; var CodeId = "CodeId" + i; var ItemCode = "ItemCode" + i; var UoM = "UoM" + i; var UnitPrice = "UnitPrice" + i; var TotalPrice = "TotalPrice" + i;
+                        int i = 1;
+                        foreach (var item in Model.NewPOForm.POItemListObject)
+                        {
+                            var ItemsId = "ItemsId" + i; var DateRequired = "DateRequired" + i; var Description = "Description" + i; var CustPONo = "CustPONo" + i; var OutStandingQuantity = "OutStandingQuantity" + i;
+                            var Quantity = "Quantity" + i; var CodeId = "CodeId" + i; var ItemCode = "ItemCode" + i; var UoM = "UoM" + i; var UnitPrice = "UnitPrice" + i; var TotalPrice = "TotalPrice" + i;
                             <tr id="dontRemove">
                                 <td class="d-none"><input id="@ItemsId" class="Id form-control custom-filter desktop" type="text" name="@ItemsId" value="@item.ItemsId" /></td>
                                 <td>
@@ -219,6 +219,46 @@
                 </tbody>
             </table>
         </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
+                    <section>
+                        <div class="row">
+                            <div class="d-flex col-md-4 col-sm-4 formfield">
+                                <span>Pay To Vendor</span>
+                            </div>
+                            <div class="d-flex col-md-8 col-sm-8">
+                                @Html.DropDownListFor(m => m.NewPOForm.PayToVendorId, (IEnumerable<SelectListItem>)ViewBag.PayToVendorList, "Select Vendor here", new { @id = "PayToVendor", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                            </div>
+                        </div>
+                        <div class="row has-danger">
+                            <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                                @Html.ValidationMessageFor(m => m.NewPOForm.PayToVendorId, null, new { @class = "form-control-feedback" })
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
+                    <section>
+                        <div class="row">
+                            <div class="d-flex col-md-4 col-sm-4 formfield">
+                                <span>Payment Terms Code</span>
+                            </div>
+                            <div class="d-flex col-md-8 col-sm-8">
+                                @Html.DropDownListFor(m => m.NewPOForm.PaymentTermsId, (IEnumerable<SelectListItem>)ViewBag.PaymentTermsCodeList, "Select Payment Terms Code here", new { @id = "PaymentTermsCode", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                            </div>
+                        </div>
+                        <div class="row has-danger">
+                            <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                                @Html.ValidationMessageFor(m => m.NewPOForm.PaymentTermsId, null, new { @class = "form-control-feedback" })
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
         <div id="counter" class="d-none">@i</div>
         <div class="col-md-12 col-sm-12">
             <div class="row">
@@ -244,7 +284,8 @@
 @section scripts {
     <script type="text/javascript">
         var UrlNewPO = "@Url.Action("NewPO", "PO")";
-        var UrlPOTabs = "@Url.Action("ViewPOTabs", "PO")";
+        var UrlPOTabs = "@Url.Action("PODetails", "PO")";
+        var UrlPRTabs = "@Url.Action("PRTabs", "PR")";
         var PRId = "@Session["PRId"].ToString()";
     </script>
     <script src="~/Scripts/NewPO.js"></script>

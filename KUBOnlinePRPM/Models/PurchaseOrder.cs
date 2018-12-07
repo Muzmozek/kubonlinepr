@@ -39,6 +39,8 @@ namespace KUBOnlinePRPM.Models
         public int POAging { get; set; }
         public string StatusId { get; set; }
         public int CustId { get; set; }
+        public int TotalQuantity { get; set; }
+        public decimal TotalPrice { get; set; }
     
         public virtual PaymentTerm PaymentTerm { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

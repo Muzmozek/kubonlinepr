@@ -5,7 +5,7 @@
         processing: true,
         paging: true,
         deferRender: true,
-        ordering: true,
+        ordering: false,
         bAutoWidth: false,
         columnDefs: [
                 { visible: false, targets: [0] }

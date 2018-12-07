@@ -445,7 +445,7 @@
             <td class="td2" style="height:10px; border-right:1px solid black;">(IT/Corporate Services/Advisor)</td>
         </tr>
         <tr>
-@if (Model.NewPRForm.AmountRequired < 20000)
+@if (Model.NewPRForm.Scenario == 1)
 {
     <td class="td2" style="height:40px;">
         <img src="@Context.Server.MapPath("~/Images/signature.png")" width="50" height="40" />
@@ -470,14 +470,21 @@ else
         <tr>
             <td class="td2" style="">Name: @Model.NewPRForm.RequestorName</td>
             <td class="td2" style="">Name: @Model.NewPRForm.HODApproverName</td>
-            <td class="td2" style=" border-right: 1px solid black;">Name: @Model.NewPRForm.RecommenderName</td>
+            @if (Model.NewPRForm.Scenario == 1)
+            {
+                <td class="td2" style=" border-right: 1px solid black;">Name: @Model.NewPRForm.ReviewerName</td>
+            }
+            else
+            {
+                <td class="td2" style=" border-right: 1px solid black;">Name: @Model.NewPRForm.RecommenderName</td>
+            }
         </tr>
         <tr>
             <td class="td2" style="border-bottom: 1px solid black; padding-bottom:10px;">Date: @Model.NewPRForm.PreparedDate.ToShortDateString()</td>
             <td class="td2" style="border-bottom: 1px solid black; padding-bottom:10px;">Date: @Model.NewPRForm.HODApprovedDate1.ToShortDateString()</td>
-            @if (Model.NewPRForm.AmountRequired < 20000)
+            @if (Model.NewPRForm.Scenario == 1)
             {
-                <td class="td2" style="border-right: 1px solid black; padding-bottom:10px; border-bottom: 1px solid black">Date: </td>
+                <td class="td2" style="border-right: 1px solid black; padding-bottom:10px; border-bottom: 1px solid black">Date: @Model.NewPRForm.ReviewedDate.ToShortDateString()</td>
             }
             else
             {
@@ -498,10 +505,20 @@ else
             <td class="td2" style="height:10px; border-right:1px solid black;"></td>
         </tr>
         <tr>
-            
-            @if (Model.NewPRForm.AmountRequired < 20000)
+
+            @if (Model.NewPRForm.Scenario == 1)
             {
                 <td class="td2" style="height:50px;"></td>
+                <td class="td2" style="height:50px;"></td>
+                <td class="td2" style="height:50px; border-right:1px solid black;">
+                    <img src="@Context.Server.MapPath("~/Images/signature.png")" width="66" height="50" />
+                </td>
+            }
+            else if (Model.NewPRForm.Scenario == 2)
+            {
+                <td class="td2" style="height:50px;">
+                    <img src="@Context.Server.MapPath("~/Images/signature.png")" width="66" height="50" />
+                </td>
                 <td class="td2" style="height:50px;"></td>
                 <td class="td2" style="height:50px; border-right:1px solid black;">
                     <img src="@Context.Server.MapPath("~/Images/signature.png")" width="66" height="50" />
@@ -519,38 +536,50 @@ else
                     <img src="@Context.Server.MapPath("~/Images/signature.png")" width="66" height="50" />
                 </td>
             }
-                    
+
         </tr>
         <tr>
-            
-            @if (Model.NewPRForm.AmountRequired < 20000)
+
+            @if (Model.NewPRForm.Scenario == 1)
             {
                 <td class="td2" style="">Name: </td>
                 <td class="td2" style="">Name: </td>
-                <td class="td2" style=" border-right: 1px solid black;">Name: @Model.NewPRForm.HODApproverName</td>
+                <td class="td2" style=" border-right: 1px solid black;">Name: @Model.NewPRForm.ApproverName</td>
+            }
+            else if (Model.NewPRForm.Scenario == 2)
+            {
+                <td class="td2" style="">Name: @Model.NewPRForm.ReviewerName</td>
+                <td class="td2" style="">Name: </td>
+                <td class="td2" style=" border-right: 1px solid black;">Name: @Model.NewPRForm.ApproverName</td>
             }
             else
             {
                 <td class="td2" style="">Name: @Model.NewPRForm.ReviewerName</td>
-                <td class="td2" style="">Name: @Model.NewPRForm.RecommenderName</td>
+                <td class="td2" style="">Name: @Model.NewPRForm.RecommenderNameII</td>
                 <td class="td2" style=" border-right: 1px solid black;">Name: @Model.NewPRForm.ApproverName</td>
             }
         </tr>
         <tr>
-            
-            @if (Model.NewPRForm.AmountRequired < 20000)
+
+            @if (Model.NewPRForm.Scenario == 1)
             {
                 <td class="td2" style="border-bottom: 1px solid black; padding-bottom:10px;">Date: </td>
                 <td class="td2" style="border-bottom: 1px solid black; padding-bottom:10px;">Date: </td>
                 <td class="td2" style="border-right: 1px solid black; padding-bottom:10px; border-bottom: 1px solid black">Date: @Model.NewPRForm.HODApprovedDate2.ToShortDateString()</td>
             }
+            else if (Model.NewPRForm.Scenario == 2)
+            {
+                <td class="td2" style="border-bottom: 1px solid black; padding-bottom:10px;">Date: @Model.NewPRForm.ReviewedDate.ToShortDateString()</td>
+                <td class="td2" style="border-bottom: 1px solid black; padding-bottom:10px;">Date: </td>
+                <td class="td2" style="border-right: 1px solid black; padding-bottom:10px; border-bottom: 1px solid black">Date: @Model.NewPRForm.ApprovedDate.ToShortDateString()</td>
+            }
             else
             {
                 <td class="td2" style="border-bottom: 1px solid black; padding-bottom:10px;">Date: @Model.NewPRForm.ReviewedDate.ToShortDateString()</td>
-                <td class="td2" style="border-bottom: 1px solid black; padding-bottom:10px;">Date: @Model.NewPRForm.RecommendDate.ToShortDateString()</td>
-                <td class="td2" style="border-right: 1px solid black; padding-bottom:10px; border-bottom: 1px solid black">Date: @Model.NewPRForm.AdminApprovedDate.ToShortDateString()</td>
+                <td class="td2" style="border-bottom: 1px solid black; padding-bottom:10px;">Date: @Model.NewPRForm.RecommendDateII.ToShortDateString()</td>
+                <td class="td2" style="border-right: 1px solid black; padding-bottom:10px; border-bottom: 1px solid black">Date: @Model.NewPRForm.ApprovedDate.ToShortDateString()</td>
             }
-            
+
         </tr>
     </table>
 </div>

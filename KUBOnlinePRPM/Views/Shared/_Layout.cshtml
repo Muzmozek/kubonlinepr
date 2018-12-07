@@ -353,56 +353,59 @@
                     </li>
                     <!-- End Purchase Order  -->
                     @*<li class="u-sidebar-navigation-v1-menu-item u-side-nav--has-sub-menu u-side-nav--top-level-menu-item">
-                        <a class="media u-side-nav--top-level-menu-link u-side-nav--hide-on-hidden g-px-15 g-py-12" href="~/Notification">
-                            <span class="d-flex align-self-center g-pos-rel g-font-size-18 g-mr-18">
-                                <i class="hs-admin-agenda"></i>
-                            </span>
-                            <span class="media-body align-self-center text-white">MY TASK</span>
-                        </a>
-                    </li>*@
+            <a class="media u-side-nav--top-level-menu-link u-side-nav--hide-on-hidden g-px-15 g-py-12" href="~/Notification">
+                <span class="d-flex align-self-center g-pos-rel g-font-size-18 g-mr-18">
+                    <i class="hs-admin-agenda"></i>
+                </span>
+                <span class="media-body align-self-center text-white">MY TASK</span>
+            </a>
+        </li>*@
                     <!--Purchase Order  -->
-                    <li class="u-sidebar-navigation-v1-menu-item u-side-nav--has-sub-menu u-side-nav--top-level-menu-item">
-                        <a class="media u-side-nav--top-level-menu-link u-side-nav--hide-on-hidden g-px-15 g-py-12" href="#!" data-hssm-target="#subMenuAdminUser">
-                            <span class="d-flex align-self-center g-pos-rel g-font-size-18 g-mr-18">
-                                <i class="et-icon-book-open"></i>
-                            </span>
-                            <span class="media-body align-self-center text-white">ADMIN</span>
-                            <span class="d-flex align-self-center u-side-nav--control-icon">
-                                <i class="hs-admin-angle-right"></i>
-                            </span>
-                            <span class="u-side-nav--has-sub-menu__indicator"></span>
-                        </a>
-                        <!-- Directory: Submenu-3 -->
-                        <ul id="subMenuAdminUser" class="u-sidebar-navigation-v1-menu u-side-nav--second-level-menu mb-0">
-                            <!-- Directory v2 -->
-                            <li class="u-sidebar-navigation-v1-menu-item u-side-nav--second-level-menu-item">
-                                <a class="media u-side-nav--second-level-menu-link g-px-15 g-py-12" href="~/UsersAdmin">
-                                    <span class="d-flex align-self-center g-mr-15 g-mt-minus-1">
-                                        <i class="icon-list"></i>
-                                    </span>
-                                    <span class="media-body align-self-center text-white">Users</span>
-                                </a>
-                            </li>
+                    @if (Session["ifAdmin"] != null || Session["ifSuperAdmin"] != null)
+                    {
+                        <li class="u-sidebar-navigation-v1-menu-item u-side-nav--has-sub-menu u-side-nav--top-level-menu-item">
+                            <a class="media u-side-nav--top-level-menu-link u-side-nav--hide-on-hidden g-px-15 g-py-12" href="#!" data-hssm-target="#subMenuAdminUser">
+                                <span class="d-flex align-self-center g-pos-rel g-font-size-18 g-mr-18">
+                                    <i class="et-icon-book-open"></i>
+                                </span>
+                                <span class="media-body align-self-center text-white">ADMIN</span>
+                                <span class="d-flex align-self-center u-side-nav--control-icon">
+                                    <i class="hs-admin-angle-right"></i>
+                                </span>
+                                <span class="u-side-nav--has-sub-menu__indicator"></span>
+                            </a>
+                            <!-- Directory: Submenu-3 -->
+                            <ul id="subMenuAdminUser" class="u-sidebar-navigation-v1-menu u-side-nav--second-level-menu mb-0">
+                                <!-- Directory v2 -->
+                                <li class="u-sidebar-navigation-v1-menu-item u-side-nav--second-level-menu-item">
+                                    <a class="media u-side-nav--second-level-menu-link g-px-15 g-py-12" href="~/UsersAdmin/Heirarchy">
+                                        <span class="d-flex align-self-center g-mr-15 g-mt-minus-1">
+                                            <i class="icon-list"></i>
+                                        </span>
+                                        <span class="media-body align-self-center text-white">Users</span>
+                                    </a>
+                                </li>
 
-                            <li class="u-sidebar-navigation-v1-menu-item u-side-nav--second-level-menu-item">
-                                <a class="media u-side-nav--second-level-menu-link g-px-15 g-py-12" href="~/Roles">
-                                    <span class="d-flex align-self-center g-mr-15 g-mt-minus-1">
-                                        <i class="icon-list"></i>
-                                    </span>
-                                    <span class="media-body align-self-center text-white">Navision</span>
-                                </a>
-                            </li>
-                            <li class="u-sidebar-navigation-v1-menu-item u-side-nav--second-level-menu-item">
-                                <a class="media u-side-nav--second-level-menu-link g-px-15 g-py-12" href="~/Notification/AuditTrail">
-                                    <span class="d-flex align-self-center g-mr-15 g-mt-minus-1">
-                                        <i class="icon-list"></i>
-                                    </span>
-                                    <span class="media-body align-self-center text-white">Audit Trail</span>
-                                </a>
-                            </li>
-                        </ul>
-                        <!-- End Directory: Submenu-3 -->
-                    </li>
+                                <li class="u-sidebar-navigation-v1-menu-item u-side-nav--second-level-menu-item">
+                                    <a class="media u-side-nav--second-level-menu-link g-px-15 g-py-12" href="~/Roles">
+                                        <span class="d-flex align-self-center g-mr-15 g-mt-minus-1">
+                                            <i class="icon-list"></i>
+                                        </span>
+                                        <span class="media-body align-self-center text-white">Navision</span>
+                                    </a>
+                                </li>
+                                <li class="u-sidebar-navigation-v1-menu-item u-side-nav--second-level-menu-item">
+                                    <a class="media u-side-nav--second-level-menu-link g-px-15 g-py-12" href="~/Notification/AuditTrail">
+                                        <span class="d-flex align-self-center g-mr-15 g-mt-minus-1">
+                                            <i class="icon-list"></i>
+                                        </span>
+                                        <span class="media-body align-self-center text-white">Audit Trail</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <!-- End Directory: Submenu-3 -->
+                        </li>
+                    }
                     <!-- End Purchase Order  -->
                 </ul>
             </div>

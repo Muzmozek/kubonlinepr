@@ -32,9 +32,9 @@
 
     $(document).on('click', '#POItemTable tbody .RemovePOItem', function (e) {
         e.preventDefault();
-        if ($(this).closest('tr')[0].id !== "dontRemove") {
+        //if ($(this).closest('tr')[0].id !== "dontRemove") {
             POItemTable.row($(this).parents('tr')).remove().draw(false);
-        }
+        //}
     });
 
     $(document).on("change", ".Quantity", function () {
@@ -106,27 +106,31 @@
             },
             dataType: "json",
             success: function (resp) {
-                if (resp.success && resp.Saved && resp.NewPO) {
-                    $.post($("#UrlViewPOTabs").attr('href'), {
-                        POId: resp.POId,
-                        POType: POType
-                    }, function (resp) {
-                        alert("The PO has been saved");
-                        window.location = resp.redirectUrl;
-                    });
-                } else if (resp.success && resp.Saved) {
+                //if (resp.success && resp.Saved && resp.NewPO) {
+                //    $.post($("#ViewPODetails").attr('href'), {
+                //        POId: resp.POId,
+                //        POType: POType
+                //    }, function (resp) {
+                //        alert("The PO has been saved");
+                //        window.location = resp.url;
+                //    });
+                //} else if (resp.success && resp.Saved) {
+                if (resp.success && resp.Saved) {
                     alert("The PO has been saved");
-                    $('#NewPO').html(resp.view);
-                    //$.fn.custombox('close');
-                    $("body").removeClass("loading");
+                    window.location = UrlPRTabs + "?PRId=" + PRId + "&PRType=" + POType;
+                    //$("body").removeClass("loading");
+                    //$("#nav-4-1-primary-hor-center--PODetails").load(UrlPOTabs + ' #PODetailsTab');
                 } else if (resp.success && resp.Submited) {
-                    $.post($("#UrlPOList").attr('href'), {
-                        PRId: PRId,
-                        PRType: POType
-                    }, function (resp) {
-                        alert("The PO has been submitted");
-                        window.location = resp.redirectUrl;
-                    });
+                    alert("The PR has been submited");
+                    window.location = UrlPRTabs + "?PRId=" + PRId + "&PRType=" + POType;
+                    //$.post($("#UrlPOList").attr('href'), {
+                    //    PRId: resp.PRId,
+                    //    PRType: POType
+                    //}, function (resp) {
+                    //    alert("The PR has been submited");
+                    //    //window.location = $("#UrlPOList").attr('href') + "?PRId=" + PRId + "&PRType=" + POType;
+                    //    window.location = $("#UrlPOList").attr('href') + "?type=All";
+                    //});
                 } else if (resp.success === false && resp.exception === true) {
                     alert("Exception occured. Please contact admin");
                     $('#NewPO').html(resp.view);

@@ -4,8 +4,9 @@
         //dom: 'frtiS',
         processing: true,
         paging: true,
+        pageLength: 50,
         deferRender: true,
-        ordering: true,
+        ordering: false,
         bAutoWidth: false,
         columnDefs: [
                 { visible: false, targets: [0] }

@@ -26,6 +26,8 @@ namespace KUBOnlinePRPM.Models
         public List<NotiListTable> NotiListObject { get; set; }
         public List<PRListTable> PRListObject { get; set; }
         public List<PRDocListTable> PRDocListObject { get; set; }
+        public int PRReviewer { get; set; }
+        public int PRRecommender { get; set; }
     }
     public class NewPRModel
     {
@@ -86,6 +88,9 @@ namespace KUBOnlinePRPM.Models
         public int RecommenderId { get; set; }
         public string RecommenderName { get; set; }
         public DateTime RecommendDate { get; set; }
+        public int RecommenderIdII { get; set; }
+        public string RecommenderNameII { get; set; }
+        public DateTime RecommendDateII { get; set; }
         public int AdminId { get; set; }
         public string AdminName { get; set; }
         public string SpecReviewer { get; set; }
@@ -158,8 +163,10 @@ namespace KUBOnlinePRPM.Models
         public decimal? UnitPrice { get; set; }
         public decimal? TotalPrice { get; set; }
         public string location { get; set; }
-        public int JobNo { get; set; }
-        public int JobTaskNo { get; set; }
+        public string JobNo { get; set; }
+        public int? JobNoId { get; set; }
+        public string JobTaskNo { get; set; }
+        public string JobTaskNoId { get; set; }
     }
     public class RoleList
     {

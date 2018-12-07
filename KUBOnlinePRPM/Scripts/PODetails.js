@@ -51,7 +51,8 @@
         e.preventDefault();
         var fd = new FormData(); var other_data; var POType; var URL;
             POType = $("#POType").val();
-            other_data = $("#PODetails").serializeArray();
+        other_data = $("#PODetails").serializeArray();
+        var PRId = $("#PRId").val();
         $.each(other_data, function (key, input) {
             fd.append(input.name, input.value);
         });
@@ -79,30 +80,26 @@
             },
             dataType: "json",
             success: function (resp) {
-                if (resp.success && resp.Saved && resp.NewPO) {
-                    $.post($("#UrlViewPOTabs").attr('href'), {
-                        POId: resp.POId,
-                        POType: POType
-                    }, function (resp) {
-                        alert("The PO has been saved");
-                        window.location = resp.redirectUrl;
-                    });
-                } else if (resp.success && resp.Saved) {
+                if (resp.success && resp.Saved) {
                     alert("The PO has been saved");
-                    $('#NewPO').html(resp.view);
+                    window.location = UrlPRTabs + "?PRId=" + PRId + "&PRType=" + POType;
+                    //$('#NewPO').html(resp.view);
                     //$.fn.custombox('close');
-                    $("body").removeClass("loading");
+                    //$("body").removeClass("loading");
+                    //$("#nav-4-1-primary-hor-center--PODetails").load(UrlPOTabs + ' #PODetailsTab');
                 } else if (resp.success && resp.Submited) {
-                    $.post($("#UrlPOList").attr('href'), {
-                        PRId: resp.PRId,
-                        PRType: POType
-                    }, function (resp) {
-                        alert("The PO has been submitted");
-                        window.location = resp.redirectUrl;
-                    });
+                    alert("The PO has been submited");
+                    window.location = UrlPRTabs + "?PRId=" + PRId + "&PRType=" + POType;
+                    //$.post($("#UrlPOList").attr('href'), {
+                    //    PRId: resp.PRId,
+                    //    PRType: POType
+                    //}, function (resp) {
+                    //    alert("The PO has been submited");
+                    //    window.location = $("#UrlPOList").attr('href') + "?type=All";
+                    //});
                 } else if (resp.success === false && resp.exception === true) {
                     alert("Exception occured. Please contact admin");
-                    $('#NewPO').html(resp.view);
+                    $('#PODetails').html(resp.view);
                     $("body").removeClass("loading");
                 }
             }
@@ -118,6 +115,7 @@
 
         }, function (resp) {
             alert(resp);
+            $("#nav-4-1-primary-hor-center--PODetails").load(UrlSaveSubmitDetails + ' #PODetailsTab');
         });
     });
 });
