@@ -164,23 +164,23 @@ namespace KUBOnlinePRPM.Controllers
                     db.SaveChanges();
                 }
 
-                if (model.NewPRForm.StatusId == "PR07")
-                {
-                    var getMsgId = (from m in db.NotificationMsgs
-                                    join n in db.NotiGroups on m.msgId equals n.msgId
-                                    where m.PRId == model.PRId && m.msgType == "Task" && n.resubmit != null
-                                    select new
-                                    {
-                                        MsgId = m.msgId,
-                                        MsgDate = m.msgDate
-                                    }).OrderByDescending(m => m.MsgDate).First();
-                    NotiGroup UpdateReqTask = db.NotiGroups.First(m => m.msgId == getMsgId.MsgId);
-                    UpdateReqTask.resubmit = true;
-                    _objNewPR.StatusId = "PR09";
-                    db.SaveChanges();
-                }
-                else
-                {
+                //if (model.NewPRForm.StatusId == "PR07")
+                //{
+                //    var getMsgId = (from m in db.NotificationMsgs
+                //                    join n in db.NotiGroups on m.msgId equals n.msgId
+                //                    where m.PRId == model.PRId && m.msgType == "Task" && n.resubmit != null
+                //                    select new
+                //                    {
+                //                        MsgId = m.msgId,
+                //                        MsgDate = m.msgDate
+                //                    }).OrderByDescending(m => m.MsgDate).First();
+                //    NotiGroup UpdateReqTask = db.NotiGroups.First(m => m.msgId == getMsgId.MsgId);
+                //    UpdateReqTask.resubmit = true;
+                //    _objNewPR.StatusId = "PR09";
+                //    db.SaveChanges();
+                //}
+                //else
+                //{
                     NotiGroup ApproverTask = new NotiGroup()
                     {
                         uuid = Guid.NewGuid(),
@@ -189,7 +189,7 @@ namespace KUBOnlinePRPM.Controllers
                         resubmit = false
                     };
                     db.NotiGroups.Add(ApproverTask);
-                }
+                //}
                 db.SaveChanges();
             }        
         }
@@ -198,14 +198,6 @@ namespace KUBOnlinePRPM.Controllers
             PurchaseRequisition FormerPRDetails = db.PurchaseRequisitions.First(m => m.PRId == x.PRId);
             Project updateProject = db.Projects.First(m => m.projectId == x.NewPRForm.ProjectId);
 
-            if (x.NewPRForm.StatusId == "PR06")
-            {
-                IssuePO(x);
-                FormerPRDetails.StatusId = "PR14";
-                db.SaveChanges();
-            }
-            else
-            {
                 if (FormerPRDetails.ProjectId != x.NewPRForm.ProjectId)
                 {
                     Project FormerProjectDetail = db.Projects.First(m => m.projectId == FormerPRDetails.ProjectId);
@@ -399,7 +391,8 @@ namespace KUBOnlinePRPM.Controllers
                     db.NotificationMsgs.Add(_objDetails_VendorStaffId);
                     FormerPRDetails.VendorStaffId = x.NewPRForm.VendorStaffId;
                 }
-                if (x.NewPRForm.SelectSave == true && (x.NewPRForm.StatusId == "PR01" || x.NewPRForm.StatusId == "PR07"))
+                //if (x.NewPRForm.SelectSave == true && (x.NewPRForm.StatusId == "PR01" || x.NewPRForm.StatusId == "PR07"))
+                if (x.NewPRForm.SelectSave == true && x.NewPRForm.StatusId == "PR01")
                 {
                     FormerPRDetails.Saved = FormerPRDetails.Saved + 1;
                     FormerPRDetails.LastModifyDate = DateTime.Now;
@@ -431,7 +424,8 @@ namespace KUBOnlinePRPM.Controllers
                 //    db.NotificationMsgs.Add(_objSaved);
                 //    db.SaveChanges();
                 //}
-                if (x.NewPRForm.SelectSubmit == true && (x.NewPRForm.StatusId == "PR01" || x.NewPRForm.StatusId == "PR07"))
+                //if (x.NewPRForm.SelectSubmit == true && (x.NewPRForm.StatusId == "PR01" || x.NewPRForm.StatusId == "PR07"))
+                if (x.NewPRForm.SelectSubmit == true && x.NewPRForm.StatusId == "PR01")
                 {
                     FormerPRDetails.Submited = FormerPRDetails.Submited + 1;
                     FormerPRDetails.SubmitDate = DateTime.Now;
@@ -493,22 +487,22 @@ namespace KUBOnlinePRPM.Controllers
                         db.PR_Admin.Add(_objSaveAdmin);
                         db.SaveChanges();
                     }
-                    if (x.NewPRForm.StatusId == "PR07")
-                    {
-                        var getMsgId = (from m in db.NotificationMsgs
-                                        join n in db.NotiGroups on m.msgId equals n.msgId
-                                        where m.PRId == x.PRId && m.msgType == "Task" && n.resubmit != null
-                                        select new
-                                        {
-                                            MsgId = m.msgId,
-                                            MsgDate = m.msgDate
-                                        }).OrderByDescending(m => m.MsgDate).First();
-                        NotiGroup UpdateReqTask = db.NotiGroups.First(m => m.msgId == getMsgId.MsgId);
-                        UpdateReqTask.resubmit = true;
-                        db.SaveChanges();
-                    }
-                    else
-                    {
+                    //if (x.NewPRForm.StatusId == "PR07")
+                    //{
+                    //    var getMsgId = (from m in db.NotificationMsgs
+                    //                    join n in db.NotiGroups on m.msgId equals n.msgId
+                    //                    where m.PRId == x.PRId && m.msgType == "Task" && n.resubmit != null
+                    //                    select new
+                    //                    {
+                    //                        MsgId = m.msgId,
+                    //                        MsgDate = m.msgDate
+                    //                    }).OrderByDescending(m => m.MsgDate).First();
+                    //    NotiGroup UpdateReqTask = db.NotiGroups.First(m => m.msgId == getMsgId.MsgId);
+                    //    UpdateReqTask.resubmit = true;
+                    //    db.SaveChanges();
+                    //}
+                    //else
+                    //{
                         foreach (var item in getApprover)
                         {
                             NotiGroup ApproverTask = new NotiGroup()
@@ -521,7 +515,7 @@ namespace KUBOnlinePRPM.Controllers
                             db.NotiGroups.Add(ApproverTask);
                             db.SaveChanges();
                         }
-                    }
+                    //}
                 }
                 //else if (x.NewPRForm.SelectSubmit == true && x.NewPRForm.StatusId == "PR02")
                 //{
@@ -718,19 +712,19 @@ namespace KUBOnlinePRPM.Controllers
                             _objDetails_ItemTypeId.msgType = "Trail";
                             if (formerItemTypeId == null)
                             {
-                                _objDetails_ItemTypeId.message = x.FullName + " set ItemCode to " + itemTypeIdChanges.type + " in PRNo : " + FormerPRDetails.PRNo;
+                                _objDetails_ItemTypeId.message = x.FullName + " set ItemDescription to " + itemTypeIdChanges.type + " in PRNo : " + FormerPRDetails.PRNo;
                             }
                             else
                             {
-                                _objDetails_ItemTypeId.message = x.FullName + " change ItemCode in PRNo : " + FormerPRDetails.PRNo + " items from " + formerItemTypeId.type + " to " + itemTypeIdChanges.type;
+                                _objDetails_ItemTypeId.message = x.FullName + " change ItemDescription in PRNo : " + FormerPRDetails.PRNo + " items from " + formerItemTypeId.type + " to " + itemTypeIdChanges.type;
                             }
                             db.NotificationMsgs.Add(_objDetails_ItemTypeId);
                             objPRItemDetails.itemTypeId = value.ItemTypeId;
                         }
                         if (objPRItemDetails.codeId != value.CodeId)
                         {
-                            var formerItemCode = db.PopulateItemLists.FirstOrDefault(m => m.codeId == objPRItemDetails.codeId);
-                            var itemCodeChanges = db.PopulateItemLists.First(m => m.codeId == value.CodeId);
+                            var formerItemDescription = db.PopulateItemLists.FirstOrDefault(m => m.codeId == objPRItemDetails.codeId);
+                            var ItemDescriptionChanges = db.PopulateItemLists.First(m => m.codeId == value.CodeId);
 
                             NotificationMsg _objDetails_CodeId = new NotificationMsg();
                             _objDetails_CodeId.uuid = Guid.NewGuid();
@@ -738,13 +732,13 @@ namespace KUBOnlinePRPM.Controllers
                             _objDetails_CodeId.msgDate = DateTime.Now;
                             _objDetails_CodeId.fromUserId = x.UserId;
                             _objDetails_CodeId.msgType = "Trail";
-                            if (formerItemCode == null)
+                            if (formerItemDescription == null)
                             {
-                                _objDetails_CodeId.message = x.FullName + " set ItemCode to " + itemCodeChanges.ItemCode + " in PRNo : " + FormerPRDetails.PRNo;
+                                _objDetails_CodeId.message = x.FullName + " set ItemDescription to " + ItemDescriptionChanges.ItemDescription + " in PRNo : " + FormerPRDetails.PRNo;
                             }
                             else
                             {
-                                _objDetails_CodeId.message = x.FullName + " change ItemCode in PRNo : " + FormerPRDetails.PRNo + " items from " + formerItemCode.ItemCode + " to " + itemCodeChanges.ItemCode;
+                                _objDetails_CodeId.message = x.FullName + " change ItemDescription in PRNo : " + FormerPRDetails.PRNo + " items from " + formerItemDescription.ItemDescription + " to " + ItemDescriptionChanges.ItemDescription;
                             }
                             db.NotificationMsgs.Add(_objDetails_CodeId);
                             objPRItemDetails.codeId = value.CodeId;
@@ -839,78 +833,9 @@ namespace KUBOnlinePRPM.Controllers
                     }
                     db.SaveChanges();
                 }
-            }
         }
-        public static void IssuePO(PRModel x)
-        {
-            PurchaseRequisition objPRDetails = db.PurchaseRequisitions.First(m => m.PRId == x.PRId);
 
-            PurchaseOrder newPO = new PurchaseOrder()
-            {
-                uuid = Guid.NewGuid(),
-                PRId = x.PRId,
-                PONo = "dummyset",
-                CustId = x.CustId,
-                PODate = DateTime.Now,
-                projectId = x.NewPRForm.ProjectId,
-                vendorId = x.NewPRForm.VendorId.Value,
-                //vendorStaffId = x.NewPRForm.VendorStaffId,
-                StatusId = "PO01",
-                POAging = 0
-            };
-            db.PurchaseOrders.Add(newPO);
-            db.SaveChanges();
-            newPO.PONo = "PO-" + DateTime.Now.Year + "-" + string.Format("{0}{1}", 0, newPO.POId.ToString("D4"));
-            db.SaveChanges();
-
-            NotificationMsg _objNewPO = new NotificationMsg
-            {
-                uuid = Guid.NewGuid(),
-                PRId = x.PRId,
-                POId = newPO.POId,
-                msgDate = DateTime.Now,
-                fromUserId = x.UserId,
-                msgType = "Trail",
-                message = x.FullName + " has create new PO No. " + newPO.PONo
-            };
-            db.NotificationMsgs.Add(_objNewPO);
-
-            foreach (var value in x.NewPRForm.PRItemListObject)
-            {
-                PO_Item newPOItem = new PO_Item()
-                {
-                    uuid = Guid.NewGuid(),
-                    POId = newPO.POId,
-                    itemsId = value.ItemsId,
-                    dateRequired = value.DateRequired,
-                    description = value.Description,
-                    codeId = value.CodeId.Value,
-                    custPONo = value.CustPONo,
-                    quantity = value.Quantity,
-                    unitPrice = value.UnitPrice.Value,
-                    totalPrice = value.TotalPrice.Value
-                };
-                db.PO_Item.Add(newPOItem);
-                db.SaveChanges();
-
-                NotificationMsg newPOMsg = new NotificationMsg()
-                {
-                    uuid = Guid.NewGuid(),
-                    PRId = x.PRId,
-                    POId = newPOItem.POId,
-                    msgDate = DateTime.Now,
-                    fromUserId = x.UserId,
-                    msgType = "Trail",
-                    message = "The system create new PO item from PR No. " + objPRDetails.PRNo
-                };
-                db.NotificationMsgs.Add(newPOMsg);
-            }
-            //objPRDetails.AmountPOBalance = 0;
-            //updateProject.utilizedToDate = updateProject.utilizedToDate + objPRDetails.AmountRequired;
-            //updateProject.budgetBalance = updateProject.budgetedAmount - updateProject.utilizedToDate;
-
-            db.SaveChanges();
-        }
+        //NewPO balnket
         public static void POSaveDbLogic(POModel POModel)
         {
             PurchaseOrder newPO = new PurchaseOrder();
@@ -918,19 +843,30 @@ namespace KUBOnlinePRPM.Controllers
             newPO.PRId = POModel.PRId;
             newPO.PONo = "dummyset";
             newPO.PODate = DateTime.Now;
+            newPO.CustId = POModel.CustId;
             newPO.projectId = POModel.NewPOForm.ProjectId;
             newPO.vendorId = POModel.NewPOForm.VendorId.Value;
             newPO.vendorStaffId = POModel.NewPOForm.VendorStaffId;
+            newPO.PayToVendorId = POModel.NewPOForm.PayToVendorId;
+            newPO.PaymentTermsId = POModel.NewPOForm.PaymentTermsId;
             newPO.PreparedById = POModel.UserId;
             newPO.PreparedDate = DateTime.Now;
-            newPO.Saved = POModel.NewPOForm.Saved + 1;
-            newPO.Submited = POModel.NewPOForm.Submited;
+            if (POModel.NewPOForm.SelectSave == true)
+            {
+                newPO.Saved = POModel.NewPOForm.Saved + 1;
+                newPO.StatusId = "PO01";
+            } else if (POModel.NewPOForm.SelectSubmit == true)
+            {
+                newPO.Submited = POModel.NewPOForm.SelectSubmit;
+                newPO.StatusId = "PO03";
+            }                
+            
             db.PurchaseOrders.Add(newPO);
             db.SaveChanges();
-            newPO.PONo = "PO-" + DateTime.Now.Year + "-" + string.Format("{0}{1}", 0, newPO.POId.ToString("D4"));
-
+            newPO.PONo = "PO-" + DateTime.Now.Year + "-" + string.Format("{0}{1}", 0, newPO.POId.ToString("D4"));            
             db.SaveChanges();
 
+            int TotalQuantity = 0; decimal TotalPrice = 0;
             foreach (var value in POModel.NewPOForm.POItemListObject)
             {
                 PO_Item _objNewPOItem = new PO_Item
@@ -955,75 +891,17 @@ namespace KUBOnlinePRPM.Controllers
                     _objUpdatePRItem.outStandingQuantity = _objUpdatePRItem.outStandingQuantity - _objNewPOItem.quantity;
                     newPO.POAging = POModel.NewPOForm.POAging;
                     db.SaveChanges();
+                    TotalQuantity = TotalQuantity + _objNewPOItem.quantity;
+                    TotalPrice = TotalPrice + _objNewPOItem.totalPrice;
                 }
             }
+            if (POModel.NewPOForm.SelectSubmit == true)
+            {
+                newPO.TotalQuantity = TotalQuantity;
+                newPO.TotalPrice = TotalPrice;               
+                db.SaveChanges();
+            }
             POModel.POId = newPO.POId;
-            //if (PRType == "Generic")
-            //{
-            //    PurchaseOrder newPO = new PurchaseOrder()
-            //    {
-            //        uuid = Guid.NewGuid(),
-            //        PRId = PRId,
-            //        PONo = "dummyset",
-            //        PODate = DateTime.Now,
-            //        projectId = objPRDetails.ProjectId,
-            //        vendorId = objPRDetails.VendorId.Value,
-            //        vendorStaffId = objPRDetails.VendorStaffId,
-            //        POAging = 0
-            //    };
-            //    db.PurchaseOrders.Add(newPO);
-            //    db.SaveChanges();
-            //    newPO.PONo = "PO-" + DateTime.Now.Year + "-" + string.Format("{0}{1}", 0, newPO.POId.ToString("D4"));
-            //    db.SaveChanges();
-
-            //    NotificationMsg _objNewPO = new NotificationMsg
-            //    {
-            //        uuid = Guid.NewGuid(),
-            //        PRId = PRId,
-            //        POId = newPO.POId,
-            //        msgDate = DateTime.Now,
-            //        fromUserId = Int32.Parse(Session["UserId"].ToString()),
-            //        msgType = "Trail",
-            //        message = Session["FullName"].ToString() + " has create new PO No. " + newPO.PONo
-            //    };
-            //    db.NotificationMsgs.Add(_objNewPO);
-
-            //    foreach (var value in objPRItemList)
-            //    {
-            //        PO_Item newPOItem = new PO_Item()
-            //        {
-            //            uuid = Guid.NewGuid(),
-            //            POId = newPO.POId,
-            //            itemsId = value.itemsId,
-            //            dateRequired = value.dateRequired,
-            //            description = value.description,
-            //            codeId = value.codeId.Value,
-            //            custPONo = value.custPONo,
-            //            quantity = value.quantity,
-            //            unitPrice = value.unitPrice.Value,
-            //            totalPrice = value.totalPrice.Value
-            //        };
-            //        db.PO_Item.Add(newPOItem);
-            //        db.SaveChanges();
-
-            //        NotificationMsg newPOMsg = new NotificationMsg()
-            //        {
-            //            uuid = Guid.NewGuid(),
-            //            PRId = PRId,
-            //            POId = newPOItem.POId,
-            //            msgDate = DateTime.Now,
-            //            fromUserId = Int32.Parse(Session["UserId"].ToString()),
-            //            msgType = "Trail",
-            //            message = "The system create new PO item from PR No. " + objPRDetails.PRNo
-            //        };
-            //        db.NotificationMsgs.Add(newPOMsg);
-            //    }
-            //    objPRDetails.AmountPOBalance = 0;
-            //    updateProject.utilizedToDate = updateProject.utilizedToDate + objPRDetails.AmountRequired;
-            //    updateProject.budgetBalance = updateProject.budgetedAmount - updateProject.utilizedToDate;
-
-            //    db.SaveChanges();
-            //}
         }
         public static void POUpdateDbLogic(POModel x)
         {
@@ -1042,6 +920,7 @@ namespace KUBOnlinePRPM.Controllers
             }
             db.SaveChanges();
             newPR.AmountPOBalance = 0;
+            int TotalQuantity = 0; decimal TotalPrice = 0;
             foreach (var value in x.NewPOForm.POItemListObject)
             {
                 PO_Item objPOItemDetails = db.PO_Item.FirstOrDefault(m => m.itemsId == value.ItemsId && m.POId == x.POId);
@@ -1062,6 +941,7 @@ namespace KUBOnlinePRPM.Controllers
                     };
                     newPR.AmountPOBalance = newPR.AmountPOBalance + _objNewPOItem.quantity;
                     db.PO_Item.Add(_objNewPOItem);
+                    db.SaveChanges();
                 }
                 else
                 {
@@ -1111,17 +991,21 @@ namespace KUBOnlinePRPM.Controllers
                         objPOItemDetails.totalPrice = value.TotalPrice;
                     }
                     newPR.AmountPOBalance = newPR.AmountPOBalance + objPOItemDetails.quantity;
+                    TotalQuantity = TotalQuantity + objPOItemDetails.quantity;
+                    TotalPrice = TotalPrice + objPOItemDetails.totalPrice;
                 }
                 db.SaveChanges();
 
                 if (x.NewPOForm.SelectSubmit == true)
                 {
                     PR_Items _objUpdatePRItem = db.PR_Items.First(m => m.itemsId == value.ItemsId);
-                    _objUpdatePRItem.outStandingQuantity = _objUpdatePRItem.outStandingQuantity - objPOItemDetails.quantity;
+                    _objUpdatePRItem.outStandingQuantity = _objUpdatePRItem.outStandingQuantity - objPOItemDetails.quantity;                    
                     db.SaveChanges();
-                }
-                db.SaveChanges();
+                }               
             }
+            objPODetails.TotalQuantity = TotalQuantity;
+            objPODetails.TotalPrice = TotalPrice;
+            db.SaveChanges();
         }
         public static SqlConnection OpenDBConnection()
         {

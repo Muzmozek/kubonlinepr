@@ -1,38 +1,34 @@
 ﻿$(document).on('ready', function () {
-    var j = 1; var k = 0;
+    var j = 1; var k = 0; var PRItemTable;
 
     $.HSCore.components.HSFileAttachment.init('.js-file-attachment');
     $.HSCore.helpers.HSFocusState.init();
 
-    var PRItemTable = $('#PRItemTable').DataTable({
-        autoWidth: false,
-        ordering: false,
-        paging: false,
-        searching: false,
-        draw: true,
-        deferRender: false,
-        columnDefs: [
-                { visible: false, targets: [0] },
-                { width: "50%", targets: [2]}
-        ],
-        destroy: true,
-        responsive: {
-            breakpoints: [{
-                name: 'desktop',
-                width: 1024
-            },
-            {
-                name: 'tablet',
-                width: 768
-            },
-            {
-                name: 'phone',
-                width: 480
+    function generatePRItemTable() {
+        PRItemTable = $('#PRItemTable').DataTable({
+            serverSide: false,
+            //dom: 'frtiS',
+            processing: true,
+            deferRender: true,
+            ordering: false,
+            paging: false,
+            searching: false,
+            bAutoWidth: false,
+            columnDefs: [
+                { visible: false, targets: [0] }
+            ],
+            destroy: true,
+            //aaSorting: [12, "desc"],
+            responsive: {
+                breakpoints: [
+                    { name: 'desktop', width: 1024 },
+                    { name: 'tablet', width: 768 },
+                    { name: 'phone', width: 480 }
+                ]
             }
-            ]
-        }
-    });
-
+        });
+    }
+    
     $(document).on("click", ".AddPRItem", function (e) {
         e.preventDefault();
         var field = ['[name="DateRequired"]', '[name="Description"]', '[name="Quantity"]'];
@@ -138,22 +134,35 @@
                 ItemsId = $(PRItemTable.row(i).data()[0]).val();
             }
             var unitPrice = $(input).find("input[name='UnitPrice']").val(); var totalPrice = $(input).find("input[name='TotalPrice']").val();
+            var ItemTypeId = $(input).find(".TypeId option:selected").val();
             var UoM = $(input).find("input[name='UoM']").val(); var CodeId = $(input).find(".CodeId option:selected").val();
+            var JobNo = $(input).find(".JobNoId option:selected").text();
+            var JobTaskNo = $(input).find(".JobTaskNoId option:selected").text();
             if (unitPrice === undefined)
                 unitPrice = "";
             if (totalPrice === undefined)
                 totalPrice = "";
             if (UoM === undefined)
                 UoM = "";
+            if (ItemTypeId === undefined)
+                ItemTypeId = "";
             if (CodeId === undefined)
                 CodeId = "";
+            if (JobNo === undefined)
+                JobNo = "";
+            if (JobTaskNo === undefined)
+                JobTaskNo = "";
+
             fd.append("NewPRForm.PRItemListObject[" + i + "].ItemsId", ItemsId);
             fd.append("NewPRForm.PRItemListObject[" + i + "].DateRequired", $(input).find("input[name='DateRequired']").val());
-            fd.append("NewPRForm.PRItemListObject[" + i + "].Description", $(input).find("input[name='Description']").val());
-            fd.append("NewPRForm.PRItemListObject[" + i + "].CodeId", CodeId);
+            fd.append("NewPRForm.PRItemListObject[" + i + "].ItemTypeId", ItemTypeId);
+            fd.append("NewPRForm.PRItemListObject[" + i + "].CodeId", CodeId);           
+            fd.append("NewPRForm.PRItemListObject[" + i + "].Description", $(input).find("input[name='Description']").val());            
             fd.append("NewPRForm.PRItemListObject[" + i + "].CustPONo", $(input).find("input[name='CustPONo']").val());
             fd.append("NewPRForm.PRItemListObject[" + i + "].Quantity", $(input).find("input[name='Quantity']").val());
             fd.append("NewPRForm.PRItemListObject[" + i + "].UOM", UoM);
+            fd.append("NewPRForm.PRItemListObject[" + i + "].JobNo", JobNo);
+            fd.append("NewPRForm.PRItemListObject[" + i + "].JobTaskNo", JobTaskNo);
             fd.append("NewPRForm.PRItemListObject[" + i + "].UnitPrice", unitPrice);
             fd.append("NewPRForm.PRItemListObject[" + i + "].TotalPrice", totalPrice);
         });
@@ -189,16 +198,12 @@
                     });
                 } else if (resp.success && resp.Saved) {
                     alert("The PR has been saved");
-                    $('.checkFiles').html(resp.view);
-                    //$.fn.custombox('close');
                     $("body").removeClass("loading");
+                    $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab');
+                    $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
                 } else if (resp.success && resp.Submited) {
                         alert("The PR has been submitted");
                         window.location = $("#UrlPRList").attr('href') + "?type=" + PRType;
-                    //if (result.type === "Generic")
-                    //    window.location = UrlPRTabs + "?PRId=" + result.PRId + "#pr-1";
-                    //else if (result.type === "Blanket")
-                    //    window.location = UrlBPRTabs + "?PRId=" + result.PRId + "#bpr-1";
                 } else if (resp.success === false && resp.exception === true) {
                     alert("Validation error. Please see the validation messages.");
                     $('#ContentWrapper').html(resp.view);
@@ -226,34 +231,7 @@
                     });
                     $.HSCore.helpers.HSFileAttachments.init();
                     $.HSCore.components.HSFileAttachment.init('.js-file-attachment');
-                    PRItemTable = $('#PRItemTable').DataTable({
-                        autoWidth: false,
-                        ordering: false,
-                        paging: false,
-                        searching: false,
-                        draw: true,
-                        deferRender: false,
-                        columnDefs: [
-                            { visible: false, targets: [0] },
-                            { width: "50%", targets: [2] }
-                        ],
-                        destroy: true,
-                        responsive: {
-                            breakpoints: [{
-                                name: 'desktop',
-                                width: 1024
-                            },
-                            {
-                                name: 'tablet',
-                                width: 768
-                            },
-                            {
-                                name: 'phone',
-                                width: 480
-                            }
-                            ]
-                        }
-                    });
+                    generatePRItemTable();
                     $("body").removeClass("loading");
                 }
             }

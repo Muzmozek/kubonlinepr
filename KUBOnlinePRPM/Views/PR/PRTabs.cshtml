@@ -24,12 +24,12 @@
     @Html.TextBoxFor(m => m.PRId, new { @id = "PRId", @class = "d-none", @type = "text" })
     @Html.TextBoxFor(m => m.Type, new { @id = "PRType", @class = "d-none", @type = "text" })
 
-@if (Model.Type == "Blanket")
-{
-    <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#nav-4-1-primary-hor-center--BPRPOList" role="tab">PO List</a>
-    </li>
-}
+    @if (Model.Type == "Blanket")
+    {
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#nav-4-1-primary-hor-center--BPRPOList" role="tab">PO List</a>
+        </li>
+    }
     <li class="nav-item">
         <a class="nav-link" data-toggle="tab" href="#nav-4-1-primary-hor-center--Conversations" role="tab">Conversations</a>
     </li>
@@ -39,14 +39,14 @@
 </ul>
 <div id="nav-4-1-primary-hor-center" class="tab-content g-pa-20--md g-mb-40 g-brd--black g-bg-white">
     <div class="tab-pane fade show active" id="nav-4-1-primary-hor-center--PRDetails" role="tabpanel">
-        <div class="container-fluid">
+        <div id="PRDetailsTab" class="container-fluid">
             @{ Html.RenderAction("PRDetails", "PR"); }
         </div>
     </div>
     @if (Model.Type == "Blanket")
     {
         <div class="tab-pane fade show" id="nav-4-1-primary-hor-center--BPRPOList" role="tabpanel">
-            <div class="container-fluid">
+            <div id="POListTab" class="container-fluid">
                 @{ Html.RenderAction("POList", "PO", new { Type = Model.Type });
                 }
             </div>
@@ -58,7 +58,7 @@
         </div>
     </div>
     <div class="tab-pane fade show" id="nav-4-1-primary-hor-center--Files" role="tabpanel">
-        <div class="container-fluid">
+        <div id="AttachmentTab" class="container-fluid">
             @{ Html.RenderAction("PRFiles", "PR"); }
         </div>
     </div>
@@ -84,6 +84,8 @@
         var UrlGMDPaperInfo = "@Url.Action("GetGMDPaperInfo", "PR")";
         var UrlItemCodeInfo = "@Url.Action("GetItemCodeInfo", "PR")";
         var UrlGetProjectInfo = "@Url.Action("GetProjectInfo", "PR")";
+        var UrlItemTypeInfo = "@Url.Action("GetItemTypeInfo", "PR")";
+        var UrlGetJobNoInfo = "@Url.Action("GetJobNoInfo", "PR")";
         var UrlVendorIdInfo = "@Url.Action("GetVendorInfo", "PR")";
         var UrlVendorStaffIdInfo = "@Url.Action("GetVendorStaffInfo", "PR")";
         var touchtime = 0;
@@ -95,15 +97,17 @@
         var UrlReviewPreparedReviewer = "@Url.Action("ApprovePRReview", "PR")";
         var UrlRejectPreparedApprover = "@Url.Action("RejectPRApprover", "PR")";
         var UrlApprovePreparedApprover = "@Url.Action("ApprovePRApprover", "PR")";
-        var UrlRejectPreparedRecommended = "@Url.Action("RejectPreparedRecommended", "PR")";
-        var UrlRecommendedPreparedRecommended = "@Url.Action("RecommendedPreparedRecommended", "PR")";
-        var UrlApprovePreparedJointRecommended = "@Url.Action("ApprovePreparedJointRecommended", "PR")";
+        var UrlRejectPreparedRecommended = "@Url.Action("RejectPRRecommended", "PR")";
+        var UrlRecommendedPreparedRecommended = "@Url.Action("RecommendedPRRecommended", "PR")";
+        var UrlApprovePreparedJointRecommended = "@Url.Action("ApprovePRJointRecommended", "PR")";
         var UrlSendMessage = "@Url.Action("SendMessages", "PR")";
         var UrlPRTabs = "@Url.Action("PRTabs", "PR")";
+        var UrlIssuePO = "@Url.Action("IssuePO", "PO")";
+        var UrlCancelPR = "@Url.Action("CancelPR", "PR")";
     </script>
+    <script src="~/Scripts/NewPR.js"></script>
     <script src="~/Scripts/PRDetails.js"></script>
     <script src="~/Scripts/PRFile.js"></script>
-    <script src="~/Scripts/NewPR.js"></script>
     <script src="~/Scripts/PRConversations.js"></script>
     <script src="~/Scripts/POList.js"></script>
 }

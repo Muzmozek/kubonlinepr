@@ -40,6 +40,22 @@ namespace KUBOnlinePRPM.Controllers
                                            VendorNo = m.vendorNo,
                                        }).OrderBy(c => c.VendorNo).ThenBy(c => c.VendorName);
                 var VendorStaffQuery = db.VendorStaffs.Select(c => new { StaffId = c.staffId, VendorContactName = c.vendorContactName }).OrderBy(c => c.VendorContactName);
+                var PayToVendorQuery = (from m in db.Vendors
+                                        where m.custId == CustId
+                                        select new
+                                        {
+                                            VendorId = m.vendorId,
+                                            VendorName = m.vendorNo + " - " + m.name,
+                                            VendorNo = m.vendorNo,
+                                        }).OrderBy(c => c.VendorNo).ThenBy(c => c.VendorName);
+                var PaymentTermsCodeQuery = (from m in db.PaymentTerms
+                                             where m.custId == CustId
+                                             select new
+                                             {
+                                                 PaymentTermsId = m.paymentTermsId,
+                                                 PaymentDescription = m.paymentCode + " - " + m.paymentDescription,
+                                                 PaymentCode = m.paymentCode,
+                                             }).OrderBy(c => c.PaymentCode).ThenBy(c => c.PaymentDescription);
 
                 int UserId = Int32.Parse(Session["UserId"].ToString());
                 var getRole = (from m in db.Users
@@ -86,20 +102,20 @@ namespace KUBOnlinePRPM.Controllers
                                        //StatusId = a.StatusId.Trim()
                                    }).FirstOrDefault();
                 NewPO.NewPOForm.POItemListObject = (from m in db.PR_Items
-                                                    join n in db.PopulateItemLists on m.codeId equals n.codeId into o
-                                                    from p in o.DefaultIfEmpty()
+                                                    from n in db.PopulateItemLists.Where(x => m.codeId == x.codeId && m.itemTypeId == x.itemTypeId).DefaultIfEmpty()
+                                                    //from p in o.DefaultIfEmpty()
                                                     where m.PRId == PRId
                                                     select new POItemsTable()
                                                     {
                                                         ItemsId = m.itemsId,
                                                         DateRequired = m.dateRequired,
                                                         Description = m.description,
-                                                        CodeId = p.codeId,
-                                                        ItemCode = p.ItemCode,
+                                                        CodeId = n.codeId,
+                                                        ItemCode = n.ItemDescription,
                                                         OutStandingQuantity = m.outStandingQuantity.Value,
                                                         UnitPrice = m.unitPrice.Value,
                                                         //TotalPrice = m.totalPrice,
-                                                        UOM = p.UoM
+                                                        UOM = n.UoM
                                                     }).ToList();
 
                 //TotalBudgetedQuantity
@@ -108,9 +124,11 @@ namespace KUBOnlinePRPM.Controllers
 
                 //}
 
-                ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "projectName", NewPO.NewPOForm.ProjectId);
+                ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "description", NewPO.NewPOForm.ProjectId);
                 ViewBag.VendorList = new SelectList(VendorListQuery.AsEnumerable(), "vendorId", "VendorName", NewPO.NewPOForm.VendorId);
                 ViewBag.VendorStaffList = new SelectList(VendorStaffQuery.AsEnumerable(), "staffId", "VendorContactName", NewPO.NewPOForm.VendorStaffId);
+                ViewBag.PayToVendorList = new SelectList(PayToVendorQuery.AsEnumerable(), "VendorId", "VendorName", NewPO.NewPOForm.PayToVendorId);
+                ViewBag.PaymentTermsCodeList = new SelectList(PaymentTermsCodeQuery.AsEnumerable(), "PaymentTermsId", "PaymentDescription", NewPO.NewPOForm.PaymentTermsId);
 
                 return View(NewPO);
             }
@@ -144,12 +162,30 @@ namespace KUBOnlinePRPM.Controllers
                                            VendorNo = m.vendorNo,
                                        }).OrderBy(c => c.VendorNo).ThenBy(c => c.VendorName);
                 var VendorStaffQuery = db.VendorStaffs.Select(c => new { StaffId = c.staffId, VendorContactName = c.vendorContactName }).OrderBy(c => c.VendorContactName);
+                var PayToVendorQuery = (from m in db.Vendors
+                                        where m.custId == CustId
+                                        select new
+                                        {
+                                            VendorId = m.vendorId,
+                                            VendorName = m.vendorNo + " - " + m.name,
+                                            VendorNo = m.vendorNo,
+                                        }).OrderBy(c => c.VendorNo).ThenBy(c => c.VendorName);
+                var PaymentTermsCodeQuery = (from m in db.PaymentTerms
+                                             where m.custId == CustId
+                                             select new
+                                             {
+                                                 PaymentTermsId = m.paymentTermsId,
+                                                 PaymentDescription = m.paymentCode + " - " + m.paymentDescription,
+                                                 PaymentCode = m.paymentCode,
+                                             }).OrderBy(c => c.PaymentCode).ThenBy(c => c.PaymentDescription);
 
                 if (!ModelState.IsValid)
                 {
                     ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "projectName", POModel.NewPOForm.ProjectId);
                     ViewBag.VendorList = new SelectList(VendorListQuery.AsEnumerable(), "vendorId", "VendorName", POModel.NewPOForm.VendorId);
                     ViewBag.VendorStaffList = new SelectList(VendorStaffQuery.AsEnumerable(), "staffId", "VendorContactName", POModel.NewPOForm.VendorStaffId);
+                    ViewBag.PayToVendorList = new SelectList(PayToVendorQuery.AsEnumerable(), "VendorId", "VendorName", POModel.NewPOForm.PayToVendorId);
+                    ViewBag.PaymentTermsCodeList = new SelectList(PaymentTermsCodeQuery.AsEnumerable(), "PaymentTermsId", "PaymentDescription", POModel.NewPOForm.PaymentTermsId);
 
                     return new JsonResult
                     {
@@ -169,6 +205,7 @@ namespace KUBOnlinePRPM.Controllers
                 }
                 POModel.PRId = Int32.Parse(Session["PRId"].ToString());
                 POModel.UserId = Int32.Parse(Session["UserId"].ToString());
+                POModel.CustId = Int32.Parse(Session["CompanyId"].ToString());
                 DBLogicController.POSaveDbLogic(POModel);
 
 
@@ -229,7 +266,7 @@ namespace KUBOnlinePRPM.Controllers
                                                RequestedName = p.userName,
                                                VendorId = n.vendorNo,
                                                VendorCompany = n.name,
-                                               AmountRequired = o.AmountRequired,
+                                               TotalPrice = m.TotalPrice,
                                                POAging = m.POAging,
                                                Status = q.status,
                                                POType = o.PRType
@@ -244,7 +281,6 @@ namespace KUBOnlinePRPM.Controllers
                     POList.POListObject = (from m in db.PurchaseOrders
                                            join n in db.Vendors on m.vendorId equals n.vendorId
                                            join o in db.PurchaseRequisitions on m.PRId equals o.PRId
-                                           join p in db.PO_Item on m.POId equals p.POId
                                            where o.PRType == "Blanket" && o.PRId == PRId
                                            select new POListTable()
                                            {
@@ -252,8 +288,8 @@ namespace KUBOnlinePRPM.Controllers
                                                PONo = m.PONo,
                                                PODate = m.PODate,
                                                POItem = o.PRNo,
-                                               Quantity = p.quantity,
-                                               TotalPrice = p.totalPrice,
+                                               Quantity = m.TotalQuantity,
+                                               TotalPrice = m.TotalPrice,
                                                POAging = m.POAging,
                                                POType = o.PRType
                                            }).ToList();
@@ -333,6 +369,7 @@ namespace KUBOnlinePRPM.Controllers
                 POModel PODetail = new POModel
                 {
                     POId = Int32.Parse(Session["POId"].ToString()),
+                    //PRId = Int32.Parse(Session["PRId"].ToString()),
                     UserId = Int32.Parse(Session["UserId"].ToString()),
                     Type = Session["POType"].ToString(),
                     RoleIdList = getRole
@@ -341,11 +378,11 @@ namespace KUBOnlinePRPM.Controllers
                                       join b in db.Projects on a.projectId equals b.projectId
                                       join c in db.Vendors on a.vendorId equals c.vendorId
                                       //join d in db.VendorStaffs on a.vendorStaffId equals d.staffId
-                                      join e in db.PO_Item on a.POId equals e.POId
-                                      join f in db.PopulateItemLists on e.codeId equals f.codeId
+                                      //join e in db.PO_Item on a.POId equals e.POId
+                                      //join f in db.PopulateItemLists on e.codeId equals f.codeId
                                       join g in db.POStatus on a.StatusId equals g.statusId
                                       join h in db.PurchaseRequisitions on a.PRId equals h.PRId
-                                      where a.POId == PODetail.POId && f.custId == CustId
+                                      where a.POId == PODetail.POId /*&& a.CustId == CustId*/
                                       select new NewPOModel()
                                       {
                                           PONo = a.PONo,
@@ -362,8 +399,8 @@ namespace KUBOnlinePRPM.Controllers
                                           PayToVendorId = a.PayToVendorId,
                                           PaymentTermsId = a.PaymentTermsId,
                                           StatusId = a.StatusId,
-                                          Status = g.status
-                                          //Submited = a.Submited.Value
+                                          Status = g.status,
+                                          Submited = a.Submited
                                       }).FirstOrDefault();
                 PODetail.NewPOForm.POItemListObject = (from m in db.PO_Item
                                                        join n in db.PopulateItemLists on m.codeId equals n.codeId
@@ -373,7 +410,7 @@ namespace KUBOnlinePRPM.Controllers
                                                        {
                                                            ItemsId = m.itemsId,
                                                            DateRequired = m.dateRequired,
-                                                           ItemCode = n.ItemCode,
+                                                           ItemCode = n.ItemDescription,
                                                            Description = m.description,                                                          
                                                            CustPONo = m.custPONo,
                                                            Quantity = m.quantity,
@@ -450,14 +487,17 @@ namespace KUBOnlinePRPM.Controllers
         }
 
         [HttpPost]
-        public JsonResult IssuePOGeneric(PRModel PRModel)
+        public JsonResult IssuePO(PRModel PRModel)
         {
-            try
+            PurchaseRequisition updatePR = db.PurchaseRequisitions.First(m => m.PRId == PRModel.PRId);
+            updatePR.StatusId = "PR14";
+            db.SaveChanges();
+            if (PRModel.Type == "Blanket")
             {
-                PurchaseRequisition updatePR = db.PurchaseRequisitions.First(m => m.PRId == PRModel.PRId);
-                updatePR.StatusId = "PR14";
-                db.SaveChanges();
 
+            } else
+            {
+                int UserId = Int32.Parse(Session["UserId"].ToString());
                 PurchaseOrder newPO = new PurchaseOrder();
                 newPO.uuid = Guid.NewGuid();
                 newPO.PRId = PRModel.PRId;
@@ -467,12 +507,13 @@ namespace KUBOnlinePRPM.Controllers
                 newPO.projectId = PRModel.NewPRForm.ProjectId;
                 newPO.vendorId = PRModel.NewPRForm.VendorId.Value;
                 //newPO.vendorStaffId = PRModel.NewPRForm.VendorStaffId;
-                newPO.PreparedById = Int32.Parse(Session["UserId"].ToString());
+                newPO.PreparedById = UserId;
                 newPO.PreparedDate = DateTime.Now;
                 newPO.Saved = 0;
                 newPO.Submited = true;
                 newPO.SubmitDate = DateTime.Now;
-                newPO.POAging = 0;
+                newPO.POAging = 0;                
+                newPO.TotalPrice = updatePR.AmountRequired;
                 newPO.StatusId = "PO01";
                 db.PurchaseOrders.Add(newPO);
                 db.SaveChanges();
@@ -480,6 +521,7 @@ namespace KUBOnlinePRPM.Controllers
 
                 db.SaveChanges();
 
+                int TotalQuantity = 0;
                 foreach (var value in PRModel.NewPRForm.PRItemListObject)
                 {
                     PO_Item _objNewPOItem = new PO_Item
@@ -500,12 +542,30 @@ namespace KUBOnlinePRPM.Controllers
 
                     PR_Items _objUpdatePRItem = db.PR_Items.First(m => m.itemsId == value.ItemsId);
                     _objUpdatePRItem.outStandingQuantity = _objUpdatePRItem.outStandingQuantity - _objNewPOItem.quantity;
+                    
                     newPO.POAging = 0;
                     db.SaveChanges();
+
+                    TotalQuantity = TotalQuantity + _objNewPOItem.quantity;
                 }
+
+                newPO.TotalQuantity = TotalQuantity;
+                NotificationMsg _objSubmited = new NotificationMsg
+                {
+                    uuid = Guid.NewGuid(),
+                    POId = newPO.POId,
+                    msgDate = DateTime.Now,
+                    fromUserId = UserId,
+                    msgType = "Trail",
+                    message = Session["FullName"].ToString() + " has issue new PO No. " + newPO.PONo + " subject for confirmation"
+                };
+                db.NotificationMsgs.Add(_objSubmited);
+            }              
+                
+            if (db.SaveChanges() > 0)
+            {
                 return Json("The PO has been confirmed");
-            }
-            catch
+            } else
             {
                 return Json("Exception error occured. Please contact admin.");
             }
@@ -525,6 +585,7 @@ namespace KUBOnlinePRPM.Controllers
             }
             int POId = Int32.Parse(Request["POId"]);
             int CustId = Int32.Parse(Session["CompanyId"].ToString());
+            int UserId = Int32.Parse(Session["UserId"].ToString());
             PurchaseOrder updatePO = db.PurchaseOrders.First(m => m.POId == POId);
             updatePO.PayToVendorId = PayToVendorId;
             updatePO.PaymentTermsId = PaymentTermsId;
@@ -538,7 +599,7 @@ namespace KUBOnlinePRPM.Controllers
                               {
                                   ItemsId = m.itemsId,
                                   DateRequired = m.dateRequired,
-                                  ItemCode = n.ItemCode,
+                                  ItemCode = n.ItemDescription,
                                   Description = m.description,
                                   CustPONo = m.custPONo,
                                   Quantity = m.quantity,
@@ -547,6 +608,22 @@ namespace KUBOnlinePRPM.Controllers
                                   TotalPrice = m.totalPrice
                                   //UOM = n.UoM
                               }).ToList();
+
+            var UpdateBudgetBalance = db.Projects.First(m => m.projectId == updatePO.projectId);
+            decimal getAmountRequired = db.PurchaseRequisitions.First(m => m.PRId == updatePO.PRId).AmountRequired;
+            UpdateBudgetBalance.utilizedToDate = UpdateBudgetBalance.utilizedToDate + getAmountRequired;
+            UpdateBudgetBalance.budgetBalance = UpdateBudgetBalance.budgetedAmount - UpdateBudgetBalance.utilizedToDate;
+
+            NotificationMsg _objConfirmed = new NotificationMsg
+            {
+                uuid = Guid.NewGuid(),
+                POId = POId,
+                msgDate = DateTime.Now,
+                fromUserId = UserId,
+                msgType = "Trail",
+                message = Session["FullName"].ToString() + " has confirmed new PO No. " + updatePO.PONo
+            };
+            db.NotificationMsgs.Add(_objConfirmed);
 
             if (db.SaveChanges() > 0)
             {

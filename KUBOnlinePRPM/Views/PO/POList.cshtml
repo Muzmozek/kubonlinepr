@@ -103,7 +103,7 @@
                 </tbody>
             </table>
         }
-        @if (Model.Type == "Blanket" && Session["ifRequestor"] != null && Model.OutstandingQty != 0 && Model.StatusId == "PR06")
+        @if (Model.Type == "Blanket")
         {
             <table id="POListTable" class="table table-striped table-bordered dt-responsive nowrap table-hover" style="width:100%">
                 <thead>
@@ -150,34 +150,37 @@
                     @{
                         foreach (var item in Model.POListObject)
                         {
-                    <tr>
-                        <th class="d-none">@Html.DisplayFor(modelItem => item.POId)</th>
-                        <td class="all">@Html.DisplayFor(modelItem => item.PONo)</td>
-                        <td class="desktop">@Html.DisplayFor(modelItem => item.PODate)</td>
-                        <td class="desktop">@Html.DisplayFor(modelItem => item.POItem)</td>
-                        <td class="desktop">@Html.DisplayFor(modelItem => item.Quantity)</td>
-                        <td class="desktop">@Html.DisplayFor(modelItem => item.TotalPrice)</td>
-                        <td class="all">@Html.DisplayFor(modelItem => item.POAging)</td>
-                        <td class="desktop">@Html.DisplayFor(modelItem => item.Status)</td>
-                    </tr>
+                            <tr>
+                                <th class="d-none">@Html.DisplayFor(modelItem => item.POId)</th>
+                                <td class="all">@Html.DisplayFor(modelItem => item.PONo)</td>
+                                <td class="desktop">@Html.DisplayFor(modelItem => item.PODate)</td>
+                                <td class="desktop">@Html.DisplayFor(modelItem => item.POItem)</td>
+                                <td class="desktop">@Html.DisplayFor(modelItem => item.Quantity)</td>
+                                <td class="desktop">@Html.DisplayFor(modelItem => item.TotalPrice)</td>
+                                <td class="all">@Html.DisplayFor(modelItem => item.POAging)</td>
+                                <td class="desktop">@Html.DisplayFor(modelItem => item.Status)</td>
+                            </tr>
                         }
                     }
                 </tbody>
             </table>
-            <div class="col-md-12 col-sm-12">
-                <div class="row">
-                    @*<div class="col-md-9 col-sm-8"></div>*@
-                    <div class="col-md-3 offset-md-9 col-sm-4 offset-sm-8">
-                        <div class="media">
-                            <div class="d-flex u-main-nav--push-right text-right">
-                                <div class="row">
-                                    <a id="NewPO" href="~/PO/NewPO?type=Blanket" class="btn btn-md u-btn-blue g-mr-5 g-mb-15">NEW PO</a>
+            if (Session["ifRequestor"] != null || Session["ifProcurement"] != null && Model.OutstandingQty != 0 && Model.StatusId == "PR06")
+            {
+                <div class="col-md-12 col-sm-12">
+                    <div class="row">
+                        @*<div class="col-md-9 col-sm-8"></div>*@
+                        <div class="col-md-3 offset-md-9 col-sm-4 offset-sm-8">
+                            <div class="media">
+                                <div class="d-flex u-main-nav--push-right text-right">
+                                    <div class="row">
+                                        <a id="NewPO" href="~/PO/NewPO?type=Blanket" class="btn btn-md u-btn-blue g-mr-5 g-mb-15">NEW PO</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            }
         }
     </div>
 </div>

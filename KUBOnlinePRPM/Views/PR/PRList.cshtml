@@ -73,7 +73,7 @@
                             <td class="desktop">@Html.DisplayFor(modelItem => item.VendorCompany)</td>
                             <td class="desktop">@Html.DisplayFor(modelItem => item.AmountRequired)</td>
                             <td class="desktop">@Html.DisplayFor(modelItem => item.PRAging)</td>
-                            @if (item.Status == "Rejected" || item.Status == "Cancel")
+                            @if (item.Status == "Reject" || item.Status == "Cancel")
                             {
                                 <td class="all">
                                     <div class="d-inline-block">

@@ -33,6 +33,7 @@ namespace KUBOnlinePRPM.Models
             this.PR_PaperApprover = new HashSet<PR_PaperApprover>();
             this.FixedAssets = new HashSet<FixedAsset>();
             this.PurchaseRequisitions = new HashSet<PurchaseRequisition>();
+            this.PR_RecommenderII = new HashSet<PR_RecommenderII>();
         }
     
         public System.Guid uuid { get; set; }
@@ -100,5 +101,7 @@ namespace KUBOnlinePRPM.Models
         public virtual ICollection<FixedAsset> FixedAssets { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseRequisition> PurchaseRequisitions { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PR_RecommenderII> PR_RecommenderII { get; set; }
     }
 }

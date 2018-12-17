@@ -25,10 +25,10 @@ namespace KUBOnlinePRPM.Models
         public decimal unitPrice { get; set; }
         public decimal totalPrice { get; set; }
     
-        public virtual PR_Items PR_Items { get; set; }
         public virtual FixedAsset FixedAsset { get; set; }
         public virtual GL GL { get; set; }
         public virtual Item Item { get; set; }
         public virtual PurchaseOrder PurchaseOrder { get; set; }
+        public virtual PR_Items PR_Items { get; set; }
     }
 }
