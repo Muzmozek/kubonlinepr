@@ -1,4 +1,29 @@
 ﻿$(document).ready(function () {
+    generatePRItemTable();
+    function generatePRItemTable() {
+        PRItemTable = $('#PRItemTable').DataTable({
+            serverSide: false,
+            //dom: 'frtiS',
+            processing: true,
+            deferRender: true,
+            ordering: false,
+            paging: false,
+            searching: false,
+            bAutoWidth: false,
+            columnDefs: [
+                { visible: false, targets: [0] }
+            ],
+            destroy: true,
+            //aaSorting: [12, "desc"],
+            responsive: {
+                breakpoints: [
+                    { name: 'desktop', width: 1024 },
+                    { name: 'tablet', width: 768 },
+                    { name: 'phone', width: 480 }
+                ]
+            }
+        });
+    }
         //$.ajax({
         //    url: UrlGetProjectInfo,
         //    method: 'GET',
@@ -384,7 +409,34 @@
             alert(resp);
             $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab');
             $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
-            Custombox.modal.close();
+            generatePRItemTable();
+        });
+
+    });
+
+    $("#RecommendCancel").click(function (e) {
+
+        e.preventDefault(); 
+        $.post(UrlRecommendCancel, {
+            PRId: PRId
+        }, function (resp) {
+            alert(resp);
+            $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab');
+            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
+            generatePRItemTable();
+        });
+
+    });
+
+    $("#AcceptCancel").click(function (e) {
+
+        e.preventDefault();
+        $.post(UrlAcceptCancel, {
+            PRId: PRId
+        }, function (resp) {
+            alert(resp);
+            $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab');
+            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
             generatePRItemTable();
         });
 

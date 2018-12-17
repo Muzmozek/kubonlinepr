@@ -297,7 +297,7 @@
                     </section>
                 </div>*@
         </div>
-        @if (Session["ifAdmin"] != null || Session["ifProcurement"] != null)
+        @if ((Session["ifAdmin"] != null || Session["ifProcurement"] != null) || Model.NewPRForm.Scenario > 0 )
         {
             <div class="col-md-12">
                 <div class="media-body align-self-center text-left g-mb-30">
@@ -575,7 +575,7 @@
                                 <div class="d-flex align-self-center">Date required</div>
                             </div>
                         </th>
-                        @if ((Session["ifAdmin"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null) && Model.NewPRForm.Scenario != 0 || Session["ifProcurement"] != null)
+                        @if ((Session["ifAdmin"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null) && Model.NewPRForm.Scenario != 0 || Session["ifProcurement"] != null || Model.NewPRForm.Scenario > 0)
                         {
                             <th class="desktop">
                                 <div class="media">
@@ -616,7 +616,7 @@
                                 <div class="d-flex align-self-center">Quantity</div>
                             </div>
                         </th>
-                        @if ((Session["ifAdmin"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null) && Model.NewPRForm.Scenario != 0 || Session["ifProcurement"] != null)
+                        @if ((Session["ifAdmin"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null) && Model.NewPRForm.Scenario != 0 || Session["ifProcurement"] != null || Model.NewPRForm.Scenario > 0)
                         {
                             <th class="tablet">
                                 <div class="media">
@@ -644,7 +644,7 @@
                                 </div>
                             </th>
                         }
-                        @if (Session["ifRequestor"] != null || Session["ifSuperAdmin"] != null)
+                        @if ((Session["ifRequestor"] != null || Session["ifSuperAdmin"] != null) && Model.NewPRForm.Scenario == 0)
                         {
                             <th class="all">
                             </th>
@@ -661,12 +661,12 @@
                             <tr>
                                 <td class="d-none"><input id="@ItemsId" class="Id form-control custom-filter desktop" type="text" name="@ItemsId" value="@item.ItemsId" /></td>
 
-                                @if (Session["ifAdmin"] != null || Session["ifProcurement"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null)
+                                @if (Session["ifAdmin"] != null || Session["ifProcurement"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null || Model.NewPRForm.Scenario > 0)
                                 {
                                     <td>
                                         <input id="@DateRequired" class="form-control rounded-0 form-control-md" value="@item.DateRequired.ToString(" yyyy-MM-dd")" name="DateRequired" type="text" readonly>
                                     </td>
-                                    if ((Session["ifAdmin"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null) && Model.NewPRForm.Scenario != 0 || Session["ifProcurement"] != null)
+                                    if ((Session["ifAdmin"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null) && Model.NewPRForm.Scenario != 0 || Session["ifProcurement"] != null || Model.NewPRForm.Scenario > 0)
                                     {
                                         <td>
                                             @Html.DropDownListFor(m => item.ItemTypeId, (IEnumerable<SelectListItem>)ViewData["ItemTypeList" + i], "Select item type here", new { @id = ItemTypeId, @class = "TypeId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
@@ -684,7 +684,7 @@
                                     <td>
                                         <input id="@Quantity" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="Quantity" value="@item.Quantity" type="text" readonly>
                                     </td>
-                                    if ((Session["ifAdmin"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null) && Model.NewPRForm.Scenario != 0 || Session["ifProcurement"] != null)
+                                    if ((Session["ifAdmin"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null) && Model.NewPRForm.Scenario != 0 || Session["ifProcurement"] != null || Model.NewPRForm.Scenario > 0)
                                     {
                                         <td>
                                             <input id="@UoM" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="UoM" value="@item.UOM" type="text" readonly>
@@ -833,7 +833,7 @@
                                     <a id="ApprovePreparedJointRecommended" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">JOINTLY RECOMMENDED</a>
                                 }
 
-                                @if (((Model.NewPRForm.StatusId == "PR05") && Session["ifAdmin"] != null) && Model.NewPRForm.Scenario == 2 || (Model.NewPRForm.StatusId == "PR05" && Session["ifHOC"] != null && Model.NewPRForm.Scenario == 2) || (Model.NewPRForm.StatusId == "PR05" && (Session["ifHOC"] != null && Model.CustId == 2) && Model.NewPRForm.Scenario == 3))
+                                @if ((Model.NewPRForm.StatusId == "PR05" && Session["ifHOC"] != null && Model.NewPRForm.Scenario == 1) || (Model.NewPRForm.StatusId == "PR05" && Session["ifHOC"] != null && Model.NewPRForm.Scenario == 2) || (Model.NewPRForm.StatusId == "PR05" && (Session["ifHOC"] != null && Model.CustId == 2) && Model.NewPRForm.Scenario == 3))
                                 {
                                     <a href="#RejectModal" class=" btn btn-md u-btn-white g-mr-5 g-mb-15" data-modal-target="#RejectModal" data-modal-effect="fadein">REJECT</a>
 
@@ -857,9 +857,19 @@
                                 }
                                 @if (Model.NewPRForm.StatusId == "PR06" && Session["ifProcurement"] != null && Model.Type != "Blanket")
                                 {
-                                    <a id="CancelPRProc" class="CancelPR btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">CANCEL</a>
                                     <a id="IssuePO" class="btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">ISSUE PO</a>
-
+                                }
+                                @if (Model.NewPRForm.StatusId == "PR06" && Session["ifRequestor"] != null && Model.Type != "Blanket")
+                                {
+                                    <a id="CancelPRProc" class="CancelPR btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">CANCEL</a>
+                                }
+                                @if (Model.NewPRForm.StatusId == "PR15" && Session["ifHOD"] != null)
+                                {
+                                    <a id="RecommendCancel" class="RecommendCancel btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">RECOMMENDED</a>
+                                }
+                                @if (Model.NewPRForm.StatusId == "PR16" && Session["ifProcurement"] != null)
+                                {
+                                    <a id="AcceptCancel" class="AcceptCancel btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">ACCEPTED</a>
                                 }
                             </div>
                         </div>
@@ -908,5 +918,5 @@
         {
             <a id="RejectPreparedReviewer" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">REJECT</a>
         }
-        </div>
+    </div>
 }

@@ -3,6 +3,7 @@
 
     $.HSCore.components.HSFileAttachment.init('.js-file-attachment');
     $.HSCore.helpers.HSFocusState.init();
+    generatePRItemTable();
 
     function generatePRItemTable() {
         PRItemTable = $('#PRItemTable').DataTable({

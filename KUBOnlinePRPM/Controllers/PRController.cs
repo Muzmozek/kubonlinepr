@@ -2513,7 +2513,7 @@ namespace KUBOnlinePRPM.Controllers
                                    {
                                        UserId = n.userId
                                    }).ToList();
-            } else if (PR.Scenario == 2)
+            } else if (PR.Scenario == 2 || PR.Scenario == 1)
             {
                 getApprover = (from m in db.Users
                                join n in db.Users_Roles on m.userId equals n.userId
@@ -2603,7 +2603,6 @@ namespace KUBOnlinePRPM.Controllers
                 return Json("System failure. Please contact admin");
             }
         }
-
         public JsonResult ApprovePRApprover()
         {
             int PrId = Int32.Parse(Request["PrId"]);
@@ -2664,7 +2663,6 @@ namespace KUBOnlinePRPM.Controllers
 
             return Json("Successfully approve");
         }
-
         public JsonResult RejectPRRecommended()
         {
             int UserId = Int32.Parse(Session["UserId"].ToString());
@@ -2709,7 +2707,6 @@ namespace KUBOnlinePRPM.Controllers
                 return Json("System failure. Please contact admin");
             }
         }
-
         public JsonResult RecommendedPRRecommended()
         {
             // todo the session must be IT / HSE / PMO
@@ -2911,11 +2908,160 @@ namespace KUBOnlinePRPM.Controllers
         public JsonResult CancelPR()
         {
             int UserId = Int32.Parse(Session["UserId"].ToString());
-            int PrId = Int32.Parse(Request["PrId"].ToString());
+            int PrId = Int32.Parse(Request["PRId"].ToString());
+            int CustId = Int32.Parse(Session["CompanyId"].ToString());
             string CancelType = Request["CancelType"].ToString();
             var UpdatePRStatus = db.PurchaseRequisitions.Where(m => m.PRId == PrId).First();
-            UpdatePRStatus.StatusId = "PR08";
+            if (CancelType == "CancelPR")
+            {
+                UpdatePRStatus.StatusId = "PR08";
+                NotificationMsg objNotification = new NotificationMsg()
+                {
+                    uuid = Guid.NewGuid(),
+                    message = Session["FullName"].ToString() + " has cancel the PR No: " + UpdatePRStatus.PRNo + " application. ",
+                    fromUserId = Int32.Parse(Session["UserId"].ToString()),
+                    msgDate = DateTime.Now,
+                    msgType = "Trail",
+                    PRId = PrId
+                };
+                db.NotificationMsgs.Add(objNotification);
+                db.SaveChanges();
+            } else
+            {
+                UpdatePRStatus.StatusId = "PR15";
+
+                NotificationMsg objNotification = new NotificationMsg()
+                {
+                    uuid = Guid.NewGuid(),
+                    message = Session["FullName"].ToString() + " has request to cancel the PR No: " + UpdatePRStatus.PRNo + " subject recommendal from HOD. ",
+                    fromUserId = Int32.Parse(Session["UserId"].ToString()),
+                    msgDate = DateTime.Now,
+                    msgType = "Trail",
+                    PRId = PrId
+                };
+                db.NotificationMsgs.Add(objNotification);
+                db.SaveChanges();
+
+                var getHOD = (from m in db.Users
+                                join n in db.Users_Roles on m.userId equals n.userId
+                                where n.roleId == "R02" && m.companyId == CustId
+                              select new PRModel()
+                                {
+                                    UserId = m.userId
+                                }).ToList();
+                NotificationMsg objTask = new NotificationMsg()
+                {
+                    uuid = Guid.NewGuid(),
+                    message = UpdatePRStatus.PRNo + " pending for you to recommend PR cancellation",
+                    fromUserId = Int32.Parse(Session["UserId"].ToString()),
+                    msgDate = DateTime.Now,
+                    msgType = "Task",
+                    PRId = PrId
+                };
+                db.NotificationMsgs.Add(objTask);
+                db.SaveChanges();
+
+                foreach (var item in getHOD)
+                {
+                    NotiGroup Task = new NotiGroup()
+                    {
+                        uuid = Guid.NewGuid(),
+                        msgId = objTask.msgId,
+                        toUserId = item.UserId
+                    };
+                    db.NotiGroups.Add(Task);
+                    db.SaveChanges();
+                }
+            }            
             //todo noti to expected user
+            if (db.SaveChanges() > 0)
+            {
+                return Json("Successfully cancel");
+            }
+            else
+            {
+                return Json("System failure. Please contact admin");
+            }
+        }
+        public JsonResult RecommendCancel()
+        {
+            int UserId = Int32.Parse(Session["UserId"].ToString());
+            int PrId = Int32.Parse(Request["PRId"].ToString());
+            int CustId = Int32.Parse(Session["CompanyId"].ToString());
+            var UpdatePRStatus = db.PurchaseRequisitions.Where(m => m.PRId == PrId).First();
+
+            NotificationMsg objNotification = new NotificationMsg()
+            {
+                uuid = Guid.NewGuid(),
+                message = Session["FullName"].ToString() + " has recommended to cancel the PR No: " + UpdatePRStatus.PRNo + " subject for acceptance from Procurement. ",
+                fromUserId = Int32.Parse(Session["UserId"].ToString()),
+                msgDate = DateTime.Now,
+                msgType = "Trail",
+                PRId = PrId
+            };
+            db.NotificationMsgs.Add(objNotification);
+            db.SaveChanges();
+
+            var getProcurement = (from m in db.Users
+                          join n in db.Users_Roles on m.userId equals n.userId
+                          where n.roleId == "R03" && m.companyId == CustId
+                          select new PRModel()
+                          {
+                              UserId = m.userId
+                          }).ToList();
+            NotificationMsg objTask = new NotificationMsg()
+            {
+                uuid = Guid.NewGuid(),
+                message = UpdatePRStatus.PRNo + " pending for you to accept PR cancellation",
+                fromUserId = Int32.Parse(Session["UserId"].ToString()),
+                msgDate = DateTime.Now,
+                msgType = "Task",
+                PRId = PrId
+            };
+            db.NotificationMsgs.Add(objTask);
+            db.SaveChanges();
+
+            foreach (var item in getProcurement)
+            {
+                NotiGroup Task = new NotiGroup()
+                {
+                    uuid = Guid.NewGuid(),
+                    msgId = objTask.msgId,
+                    toUserId = item.UserId
+                };
+                db.NotiGroups.Add(Task);
+                db.SaveChanges();
+            }
+
+            UpdatePRStatus.StatusId = "PR16";
+            if (db.SaveChanges() > 0)
+            {
+                return Json("Successfully cancel");
+            }
+            else
+            {
+                return Json("System failure. Please contact admin");
+            }
+        }
+        public JsonResult AcceptCancel()
+        {
+            int UserId = Int32.Parse(Session["UserId"].ToString());
+            int PrId = Int32.Parse(Request["PRId"].ToString());
+            //int CustId = Int32.Parse(Session["CompanyId"].ToString());
+            var UpdatePRStatus = db.PurchaseRequisitions.Where(m => m.PRId == PrId).First();
+            UpdatePRStatus.StatusId = "PR08";
+
+            NotificationMsg objNotification = new NotificationMsg()
+            {
+                uuid = Guid.NewGuid(),
+                message = Session["FullName"].ToString() + " has accept the PR No: " + UpdatePRStatus.PRNo + " cancellation request.",
+                fromUserId = Int32.Parse(Session["UserId"].ToString()),
+                msgDate = DateTime.Now,
+                msgType = "Trail",
+                PRId = PrId
+            };
+            db.NotificationMsgs.Add(objNotification);
+
             if (db.SaveChanges() > 0)
             {
                 return Json("Successfully cancel");
