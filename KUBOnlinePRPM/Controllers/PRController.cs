@@ -61,6 +61,54 @@ namespace KUBOnlinePRPM.Controllers
             //var query = from line in context.User select line;
             return View();
         }
+
+        public JsonResult DashboardPurchaseRequisition()
+        {
+            var sql = "select count(*) as quantity,Year(SubmitDate) as description from PurchaseRequisition group by Year(SubmitDate)";
+
+            //dummy
+            var collections = new List<DashboardPOModel>();
+            collections.Add(new DashboardPOModel() { quantity = 22, description = "Open" });
+            collections.Add(new DashboardPOModel() { quantity = 7, description = "Close" });
+            collections.Add(new DashboardPOModel() { quantity = 38, description = "Close with PO" });
+            collections.Add(new DashboardPOModel() { quantity = 5, description = "Cancel" });
+
+            //var collections = db.Database.SqlQuery<DashboardPOModel>(sql);
+
+            return Json(collections, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DashboardPurchaseOrder()
+        {
+            var sql = "select count(*) as sum_yearly,Year(SubmitDate) as yearly from PurchaseRequisition group by Year(SubmitDate)";
+
+            //dummy
+            var collections = new List<DashboardPOModel>();
+            collections.Add(new DashboardPOModel() { quantity = 1, description = "Open" });
+            collections.Add(new DashboardPOModel() { quantity = 14, description = "Close" });
+            collections.Add(new DashboardPOModel() { quantity = 3, description = "Force Close" });
+            collections.Add(new DashboardPOModel() { quantity = 20, description = "Release" });
+
+            //var collections = db.Database.SqlQuery<DashboardPOModel>(sql);
+
+            return Json(collections, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DashboardOpenPO()
+        {
+            var sql = "select count(*) as sum_yearly,Year(SubmitDate) as yearly from PurchaseRequisition group by Year(SubmitDate)";
+
+            //dummy
+            var collections = new List<DashboardPOModel>();
+            collections.Add(new DashboardPOModel () { quantity = 10, description = "2016" });
+            collections.Add(new DashboardPOModel() { quantity = 5, description = "2017" });
+            collections.Add(new DashboardPOModel() { quantity = 4, description = "2018" });
+
+            //var collections = db.Database.SqlQuery<DashboardPOModel>(sql);
+
+            return Json( collections ,JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult GetProjectInfo(int projectId)
         {
             var projectInfo = db.Projects.Select(m => new NewPRModel()
@@ -2113,5 +2161,11 @@ namespace KUBOnlinePRPM.Controllers
 
             return Json("Successfully joint recommended");
         }
+    }
+
+    internal class DashboardPOModel
+    {
+        public int quantity { get; set; }
+        public string description { get; set; }
     }
 }

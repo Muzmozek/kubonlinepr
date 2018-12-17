@@ -109,6 +109,42 @@ namespace KUBOnlinePRPM.Service
                                userId = u.userId
                            }).ToList();
 
+                var it = (from u in _db.Users
+                           join ur in _db.Users_Roles on u.userId equals ur.userId
+                           join r in _db.Roles on ur.roleId equals r.roleId
+                           where r.name == "IT"
+                           && u.Customer.abbreviation == customer.abbreviation
+                           select new UserViewModel
+                           {
+                               firstName = u.firstName,
+                               lastName = u.lastName,
+                               userId = u.userId
+                           }).ToList();
+
+                var pmo = (from u in _db.Users
+                           join ur in _db.Users_Roles on u.userId equals ur.userId
+                           join r in _db.Roles on ur.roleId equals r.roleId
+                           where r.name == "PMO"
+                           && u.Customer.abbreviation == customer.abbreviation
+                           select new UserViewModel
+                           {
+                               firstName = u.firstName,
+                               lastName = u.lastName,
+                               userId = u.userId
+                           }).ToList();
+
+                var hse = (from u in _db.Users
+                           join ur in _db.Users_Roles on u.userId equals ur.userId
+                           join r in _db.Roles on ur.roleId equals r.roleId
+                           where r.name == "HSE"
+                           && u.Customer.abbreviation == customer.abbreviation
+                           select new UserViewModel
+                           {
+                               firstName = u.firstName,
+                               lastName = u.lastName,
+                               userId = u.userId
+                           }).ToList();
+
                 var hod = (from u in _db.Users
                            join ur in _db.Users_Roles on u.userId equals ur.userId
                            join r in _db.Roles on ur.roleId equals r.roleId
@@ -153,7 +189,10 @@ namespace KUBOnlinePRPM.Service
                     SubsidiaryName = customer.abbreviation,
                     HOCs = hoc,
                     HODs = hod,
-                    Requestors = requestor
+                    Requestors = requestor,
+                    ITs = it,
+                    PMOs = pmo,
+                    HSEs = hse
                 });
 
             }

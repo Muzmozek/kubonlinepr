@@ -207,7 +207,7 @@
 
             <div class="checkbox">
                 <label>
-                    @if (Model.Users_Roles.ToList().Any(x => x.roleId == @item.roleId))
+                    @if (Model.Users_Roles.Any(x => x.roleId == @item.roleId))
                     {
                         <input class="assignRole" type="checkbox" value="@item.roleId" name="roles[]" checked>@item.roleName
                     }

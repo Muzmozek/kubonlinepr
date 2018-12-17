@@ -19,9 +19,7 @@
                     <h4 class="g-font-size-24 g-font-weight-600 g-color-gray-dark-v6 mb-0">Purchase Requisition</h4>
                 </div>
                 <div class="media align-self-center">
-                    <div class="d-flex g-mr-15">
-                        <canvas id="chart_pr" height="350"></canvas>
-                    </div>
+                    <canvas id="chart_pr" height="350"></canvas>
                 </div>
             </div>
         </div>
@@ -36,9 +34,9 @@
                     <h4 class="g-font-size-24 g-font-weight-600 g-color-gray-dark-v6 mb-0">Purchase Order</h4>
                 </div>
                 <div class="media align-self-center">
-                    <div class="d-flex g-mr-15">
+                   
                         <canvas id="chart_po" height="350"></canvas>
-                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -53,9 +51,9 @@
                     <h4 class="g-font-size-24 g-font-weight-600 g-color-gray-dark-v6 mb-0">Open PO</h4>
                 </div>
                 <div class="media align-self-center">
-                    <div class="d-flex g-mr-15">
+                    
                         <canvas id="chart_open_po" height="350"></canvas>
-                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -104,149 +102,171 @@
                 return Math.round(Math.random() * 100);
             };
 
-            <!-- Chart PR start -->
-            var ctx_chart_pr = document.getElementById("chart_pr").getContext('2d');
-            var myChartPR = new Chart(ctx_chart_pr, {
-                type: 'doughnut',
-                data: {
-                    datasets: [{
-                        data: [
-                            randomScalingFactor(),
-                            randomScalingFactor(),
-                            randomScalingFactor(),
-                            randomScalingFactor(),
-                            randomScalingFactor(),
-                        ],
-                        backgroundColor: [
-                            window.chartColors.red,
-                            window.chartColors.orange,
-                            window.chartColors.yellow,
-                            window.chartColors.green,
-                            window.chartColors.blue,
-                        ],
-                        label: 'Dataset 1'
-                    }],
-                    labels: [
-                        'Red',
-                        'Orange',
-                        'Yellow',
-                        'Green',
-                        'Blue'
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    legend: {
-                        position: 'top',
+            // Chart PR start
+            
+            $.getJSON("/PR/DashboardPurchaseRequisition", function (result) {
+                //store the results
+                var data_po = [];
+                var label_po = [];
+
+                $.each(result, function (i, field) {
+                    data_po.push(field.quantity);
+                    label_po.push(field.description);
+                });
+
+                //render chart
+                chart_purchase_requisition({ data_po, label_po });
+            });    
+            function chart_purchase_requisition(pass_data) {
+                var ctx_chart_pr = document.getElementById("chart_pr").getContext('2d');
+                var myChartPR = new Chart(ctx_chart_pr, {
+                    type: 'doughnut',
+                    data: {
+                        datasets: [{
+                            data: pass_data.data_po,
+                            backgroundColor: [
+                                window.chartColors.red,
+                                window.chartColors.orange,
+                                window.chartColors.yellow,
+                                window.chartColors.green,
+                                window.chartColors.blue,
+                            ],
+                            label: 'Dataset 1'
+                        }],
+                        labels: pass_data.label_po
                     },
-                    title: {
-                        display: true,
-                        //text: 'Chart.js Doughnut Chart'
-                    },
-                    animation: {
-                        animateScale: true,
-                        animateRotate: true
+                    options: {
+                        responsive: true,
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            //text: 'Chart.js Doughnut Chart'
+                        },
+                        animation: {
+                            animateScale: true,
+                            animateRotate: true
+                        }
                     }
-                }
+                });
+            }
+            
+            // Chart PR end
+
+            // Chart PO start
+            $.getJSON("/PR/DashboardPurchaseOrder", function (result) {
+                    //store the results
+                    var data_po = [];
+                    var label_po = [];
+
+                    $.each(result, function (i, field) {
+                        data_po.push(field.quantity);
+                        label_po.push(field.description);
+                    });
+
+                    //render chart
+                    chart_po({ data_po, label_po });
+                });            
+            function chart_po(pass_data) {
+                var ctx_chart_po = document.getElementById("chart_po").getContext('2d');
+                var myChartPO = new Chart(ctx_chart_po, {
+                    type: 'doughnut',
+                    data: {
+                        datasets: [{
+                            data: pass_data.data_po,
+                            backgroundColor: [
+                                window.chartColors.red,
+                                window.chartColors.orange,
+                                window.chartColors.yellow,
+                                window.chartColors.green,
+                                window.chartColors.blue,
+                            ],
+                            labels: pass_data.label_po
+                        }],
+                        labels: pass_data.label_po
+                    },
+                    options: {
+                        responsive: true,
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            //text: 'Chart.js Doughnut Chart'
+                        },
+                        animation: {
+                            animateScale: true,
+                            animateRotate: true
+                        }
+                    }
+                });
+            }
+
+            // Chart PO end
+
+
+            // Chart Open PO start
+
+            $.getJSON("/PR/DashboardOpenPO", function (result) {
+                //store the results
+                var data_po = [];
+                var label_po = [];
+
+                $.each(result, function (i, field) {
+                    data_po.push(field.quantity);
+                    label_po.push(field.description);
+                });
+
+                //render chart
+                chart_open_po({ data_po, label_po });
             });
 
-            <!--Chart PR end -->
-
-            <!--Chart PO start-->
-            var ctx_chart_po = document.getElementById("chart_po").getContext('2d');
-            var myChartPO = new Chart(ctx_chart_po, {
-                type: 'doughnut',
-                data: {
-                    datasets: [{
-                        data: [
-                            randomScalingFactor(),
-                            randomScalingFactor(),
-                            randomScalingFactor(),
-                            randomScalingFactor(),
-                            randomScalingFactor(),
-                        ],
-                        backgroundColor: [
-                            window.chartColors.red,
-                            window.chartColors.orange,
-                            window.chartColors.yellow,
-                            window.chartColors.green,
-                            window.chartColors.blue,
-                        ],
-                        label: 'Dataset 1'
-                    }],
-                    labels: [
-                        'Red',
-                        'Orange',
-                        'Yellow',
-                        'Green',
-                        'Blue'
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    legend: {
-                        position: 'top',
+            function chart_open_po(pass_data) {
+                var ctx_chart_po = document.getElementById("chart_open_po").getContext('2d');
+                var myChartPO = new Chart(ctx_chart_po, {
+                    type: 'bar',
+                    data: {
+                        datasets: [{
+                            
+                            data: pass_data.data_po,
+                            backgroundColor: [
+                                window.chartColors.red,
+                                window.chartColors.orange,
+                                window.chartColors.yellow,
+                                window.chartColors.green,
+                                window.chartColors.blue,
+                            ],
+                        }],
+                        labels: pass_data.label_po
                     },
-                    title: {
-                        display: true,
-                        //text: 'Chart.js Doughnut Chart'
-                    },
-                    animation: {
-                        animateScale: true,
-                        animateRotate: true
+                    options: {
+                        responsive: true,
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            //text: 'Chart.js Doughnut Chart'
+                        },
+                        animation: {
+                            animateScale: true,
+                            animateRotate: true
+                        },
+                        legend: {
+                            display: false
+                        },
+                        tooltips: {
+                            callbacks: {
+                                label: function (tooltipItem) {
+                                    return tooltipItem.yLabel;
+                                }
+                            }
+                        }
                     }
-                }
-            });
-
-            <!--Chart PO end-->
-
-            <!--Chart Open PO start-- >
-            var ctx_chart_po = document.getElementById("chart_open_po").getContext('2d');
-            var myChartPO = new Chart(ctx_chart_po, {
-                type: 'bar',
-                data: {
-                    datasets: [{
-                        data: [
-                            randomScalingFactor(),
-                            randomScalingFactor(),
-                            randomScalingFactor(),
-                            randomScalingFactor(),
-                            randomScalingFactor(),
-                        ],
-                        backgroundColor: [
-                            window.chartColors.red,
-                            window.chartColors.orange,
-                            window.chartColors.yellow,
-                            window.chartColors.green,
-                            window.chartColors.blue,
-                        ],
-                        label: 'Dataset 1'
-                    }],
-                    labels: [
-                        'Red',
-                        'Orange',
-                        'Yellow',
-                        'Green',
-                        'Blue'
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    legend: {
-                        position: 'top',
-                    },
-                    title: {
-                        display: true,
-                        //text: 'Chart.js Doughnut Chart'
-                    },
-                    animation: {
-                        animateScale: true,
-                        animateRotate: true
-                    }
-                }
-            });
-
-            <!--Chart Open PO end -->
+                });
+            }
+            // Chart Open PO end
 
 
                 
