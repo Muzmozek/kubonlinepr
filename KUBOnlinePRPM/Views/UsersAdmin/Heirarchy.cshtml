@@ -24,8 +24,8 @@
     </thead>
     <tbody>
         <tr>
-            <td>@Model.SuperAdmin.firstName</td>
-            <td>@Model.HeadOfGPSS.firstName</td>
+            <td>@Html.ActionLink(@Model.SuperAdmin.firstName, "Edit", "UsersAdmin", new { id = @Model.SuperAdmin.userId }, new { target = "_blank" })</td>
+            <td>@Html.ActionLink(@Model.HeadOfGPSS.firstName, "Edit", "UsersAdmin", new { id = @Model.HeadOfGPSS.userId }, new { target = "_blank" })</td>
         </tr>
     </tbody>
 
@@ -60,9 +60,87 @@
                     <ol>
                         @foreach (var x in member.HOCs)
                         {
-                            <li>@x.firstName</li>
+                            <li>@Html.ActionLink(@x.firstName, "Edit", "UsersAdmin", new { id = @x.userId }, new { target = "_blank" })</li>
                         }
                     </ol>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    IT
+                </td>
+                <td>
+                    @if (member.ITs.Count > 0)
+                    {
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Username
+                                    </th>
+                                </tr>
+                            </thead>
+                            @foreach (var x in member.ITs)
+                            {
+                                <tr>
+                                    <td>@Html.ActionLink(@x.firstName, "Edit", "UsersAdmin", new { id = @x.userId }, new { target = "_blank" })</td>
+                                </tr>
+                            }
+                        </table>
+                    }
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    PMO
+                </td>
+                <td>
+                    @if (member.PMOs.Count > 0)
+                    {
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Username
+                                    </th>
+                                </tr>
+                            </thead>
+                            @foreach (var x in member.PMOs)
+                            {
+                                <tr>
+                                    <td>@Html.ActionLink(@x.firstName, "Edit", "UsersAdmin", new { id = @x.userId }, new { target = "_blank" })</td>
+                                </tr>
+                            }
+                        </table>
+                    }
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    HSE
+                </td>
+                <td>
+                    @if (member.HSEs.Count > 0)
+                    {
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Username
+                                    </th>
+                                </tr>
+                            </thead>
+                            @foreach (var x in member.HSEs)
+                            {
+                                <tr>
+                                    <td>@Html.ActionLink(@x.firstName, "Edit", "UsersAdmin", new { id = @x.userId }, new { target = "_blank" })</td>
+                                </tr>
+                            }
+                        </table>
+                    }
                 </td>
             </tr>
 
@@ -74,23 +152,41 @@
                     <ol>
                         @foreach (var x in member.HODs)
                         {
-                            <li>@x.firstName</li>
+                            <li>@Html.ActionLink(@x.firstName, "Edit", "UsersAdmin", new { id = @x.userId }, new { target = "_blank" })</li>
                         }
                     </ol>
                 </td>
-            </tr>
+             </tr>
 
             <tr>
                 <td>
                     Requestors
                 </td>
                 <td>
-                    <ol>
-                        @foreach (var x in member.Requestors)
-                        {
-                            <li>@x.firstName -[@x.superiorFirstName]</li>
-                        }
-                    </ol>
+                    @Html.ActionLink("Add New User", "Create", "UsersAdmin",null, new { target = "_blank" })
+
+                    @if (member.Requestors.Count > 0)
+                    {
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Username
+                                    </th>
+                                    <th>
+                                        HOD
+                                    </th>
+                                </tr>
+                            </thead>
+                            @foreach (var x in member.Requestors)
+                            {
+                                <tr>
+                                    <td>@Html.ActionLink(@x.firstName, "Edit", "UsersAdmin", new { id = @x.userId }, new { target = "_blank" })</td>
+                                    <td>@Html.ActionLink(@x.superiorFirstName, "Edit", "UsersAdmin", new { id = @x.superiorId }, new { target = "_blank" })</td>
+                                </tr>
+                            }
+                        </table>
+                    }
                 </td>
             </tr>
         </tbody>

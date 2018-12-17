@@ -22,11 +22,6 @@ namespace KUBOnlinePRPM.Controllers.Admin
         public async Task<ActionResult> Heirarchy()
         {
             var users = PRService.populateUserList();
-
-            
-
-            
-
             return View(users);
         }
 

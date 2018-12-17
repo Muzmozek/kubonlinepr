@@ -7,7 +7,7 @@
             width = '480';
         }
         drawPieChart();
-        PRChart.render();
+        //PRChart.render();
     }
     // Execute on load
     checkWidth();
@@ -81,7 +81,7 @@
             //dataPoints: @@Html.Raw(ViewBag.DataPoints),
         }]
     });
-    POChart.render();
+    //POChart.render();
 
     function onClick(e) {
         window.open(e.dataPoint.link, '_blank');
