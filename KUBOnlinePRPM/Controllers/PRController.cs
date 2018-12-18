@@ -65,47 +65,73 @@ namespace KUBOnlinePRPM.Controllers
 
         public JsonResult DashboardPurchaseRequisition()
         {
-            var sql = "select count(*) as quantity,Year(SubmitDate) as description from PurchaseRequisition group by Year(SubmitDate)";
+            var sql = "SELECT 'Open'        AS [description], " +
+                               "Sum(quantity) AS quantity " +
+                        "FROM   (SELECT m.status      AS [description], " +
+                                       "Count(n.prid) AS quantity " +
+                                "FROM   prstatus m " +
+                                       "LEFT JOIN purchaserequisition n " +
+                                              "ON ( m.statusid = n.statusid ) " +
+                                "WHERE  m.statusid <> 'PR08' " +
+                                       "AND m.statusid <> 'PR06' " +
+                                       "AND m.statusid <> 'PR14' " +
+                                       "AND m.statusid <> 'PR07' " +
+                                "GROUP  BY m.status) AS T " +
+                        "UNION " +
+                        "SELECT TOP 3 m.status      AS [description], " +
+                                     "Count(n.prid) AS quantity " +
+                        "FROM   prstatus m " +
+                               "LEFT JOIN purchaserequisition n " +
+                                      "ON ( m.statusid = n.statusid ) " +
+                        //"--where m.status = 'Cancel' " +
+                        "GROUP  BY m.status " +
+                        "UNION " +
+                        "SELECT m.status      AS [description], " +
+                               "Count(n.prid) AS quantity " +
+                        "FROM   prstatus m " +
+                               "LEFT JOIN purchaserequisition n " +
+                                      "ON ( m.statusid = n.statusid " +
+                                           "AND m.statusid = 'PR07' ) " +
+                        "WHERE  m.status = 'Reject' " +
+                        "GROUP  BY m.status ";
 
             //dummy
-            var collections = new List<DashboardPOModel>();
-            collections.Add(new DashboardPOModel() { quantity = 22, description = "Open" });
-            collections.Add(new DashboardPOModel() { quantity = 7, description = "Close" });
-            collections.Add(new DashboardPOModel() { quantity = 38, description = "Close with PO" });
-            collections.Add(new DashboardPOModel() { quantity = 5, description = "Cancel" });
+            //var collections = new List<DashboardPOModel>();
+            //collections.Add(new DashboardPOModel() { quantity = 22, description = "Open" });
+            //collections.Add(new DashboardPOModel() { quantity = 7, description = "Close" });
+            //collections.Add(new DashboardPOModel() { quantity = 38, description = "Close with PO" });
+            //collections.Add(new DashboardPOModel() { quantity = 5, description = "Cancel" });
 
-            //var collections = db.Database.SqlQuery<DashboardPOModel>(sql);
+            var collections = db.Database.SqlQuery<DashboardPOModel>(sql);
 
             return Json(collections, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult DashboardPurchaseOrder()
         {
-            var sql = "select count(*) as sum_yearly,Year(SubmitDate) as yearly from PurchaseRequisition group by Year(SubmitDate)";
+            var sql = "SELECT m.status      AS [description], " +
+                                     "Count(n.POId) AS quantity " +
+                        "FROM   POStatus m " +
+                               "LEFT JOIN PurchaseOrder n " +
+                                      "ON ( m.statusid = n.statusid ) " +
+                        "GROUP  BY m.status ";
 
-            //dummy
-            var collections = new List<DashboardPOModel>();
-            collections.Add(new DashboardPOModel() { quantity = 1, description = "Open" });
-            collections.Add(new DashboardPOModel() { quantity = 14, description = "Close" });
-            collections.Add(new DashboardPOModel() { quantity = 3, description = "Force Close" });
-            collections.Add(new DashboardPOModel() { quantity = 20, description = "Release" });
-
-            //var collections = db.Database.SqlQuery<DashboardPOModel>(sql);
+            var collections = db.Database.SqlQuery<DashboardPOModel>(sql);
 
             return Json(collections, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult DashboardOpenPO()
         {
-            var sql = "select count(*) as sum_yearly,Year(SubmitDate) as yearly from PurchaseRequisition group by Year(SubmitDate)";
+            var sql = "select count(*) as quantity,CAST(Year(SubmitDate) AS nvarchar) as description from PurchaseOrder group by Year(SubmitDate)";
 
             //dummy
-            var collections = new List<DashboardPOModel>();
-            collections.Add(new DashboardPOModel () { quantity = 10, description = "2016" });
-            collections.Add(new DashboardPOModel() { quantity = 5, description = "2017" });
-            collections.Add(new DashboardPOModel() { quantity = 4, description = "2018" });
+            //var collections = new List<DashboardPOModel>();
+            //collections.Add(new DashboardPOModel () { quantity = 10, description = "2016" });
+            //collections.Add(new DashboardPOModel() { quantity = 5, description = "2017" });
+            //collections.Add(new DashboardPOModel() { quantity = 4, description = "2018" });
 
-            //var collections = db.Database.SqlQuery<DashboardPOModel>(sql);
+            var collections = db.Database.SqlQuery<DashboardPOModel>(sql);
 
             return Json( collections ,JsonRequestBehavior.AllowGet);
         }
@@ -804,6 +830,14 @@ namespace KUBOnlinePRPM.Controllers
                                             Description = m.dimension + " - " + m.projectCode,
                                             Code = m.projectCode,
                                         }).OrderBy(c => c.Dimension).ThenBy(c => c.Code);
+                    VendorListQuery = (from m in db.Vendors
+                                       where m.custId == PRCustId
+                                       select new
+                                       {
+                                           VendorId = m.vendorId,
+                                           VendorName = m.vendorNo + " - " + m.name,
+                                           VendorNo = m.vendorNo,
+                                       }).OrderBy(c => c.VendorNo).ThenBy(c => c.VendorName);
                     ItemCodeListQuery = db.PopulateItemLists.Select(c => new { CodeId = c.codeId, ItemCode = c.ItemDescription, CustId = c.custId }).Where(c => c.CustId == PRCustId).OrderBy(c => c.ItemCode);
                     JobNoListQuery = db.Projects.Select(m => new { JobNoId = m.projectId, JobNo = m.projectCode, CustId = m.custId, Dimension = m.dimension }).Where(m => m.CustId == PRCustId && m.Dimension == "PROJECT").OrderBy(m => m.JobNo);
                     JobTaskListQuery = db.JobTasks.Select(m => new { JobTaskNoId = m.jobNo, JobTaskNo = m.jobTaskNo, CustId = m.custId }).Where(m => m.CustId == PRCustId).OrderBy(m => m.JobTaskNoId);
@@ -957,7 +991,7 @@ namespace KUBOnlinePRPM.Controllers
                                                            from n in db.PopulateItemLists.Where(x => m.codeId == x.codeId && m.itemTypeId == x.itemTypeId).DefaultIfEmpty()
                                                            join o in db.Projects on m.jobNo equals o.projectCode into p
                                                            from q in p.DefaultIfEmpty()
-                                                           where m.PRId == PRDetail.PRId
+                                                           where m.PRId == PRDetail.PRId && n.custId == PRCustId
                                                            select new PRItemsTable()
                                                            {
                                                                ItemsId = m.itemsId,
@@ -2654,6 +2688,7 @@ namespace KUBOnlinePRPM.Controllers
         public JsonResult ApprovePRApprover()
         {
             int PrId = Int32.Parse(Request["PrId"]);
+            string PRType = Request["PRType"].ToString();
             var PR = db.PurchaseRequisitions.First(x => x.PRId == PrId);
             PR.StatusId = "PR06";
             db.SaveChanges();
@@ -2676,37 +2711,62 @@ namespace KUBOnlinePRPM.Controllers
             getDone.done = true;
             db.SaveChanges();
 
-            int CustId = Int32.Parse(Session["CompanyId"].ToString());
-            var getAdmin = (from m in db.Users
-                            join n in db.Users_Roles on m.userId equals n.userId
-                            where n.roleId == "R03" && m.companyId == CustId
-                            select new PRModel()
-                            {
-                                UserId = m.userId
-                            }).ToList();
-            NotificationMsg objTask = new NotificationMsg()
+            if (PRType != "Blanket")
             {
-                uuid = Guid.NewGuid(),
-                message = PR.PRNo + " pending for you to issue PO or cancel",
-                fromUserId = Int32.Parse(Session["UserId"].ToString()),
-                msgDate = DateTime.Now,
-                msgType = "Task",
-                PRId = PrId
-            };
-            db.NotificationMsgs.Add(objTask);
-            db.SaveChanges();
+                int CustId = Int32.Parse(Session["CompanyId"].ToString());
+                var getAdmin = (from m in db.Users
+                                join n in db.Users_Roles on m.userId equals n.userId
+                                where n.roleId == "R03" && m.companyId == CustId
+                                select new PRModel()
+                                {
+                                    UserId = m.userId
+                                }).ToList();
+                NotificationMsg objTask = new NotificationMsg()
+                {
+                    uuid = Guid.NewGuid(),
+                    message = PR.PRNo + " pending for you to issue PO or cancel",
+                    fromUserId = Int32.Parse(Session["UserId"].ToString()),
+                    msgDate = DateTime.Now,
+                    msgType = "Task",
+                    PRId = PrId
+                };
+                db.NotificationMsgs.Add(objTask);
+                db.SaveChanges();
 
-            foreach (var item in getAdmin)
+                foreach (var item in getAdmin)
+                {
+                    NotiGroup Task = new NotiGroup()
+                    {
+                        uuid = Guid.NewGuid(),
+                        msgId = objTask.msgId,
+                        toUserId = item.UserId
+                    };
+                    db.NotiGroups.Add(Task);
+                    db.SaveChanges();
+                }
+            } else
             {
+                NotificationMsg objTask = new NotificationMsg()
+                {
+                    uuid = Guid.NewGuid(),
+                    message = PR.PRNo + " pending for you to issue new PO (blanket)",
+                    fromUserId = Int32.Parse(Session["UserId"].ToString()),
+                    msgDate = DateTime.Now,
+                    msgType = "Task",
+                    PRId = PrId
+                };
+                db.NotificationMsgs.Add(objTask);
+                db.SaveChanges();
+
                 NotiGroup Task = new NotiGroup()
                 {
                     uuid = Guid.NewGuid(),
                     msgId = objTask.msgId,
-                    toUserId = item.UserId
+                    toUserId = PR.PreparedById
                 };
                 db.NotiGroups.Add(Task);
                 db.SaveChanges();
-            }
+            }         
             // todo the session must be HOC
 
             return Json("Successfully approve");

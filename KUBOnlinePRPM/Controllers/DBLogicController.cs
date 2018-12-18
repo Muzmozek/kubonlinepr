@@ -844,6 +844,7 @@ namespace KUBOnlinePRPM.Controllers
             newPO.PONo = "dummyset";
             newPO.PODate = DateTime.Now;
             newPO.CustId = POModel.CustId;
+            newPO.SubmitDate = DateTime.Now;
             newPO.projectId = POModel.NewPOForm.ProjectId;
             newPO.vendorId = POModel.NewPOForm.VendorId.Value;
             newPO.vendorStaffId = POModel.NewPOForm.VendorStaffId;
@@ -874,6 +875,7 @@ namespace KUBOnlinePRPM.Controllers
                     uuid = Guid.NewGuid(),
                     POId = newPO.POId,
                     itemsId = value.ItemsId,
+                    itemTypeId = value.ItemTypeId,
                     dateRequired = value.DateRequired,
                     description = value.Description,
                     codeId = value.CodeId,
@@ -900,6 +902,28 @@ namespace KUBOnlinePRPM.Controllers
                 newPO.TotalQuantity = TotalQuantity;
                 newPO.TotalPrice = TotalPrice;               
                 db.SaveChanges();
+
+                var SumOutStandingQuantity = (from m in db.PurchaseRequisitions
+                                              join n in db.PR_Items on m.PRId equals n.PRId
+                                              where m.PRId == POModel.PRId
+                                              select n.outStandingQuantity).Sum();
+                if (SumOutStandingQuantity == 0)
+                {
+                    PurchaseRequisition updatePR = db.PurchaseRequisitions.First(m => m.PRId == POModel.PRId);
+                    updatePR.AmountPOBalance = 0;                   
+
+                    var requestorDone = (from m in db.NotificationMsgs
+                                         join n in db.NotiGroups on m.msgId equals n.msgId
+                                         where n.toUserId == POModel.UserId && m.PRId == POModel.PRId
+                                         select new PRModel()
+                                         {
+                                             MsgId = m.msgId
+                                         }).First();
+
+                    NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == requestorDone.MsgId);
+                    getDone.done = true;
+                    db.SaveChanges();
+                }
             }
             POModel.POId = newPO.POId;
         }
@@ -930,6 +954,7 @@ namespace KUBOnlinePRPM.Controllers
                     {
                         uuid = Guid.NewGuid(),
                         itemsId = value.ItemsId,
+                        itemTypeId = value.ItemTypeId,
                         POId = x.POId,
                         dateRequired = value.DateRequired,
                         description = value.Description,

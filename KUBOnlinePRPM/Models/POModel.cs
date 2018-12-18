@@ -71,6 +71,7 @@ namespace KUBOnlinePRPM.Models
     public class POItemsTable
     {
         public int ItemsId { get; set; }
+        public int? ItemTypeId { get; set; }
         public int POId { get; set; }
         public DateTime DateRequired { get; set; }
         public string Description { get; set; }

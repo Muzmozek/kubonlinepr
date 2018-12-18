@@ -24,6 +24,7 @@ namespace KUBOnlinePRPM.Models
         public int quantity { get; set; }
         public decimal unitPrice { get; set; }
         public decimal totalPrice { get; set; }
+        public Nullable<int> itemTypeId { get; set; }
     
         public virtual FixedAsset FixedAsset { get; set; }
         public virtual GL GL { get; set; }

@@ -183,6 +183,7 @@
         $.post(UrlApprovePreparedApprover, {
 
             PRId: PRId,
+            PRType: POType,
             RejectRemark: $("textarea#RejectRemark").val()
 
         }, function (resp) {
@@ -490,7 +491,7 @@
             fd.append("NewPRForm.PRItemListObject[" + i + "].UnitPrice", unitPrice);
             fd.append("NewPRForm.PRItemListObject[" + i + "].TotalPrice", totalPrice);
         });
-        fd.app("Type", POType);
+        fd.append("Type", POType);
         $.ajax({
             url: UrlIssuePO,
             type: 'POST',

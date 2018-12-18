@@ -104,10 +104,11 @@ namespace KUBOnlinePRPM.Controllers
                 NewPO.NewPOForm.POItemListObject = (from m in db.PR_Items
                                                     from n in db.PopulateItemLists.Where(x => m.codeId == x.codeId && m.itemTypeId == x.itemTypeId).DefaultIfEmpty()
                                                     //from p in o.DefaultIfEmpty()
-                                                    where m.PRId == PRId
+                                                    where m.PRId == PRId && n.custId == CustId && m.outStandingQuantity > 0
                                                     select new POItemsTable()
                                                     {
                                                         ItemsId = m.itemsId,
+                                                        ItemTypeId = m.itemTypeId,
                                                         DateRequired = m.dateRequired,
                                                         Description = m.description,
                                                         CodeId = n.codeId,
@@ -209,14 +210,7 @@ namespace KUBOnlinePRPM.Controllers
                 DBLogicController.POSaveDbLogic(POModel);
 
 
-                //var CalcPOBalance = (from m in db.PurchaseRequisitions
-                //                     join n in db.Projects on m.ProjectId equals n.projectId
-                //                     join o in db.PurchaseOrders on m.PRId equals o.PRId
-                //                     where m.PRId == newPO.PRId.Value
-                //                     select new NewPOModel()
-                //                     {
-                //                         AmountPOBalance = m.AmountRequired.Value - POModel.NewPOForm.AmountRequired,
-                //                    }).ToList();
+
                 //Project updateProject = db.Projects.First(m => m.projectId == POModel.NewPOForm.ProjectId);
                 //PurchaseRequisition updatePR = db.PurchaseRequisitions.First(m => m.PRId == newPO.PRId.Value);
                 //updatePR.AmountPOBalance = updatePR.AmountRequired - POModel.NewPOForm.AmountRequired;
@@ -403,12 +397,13 @@ namespace KUBOnlinePRPM.Controllers
                                           Submited = a.Submited
                                       }).FirstOrDefault();
                 PODetail.NewPOForm.POItemListObject = (from m in db.PO_Item
-                                                       join n in db.PopulateItemLists on m.codeId equals n.codeId
+                                                       from n in db.PopulateItemLists.Where(x => m.codeId == x.codeId && m.itemTypeId == x.itemTypeId).DefaultIfEmpty()
                                                        join p in db.PR_Items on m.itemsId equals p.itemsId
                                                        where m.POId == PODetail.POId && n.custId == CustId
                                                        select new POItemsTable()
                                                        {
                                                            ItemsId = m.itemsId,
+                                                           ItemTypeId = m.itemTypeId,
                                                            DateRequired = m.dateRequired,
                                                            ItemCode = n.ItemDescription,
                                                            Description = m.description,                                                          
@@ -529,6 +524,7 @@ namespace KUBOnlinePRPM.Controllers
                         uuid = Guid.NewGuid(),
                         POId = newPO.POId,
                         itemsId = value.ItemsId,
+                        itemTypeId = value.ItemTypeId,
                         dateRequired = value.DateRequired,
                         description = value.Description,
                         codeId = value.CodeId.Value,
@@ -560,6 +556,17 @@ namespace KUBOnlinePRPM.Controllers
                     message = Session["FullName"].ToString() + " has issue new PO No. " + newPO.PONo + " subject for confirmation"
                 };
                 db.NotificationMsgs.Add(_objSubmited);
+
+                var requestorDone = (from m in db.NotificationMsgs
+                                     join n in db.NotiGroups on m.msgId equals n.msgId
+                                     where n.toUserId == UserId && m.PRId == newPO.PRId
+                                     select new PRModel()
+                                     {
+                                         MsgId = m.msgId
+                                     }).First();
+
+                NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == requestorDone.MsgId);
+                getDone.done = true;
             }              
                 
             if (db.SaveChanges() > 0)
@@ -592,12 +599,13 @@ namespace KUBOnlinePRPM.Controllers
             updatePO.StatusId = "PO03";
 
             var POItemList = (from m in db.PO_Item
-                              join n in db.PopulateItemLists on m.codeId equals n.codeId
+                              from n in db.PopulateItemLists.Where(x => m.codeId == x.codeId && m.itemTypeId == x.itemTypeId).DefaultIfEmpty()
                               join p in db.PR_Items on m.itemsId equals p.itemsId
                               where m.POId == POId && n.custId == CustId
                               select new POItemsTable()
                               {
                                   ItemsId = m.itemsId,
+                                  ItemTypeId = m.itemTypeId,
                                   DateRequired = m.dateRequired,
                                   ItemCode = n.ItemDescription,
                                   Description = m.description,
@@ -661,6 +669,35 @@ namespace KUBOnlinePRPM.Controllers
                 return Json("Exception error occured. Please contact admin.");
             }
 
+        }
+
+        [HttpPost]
+        public JsonResult CancelPO()
+        {
+            int UserId = Int32.Parse(Session["UserId"].ToString());
+            int POId = Int32.Parse(Request["POId"].ToString());
+            int CustId = Int32.Parse(Session["CompanyId"].ToString());
+            var UpdatePOStatus = db.PurchaseOrders.Where(m => m.POId == POId).First();
+            UpdatePOStatus.StatusId = "PO05";
+                NotificationMsg objNotification = new NotificationMsg()
+                {
+                    uuid = Guid.NewGuid(),
+                    message = Session["FullName"].ToString() + " has cancel the PO No: " + UpdatePOStatus.PONo + " application. ",
+                    fromUserId = Int32.Parse(Session["UserId"].ToString()),
+                    msgDate = DateTime.Now,
+                    msgType = "Trail",
+                    POId = POId
+                };
+                db.NotificationMsgs.Add(objNotification);
+
+            if (db.SaveChanges() > 0)
+            {
+                return Json("Successfully cancel");
+            }
+            else
+            {
+                return Json("System failure. Please contact admin");
+            }
         }
     }
 }

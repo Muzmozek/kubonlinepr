@@ -72,6 +72,7 @@
                 ItemsId = $(POItemTable.row(i).data()[0]).val();
             }
             var unitPrice = $(input).find("input[name='UnitPrice']").val(); var totalPrice = $(input).find("input[name='TotalPrice']").val();
+            var ItemTypeId = $(input).find("input[name='ItemTypeId']").val();
             var UoM = $(input).find("input[name='UoM']").val();
             if (unitPrice === undefined)
                 unitPrice = "";
@@ -79,7 +80,10 @@
                 totalPrice = "";
             if (UoM === undefined)
                 UoM = "";
+            if (ItemTypeId === undefined)
+                ItemTypeId = "";
             fd.append("NewPOForm.POItemListObject[" + i + "].ItemsId", ItemsId);
+            fd.append("NewPOForm.POItemListObject[" + i + "].ItemTypeId", ItemTypeId);
             fd.append("NewPOForm.POItemListObject[" + i + "].DateRequired", $(input).find("input[name='DateRequired']").val());
             fd.append("NewPOForm.POItemListObject[" + i + "].Description", $(input).find("input[name='Description']").val());
             fd.append("NewPOForm.POItemListObject[" + i + "].CodeId", $(input).find("input[name='CodeId']").val());

@@ -118,4 +118,15 @@
             $("#nav-4-1-primary-hor-center--PODetails").load(UrlSaveSubmitDetails + ' #PODetailsTab');
         });
     });
+
+    $("#CancelPO").click(function (e) {
+        e.preventDefault();
+        $.post(UrlCancelPO, {
+            POId: POId
+
+        }, function (resp) {
+            alert(resp);
+            $("#nav-4-1-primary-hor-center--PODetails").load(UrlSaveSubmitDetails + ' #PODetailsTab');
+        });
+    });
 });

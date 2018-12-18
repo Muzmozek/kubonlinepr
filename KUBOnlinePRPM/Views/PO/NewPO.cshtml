@@ -173,7 +173,7 @@
                         int i = 1;
                         foreach (var item in Model.NewPOForm.POItemListObject)
                         {
-                            var ItemsId = "ItemsId" + i; var DateRequired = "DateRequired" + i; var Description = "Description" + i; var CustPONo = "CustPONo" + i; var OutStandingQuantity = "OutStandingQuantity" + i;
+                            var ItemsId = "ItemsId" + i; var ItemTypeId = "ItemTypeId" + i; var DateRequired = "DateRequired" + i; var Description = "Description" + i; var CustPONo = "CustPONo" + i; var OutStandingQuantity = "OutStandingQuantity" + i;
                             var Quantity = "Quantity" + i; var CodeId = "CodeId" + i; var ItemCode = "ItemCode" + i; var UoM = "UoM" + i; var UnitPrice = "UnitPrice" + i; var TotalPrice = "TotalPrice" + i;
                             <tr id="dontRemove">
                                 <td class="d-none"><input id="@ItemsId" class="Id form-control custom-filter desktop" type="text" name="@ItemsId" value="@item.ItemsId" /></td>
@@ -184,6 +184,7 @@
                                     <input id="@Description" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="Description" value="@item.Description" type="text" readonly>
                                 </td>
                                 <td>
+                                    <input id="@ItemTypeId" class="d-none" placeholder="" name="ItemTypeId" value="@item.ItemTypeId" type="text" readonly>
                                     <input id="@CodeId" class="d-none" placeholder="" name="CodeId" value="@item.CodeId" type="text" readonly>
                                     <input id="@ItemCode" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="ItemCode" value="@item.ItemCode" type="text" readonly>
                                     @*@Html.DropDownListFor(m => item.CodeId, (IEnumerable<SelectListItem>)ViewData["ItemCodeList" + i], new { @id = CodeId, @class = "CodeId custom-select g-height-50 g-color-black g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })*@

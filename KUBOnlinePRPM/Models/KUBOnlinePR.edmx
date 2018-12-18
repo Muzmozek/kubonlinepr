@@ -137,6 +137,7 @@
           </Key>
           <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="itemsId" Type="int" Nullable="false" />
+          <Property Name="itemTypeId" Type="int" />
           <Property Name="POId" Type="int" Nullable="false" />
           <Property Name="dateRequired" Type="datetime" Nullable="false" />
           <Property Name="description" Type="nvarchar" MaxLength="300" />
@@ -307,8 +308,8 @@
           <Property Name="Submited" Type="bit" Nullable="false" />
           <Property Name="SubmitDate" Type="datetime" />
           <Property Name="POAging" Type="int" Nullable="false" />
-          <Property Name="TotalQuantity" Type="int" />
-          <Property Name="TotalPrice" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TotalQuantity" Type="int" Nullable="false" />
+          <Property Name="TotalPrice" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="StatusId" Type="nchar" MaxLength="4" />
         </EntityType>
         <EntityType Name="PurchaseRequisition">
@@ -2170,6 +2171,7 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <NavigationProperty Name="Item" Relationship="KUBOnlinePRModel.FK_PO_Item_Items" FromRole="PO_Item" ToRole="Item" />
           <NavigationProperty Name="PurchaseOrder" Relationship="KUBOnlinePRModel.FK_PO_Item_PurchaseOrder" FromRole="PO_Item" ToRole="PurchaseOrder" />
           <NavigationProperty Name="PR_Items" Relationship="KUBOnlinePRModel.FK_PO_Item_PR_Items" FromRole="PO_Item" ToRole="PR_Items" />
+          <Property Name="itemTypeId" Type="Int32" />
         </EntityType>
         <EntityType Name="NotificationMsg">
           <Key>
@@ -3300,6 +3302,7 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <EntitySetMapping Name="PO_Item">
             <EntityTypeMapping TypeName="KUBOnlinePRModel.PO_Item">
               <MappingFragment StoreEntitySet="PO_Item">
+                <ScalarProperty Name="itemTypeId" ColumnName="itemTypeId" />
                 <ScalarProperty Name="totalPrice" ColumnName="totalPrice" />
                 <ScalarProperty Name="unitPrice" ColumnName="unitPrice" />
                 <ScalarProperty Name="quantity" ColumnName="quantity" />
