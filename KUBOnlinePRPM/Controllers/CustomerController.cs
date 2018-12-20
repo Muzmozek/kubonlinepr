@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace KUBOnlinePRPM.Controllers
 {
-    public class CustomerController : Controller
+    public class CustomerController : DBLogicController
     {
         // GET: Customer
         public ActionResult Index()

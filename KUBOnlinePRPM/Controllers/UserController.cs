@@ -8,7 +8,7 @@ using System.Web.Mvc;
 namespace KUBOnlinePRPM.Controllers
 {
 
-    public class UserController : Controller
+    public class UserController : DBLogicController
     {
         private KUBOnlinePREntities db = new KUBOnlinePREntities();
 

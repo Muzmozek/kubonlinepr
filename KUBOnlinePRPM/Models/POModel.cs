@@ -20,6 +20,8 @@ namespace KUBOnlinePRPM.Models
     }
     public class NewPOModel
     {
+        public string CompanyName { get; set; }
+        public int POId { get; set; }
         public string PONo { get; set; }
         public int ProjectId { get; set; }
         public string ProjectName { get; set; }

@@ -46,7 +46,7 @@ namespace KUBOnlinePRPM.Controllers
             return actualValue;
         }
     }
-    public class PRController : Controller
+    public class PRController : DBLogicController
     {
         private KUBOnlinePREntities db = new KUBOnlinePREntities();
         //private KUBMEntities KUBMdb = new KUBMEntities();
@@ -59,7 +59,7 @@ namespace KUBOnlinePRPM.Controllers
             //var testList = db1.KUB_Telekomunikasi_Sdn_Bhd_Contact.ToList();
             //ActiveDirectoryContext context = new ActiveDirectoryContext();
             //context.Configuration.UseDatabaseNullSemantics = true;
-            //var query = from line in context.User select line;
+            //var query = from line in context.User select line;            
             return View();
         }
 
@@ -123,7 +123,7 @@ namespace KUBOnlinePRPM.Controllers
 
         public JsonResult DashboardOpenPO()
         {
-            var sql = "select count(*) as quantity,CAST(Year(SubmitDate) AS nvarchar) as description from PurchaseOrder group by Year(SubmitDate)";
+            var sql = "select count(*) as quantity,CAST(Year(SubmitDate) AS nvarchar) as description from PurchaseOrder where StatusId = 'PO01' group by Year(SubmitDate)";
 
             //dummy
             //var collections = new List<DashboardPOModel>();
@@ -395,7 +395,7 @@ namespace KUBOnlinePRPM.Controllers
                 model.FullName = Session["FullName"].ToString();
                 model.UserId = Int32.Parse(Session["UserId"].ToString());
                 model.NewPRForm.HODApproverId = db.Users.Select(m => new { SuperiorId = m.superiorId, UserId = m.userId }).Where(m => m.UserId == model.UserId).First().SuperiorId.Value;
-                DBLogicController.PRSaveDbLogic(model);
+                PRSaveDbLogic(model);
 
                 bool checkPaperVerified = db.Projects.FirstOrDefault(m => m.projectId == model.NewPRForm.ProjectId).paperVerified;
                 FileUpload fileUploadModel = new FileUpload();
@@ -529,7 +529,7 @@ namespace KUBOnlinePRPM.Controllers
                 var ifHSE = Session["ifHSE"];
                 var ifHOGPSS = Session["ifHOGPSS"];
                 //var ifProcurement = KUBHelper.CheckRole("R03") ? true : false;
-
+                int CustId = Int32.Parse(Session["CompanyId"].ToString());
                 PRModel PRList = new PRModel();
                 while (ifSuperAdmin != null)
                 {
@@ -539,7 +539,7 @@ namespace KUBOnlinePRPM.Controllers
                                            join p in db.PRStatus on m.StatusId equals p.statusId
                                            from r in q.DefaultIfEmpty()
                                            from ai in ah.DefaultIfEmpty()
-                                           where m.PRType == type 
+                                           where m.PRType == type
                                            select new PRListTable()
                                            {
                                                PRId = m.PRId,
@@ -557,7 +557,6 @@ namespace KUBOnlinePRPM.Controllers
                 }
                 while (ifAdmin != null)
                 {
-                    int CustId = Int32.Parse(Session["CompanyId"].ToString());
                     PRList.PRListObject = (from m in db.PurchaseRequisitions
                                            join n in db.Users on m.PreparedById equals n.userId into ah
                                            join o in db.Vendors on m.VendorId equals o.vendorId into q
@@ -582,13 +581,12 @@ namespace KUBOnlinePRPM.Controllers
                 }
                 if (ifRequestor != null)
                 {
-                    var addedQuery = ExpressionHelper.GetExpressionText("&& m.PreparedById == UserId");
                     PRList.PRListObject = (from m in db.PurchaseRequisitions
                                            join n in db.Users on m.PreparedById equals n.userId
                                            join o in db.Vendors on m.VendorId equals o.vendorId into q
                                            join p in db.PRStatus on m.StatusId equals p.statusId
                                            from r in q.DefaultIfEmpty()
-                                           where m.PRType == type && m.PreparedById == UserId
+                                           where m.PRType == type && m.PreparedById == UserId && m.CustId == CustId
                                            select new PRListTable()
                                            {
                                                PRId = m.PRId,
@@ -610,7 +608,7 @@ namespace KUBOnlinePRPM.Controllers
                                            from s in db.PR_Reviewer.Where(x => x.PRId == m.PRId && x.reviewerId == UserId).DefaultIfEmpty()
                                            from t in db.PR_Recommender.Where(x => x.PRId == m.PRId && x.recommenderId == UserId).DefaultIfEmpty()
                                            from r in q.DefaultIfEmpty()
-                                           where m.PRType == type
+                                           where m.PRType == type && m.CustId == CustId
                                            select new PRListTable()
                                            {
                                                PRId = m.PRId,
@@ -697,7 +695,7 @@ namespace KUBOnlinePRPM.Controllers
                                            join p in db.PRStatus on m.StatusId equals p.statusId
                                            from s in db.PR_Admin.Where(x => x.PRId == m.PRId && x.adminId == UserId).DefaultIfEmpty()
                                            from r in q.DefaultIfEmpty()
-                                           where m.PRType == type
+                                           where m.PRType == type && m.CustId == CustId
                                            select new PRListTable()
                                            {
                                                PRId = m.PRId,
@@ -1094,38 +1092,7 @@ namespace KUBOnlinePRPM.Controllers
                 var ItemCodeListQuery = db.PopulateItemLists.Select(c => new { CodeId = c.codeId, ItemCode = c.ItemDescription, CustId = c.custId }).Where(c => c.CustId == CustId).OrderBy(c => c.ItemCode);
                 var JobNoListQuery = db.Projects.Select(m => new { JobNoId = m.projectId, JobNo = m.projectCode, CustId = m.custId }).Where(m => m.CustId == CustId).OrderBy(m => m.JobNo);
                 var JobTaskListQuery = db.JobTasks.Select(m => new { JobTaskId = m.jobNo, JobTaskNo = m.jobTaskNo, CustId = m.custId }).Where(m => m.CustId == CustId).OrderBy(m => m.JobTaskNo);
-                //var ReviewerNameQuery = (from m in db.Users
-                //                         join n in db.PR_Reviewer on m.userId equals n.reviewerId
-                //                         where n.PRId == PRModel.PRId
-                //                         select new NewPRModel()
-                //                         {
-                //                             ReviewerId = m.userId,
-                //                             ReviewerName = m.firstName + " " + m.lastName
-                //                         }).FirstOrDefault();
-                //var HODApproverNameQuery = (from m in db.Users
-                //                            join n in db.PR_HOD on m.userId equals n.HODId
-                //                            where n.PRId == PRModel.PRId
-                //                            select new NewPRModel()
-                //                            {
-                //                                HODApproverId = m.userId,
-                //                                HODApproverName = m.firstName + " " + m.lastName
-                //                            }).FirstOrDefault();
-                //var ApproverNameQuery = (from m in db.Users
-                //                         join n in db.Users_Roles on m.userId equals n.userId
-                //                         where n.roleId == "R04"
-                //                         select new NewPRModel()
-                //                         {
-                //                             ApproverId = m.userId,
-                //                             ApproverName = m.firstName + " " + m.lastName
-                //                         }).FirstOrDefault();
-                //var RecommenderNameQuery = (from m in db.Users
-                //                            join n in db.Users_Roles on m.userId equals n.userId
-                //                            where n.roleId == "R03"
-                //                            select new NewPRModel()
-                //                            {
-                //                                RecommenderId = m.userId,
-                //                                RecommenderName = m.firstName + " " + m.lastName
-                //                            }).FirstOrDefault();
+
                 int i = 1;
                 if (!ModelState.IsValid)
                 {
@@ -1163,6 +1130,7 @@ namespace KUBOnlinePRPM.Controllers
                 }
                 PRModel.UserId = Int32.Parse(Session["UserId"].ToString());
                 PRModel.FullName = Session["FullName"].ToString();
+                PRModel.CustId = CustId;
                 //var getRole = (from m in db.Users
                 //               join n in db.Users_Roles on m.userId equals n.userId
                 //               where m.userId == UserId
@@ -1171,7 +1139,7 @@ namespace KUBOnlinePRPM.Controllers
                 //                   RoleId = n.roleId,
                 //                   RoleName = n.Role.name
                 //               }).ToList();
-                DBLogicController.PRUpdateDbLogic(PRModel);
+                PRUpdateDbLogic(PRModel);
 
                 bool checkPaperVerified = db.Projects.FirstOrDefault(m => m.projectId == PRModel.NewPRForm.ProjectId).paperVerified;
                 FileUpload fileUploadModel = new FileUpload();
@@ -1332,7 +1300,7 @@ namespace KUBOnlinePRPM.Controllers
 
             NotiModel NewNotiList = new NotiModel()
             {
-                MessageListModel = DBLogicController.getMessageList(PRId, userId)
+                MessageListModel = getMessageList(PRId, userId)
             };           
             //var haha = db.NotificationMsgs.ToList();
             var NotiMemberList = (from m in db.Users
@@ -1503,81 +1471,7 @@ namespace KUBOnlinePRPM.Controllers
                                      {
                                          MsgId = m.msgId
                                      }).First();
-
-                //if (Reviewer == true)
-                //{
-                //    PR_Reviewer objGetReviewer = db.PR_Reviewer.First(m => m.PRId == PRId && m.reviewerId == UserId);
-                //    objGetReviewer.reviewed = objGetReviewer.reviewed + 1;
-                //    objGetReviewer.reviewedDate = DateTime.Now;
-                //    objPRDetails.StatusId = "PR05";
-
-                //    NotificationMsg objNotification = new NotificationMsg()
-                //    {
-                //        uuid = Guid.NewGuid(),
-                //        message = Session["FullName"].ToString() + " has reviewed the PR No: " + objPRDetails.PRNo + " application. ",
-                //        fromUserId = UserId,
-                //        msgDate = DateTime.Now,
-                //        msgType = "Trail",
-                //        PRId = PRId
-                //    };
-                //    db.NotificationMsgs.Add(objNotification);
-                //    db.SaveChanges();
-
-                //    NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == requestorDone.MsgId);
-                //    getDone.done = true;
-
-                //    if (objPRDetails.AmountRequired < 20000)
-                //    {
-                //        var getHODApprover = db.PR_HOD.Select(m => new { HODId = m.HODId, PRId = m.PRId }).Where(m => m.PRId == PRId).ToList();
-                //        foreach (var item in getHODApprover)
-                //        {
-                //            NotificationMsg objTask = new NotificationMsg()
-                //            {
-                //                uuid = Guid.NewGuid(),
-                //                message = objPRDetails.PRNo + " pending for your approval",
-                //                fromUserId = UserId,
-                //                msgDate = DateTime.Now,
-                //                msgType = "Task",
-                //                PRId = PRId
-                //            };
-                //            db.NotificationMsgs.Add(objTask);
-
-                //            NotiGroup Task = new NotiGroup()
-                //            {
-                //                uuid = Guid.NewGuid(),
-                //                msgId = objTask.msgId,
-                //                toUserId = item.HODId
-                //            };
-                //            db.NotiGroups.Add(Task);
-                //            db.SaveChanges();
-                //        }
-                //    } else
-                //    {
-                //        var getApprover = db.PR_Approver.Select(m => new { ApproverId = m.approverId, PRId = m.PRId }).Where(m => m.PRId == PRId).ToList();
-                //        foreach (var item in getApprover)
-                //        {
-                //            NotificationMsg objTask = new NotificationMsg()
-                //            {
-                //                uuid = Guid.NewGuid(),
-                //                message = objPRDetails.PRNo + " pending for your approval",
-                //                fromUserId = UserId,
-                //                msgDate = DateTime.Now,
-                //                msgType = "Task",
-                //                PRId = PRId
-                //            };
-                //            db.NotificationMsgs.Add(objTask);
-
-                //            NotiGroup Task = new NotiGroup()
-                //            {
-                //                uuid = Guid.NewGuid(),
-                //                msgId = objTask.msgId,
-                //                toUserId = item.ApproverId
-                //            };
-                //            db.NotiGroups.Add(Task);
-                //            db.SaveChanges();
-                //        }
-                //    }
-                //}
+                int PRCustId = objPRDetails.CustId;
                 Project updateProject = db.Projects.First(m => m.projectId == objPRDetails.ProjectId);
 
                 if (Approver == "HOD")
@@ -1607,7 +1501,7 @@ namespace KUBOnlinePRPM.Controllers
 
                         var getAdmin = (from m in db.Users
                                         join n in db.Users_Roles on m.userId equals n.userId
-                                        where n.roleId == "R03"
+                                        where n.roleId == "R03" && m.companyId == PRCustId
                                         select new PRModel()
                                         {
                                             UserId = m.userId
@@ -1728,7 +1622,7 @@ namespace KUBOnlinePRPM.Controllers
 
                     var getAdmin = (from m in db.Users
                                     join n in db.Users_Roles on m.userId equals n.userId
-                                    where n.roleId == "R03"
+                                    where n.roleId == "R03" && m.companyId == PRCustId
                                     select new PRModel()
                                     {
                                         UserId = m.userId
@@ -1848,7 +1742,7 @@ namespace KUBOnlinePRPM.Controllers
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
-                int CustId = Int32.Parse(Session["CompanyId"].ToString());
+                
                 PRModel PRDetail = new PRModel
                 {
                     PRId = Int32.Parse(Session["PRId"].ToString()),
@@ -1857,6 +1751,7 @@ namespace KUBOnlinePRPM.Controllers
                     //RoleIdList = getRole
                 };
                 PurchaseRequisition getScenario = db.PurchaseRequisitions.First(m => m.PRId == PRDetail.PRId);
+                int PRCustId = getScenario.CustId;
                 if (getScenario.Scenario == 1)
                 {
                     PRDetail.NewPRForm = (from a in db.PurchaseRequisitions
@@ -1869,9 +1764,13 @@ namespace KUBOnlinePRPM.Controllers
                                           join j in db.PopulateItemLists on h.codeId equals j.codeId into k
                                           join m in db.PurchaseTypes on a.PurchaseTypeId equals m.purchaseTypeId
                                           join n in db.Customers on b.companyId equals n.custId
+                                          join o in db.PR_Reviewer on a.PRId equals o.PRId into p
+                                          join q in db.PR_Approver on a.PRId equals q.PRId into r
                                           join s in db.PR_HOD on a.PRId equals s.PRId
                                           join t in db.Users on s.HODId equals t.userId
                                           //from x in l.DefaultIfEmpty()
+                                          from v in r.DefaultIfEmpty()
+                                          from w in p.DefaultIfEmpty()
                                           from y in f.DefaultIfEmpty()
                                           from z in k.DefaultIfEmpty()
                                           where a.PRId == PRDetail.PRId
@@ -1904,6 +1803,10 @@ namespace KUBOnlinePRPM.Controllers
                                               HODApproverId = s.HODId,
                                               HODApproverName = t.firstName + " " + t.lastName,
                                               HODApprovedDate1 = s.HODApprovedDate1.Value,
+                                              ApproverId = v.approverId,
+                                              ApprovedDate = v.approverApprovedDate.Value,
+                                              ReviewerId = w.reviewerId,
+                                              ReviewedDate = w.reviewedDate.Value,
                                               //HODApprovedDate2 = s.HODApprovedDate2.Value,
                                               Saved = a.Saved,
                                               Submited = a.Submited,
@@ -1911,15 +1814,16 @@ namespace KUBOnlinePRPM.Controllers
                                               Scenario = a.Scenario,
                                               StatusId = a.StatusId.Trim()
                                           }).FirstOrDefault();
-                    PR_Reviewer getReviewer = db.PR_Reviewer.First(m => m.PRId == PRDetail.PRId && m.reviewed == 1);
-                    PRDetail.NewPRForm.ReviewerId = getReviewer.reviewerId;
-                    User getReviewerName = db.Users.First(m => m.userId == getReviewer.reviewerId);
-                    PRDetail.NewPRForm.ReviewerName = getReviewerName.firstName + " " + getReviewerName.lastName;
-
-                    PR_Approver getApprover = db.PR_Approver.First(m => m.PRId == PRDetail.PRId && m.approverApproved == 1);
-                    PRDetail.NewPRForm.ApproverId = getApprover.approverId;
-                    User getApproverName = db.Users.First(m => m.userId == getApprover.approverId);
-                    PRDetail.NewPRForm.ApproverName = getApproverName.firstName + " " + getApproverName.lastName;
+                    if (PRDetail.NewPRForm.ApproverId != 0)
+                    {
+                        User getFullname = db.Users.First(m => m.userId == PRDetail.NewPRForm.ApproverId);
+                        PRDetail.NewPRForm.ApproverName = getFullname.firstName + " " + getFullname.lastName;
+                    }
+                    if (PRDetail.NewPRForm.ReviewerId != 0)
+                    {
+                        User getFullname = db.Users.First(m => m.userId == PRDetail.NewPRForm.ReviewerId);
+                        PRDetail.NewPRForm.ReviewerName = getFullname.firstName + " " + getFullname.lastName;
+                    }
                 } else if (getScenario.Scenario == 2)
                 {
                     PRDetail.NewPRForm = (from a in db.PurchaseRequisitions
@@ -2078,7 +1982,7 @@ namespace KUBOnlinePRPM.Controllers
                 PRDetail.NewPRForm.PRItemListObject = (from m in db.PR_Items
                                                        from n in db.PopulateItemLists.Where(x => m.codeId == x.codeId && m.itemTypeId == x.itemTypeId)
                                                        //from p in o.DefaultIfEmpty()
-                                                       where m.PRId == PRDetail.PRId && n.custId == CustId
+                                                       where m.PRId == PRDetail.PRId && n.custId == PRCustId
                                                        select new PRItemsTable()
                                                        {
                                                            ItemsId = m.itemsId,
@@ -2297,6 +2201,7 @@ namespace KUBOnlinePRPM.Controllers
             
         }
 
+        [HttpPost]
         public JsonResult SubmitPRProcurement(PRModel PRModel)
         {
             // todo check session if login as procurement or admin only

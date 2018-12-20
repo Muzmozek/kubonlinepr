@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace KUBOnlinePRPM.Controllers.Admin
 {
-    public class AdminController : Controller
+    public class AdminController : DBLogicController
     {
         // GET: Admin
         public ActionResult Index()

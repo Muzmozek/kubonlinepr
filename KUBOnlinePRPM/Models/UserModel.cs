@@ -14,5 +14,6 @@ namespace KUBOnlinePRPM.Models
         public string Role { get; set; }
         public string RoleId { get; set; }
         public string JobTitle { get; set; }
+        public string EmailAddress { get; set; }
     }
 }

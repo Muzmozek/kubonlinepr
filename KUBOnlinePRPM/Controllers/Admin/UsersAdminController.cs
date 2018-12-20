@@ -13,7 +13,7 @@ using KUBOnlinePRPM.Service;
 
 namespace KUBOnlinePRPM.Controllers.Admin
 {
-    public class UsersAdminController : Controller
+    public class UsersAdminController : DBLogicController
     {
         private KUBOnlinePREntities db = new KUBOnlinePREntities();
         private PRService PRService = new PRService();

@@ -174,7 +174,6 @@
     <Compile Include="Controllers\DBLogicController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
-    <Compile Include="Controllers\PMController.cs" />
     <Compile Include="Controllers\POController.cs" />
     <Compile Include="Controllers\PRController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -218,6 +217,7 @@
       <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\MailModel.cs" />
     <Compile Include="Models\MessageList.cs">
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
     </Compile>
@@ -5621,6 +5621,7 @@
     <Content Include="Views\Roles\Index.cshtml" />
     <Content Include="Views\Notification\AuditTrail.cshtml" />
     <Content Include="Views\UsersAdmin\Heirarchy.cshtml" />
+    <Content Include="Views\Shared\PREmailTemplate.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

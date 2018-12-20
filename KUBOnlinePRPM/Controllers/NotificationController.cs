@@ -7,7 +7,7 @@ using KUBOnlinePRPM.Models;
 
 namespace KUBOnlinePRPM.Controllers
 {
-    public class NotificationController : Controller
+    public class NotificationController : DBLogicController
     {
         private KUBOnlinePREntities db = new KUBOnlinePREntities();
         // GET: Notification

@@ -29,7 +29,7 @@ namespace KUBOnlinePRPM.Controllers
             }
         }
     }
-    public class HomeController : Controller
+    public class HomeController : DBLogicController
     {
         private KUBOnlinePREntities db = new KUBOnlinePREntities();
         private KUBHelper KUBHelper = new KUBHelper();

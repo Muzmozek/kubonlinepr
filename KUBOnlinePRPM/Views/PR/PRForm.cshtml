@@ -41,7 +41,7 @@
             <td style="width:75px"></td>
             <td style="width:44px"></td>
             <td class="c2_12" style="width:88px"></td>
-            <td  style="width:97px"></td>
+            <td style="width:97px"></td>
             @*<td style="width:70px"></td>*@
             <td colspan="2" class="c2_12" style="width:173px"></td>
         </tr>
@@ -196,10 +196,10 @@
                 <td class="c11_2" style="width:78px">@Model.NewPRForm.PRItemListObject[i].CustPONo</td>
                 <td class="c11_2" style="width:75px">@Model.NewPRForm.PRItemListObject[i].Quantity</td>
                 <td class="c11_2" style="width:44px">@Model.NewPRForm.PRItemListObject[i].UOM</td>
-                <td class="c11_2" style="width:88px">@*@String.Format("{0:N2}", item.UnitPrice)*@ @Model.NewPRForm.PRItemListObject[i].UnitPrice</td>
-                <td class="c11_2" style="width:97px">@Model.NewPRForm.PRItemListObject[i].TotalPrice</td>
+                <td class="c11_2" style="width:88px">@Convert.ToDecimal(Model.NewPRForm.PRItemListObject[i].UnitPrice).ToString("#,##0.00")</td>
+                <td class="c11_2" style="width:97px">@Convert.ToDecimal(Model.NewPRForm.PRItemListObject[i].TotalPrice).ToString("#,##0.00")</td>
                 <td class="c11_2" style="width:70px">@*@item.GST*@</td>
-                <td class="c11_15" style="width:103px">@Model.NewPRForm.PRItemListObject[i].TotalPrice</td>
+                <td class="c11_15" style="width:103px">@Convert.ToDecimal(Model.NewPRForm.PRItemListObject[i].TotalPrice).ToString("#,##0.00")</td>
             </tr>
         }
         @if (Model.NewPRForm.PRItemListObject.Count < 20)
@@ -242,7 +242,7 @@
             <td class="c33_13" style="width:70px">
                 TOTAL
             </td>
-            <td class="c33_15" style="width:103px">@Model.NewPRForm.AmountRequired</td>
+            <td class="c33_15" style="width:103px">@Convert.ToDecimal(Model.NewPRForm.AmountRequired).ToString("#,##0.00")</td>
         </tr>
         <tr style="height:20px">
             <td style="width:98px"></td>
@@ -316,10 +316,10 @@
         <tr style="height:48px">
             <td class="c38_10" style="width:98px">@Model.NewPRForm.PurchaseType</td>
             <td class="c38_10" colspan="4">@Model.NewPRForm.BudgetDescription</td>
-            <td class="c38_10" colspan="2">@Model.NewPRForm.BudgetedAmount</td>
-            <td class="c38_10" colspan="2">@Model.NewPRForm.UtilizedToDate</td>
-            <td class="c38_10" colspan="2">@Model.NewPRForm.AmountRequired</td>
-            <td colspan="2" class="c38_10">@Model.NewPRForm.BudgetBalance</td>
+            <td class="c38_10" colspan="2">@Convert.ToDecimal(Model.NewPRForm.BudgetedAmount).ToString("#,##0.00")</td>
+            <td class="c38_10" colspan="2">@Convert.ToDecimal(Model.NewPRForm.UtilizedToDate).ToString("#,##0.00")</td>
+            <td class="c38_10" colspan="2">@Convert.ToDecimal(Model.NewPRForm.AmountRequired).ToString("#,##0.00")</td>
+            <td colspan="2" class="c38_10">@Convert.ToDecimal(Model.NewPRForm.BudgetBalance).ToString("#,##0.00")</td>
             @*<td class="c38_10" style="width:97px"></td>*@
             <td class="c38_10 c38_15" colspan="2">@*@Model.Remarks*@</td>
             @*<td class="c38_15" style="width:103px">dfg56</td>*@
@@ -445,27 +445,16 @@
             <td class="td2" style="height:10px; border-right:1px solid black;">(IT/Corporate Services/Advisor)</td>
         </tr>
         <tr>
-@if (Model.NewPRForm.Scenario == 1)
-{
-    <td class="td2" style="height:40px;">
-        <img src="@Context.Server.MapPath("~/Images/signature.png")" width="50" height="40" />
-    </td>
-    <td class="td2" style="height:40px;"><img src="@Context.Server.MapPath("~/Images/signature.png")" width="50" height="40" /></td>
-            <td class="td2" style="height:40px; border-right:1px solid black;"></td>
-}
-else
-{
-    <td class="td2" style="height:40px;">
-        <img src="@Context.Server.MapPath("~/Images/signature.png")" width="66" height="50" />
-    </td>
-    <td class="td2" style="height:40px;">
-        <img src="@Context.Server.MapPath("~/Images/signature.png")" width="66" height="50" />
-    </td>
+
+            <td class="td2" style="height:40px;">
+                <img src="@Context.Server.MapPath("~/Images/signature.png")" width="66" height="50" />
+            </td>
+            <td class="td2" style="height:40px;">
+                <img src="@Context.Server.MapPath("~/Images/signature.png")" width="66" height="50" />
+            </td>
             <td class="td2" style="height:40px; border-right:1px solid black;">
                 <img src="@Context.Server.MapPath("~/Images/signature.png")" width="66" height="50" />
             </td>
-}
-            
         </tr>
         <tr>
             <td class="td2" style="">Name: @Model.NewPRForm.RequestorName</td>
@@ -490,7 +479,7 @@ else
             {
                 <td class="td2" style="border-right: 1px solid black; padding-bottom:10px; border-bottom: 1px solid black">Date: @Model.NewPRForm.RecommendDate.ToShortDateString()</td>
             }
-            
+
         </tr>
     </table>
     <table class="hiddenTable">
@@ -565,7 +554,7 @@ else
             {
                 <td class="td2" style="border-bottom: 1px solid black; padding-bottom:10px;">Date: </td>
                 <td class="td2" style="border-bottom: 1px solid black; padding-bottom:10px;">Date: </td>
-                <td class="td2" style="border-right: 1px solid black; padding-bottom:10px; border-bottom: 1px solid black">Date: @Model.NewPRForm.HODApprovedDate2.ToShortDateString()</td>
+                <td class="td2" style="border-right: 1px solid black; padding-bottom:10px; border-bottom: 1px solid black">Date: @Model.NewPRForm.ApprovedDate.ToShortDateString()</td>
             }
             else if (Model.NewPRForm.Scenario == 2)
             {

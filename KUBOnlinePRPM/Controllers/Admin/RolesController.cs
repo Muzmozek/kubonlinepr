@@ -11,7 +11,7 @@ using KUBOnlinePRPM.Models;
 
 namespace KUBOnlinePRPM.Controllers.Admin
 {
-    public class RolesController : Controller
+    public class RolesController : DBLogicController
     {
         private KUBOnlinePREntities db = new KUBOnlinePREntities();
 

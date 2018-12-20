@@ -1,4 +1,7 @@
 ﻿using KUBOnlinePRPM.Models;
+using RazorEngine;
+using RazorEngine.Templating;
+using System.Net.Mail;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,10 +13,10 @@ using System.Web.Mvc;
 
 namespace KUBOnlinePRPM.Controllers
 {
-    public class DBLogicController : Controller
+    public abstract class DBLogicController : Controller
     {
         private static KUBOnlinePREntities db = new KUBOnlinePREntities();
-        public static void PRSaveDbLogic(PRModel model)
+        protected void PRSaveDbLogic(PRModel model)
         {
             PurchaseRequisition _objNewPR = new PurchaseRequisition
             {
@@ -145,7 +148,7 @@ namespace KUBOnlinePRPM.Controllers
 
                 var getAdminList = (from m in db.Users
                                     join n in db.Users_Roles on m.userId equals n.userId
-                                    where n.roleId == "R03"
+                                    where n.roleId == "R03" && m.companyId == model.CustId
                                     select new NewPRModel()
                                     {
                                         AdminId = m.userId,
@@ -193,7 +196,7 @@ namespace KUBOnlinePRPM.Controllers
                 db.SaveChanges();
             }        
         }
-        public static void PRUpdateDbLogic(PRModel x)
+        protected void PRUpdateDbLogic(PRModel x)
         {
             PurchaseRequisition FormerPRDetails = db.PurchaseRequisitions.First(m => m.PRId == x.PRId);
             Project updateProject = db.Projects.First(m => m.projectId == x.NewPRForm.ProjectId);
@@ -467,10 +470,10 @@ namespace KUBOnlinePRPM.Controllers
                     db.NotificationMsgs.Add(objTask);
                     db.SaveChanges();
 
-                    var getAdminList = (from m in db.Users
+                var getAdminList = (from m in db.Users
                                         join n in db.Users_Roles on m.userId equals n.userId
-                                        where n.roleId == "R03"
-                                        select new NewPRModel()
+                                        where n.roleId == "R03" && m.companyId == x.CustId
+                                    select new NewPRModel()
                                         {
                                             AdminId = m.userId,
                                             AdminName = m.firstName + " " + m.lastName
@@ -834,9 +837,179 @@ namespace KUBOnlinePRPM.Controllers
                     db.SaveChanges();
                 }
         }
+        protected void SendEmailNotification(PRModel PR, string POFlow)
+        {
+            var myEmail = db.Users.SingleOrDefault(x => x.userId == PR.UserId).emailAddress;
+            var getRequestorDetails = (from m in db.PurchaseRequisitions
+                                     join n in db.Users on m.PreparedById equals n.userId
+                                     where m.PRId == PR.PRId
+                                     select new UserModel()
+                                     {
+                                         UserId = n.userId,
+                                         FullName = n.firstName + " " + n.lastName,
+                                         EmailAddress = n.emailAddress
+                                     }).FirstOrDefault();
+            var getHODDetails = (from m in db.PR_HOD
+                               join n in db.Users on m.HODId equals n.userId
+                               where m.PRId == PR.PRId
+                               select new UserModel()
+                               {
+                                   UserId = n.userId,
+                                   FullName = n.firstName + " " + n.lastName,
+                                   EmailAddress = n.emailAddress
+                               }).FirstOrDefault();
+            var getReviewerDetails = (from m in db.PR_Reviewer
+                                      join n in db.Users on m.reviewerId equals n.userId
+                                      where m.PRId == PR.PRId
+                                      select new UserModel()
+                                      {
+                                          UserId = n.userId,
+                                          FullName = n.firstName + " " + n.lastName,
+                                          EmailAddress = n.emailAddress
+                                      }).FirstOrDefault();
+            var getHOCDetails = (from m in db.PR_Approver
+                                 join n in db.Users on m.approverId equals n.userId
+                                 where m.PRId == PR.PRId
+                                 select new UserModel()
+                                 {
+                                     UserId = n.userId,
+                                     FullName = n.firstName + " " + n.lastName,
+                                     EmailAddress = n.emailAddress
+                                 }).FirstOrDefault();
+            string NotiMessage = ""; string POMessage = "";
+            List<UserModel> sentEmailList = new List<UserModel>();
+            sentEmailList.Add(getRequestorDetails);
+            sentEmailList.Add(getHODDetails);
+            sentEmailList.Add(getReviewerDetails);
+            sentEmailList.Add(getHOCDetails);
 
+            if (POFlow == "IssuePO")
+            {
+                POMessage = "PO issuance";
+            } else
+            {
+                POMessage = "PO Confirmation";
+            }
+
+            if (PR.NewPRForm.Scenario == 1)
+            {                
+                NotiMessage = PR.FullName + " has send email notification for " + POMessage + " for PRNo : " + PR.NewPRForm.PRNo + " to " + getRequestorDetails.FullName + " (Requestor), " + getHODDetails.FullName + " (HOD), " + getReviewerDetails.FullName + " (Reviewer), " + getHOCDetails.FullName + " (Approver).";
+                                
+            } else if (PR.NewPRForm.Scenario == 2)
+            {
+                var getRecommenderDetails = (from m in db.PR_Recommender
+                                          join n in db.Users on m.recommenderId equals n.userId
+                                          where m.PRId == PR.PRId
+                                          select new UserModel()
+                                          {
+                                              UserId = n.userId,
+                                              FullName = n.firstName + " " + n.lastName,
+                                              EmailAddress = n.emailAddress
+                                          }).FirstOrDefault();
+                sentEmailList.Add(getRecommenderDetails);
+                NotiMessage = PR.FullName + " has send email notification for " + POMessage + " for PRNo : " + PR.NewPRForm.PRNo + " to " + getRequestorDetails.FullName + " (Requestor), " + getHODDetails.FullName + " (HOD), " + getRecommenderDetails.FullName + " (Recommender), " + getReviewerDetails.FullName + " (Reviewer), " + getHOCDetails.FullName + " (Approver).";
+            } else
+            {
+                var getRecommenderDetails = (from m in db.PR_Recommender
+                                          join n in db.Users on m.recommenderId equals n.userId
+                                          where m.PRId == PR.PRId
+                                          select new UserModel()
+                                          {
+                                              UserId = n.userId,
+                                              FullName = n.firstName + " " + n.lastName,
+                                              EmailAddress = n.emailAddress
+                                          }).FirstOrDefault();
+                
+                var getRecommenderIIDetails = (from m in db.PR_RecommenderII
+                                             join n in db.Users on m.recommenderId equals n.userId
+                                             where m.PRId == PR.PRId
+                                             select new UserModel()
+                                             {
+                                                 UserId = n.userId,
+                                                 FullName = n.firstName + " " + n.lastName,
+                                                 EmailAddress = n.emailAddress
+                                             }).FirstOrDefault();
+
+                sentEmailList.Add(getRecommenderDetails);
+                sentEmailList.Add(getRecommenderIIDetails);
+                NotiMessage = PR.FullName + " has send email notification for " + POMessage + " for PRNo : " + PR.NewPRForm.PRNo + " to " + getRequestorDetails.FullName + " (Requestor), " + getHODDetails.FullName + " (HOD), " + getRecommenderDetails.FullName + " (Recommender), " + getRecommenderIIDetails.FullName + " (RecommenderII), " + getReviewerDetails.FullName + " (Reviewer), " + getHOCDetails.FullName + " (Approver).";
+            }
+
+            NotificationMsg _objSendMessage = new NotificationMsg
+            {
+                uuid = Guid.NewGuid(),
+                //POId = PR.poi,
+                PRId = PR.PRId,
+                msgDate = DateTime.Now,
+                fromUserId = PR.UserId,
+                message = NotiMessage,
+                msgType = "Message"
+            };
+            db.NotificationMsgs.Add(_objSendMessage);
+            db.SaveChanges();
+
+            foreach (var item in sentEmailList)
+            {
+                var POInfo = (from m in db.PurchaseOrders
+                              join n in db.Users on m.PreparedById equals n.userId
+                              join o in db.Projects on m.projectId equals o.projectId
+                              join p in db.Customers on o.custId equals p.custId
+                              //join p in db.OpportunityTypes on m.typeId equals p.typeId
+                              where m.PRId == PR.PRId
+                              select new MailModel()
+                              {
+                                  POId = m.POId,
+                                  CustName = p.name + " (" + p.abbreviation + ")",
+                                  //abb = p.abbreviation,
+                                  ProjectName = o.projectName,
+                                  //Description = o.des,
+                                  //PODescription = m.des,
+                                  PONo = m.PONo,
+                                  //ContractType = p.type,
+                                  AssignTo = n.firstName + " " + n.lastName
+                              }).FirstOrDefault();
+
+                string templateFile = System.IO.File.ReadAllText(HttpContext.Server.MapPath("~/Views/Shared/PREmailTemplate.cshtml"));
+                POInfo.Content = PR.FullName + " has issue new Purchase Order. Please refer the details as below: ";
+                POInfo.FromName = PR.FullName;
+                POInfo.BackLink = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority,
+                    Url.Content("~/PO/ViewPODetails") + "?POId=" + POInfo.POId + "&POType=Generic");
+                var result = Engine.Razor.RunCompile(new LoadedTemplateSource(templateFile), "POTemplateKey", null, POInfo);
+
+                MailMessage mail = new MailMessage
+                {
+                    From = new MailAddress("hr@kubtel.com"),
+                    Subject = "OnlinePR: Updates on " + POInfo.ProjectName + " for " + POInfo.CustName,
+                    Body = result,
+                    IsBodyHtml = true
+                };
+                mail.To.Add(new MailAddress(item.EmailAddress));
+
+                SmtpClient smtp = new SmtpClient
+                {
+                    //smtp.Host = "pops.kub.com";
+                    Host = "outlook.office365.com",
+                    //smtp.Host = "smtp.gmail.com";
+                    Port = 587,
+                    //smtp.Port = 25;
+                    EnableSsl = true,
+                    Credentials = new System.Net.NetworkCredential("hr@kubtel.com", "welcome123$")
+                };
+                //smtp.Credentials = new System.Net.NetworkCredential("ocm@kubtel.com", "welcome123$");
+                smtp.Send(mail);
+
+                NotiGroup _objSendToUserId = new NotiGroup
+                {
+                    uuid = Guid.NewGuid(),
+                    msgId = _objSendMessage.msgId,
+                    toUserId = item.UserId
+                };
+                db.NotiGroups.Add(_objSendToUserId);
+            }
+            db.SaveChanges();
+        }
         //NewPO balnket
-        public static void POSaveDbLogic(POModel POModel)
+        protected void POSaveDbLogic(POModel POModel)
         {
             PurchaseOrder newPO = new PurchaseOrder();
             newPO.uuid = Guid.NewGuid();
@@ -927,7 +1100,7 @@ namespace KUBOnlinePRPM.Controllers
             }
             POModel.POId = newPO.POId;
         }
-        public static void POUpdateDbLogic(POModel x)
+        protected void POUpdateDbLogic(POModel x)
         {
             PurchaseOrder objPODetails = db.PurchaseOrders.First(m => m.POId == x.POId);
             PurchaseRequisition newPR = new PurchaseRequisition();
@@ -1032,7 +1205,7 @@ namespace KUBOnlinePRPM.Controllers
             objPODetails.TotalPrice = TotalPrice;
             db.SaveChanges();
         }
-        public static SqlConnection OpenDBConnection()
+        protected SqlConnection OpenDBConnection()
         {
             SqlConnection conn = null;
             try
@@ -1055,7 +1228,7 @@ namespace KUBOnlinePRPM.Controllers
             }
             return conn;
         }
-        public static List<QuestionAnswerModels> getMessageList(int PRId, int UserId)
+        protected List<QuestionAnswerModels> getMessageList(int PRId, int UserId)
         {
             SqlConnection conn = null;
             DataSet returnDS = new DataSet("MessageList");
@@ -1120,8 +1293,7 @@ namespace KUBOnlinePRPM.Controllers
 
             return MessageList;
         }
-
-        public static void CloseDBConnection(SqlConnection conn)
+        protected void CloseDBConnection(SqlConnection conn)
         {
             if ((conn != null))
             {
