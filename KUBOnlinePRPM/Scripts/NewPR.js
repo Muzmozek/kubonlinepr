@@ -107,6 +107,15 @@
         }
     });
 
+    $(document).ajaxError(
+        function (e, xhr, settings) {
+            if (xhr.status == 401) {
+                alert("Your Session time expired. You will be logged out.");
+                window.location.href = UrlLogin;
+            }
+        });
+    });
+
     $(document).on("click", ".saveSubmit, .saveSubmitDetail", function (e) {       
         e.preventDefault();
         var fd = new FormData(); var other_data; var PRType; var URL;

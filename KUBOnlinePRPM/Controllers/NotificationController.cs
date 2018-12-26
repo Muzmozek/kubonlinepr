@@ -11,6 +11,7 @@ namespace KUBOnlinePRPM.Controllers
     {
         private KUBOnlinePREntities db = new KUBOnlinePREntities();
         // GET: Notification
+        [CheckSessionOut]
         public ActionResult Index()
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
@@ -46,10 +47,9 @@ namespace KUBOnlinePRPM.Controllers
             }
         }
 
+        [CheckSessionOut]
         public ActionResult AuditTrail()
         {
-            if (User.Identity.IsAuthenticated && Session["UserId"] != null)
-            {
                 NotiModel NewNotiList = new NotiModel();
                 int userId = Int32.Parse(Session["UserId"].ToString());
                 //var haha = db.NotificationMsgs.ToList();
@@ -76,11 +76,6 @@ namespace KUBOnlinePRPM.Controllers
                                               }).OrderByDescending(m => m.MsgDate).ToList();
 
                 return View(NewNotiList);
-            }
-            else
-            {
-                return Redirect("~/Home/Index");
-            }
         }
     }
 }

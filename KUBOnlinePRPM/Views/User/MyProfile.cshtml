@@ -1,27 +1,27 @@
-﻿@model KUBOnlinePRPM.Models.User
+﻿@model KUBOnlinePRPM.Models.UserModel
 <table>
     <tr>
         <td>Name</td>
-        <td>@Model.firstName @Model.lastName</td>
+        <td>@Model.FullName</td>
     </tr>
     <tr>
         <td>Designation</td>
-        <td>@Model.jobTitle</td>
+        <td>@Model.JobTitle</td>
     </tr>
     <tr>
         <td>Department</td>
-        <td></td>
+        <td>@Model.Department</td>
     </tr>
     <tr>
         <td>Company</td>
-        <td></td>
+        <td>@Model.CompanyName</td>
     </tr>
     <tr>
         <td>Head of Department/Division</td>
-        <td></td>
+        <td>@Model.HOD</td>
     </tr>
     <tr>
         <td>Head of Company</td>
-        <td></td>
+        <td>@Model.HOC</td>
     </tr>
 </table>

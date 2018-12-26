@@ -395,6 +395,7 @@
           <Property Name="lastName" Type="nvarchar" MaxLength="75" />
           <Property Name="employeeNo" Type="nchar" MaxLength="10" />
           <Property Name="jobTitle" Type="varchar" MaxLength="100" />
+          <Property Name="department" Type="nvarchar" MaxLength="100" />
           <Property Name="superiorId" Type="int" />
           <Property Name="loginDate" Type="datetime" />
           <Property Name="loginLatLng" Type="nvarchar" MaxLength="75" />
@@ -1662,6 +1663,7 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <NavigationProperty Name="FixedAssets" Relationship="KUBOnlinePRModel.FK_ItemCodes_User1" FromRole="User" ToRole="FixedAsset" />
           <NavigationProperty Name="PurchaseRequisitions" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_User" FromRole="User" ToRole="PurchaseRequisition" />
           <NavigationProperty Name="PR_RecommenderII" Relationship="KUBOnlinePRModel.FK_PR_RecommenderII_User" FromRole="User" ToRole="PR_RecommenderII" />
+          <Property Name="department" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Users_Roles">
           <Key>
@@ -3212,6 +3214,7 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="KUBOnlinePRModel.User">
               <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="department" ColumnName="department" />
                 <ScalarProperty Name="superiorId" ColumnName="superiorId" />
                 <ScalarProperty Name="uuid" ColumnName="uuid" />
                 <ScalarProperty Name="userId" ColumnName="userId" />

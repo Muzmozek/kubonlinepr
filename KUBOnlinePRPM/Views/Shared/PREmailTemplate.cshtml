@@ -1,34 +1,28 @@
 ﻿<html>
 <head>
-    <title>PO Management</title>
+    <title>@Model.PRFlow required for @Model.PRNo</title>
 </head>
 <body>
-    You got new notification from @Model.FromName
-    <br /><br />
-    New Message: @Model.Content
-    <br /><br />
-    <b>@Model.POFlow</b>
-    <br /><br />
-    From Customer: @Model.CustName
+    PR No: @Model.PRNo
     <br />
-    Contract Name: @Model.ContractName
+    PR Date: @Model.PRDate
     <br />
-    Contract Description: @Model.Description
+    Requestor: @Model.Requestor
     <br />
-    PO Number: @Model.PONo
+    Vendor company: @Model.VendorCompany
     <br />
-    PO Description: @Model.PODescription
-    <br />
+    Amount required: @Model.AmountRequired
+    @*<br />
     <br />
     Please click <a href="@Model.BackLink">here</a> for more details.
     <br />
-    Notes: Please <b>login to the OCM first</b> before click the link.
+    Notes: Please <b>login to the OCM first</b> before click the link.*@
     <br /><br /><br />
     <b>Disclaimer</b>
     <br /><br />
-    <p>
-        This e-mail and any files transmitted with it is confidential and intended solely for the use of the individual or entity to whom it is addressed. If you are not the intended recipient, or the person responsible for delivering the e-mail, be advised that you have received this e-mail and any files transmitted with it in error and that any use, dissemination, forwarding, printing or copying of this e-mail and any files transmitted with it is strictly prohibited. If you have received this e-mail and any files transmitted with it in error, please advise the sender immediately by reply e-mail and delete this message.
-    </p>
+          <p>
+              The content of this email is confidential and intended for the recipient specified in the message only. It is strictly forbidden to share any part of this message with any third party, without a written consent of the sender. If you received this message by mistake, please reply to this message and follow with its deletion, so that we can ensure such a mistake does not occur in the future.
+          </p>
     <br />
 </body>
 </html>

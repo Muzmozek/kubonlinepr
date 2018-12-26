@@ -67,6 +67,7 @@ namespace KUBOnlinePRPM.Models
         public string address { get; set; }
         public Nullable<int> extensionNo { get; set; }
         public Nullable<int> superiorId { get; set; }
+        public string department { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Customer> Customers { get; set; }

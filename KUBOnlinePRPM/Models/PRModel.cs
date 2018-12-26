@@ -28,6 +28,7 @@ namespace KUBOnlinePRPM.Models
         public List<PRDocListTable> PRDocListObject { get; set; }
         public int PRReviewer { get; set; }
         public int PRRecommender { get; set; }
+        public string EmailAddress { get; set; }
     }
     public class NewPRModel
     {
@@ -79,6 +80,7 @@ namespace KUBOnlinePRPM.Models
         public string HODApproverName { get; set; }
         public DateTime HODApprovedDate1 { get; set; }
         public DateTime HODApprovedDate2 { get; set; }
+        public string ApproverEmail { get; set; }
         public int ApproverId { get; set; }
         public string ApproverName { get; set; }
         public DateTime ApprovedDate { get; set; }

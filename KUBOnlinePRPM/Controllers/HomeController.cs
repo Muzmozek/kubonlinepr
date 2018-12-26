@@ -55,17 +55,17 @@ namespace KUBOnlinePRPM.Controllers
                                          Password = m.password
                                      }).FirstOrDefault();
             bool validate = false;
-            if (CheckUserPassword != null)
+            if (CheckUserPassword != null && CheckUserPassword.Password != null)
             {
                 validate = BCrypt.CheckPassword(model.Password, CheckUserPassword.Password);
-            } 
-            
-            //var directoryEntry = new DirectoryEntry("LDAP://172.16.0.1/DC=kub,DC=local");
+            }
+
+            var directoryEntry = new DirectoryEntry("LDAP://172.16.0.2/DC=kub,DC=local");
             //directoryEntry.Username = "win2k8";
             //directoryEntry.Password = "Quantum111?";
-            if (validate == true)
-                //if (Membership.ValidateUser(model.Username, model.Password) || validate == true)
-            {
+            //if (validate == true)
+                if (Membership.ValidateUser(model.Username, model.Password) || validate == true)
+                {
                 var CheckUserId = (from m in db.Users
                                join n in db.Users_Roles on m.userId equals n.userId
                                join o in db.Roles on n.roleId equals o.roleId
