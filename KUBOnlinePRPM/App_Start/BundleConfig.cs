@@ -13,6 +13,7 @@ namespace KUBOnlinePRPM
                         "~/Assets/jquery-migrate/jquery-migrate.min.js",
                         "~/Assets/popper.min.js",
                         "~/Assets/bootstrap/bootstrap.js",
+                        //"~/Assets/jquery-validate/jquery.validate.unobtrusive.js",
                         "~/Assets/cookiejs/jquery.cookie.js"
                         ));
 

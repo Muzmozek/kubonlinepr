@@ -101,6 +101,7 @@ namespace KUBOnlinePRPM.Models
         public bool SelectSubmit { get; set; }
         public int Submited { get; set; }
         public int Rejected { get; set; }
+        public string RejectedRemark { get; set; }
         public int Reviewed { get; set; }
         public int HODApproverApprovedP1 { get; set; }
         public int HODApproverApprovedP2 { get; set; }

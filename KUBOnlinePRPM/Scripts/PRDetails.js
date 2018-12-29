@@ -49,6 +49,10 @@
             fd.append("NewPRForm.SelectSave", true);
             URL = UrlSavePreparedProcurement;
         } else if ($(this)[0].id === "SubmitPreparedProcurement") {
+            if ($("#SpecReviewer option:selected").text() === "Select SpecReviewer here") {
+                alert("Please insert spec reviewer here");
+                return false;
+            }
             fd.append("NewPRForm.SelectSubmit", true);
             URL = UrlSubmitPreparedProcurement;
         }
@@ -57,7 +61,7 @@
             fd.append(input.name, input.value);
         });
         var data = PRItemTable.$("tr");
-        var ItemsId;
+        var ItemsId; var kill = false;
         $.each(data, function (i, input) {
             if ($(PRItemTable.row(i).data()[0]).val() === "") {
                 ItemsId = 0;
@@ -65,7 +69,12 @@
                 ItemsId = $(PRItemTable.row(i).data()[0]).val();
             }
             var unitPrice = $(input).find("input[name='UnitPrice']").val(); var totalPrice = $(input).find("input[name='TotalPrice']").val();
-            var ItemTypeId = $(input).find(".TypeId option:selected").val();
+            var ItemTypeId = $(input).find(".TypeId option:selected").val();           
+            if (ItemTypeId === "") {
+                alert("Please insert item type in PR items table before save/submit.");
+                kill = true;
+                return false;
+            }
             var UoM = $(input).find("input[name='UoM']").val(); var CodeId = $(input).find(".CodeId option:selected").val();
             var JobNo = $(input).find(".JobNoId option:selected").text();
             var JobTaskNo = $(input).find(".JobTaskNoId option:selected").text();
@@ -97,25 +106,27 @@
             fd.append("NewPRForm.PRItemListObject[" + i + "].TotalPrice", totalPrice);
         });
 
-        $.ajax({
-            url: URL,
-            type: 'POST',
-            data: fd,
-            contentType: false,
-            processData: false,
-            cache: false,
-            beforeSend: function () {
-                $("body").addClass("loading");
-            },
-            dataType: "json",
-            success: function (resp) {
-                $("body").removeClass("loading");
-                alert(resp);
-                $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab');
-                $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
-                generatePRItemTable();
-            }
-        });
+        if (kill === false) {
+            $.ajax({
+                url: URL,
+                type: 'POST',
+                data: fd,
+                contentType: false,
+                processData: false,
+                cache: false,
+                beforeSend: function () {
+                    $("body").addClass("loading");
+                },
+                dataType: "json",
+                success: function (resp) {
+                    $("body").removeClass("loading");
+                    alert(resp);
+                    $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab');
+                    $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
+                    generatePRItemTable();
+                }
+            });
+        }       
     });
 
     // scenario 1

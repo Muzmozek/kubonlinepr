@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Data.Entity.Validation;
 
 namespace KUBOnlinePRPM.Controllers
 {
@@ -18,6 +19,7 @@ namespace KUBOnlinePRPM.Controllers
         private static KUBOnlinePREntities db = new KUBOnlinePREntities();
         protected void PRSaveDbLogic(PRModel model)
         {
+            try {
             PurchaseRequisition _objNewPR = new PurchaseRequisition
             {
                 uuid = Guid.NewGuid(),
@@ -50,7 +52,7 @@ namespace KUBOnlinePRPM.Controllers
             _updateProject.utilizedToDate = model.NewPRForm.UtilizedToDate;
             _updateProject.budgetBalance = model.NewPRForm.BudgetBalance;
             db.SaveChanges();
-
+        
             PurchaseRequisition generatePRNo = db.PurchaseRequisitions.First(m => m.PRId == _objNewPR.PRId);
             generatePRNo.PRNo = "PR-" + DateTime.Now.Year + "-" + string.Format("{0}{1}", 0, _objNewPR.PRId.ToString("D4"));
             NotificationMsg generateMsg = new NotificationMsg();
@@ -203,9 +205,25 @@ namespace KUBOnlinePRPM.Controllers
                 //}
                 db.SaveChanges();
             }
+            }
+            catch (DbEntityValidationException e)
+            {
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                throw;
+            }
         }
         protected void PRUpdateDbLogic(PRModel x)
         {
+            try {
             PurchaseRequisition FormerPRDetails = db.PurchaseRequisitions.First(m => m.PRId == x.PRId);
             Project updateProject = db.Projects.First(m => m.projectId == x.NewPRForm.ProjectId);
 
@@ -531,8 +549,9 @@ namespace KUBOnlinePRPM.Controllers
                     };
                     db.NotiGroups.Add(ApproverTask);
                     db.SaveChanges();
-                //}
             }
+            //}
+
             //else if (x.NewPRForm.SelectSubmit == true && x.NewPRForm.StatusId == "PR02")
             //{
             //    PR_Admin SaveAdminInfo = db.PR_Admin.First(m => m.PRId == x.PRId);
@@ -763,6 +782,21 @@ namespace KUBOnlinePRPM.Controllers
                 }
                 db.SaveChanges();
             }
+        }
+                    catch (DbEntityValidationException e)
+                    {
+                        foreach (var eve in e.EntityValidationErrors)
+                        {
+                            Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                                eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                            foreach (var ve in eve.ValidationErrors)
+                            {
+                                Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                                    ve.PropertyName, ve.ErrorMessage);
+                            }
+}
+                        throw;
+                    }
         }
         protected void POSaveDbLogic(POModel POModel)
         {

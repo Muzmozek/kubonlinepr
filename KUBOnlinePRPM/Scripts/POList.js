@@ -11,7 +11,7 @@
                 { visible: false, targets: [0] }
         ],
         destroy: true,
-        //aaSorting: [12, "desc"],
+        aaSorting: [1, "desc"],
         responsive: {
             breakpoints: [
                 { name: 'desktop', width: 1024 },

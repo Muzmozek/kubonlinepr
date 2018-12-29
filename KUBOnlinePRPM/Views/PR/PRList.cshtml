@@ -20,7 +20,7 @@
 </div>
 <div class="g-bg-white g-brd-1 g-brd-gray-light-v3 g-brd-style-solid rounded g-mb-40">
     <div class="container-fluid g-pa-20">
-        <table id="PRListTable" class="table table-striped table-bordered dt-responsive nowrap table-hover" style="width:100%">
+        <table id="PRListTable" class="table table-striped table-bordered dt-responsive table-hover" style="width:100%">
             <thead>
                 <tr>
                     <th class="d-none"></th>
@@ -65,48 +65,37 @@
                 @{
                     foreach (var item in Model.PRListObject)
                     {
-                        <tr>
-                            <td class="d-none">@Html.DisplayFor(modelItem => item.PRId)</td>
-                            <td class="all">@Html.DisplayFor(modelItem => item.PRNo)</td>
-                            <td class="desktop">@Html.DisplayFor(modelItem => item.PRDate)</td>
-                            <td class="desktop">@Html.DisplayFor(modelItem => item.RequestorName)</td>
-                            <td class="desktop">@Html.DisplayFor(modelItem => item.VendorCompany)</td>
-                            <td class="desktop">@Html.DisplayFor(modelItem => item.AmountRequired)</td>
-                            <td class="desktop">@Html.DisplayFor(modelItem => item.PRAging)</td>
-                            @if (item.Status == "Reject" || item.Status == "Cancel")
-                            {
-                                <td class="all">
-                                    <div class="d-inline-block">
-                                        <span class="d-flex align-items-center justify-content-center u-tags-v1 g-brd-around g-bg-white g-font-size-default g-color-gray-dark-v6 g-brd-white g-rounded-50 g-py-4 g-px-15">
-                                            <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-red g-mr-8"></span>
-                                            @item.Status
-                                        </span>
-                                    </div>
-                                </td>
-                            }
-                            else if (item.Status == "Close" || item.Status == "Close With PO")
-                            {
-                                <td class="all">
-                                    <div class="d-inline-block">
-                                        <span class="d-flex align-items-center justify-content-center u-tags-v1 g-brd-around g-bg-white g-font-size-default g-color-gray-dark-v6 g-brd-white g-rounded-50 g-py-4 g-px-15">
-                                            <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-green g-mr-8"></span>
-                                            @item.Status
-                                        </span>
-                                    </div>
-                                </td>
-                            }
-                            else
-                            {
-                                <td class="all">
-                                    <div class="d-inline-block">
-                                        <span class="d-flex align-items-center justify-content-center u-tags-v1 g-brd-around g-bg-white g-font-size-default g-color-gray-dark-v6 g-brd-white g-rounded-50 g-py-4 g-px-15">
-                                            <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-red g-mr-8"></span>
-                                            Open
-                                        </span>
-                                    </div>
-                                </td>
-                            }
-                        </tr>
+                <tr>
+                    <td class="d-none">@Html.DisplayFor(modelItem => item.PRId)</td>
+                    <td class="all"><a class="PRDetailsButton btn btn-md u-btn-blue g-mr-5 g-mb-15">@Html.DisplayFor(modelItem => item.PRNo)</a></td>
+                    <td class="desktop">@Html.DisplayFor(modelItem => item.PRDate)</td>
+                    <td class="desktop">@Html.DisplayFor(modelItem => item.RequestorName)</td>
+                    <td class="desktop">@Html.DisplayFor(modelItem => item.VendorCompany)</td>
+                    <td class="desktop">@Html.DisplayFor(modelItem => item.AmountRequired)</td>
+                    <td class="desktop">@Html.DisplayFor(modelItem => item.PRAging)</td>
+                    @if (item.Status == "Reject" || item.Status == "Cancel")
+                    {
+                        <td class="all">
+                            <div class="d-inline-block">
+                                <span class="d-flex align-items-center justify-content-center u-tags-v1 g-brd-around g-bg-white g-font-size-default g-color-gray-dark-v6 g-brd-white g-rounded-50 g-py-4 g-px-15">
+                                    <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-red g-mr-8"></span>
+                                    @item.Status
+                                </span>
+                            </div>
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="all">
+                            <div class="d-inline-block">
+                                <span class="d-flex align-items-center justify-content-center u-tags-v1 g-brd-around g-bg-white g-font-size-default g-color-gray-dark-v6 g-brd-white g-rounded-50 g-py-4 g-px-15">
+                                    <span class="u-badge-v2--md g-pos-stc g-transform-origin--top-left g-bg-red g-mr-8"></span>
+                                    @item.Status
+                                </span>
+                            </div>
+                        </td>
+                    }
+                </tr>
                     }
                 }
 

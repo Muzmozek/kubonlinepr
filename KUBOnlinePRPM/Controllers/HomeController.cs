@@ -35,6 +35,91 @@ namespace KUBOnlinePRPM.Controllers
         private KUBHelper KUBHelper = new KUBHelper();
         public ActionResult Index()
         {
+            if (Request["UserName"] != null && (Request["PRId"] != null || Request["POId"] != null) && Request["PRType"] != null)
+            {
+                string UserName = Request["UserName"].ToString();
+                int PRId = 0; int POId = 0; string Url = "";
+                if (Request["PRId"] != null)
+                {
+                    PRId = Int32.Parse(Request["PRId"].ToString());
+                }
+                if (Request["POId"] != null)
+                {
+                    POId = Int32.Parse(Request["POId"].ToString());
+                }
+                string PRType = Request["PRType"].ToString();
+
+                var CheckUserPassword = (from m in db.Users
+                                         where m.userName == UserName
+                                         select new UserModel()
+                                         {
+                                             Password = m.password
+                                         }).FirstOrDefault();
+                //bool validate = false;
+                //if (CheckUserPassword != null && CheckUserPassword.Password != null)
+                //{
+                //    validate = BCrypt.CheckPassword(Password, CheckUserPassword.Password);
+                //}
+
+                //var directoryEntry = new DirectoryEntry("LDAP://172.16.0.2/DC=kub,DC=local");
+                //if (Membership.ValidateUser(UserName, Password) || validate == true)
+                //{
+                    var CheckUserId = (from m in db.Users
+                                       join n in db.Users_Roles on m.userId equals n.userId
+                                       join o in db.Roles on n.roleId equals o.roleId
+                                       where m.userName == UserName
+                                       select new UserModel()
+                                       {
+                                           UserId = m.userId,
+                                           CompanyId = m.companyId,
+                                           JobTitle = m.jobTitle,
+                                           FullName = m.firstName + " " + m.lastName
+                                       }).FirstOrDefault();
+
+                    var getRole = db.Users_Roles.Select(x => new { x.userId, x.roleId }).Where(x => x.userId == CheckUserId.UserId).ToList();
+
+                    Session["UserId"] = CheckUserId.UserId;
+                    Session["Username"] = UserName;
+                    Session["ifRequestor"] = getRole.FirstOrDefault(x => x.roleId.Contains("R01"));
+                    Session["ifHOD"] = getRole.FirstOrDefault(x => x.roleId.Contains("R02"));
+                    Session["ifProcurement"] = getRole.FirstOrDefault(x => x.roleId.Contains("R03"));
+                    Session["ifHOC"] = getRole.FirstOrDefault(x => x.roleId.Contains("R04"));
+                    Session["ifAdmin"] = getRole.FirstOrDefault(x => x.roleId.Contains("R05"));
+                    Session["ifSuperAdmin"] = getRole.FirstOrDefault(x => x.roleId.Contains("R06"));
+                    Session["ifIT"] = getRole.FirstOrDefault(x => x.roleId.Contains("R07"));
+                    Session["ifPMO"] = getRole.FirstOrDefault(x => x.roleId.Contains("R08"));
+                    Session["ifHSE"] = getRole.FirstOrDefault(x => x.roleId.Contains("R09"));
+                    Session["ifHOGPSS"] = getRole.FirstOrDefault(x => x.roleId.Contains("R10"));
+                    Session["roles"] = db.Users_Roles.Where(x => x.userId == CheckUserId.UserId).ToList();
+                    Session["FullName"] = CheckUserId.FullName;
+                    Session["CompanyId"] = CheckUserId.CompanyId;
+                    Session["JobTitle"] = CheckUserId.JobTitle;
+                    FormsAuthentication.SetAuthCookie(UserName, true);
+
+                    User saveLoginNoti = db.Users.First(m => m.userId == CheckUserId.UserId);
+                    saveLoginNoti.lastLoginDate = DateTime.Now;
+                    NotificationMsg userAuditTrail = new NotificationMsg()
+                    {
+                        uuid = Guid.NewGuid(),
+                        message = CheckUserId.FullName + " has login to the Online PR system",
+                        msgDate = DateTime.Now,
+                        fromUserId = CheckUserId.UserId,
+                        msgType = "Trail"
+                    };
+                    db.NotificationMsgs.Add(userAuditTrail);
+                    db.SaveChanges();
+                //}
+                if (Request["PRId"] != null)
+                {
+                    Url = "~/PR/PRTabs?PRId=" + PRId + "&PRType=" + PRType;
+                }
+                if (Request["POId"] != null)
+                {
+                    Url = "~/PO/PODetails?POId=" + POId + "&POType=" + PRType;
+                }
+                return Redirect(Url);
+            }
+            
             return View();
         }
 
@@ -47,7 +132,7 @@ namespace KUBOnlinePRPM.Controllers
             {
                 return this.View(model);
             }
-
+            
             var CheckUserPassword = (from m in db.Users
                                      where m.userName == model.Username
                                      select new UserModel()

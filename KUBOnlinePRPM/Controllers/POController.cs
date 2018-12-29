@@ -361,14 +361,19 @@ namespace KUBOnlinePRPM.Controllers
                                                  PaymentCode = m.paymentCode,
                                              }).OrderBy(c => c.PaymentCode).ThenBy(c => c.PaymentDescription);
 
-                POModel PODetail = new POModel
+                POModel PODetail = new POModel();
+                if (Session["POId"] == null)
                 {
-                    POId = Int32.Parse(Session["POId"].ToString()),
-                    //PRId = Int32.Parse(Session["PRId"].ToString()),
-                    UserId = Int32.Parse(Session["UserId"].ToString()),
-                    Type = Session["POType"].ToString(),
-                    RoleIdList = getRole
-                };
+                    PODetail.POId = Int32.Parse(Request["POId"].ToString());
+                    PODetail.Type = Request["POType"].ToString();
+                    Session["POId"] = PODetail.POId; Session["POType"] = PODetail.Type;
+                }
+                else
+                {
+                    PODetail.POId = Int32.Parse(Session["POId"].ToString());
+                    PODetail.Type = Session["POType"].ToString();
+                }
+                PODetail.UserId = Int32.Parse(Session["UserId"].ToString());
                 PODetail.NewPOForm = (from a in db.PurchaseOrders
                                       join b in db.Projects on a.projectId equals b.projectId
                                       join c in db.Vendors on a.vendorId equals c.vendorId
@@ -614,6 +619,7 @@ namespace KUBOnlinePRPM.Controllers
                 int CustId = Int32.Parse(Session["CompanyId"].ToString());
                 int UserId = Int32.Parse(Session["UserId"].ToString());
                 PurchaseOrder updatePO = db.PurchaseOrders.First(m => m.POId == POId);
+                var getScenario = db.PurchaseRequisitions.First(m => m.PRId == updatePO.PRId).Scenario;
                 updatePO.PayToVendorId = PayToVendorId;
                 updatePO.PaymentTermsId = PaymentTermsId;
                 updatePO.StatusId = "PO03";
@@ -659,6 +665,8 @@ namespace KUBOnlinePRPM.Controllers
                     PRModel.FullName = Session["FullName"].ToString();
                     PRModel.PRId = updatePO.PRId.Value;
                     PRModel.UserId = UserId;
+                    PRModel.NewPRForm = new NewPRModel();
+                    PRModel.NewPRForm.Scenario = getScenario;
                     SendEmailPONotification(PRModel, "ConfirmPO");
                     //XmlWriterSettings setting = new XmlWriterSettings();
                     //setting.ConformanceLevel = ConformanceLevel.Auto;

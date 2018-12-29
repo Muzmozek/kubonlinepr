@@ -93,10 +93,11 @@ namespace KUBOnlinePRPM.Controllers
                           }).FirstOrDefault();
 
             string templateFile = System.IO.File.ReadAllText(HttpContext.Server.MapPath("~/Views/Shared/PREmailTemplate.cshtml"));
-            //PRInfo.Content = PR.FullName + " has issue new Purchase Requisition. Please refer the details as below: ";
+            string Username = db.Users.First(m => m.userId == getReceipientDetails.UserId).userName;
+            PRInfo.Content = "~/Home/Index?Username=" + Username + "&PRId=" + PR.PRId + "&PRType=Generic";
             //PRInfo.FromName = PR.FullName;
             PRInfo.BackLink = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority,
-                Url.Content("~/PR/ViewPRDetails") + "?PRId=" + PRInfo.PRId + "&PRType=Generic");
+                Url.Content(PRInfo.Content));
             var result = Engine.Razor.RunCompile(new LoadedTemplateSource(templateFile), "PRTemplateKey", null, PRInfo);
 
             MailMessage mail = new MailMessage
@@ -276,16 +277,17 @@ namespace KUBOnlinePRPM.Controllers
                               }).FirstOrDefault();
 
                 string templateFile = System.IO.File.ReadAllText(HttpContext.Server.MapPath("~/Views/Shared/POEmailTemplate.cshtml"));
-                POInfo.Content = PR.FullName + " has issue new Purchase Order. Please refer the details as below: ";
+                string Username = db.Users.First(m => m.userId == item.UserId).userName;
+                POInfo.Content = "~/Home/Index?Username=" + Username + "&POId=" + POInfo.POId + "&PRType=Generic";
                 POInfo.FromName = PR.FullName;
                 POInfo.BackLink = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority,
-                    Url.Content("~/PO/ViewPODetails") + "?POId=" + POInfo.POId + "&POType=Generic");
+                    Url.Content(POInfo.Content));
                 var result = Engine.Razor.RunCompile(new LoadedTemplateSource(templateFile), "POTemplateKey", null, POInfo);
 
                 MailMessage mail = new MailMessage
                 {
                     From = new MailAddress("info@kubtel.com"),
-                    Subject = "[PR Online]  A new PO to be created - " + POInfo.PONo,
+                    Subject = "[PR Online] " + POMessage + " for - " + POInfo.PONo,
                     Body = result,
                     IsBodyHtml = true
                 };
