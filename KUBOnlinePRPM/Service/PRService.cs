@@ -166,22 +166,10 @@ namespace KUBOnlinePRPM.Service
                                  {
                                      firstName = u.firstName,
                                      lastName = u.lastName,
-                                     userId = u.userId,
-                                     superiorId = u.superiorId
+                                     userId = u.userId
                                     
                                  }).ToList();
 
-
-                foreach (var r in requestor)
-                {
-                    if (r.superiorId != null) {
-                        var superior = _db.Users.Find(r.superiorId);
-
-                        r.superiorFirstName = superior.firstName;
-                        r.superiorLastName = superior.lastName;
-                    }
-                    
-                }
 
                 records.Members.Add(new SubsidiaryLevel()
                 {

@@ -64,7 +64,7 @@ namespace KUBOnlinePRPM.Controllers.Admin
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "uuid,userId,companyId,createByUserId,createDate,modifiedByUserId,modifiedDate,userName,password,passwordReset,passwordModifiedDate,reminderQueryQuestion,reminderQueryAnswer,emailAddress,firstName,lastName,employeeNo,jobTitle,loginDate,loginLatLng,loginAddress,lastLoginDate,lastFailedLoginDate,failedLoginAttempts,lockout,lockoutDate,status,telephoneNo,address,extensionNo,superiorId")] User user)
+        public async Task<ActionResult> Create([Bind(Include = "uuid,userId,companyId,createByUserId,createDate,modifiedByUserId,modifiedDate,userName,password,passwordReset,passwordModifiedDate,reminderQueryQuestion,reminderQueryAnswer,emailAddress,firstName,lastName,employeeNo,jobTitle,loginDate,loginLatLng,loginAddress,lastLoginDate,lastFailedLoginDate,failedLoginAttempts,lockout,lockoutDate,status,telephoneNo,address,extensionNo")] User user)
         {
             if (ModelState.IsValid)
             {
@@ -92,7 +92,7 @@ namespace KUBOnlinePRPM.Controllers.Admin
                 return HttpNotFound();
             }
             ViewBag.companyId = new SelectList(db.Customers, "custId", "name", user.companyId);
-            ViewBag.superiorId = new SelectList(db.Users, "userId", "firstName", user.superiorId);
+            
             ViewBag.roleList = db.Roles.Select(x => new UserRoleViewModel{ roleId = x.roleId , roleName = x.name});
             return View(user);
         }
@@ -102,7 +102,7 @@ namespace KUBOnlinePRPM.Controllers.Admin
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "uuid,userId,companyId,createByUserId,createDate,modifiedByUserId,modifiedDate,userName,password,passwordReset,passwordModifiedDate,reminderQueryQuestion,reminderQueryAnswer,emailAddress,firstName,lastName,employeeNo,jobTitle,loginDate,loginLatLng,loginAddress,lastLoginDate,lastFailedLoginDate,failedLoginAttempts,lockout,lockoutDate,status,telephoneNo,address,extensionNo,superiorId")] User user)
+        public async Task<ActionResult> Edit([Bind(Include = "uuid,userId,companyId,createByUserId,createDate,modifiedByUserId,modifiedDate,userName,password,passwordReset,passwordModifiedDate,reminderQueryQuestion,reminderQueryAnswer,emailAddress,firstName,lastName,employeeNo,jobTitle,loginDate,loginLatLng,loginAddress,lastLoginDate,lastFailedLoginDate,failedLoginAttempts,lockout,lockoutDate,status,telephoneNo,address,extensionNo")] User user)
         {
             if (ModelState.IsValid)
             {
