@@ -36,6 +36,7 @@ namespace KUBOnlinePRPM.Models
         public string jobNo { get; set; }
         public string jobTaskNo { get; set; }
         public Nullable<System.DateTime> plannedReceiptDate { get; set; }
+        public Nullable<decimal> sst { get; set; }
     
         public virtual FixedAsset FixedAsset { get; set; }
         public virtual GL GL { get; set; }

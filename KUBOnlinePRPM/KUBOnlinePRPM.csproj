@@ -270,7 +270,13 @@
     <Compile Include="Models\PR_Recommender.cs">
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PR_RecommenderII.cs">
+    <Compile Include="Models\PR_RecommenderCFO.cs">
+      <DependentUpon>KUBOnlinePR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PR_RecommenderCOO.cs">
+      <DependentUpon>KUBOnlinePR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PR_RecommenderHOC.cs">
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PR_Reviewer.cs">
@@ -480,6 +486,9 @@
     <Content Include="Assets\datatables\images\sort_both.png" />
     <Content Include="Assets\datatables\images\sort_desc.png" />
     <Content Include="Assets\datatables\images\sort_desc_disabled.png" />
+    <Content Include="Assets\datatables\js\buttons.flash.js" />
+    <Content Include="Assets\datatables\js\buttons.html5.js" />
+    <Content Include="Assets\datatables\js\buttons.print.js" />
     <Content Include="Assets\datatables\js\dataTables.bootstrap.js" />
     <Content Include="Assets\datatables\js\dataTables.bootstrap.min.js" />
     <Content Include="Assets\datatables\js\dataTables.bootstrap4.js" />

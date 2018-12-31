@@ -96,9 +96,16 @@
         <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Items_ItemType" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PO_Item_PR_Items" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Items_PurchaseRequisition" />
-        <EntityTypeShape EntityType="KUBOnlinePRModel.PR_RecommenderII" Width="1.5" PointX="18.75" PointY="39.75" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_RecommenderII_PurchaseRequisition" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_RecommenderII_User" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PRs_FileUpload_Project" />
+        <EntityTypeShape EntityType="KUBOnlinePRModel.PR_RecommenderCFO" Width="1.5" PointX="12.75" PointY="32.125" />
+        <EntityTypeShape EntityType="KUBOnlinePRModel.PR_RecommenderCOO" Width="1.5" PointX="18.75" PointY="36.125" />
+        <EntityTypeShape EntityType="KUBOnlinePRModel.PR_RecommenderHOC" Width="1.5" PointX="15.75" PointY="47.125" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_RecommenderCFO_PurchaseRequisition" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_RecommenderCFO_User" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_RecommenderCOO_PurchaseRequisition" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_RecommenderCOO_User" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_RecommenderII_PurchaseRequisition1" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_RecommenderII_User1" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

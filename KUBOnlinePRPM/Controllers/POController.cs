@@ -584,6 +584,7 @@ namespace KUBOnlinePRPM.Controllers
                 {
                     PRModel.UserId = UserId;
                     PRModel.FullName = Session["FullName"].ToString();
+                    PRModel.CustId = updatePR.CustId;
                     PRModel.NewPRForm.PRNo = updatePR.PRNo;
                     PRModel.NewPRForm.Scenario = updatePR.Scenario;
                     SendEmailPONotification(PRModel, "IssuePO");
@@ -665,6 +666,7 @@ namespace KUBOnlinePRPM.Controllers
                     PRModel.FullName = Session["FullName"].ToString();
                     PRModel.PRId = updatePO.PRId.Value;
                     PRModel.UserId = UserId;
+                    PRModel.CustId = updatePO.CustId;
                     PRModel.NewPRForm = new NewPRModel();
                     PRModel.NewPRForm.Scenario = getScenario;
                     SendEmailPONotification(PRModel, "ConfirmPO");

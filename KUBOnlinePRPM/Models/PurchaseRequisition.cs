@@ -26,7 +26,9 @@ namespace KUBOnlinePRPM.Models
             this.PRs_FileUpload = new HashSet<PRs_FileUpload>();
             this.PurchaseOrders = new HashSet<PurchaseOrder>();
             this.PR_Items = new HashSet<PR_Items>();
-            this.PR_RecommenderII = new HashSet<PR_RecommenderII>();
+            this.PR_RecommenderCFO = new HashSet<PR_RecommenderCFO>();
+            this.PR_RecommenderCOO = new HashSet<PR_RecommenderCOO>();
+            this.PR_RecommenderHOC = new HashSet<PR_RecommenderHOC>();
         }
     
         public System.Guid uuid { get; set; }
@@ -65,6 +67,7 @@ namespace KUBOnlinePRPM.Models
         public string StatusId { get; set; }
         public int Scenario { get; set; }
         public bool Budgeted { get; set; }
+        public string VendorCompanyId { get; set; }
     
         public virtual Customer Customer { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -92,6 +95,10 @@ namespace KUBOnlinePRPM.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_Items> PR_Items { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PR_RecommenderII> PR_RecommenderII { get; set; }
+        public virtual ICollection<PR_RecommenderCFO> PR_RecommenderCFO { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PR_RecommenderCOO> PR_RecommenderCOO { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PR_RecommenderHOC> PR_RecommenderHOC { get; set; }
     }
 }

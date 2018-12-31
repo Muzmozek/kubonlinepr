@@ -15,6 +15,7 @@ namespace KUBOnlinePRPM.Models
         public List<RoleList> RoleIdList { get; set; }
         public string Type { get; set; }
         public int CustId { get; set; }
+        public int PRCustId { get; set; }
         public int PRId { get; set; }
         public int MsgId { get; set; }
         public bool Done { get; set; }
@@ -69,6 +70,7 @@ namespace KUBOnlinePRPM.Models
         public int? VendorId { get; set; }
         public int? VendorStaffId { get; set; }
         public string CompanyName { get; set; }
+        public string VendorCompanyId { get; set; }
         public string VendorName { get; set; }
         public string VendorEmail { get; set; }
         public string VendorContactName { get; set; }
@@ -170,6 +172,7 @@ namespace KUBOnlinePRPM.Models
         public int? JobNoId { get; set; }
         public string JobTaskNo { get; set; }
         public string JobTaskNoId { get; set; }
+        public decimal? SST { get; set; }
     }
     public class RoleList
     {

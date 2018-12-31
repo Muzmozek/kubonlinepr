@@ -57,6 +57,8 @@ namespace KUBOnlinePRPM.Models
         public virtual DbSet<PurchaseRequisition> PurchaseRequisitions { get; set; }
         public virtual DbSet<MessageList> MessageLists { get; set; }
         public virtual DbSet<PR_Items> PR_Items { get; set; }
-        public virtual DbSet<PR_RecommenderII> PR_RecommenderII { get; set; }
+        public virtual DbSet<PR_RecommenderCFO> PR_RecommenderCFO { get; set; }
+        public virtual DbSet<PR_RecommenderCOO> PR_RecommenderCOO { get; set; }
+        public virtual DbSet<PR_RecommenderHOC> PR_RecommenderHOC { get; set; }
     }
 }

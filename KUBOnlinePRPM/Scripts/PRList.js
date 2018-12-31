@@ -1,7 +1,10 @@
 ﻿$(document).ready(function () {
     PRListTable = $('#PRListTable').DataTable({
         serverSide: false,
-        //dom: 'frtiS',
+        dom: '<"btn-FloatLeft"l><"btn-FloatRight"B><"btn-FloatRight"f>tip',
+buttons: [
+            'csv', 'excel', 'pdf', 'print'
+        ],
         processing: true,
         paging: true,
         deferRender: true,

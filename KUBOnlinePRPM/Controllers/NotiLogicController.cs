@@ -222,8 +222,32 @@ namespace KUBOnlinePRPM.Controllers
                                                  FullName = n.firstName + " " + n.lastName,
                                                  EmailAddress = n.emailAddress
                                              }).FirstOrDefault();
+                var getRecommenderIIDetails = new UserModel();
+                if (PR.CustId != 2)
+                {
+                    getRecommenderIIDetails = (from m in db.PR_RecommenderHOC
+                                                    join n in db.Users on m.recommenderId equals n.userId
+                                                    where m.PRId == PR.PRId
+                                                    select new UserModel()
+                                                    {
+                                                        UserId = n.userId,
+                                                        FullName = n.firstName + " " + n.lastName,
+                                                        EmailAddress = n.emailAddress
+                                                    }).FirstOrDefault();
+                    sentEmailList.Add(getRecommenderIIDetails);
+                } 
 
-                var getRecommenderIIDetails = (from m in db.PR_RecommenderII
+                var getRecommenderIIIDetails = (from m in db.PR_RecommenderCOO
+                                               join n in db.Users on m.recommenderId equals n.userId
+                                               where m.PRId == PR.PRId
+                                               select new UserModel()
+                                               {
+                                                   UserId = n.userId,
+                                                   FullName = n.firstName + " " + n.lastName,
+                                                   EmailAddress = n.emailAddress
+                                               }).FirstOrDefault();
+
+                var getRecommenderIVDetails = (from m in db.PR_RecommenderCFO
                                                join n in db.Users on m.recommenderId equals n.userId
                                                where m.PRId == PR.PRId
                                                select new UserModel()
@@ -234,8 +258,15 @@ namespace KUBOnlinePRPM.Controllers
                                                }).FirstOrDefault();
 
                 sentEmailList.Add(getRecommenderDetails);
-                sentEmailList.Add(getRecommenderIIDetails);
-                NotiMessage = PR.FullName + " has send email notification for " + POMessage + " for PRNo : " + PR.NewPRForm.PRNo + " to " + getRequestorDetails.FullName + " (Requestor), " + getHODDetails.FullName + " (HOD), " + getRecommenderDetails.FullName + " (Recommender), " + getRecommenderIIDetails.FullName + " (RecommenderII), " + getReviewerDetails.FullName + " (Reviewer), " + getHOCDetails.FullName + " (Approver).";
+                sentEmailList.Add(getRecommenderIIIDetails);
+                sentEmailList.Add(getRecommenderIVDetails);
+
+                if (PR.CustId != 2)
+                {
+                    NotiMessage = PR.FullName + " has send email notification for " + POMessage + " for PRNo : " + PR.NewPRForm.PRNo + " to " + getRequestorDetails.FullName + " (Requestor), " + getHODDetails.FullName + " (HOD), " + getRecommenderDetails.FullName + " (Recommender), " + getRecommenderIIDetails.FullName + " (HOC), " + getRecommenderIIIDetails.FullName + " (COO), " + getRecommenderIVDetails.FullName + " (CFO), " + getReviewerDetails.FullName + " (Reviewer), " + getHOCDetails.FullName + " (Approver).";
+                } else {
+                    NotiMessage = PR.FullName + " has send email notification for " + POMessage + " for PRNo : " + PR.NewPRForm.PRNo + " to " + getRequestorDetails.FullName + " (Requestor), " + getHODDetails.FullName + " (HOD), " + getRecommenderDetails.FullName + " (Recommender), " + getRecommenderIIIDetails.FullName + " (COO), " + getRecommenderIVDetails.FullName + " (CFO), " + getReviewerDetails.FullName + " (Reviewer), " + getHOCDetails.FullName + " (Approver).";
+                }               
             }
 
             NotificationMsg _objSendMessage = new NotificationMsg

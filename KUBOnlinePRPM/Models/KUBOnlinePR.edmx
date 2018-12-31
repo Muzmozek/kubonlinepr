@@ -211,6 +211,7 @@
           <Property Name="jobNo" Type="nvarchar" MaxLength="30" />
           <Property Name="jobTaskNo" Type="nvarchar" MaxLength="30" />
           <Property Name="plannedReceiptDate" Type="datetime" />
+          <Property Name="sst" Type="numeric" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="PR_PaperApprover">
           <Key>
@@ -233,7 +234,29 @@
           <Property Name="recommendedDate" Type="datetime" />
           <Property Name="lastRecommendedDate" Type="datetime" />
         </EntityType>
-        <EntityType Name="PR_RecommenderII">
+        <EntityType Name="PR_RecommenderCFO">
+          <Key>
+            <PropertyRef Name="uuid" />
+          </Key>
+          <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="recommenderId" Type="int" Nullable="false" />
+          <Property Name="PRId" Type="int" Nullable="false" />
+          <Property Name="recommended" Type="int" Nullable="false" />
+          <Property Name="recommendedDate" Type="datetime" />
+          <Property Name="lastRecommendedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="PR_RecommenderCOO">
+          <Key>
+            <PropertyRef Name="uuid" />
+          </Key>
+          <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="recommenderId" Type="int" Nullable="false" />
+          <Property Name="PRId" Type="int" Nullable="false" />
+          <Property Name="recommended" Type="int" Nullable="false" />
+          <Property Name="recommendedDate" Type="datetime" />
+          <Property Name="lastRecommendedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="PR_RecommenderHOC">
           <Key>
             <PropertyRef Name="uuid" />
           </Key>
@@ -277,6 +300,7 @@
           <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="fileEntryId" Type="int" Nullable="false" />
           <Property Name="PRId" Type="int" Nullable="false" />
+          <Property Name="ProjectId" Type="int" />
         </EntityType>
         <EntityType Name="PRStatus">
           <Key>
@@ -322,8 +346,8 @@
           <Property Name="PRNo" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="ProjectId" Type="int" Nullable="false" />
           <Property Name="Budgeted" Type="bit" Nullable="false" />
-          <Property Name="PaperRefNo" Type="nvarchar" MaxLength="30" />
-          <Property Name="BidWaiverRefNo" Type="nvarchar" MaxLength="30" />
+          <Property Name="PaperRefNo" Type="nvarchar" MaxLength="1000" />
+          <Property Name="BidWaiverRefNo" Type="nvarchar" MaxLength="1000" />
           <Property Name="PaperAttachment" Type="bit" Nullable="false" />
           <Property Name="PurchaseTypeId" Type="int" Nullable="false" />
           <Property Name="BudgetDescription" Type="nvarchar" MaxLength="100" />
@@ -331,6 +355,7 @@
           <Property Name="AmountRequired" Type="numeric" Precision="18" Scale="2" Nullable="false" />
           <Property Name="VendorId" Type="int" />
           <Property Name="VendorStaffId" Type="int" />
+          <Property Name="VendorCompanyId" Type="nvarchar" MaxLength="30" />
           <Property Name="VendorQuoteNo" Type="nvarchar" MaxLength="30" />
           <Property Name="SpecsReviewer" Type="nvarchar" MaxLength="25" />
           <Property Name="PreparedDate" Type="datetime" Nullable="false" />
@@ -341,7 +366,7 @@
           <Property Name="SubmitDate" Type="datetime" />
           <Property Name="LastSubmitedDate" Type="datetime" />
           <Property Name="Rejected" Type="int" Nullable="false" />
-          <Property Name="RejectedRemark" Type="nvarchar" MaxLength="300" />
+          <Property Name="RejectedRemark" Type="nvarchar" MaxLength="500" />
           <Property Name="RejectedById" Type="int" />
           <Property Name="RejectedDate" Type="datetime" />
           <Property Name="Phase1Completed" Type="bit" Nullable="false" />
@@ -460,7 +485,7 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.MessageList' does not have a prima
             <PropertyRef Name="message" />
           </Key>
           <Property Name="fromUserId" Type="int" />
-          <Property Name="FromUserName" Type="nvarchar" MaxLength="151" />
+          <Property Name="FromUserName" Type="nvarchar" MaxLength="75" />
           <Property Name="msgId" Type="int" Nullable="false" />
           <Property Name="msgDate" Type="datetime" Nullable="false" />
           <Property Name="PRId" Type="int" />
@@ -869,26 +894,74 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PR_RecommenderII_PurchaseRequisition">
+        <Association Name="FK_PR_RecommenderCFO_PurchaseRequisition">
           <End Role="PurchaseRequisition" Type="Self.PurchaseRequisition" Multiplicity="1" />
-          <End Role="PR_RecommenderII" Type="Self.PR_RecommenderII" Multiplicity="*" />
+          <End Role="PR_RecommenderCFO" Type="Self.PR_RecommenderCFO" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PurchaseRequisition">
               <PropertyRef Name="PRId" />
             </Principal>
-            <Dependent Role="PR_RecommenderII">
+            <Dependent Role="PR_RecommenderCFO">
+              <PropertyRef Name="PRId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_RecommenderCFO_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="PR_RecommenderCFO" Type="Self.PR_RecommenderCFO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="PR_RecommenderCFO">
+              <PropertyRef Name="recommenderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_RecommenderCOO_PurchaseRequisition">
+          <End Role="PurchaseRequisition" Type="Self.PurchaseRequisition" Multiplicity="1" />
+          <End Role="PR_RecommenderCOO" Type="Self.PR_RecommenderCOO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseRequisition">
+              <PropertyRef Name="PRId" />
+            </Principal>
+            <Dependent Role="PR_RecommenderCOO">
+              <PropertyRef Name="PRId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_RecommenderCOO_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="PR_RecommenderCOO" Type="Self.PR_RecommenderCOO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="PR_RecommenderCOO">
+              <PropertyRef Name="recommenderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_RecommenderII_PurchaseRequisition">
+          <End Role="PurchaseRequisition" Type="Self.PurchaseRequisition" Multiplicity="1" />
+          <End Role="PR_RecommenderHOC" Type="Self.PR_RecommenderHOC" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseRequisition">
+              <PropertyRef Name="PRId" />
+            </Principal>
+            <Dependent Role="PR_RecommenderHOC">
               <PropertyRef Name="PRId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_PR_RecommenderII_User">
           <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="PR_RecommenderII" Type="Self.PR_RecommenderII" Multiplicity="*" />
+          <End Role="PR_RecommenderHOC" Type="Self.PR_RecommenderHOC" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="userId" />
             </Principal>
-            <Dependent Role="PR_RecommenderII">
+            <Dependent Role="PR_RecommenderHOC">
               <PropertyRef Name="recommenderId" />
             </Dependent>
           </ReferentialConstraint>
@@ -938,6 +1011,18 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
             </Principal>
             <Dependent Role="PRs_FileUpload">
               <PropertyRef Name="fileEntryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PRs_FileUpload_Project">
+          <End Role="Project" Type="Self.Project" Multiplicity="0..1" />
+          <End Role="PRs_FileUpload" Type="Self.PRs_FileUpload" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="projectId" />
+            </Principal>
+            <Dependent Role="PRs_FileUpload">
+              <PropertyRef Name="ProjectId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1224,7 +1309,9 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <EntitySet Name="PR_Items" EntityType="Self.PR_Items" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PR_PaperApprover" EntityType="Self.PR_PaperApprover" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PR_Recommender" EntityType="Self.PR_Recommender" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="PR_RecommenderII" EntityType="Self.PR_RecommenderII" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PR_RecommenderCFO" EntityType="Self.PR_RecommenderCFO" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PR_RecommenderCOO" EntityType="Self.PR_RecommenderCOO" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PR_RecommenderHOC" EntityType="Self.PR_RecommenderHOC" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PR_Reviewer" EntityType="Self.PR_Reviewer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Project" EntityType="Self.Project" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PRs_FileUpload" EntityType="Self.PRs_FileUpload" Schema="dbo" store:Type="Tables" />
@@ -1388,13 +1475,29 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
             <End Role="User" EntitySet="User" />
             <End Role="PR_Recommender" EntitySet="PR_Recommender" />
           </AssociationSet>
+          <AssociationSet Name="FK_PR_RecommenderCFO_PurchaseRequisition" Association="Self.FK_PR_RecommenderCFO_PurchaseRequisition">
+            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisition" />
+            <End Role="PR_RecommenderCFO" EntitySet="PR_RecommenderCFO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_RecommenderCFO_User" Association="Self.FK_PR_RecommenderCFO_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="PR_RecommenderCFO" EntitySet="PR_RecommenderCFO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_RecommenderCOO_PurchaseRequisition" Association="Self.FK_PR_RecommenderCOO_PurchaseRequisition">
+            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisition" />
+            <End Role="PR_RecommenderCOO" EntitySet="PR_RecommenderCOO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_RecommenderCOO_User" Association="Self.FK_PR_RecommenderCOO_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="PR_RecommenderCOO" EntitySet="PR_RecommenderCOO" />
+          </AssociationSet>
           <AssociationSet Name="FK_PR_RecommenderII_PurchaseRequisition" Association="Self.FK_PR_RecommenderII_PurchaseRequisition">
             <End Role="PurchaseRequisition" EntitySet="PurchaseRequisition" />
-            <End Role="PR_RecommenderII" EntitySet="PR_RecommenderII" />
+            <End Role="PR_RecommenderHOC" EntitySet="PR_RecommenderHOC" />
           </AssociationSet>
           <AssociationSet Name="FK_PR_RecommenderII_User" Association="Self.FK_PR_RecommenderII_User">
             <End Role="User" EntitySet="User" />
-            <End Role="PR_RecommenderII" EntitySet="PR_RecommenderII" />
+            <End Role="PR_RecommenderHOC" EntitySet="PR_RecommenderHOC" />
           </AssociationSet>
           <AssociationSet Name="FK_PR_Reviewer_PurchaseRequisition" Association="Self.FK_PR_Reviewer_PurchaseRequisition">
             <End Role="PurchaseRequisition" EntitySet="PurchaseRequisition" />
@@ -1410,6 +1513,10 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           </AssociationSet>
           <AssociationSet Name="FK_PRs_FileUpload_FileUpload" Association="Self.FK_PRs_FileUpload_FileUpload">
             <End Role="FileUpload" EntitySet="FileUpload" />
+            <End Role="PRs_FileUpload" EntitySet="PRs_FileUpload" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PRs_FileUpload_Project" Association="Self.FK_PRs_FileUpload_Project">
+            <End Role="Project" EntitySet="Project" />
             <End Role="PRs_FileUpload" EntitySet="PRs_FileUpload" />
           </AssociationSet>
           <AssociationSet Name="FK_PRs_FileUpload_PurchaseRequisition" Association="Self.FK_PRs_FileUpload_PurchaseRequisition">
@@ -1568,6 +1675,7 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <NavigationProperty Name="Customer" Relationship="KUBOnlinePRModel.FK_Project_Customer" FromRole="Project" ToRole="Customer" />
           <NavigationProperty Name="PurchaseOrders" Relationship="KUBOnlinePRModel.FK_PurchaseOrder_Project" FromRole="Project" ToRole="PurchaseOrder" />
           <NavigationProperty Name="PurchaseRequisitions" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_Project" FromRole="Project" ToRole="PurchaseRequisition" />
+          <NavigationProperty Name="PRs_FileUpload" Relationship="KUBOnlinePRModel.FK_PRs_FileUpload_Project" FromRole="Project" ToRole="PRs_FileUpload" />
         </EntityType>
         <EntityType Name="PRs_FileUpload">
           <Key>
@@ -1578,6 +1686,8 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <Property Name="PRId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="FileUpload" Relationship="Self.FK_PRs_FileUpload_FileUpload" FromRole="PRs_FileUpload" ToRole="FileUpload" />
           <NavigationProperty Name="PurchaseRequisition" Relationship="KUBOnlinePRModel.FK_PRs_FileUpload_PurchaseRequisition" FromRole="PRs_FileUpload" ToRole="PurchaseRequisition" />
+          <Property Name="ProjectId" Type="Int32" />
+          <NavigationProperty Name="Project" Relationship="KUBOnlinePRModel.FK_PRs_FileUpload_Project" FromRole="PRs_FileUpload" ToRole="Project" />
         </EntityType>
         <EntityType Name="PRStatu">
           <Key>
@@ -1662,8 +1772,10 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <NavigationProperty Name="PR_PaperApprover" Relationship="KUBOnlinePRModel.FK_PR_PaperApprover_User" FromRole="User" ToRole="PR_PaperApprover" />
           <NavigationProperty Name="FixedAssets" Relationship="KUBOnlinePRModel.FK_ItemCodes_User1" FromRole="User" ToRole="FixedAsset" />
           <NavigationProperty Name="PurchaseRequisitions" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_User" FromRole="User" ToRole="PurchaseRequisition" />
-          <NavigationProperty Name="PR_RecommenderII" Relationship="KUBOnlinePRModel.FK_PR_RecommenderII_User" FromRole="User" ToRole="PR_RecommenderII" />
           <Property Name="department" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PR_RecommenderCFO" Relationship="KUBOnlinePRModel.FK_PR_RecommenderCFO_User" FromRole="User" ToRole="PR_RecommenderCFO" />
+          <NavigationProperty Name="PR_RecommenderCOO" Relationship="KUBOnlinePRModel.FK_PR_RecommenderCOO_User" FromRole="User" ToRole="PR_RecommenderCOO" />
+          <NavigationProperty Name="PR_RecommenderHOC" Relationship="KUBOnlinePRModel.FK_PR_RecommenderII_User1" FromRole="User" ToRole="PR_RecommenderHOC" />
         </EntityType>
         <EntityType Name="Users_Roles">
           <Key>
@@ -2132,14 +2244,36 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
             <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
             <End Role="PR_Items" EntitySet="PR_Items" />
           </AssociationSet>
-          <EntitySet Name="PR_RecommenderII" EntityType="KUBOnlinePRModel.PR_RecommenderII" />
-          <AssociationSet Name="FK_PR_RecommenderII_PurchaseRequisition" Association="KUBOnlinePRModel.FK_PR_RecommenderII_PurchaseRequisition">
-            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
-            <End Role="PR_RecommenderII" EntitySet="PR_RecommenderII" />
+          <AssociationSet Name="FK_PRs_FileUpload_Project" Association="KUBOnlinePRModel.FK_PRs_FileUpload_Project">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="PRs_FileUpload" EntitySet="PRs_FileUpload" />
           </AssociationSet>
-          <AssociationSet Name="FK_PR_RecommenderII_User" Association="KUBOnlinePRModel.FK_PR_RecommenderII_User">
+          <EntitySet Name="PR_RecommenderCFO" EntityType="KUBOnlinePRModel.PR_RecommenderCFO" />
+          <EntitySet Name="PR_RecommenderCOO" EntityType="KUBOnlinePRModel.PR_RecommenderCOO" />
+          <EntitySet Name="PR_RecommenderHOC" EntityType="KUBOnlinePRModel.PR_RecommenderHOC" />
+          <AssociationSet Name="FK_PR_RecommenderCFO_PurchaseRequisition" Association="KUBOnlinePRModel.FK_PR_RecommenderCFO_PurchaseRequisition">
+            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
+            <End Role="PR_RecommenderCFO" EntitySet="PR_RecommenderCFO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_RecommenderCFO_User" Association="KUBOnlinePRModel.FK_PR_RecommenderCFO_User">
             <End Role="User" EntitySet="Users" />
-            <End Role="PR_RecommenderII" EntitySet="PR_RecommenderII" />
+            <End Role="PR_RecommenderCFO" EntitySet="PR_RecommenderCFO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_RecommenderCOO_PurchaseRequisition" Association="KUBOnlinePRModel.FK_PR_RecommenderCOO_PurchaseRequisition">
+            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
+            <End Role="PR_RecommenderCOO" EntitySet="PR_RecommenderCOO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_RecommenderCOO_User" Association="KUBOnlinePRModel.FK_PR_RecommenderCOO_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="PR_RecommenderCOO" EntitySet="PR_RecommenderCOO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_RecommenderII_PurchaseRequisition1" Association="KUBOnlinePRModel.FK_PR_RecommenderII_PurchaseRequisition1">
+            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
+            <End Role="PR_RecommenderHOC" EntitySet="PR_RecommenderHOC" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_RecommenderII_User1" Association="KUBOnlinePRModel.FK_PR_RecommenderII_User1">
+            <End Role="User" EntitySet="Users" />
+            <End Role="PR_RecommenderHOC" EntitySet="PR_RecommenderHOC" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="ItemType">
@@ -2732,8 +2866,8 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <Property Name="CustId" Type="Int32" Nullable="false" />
           <Property Name="PRNo" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="ProjectId" Type="Int32" Nullable="false" />
-          <Property Name="PaperRefNo" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="BidWaiverRefNo" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="PaperRefNo" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="BidWaiverRefNo" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="PaperAttachment" Type="Boolean" Nullable="false" />
           <Property Name="PurchaseTypeId" Type="Int32" Nullable="false" />
           <Property Name="BudgetDescription" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
@@ -2751,7 +2885,7 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <Property Name="SubmitDate" Type="DateTime" Precision="3" />
           <Property Name="LastSubmitedDate" Type="DateTime" Precision="3" />
           <Property Name="Rejected" Type="Int32" Nullable="false" />
-          <Property Name="RejectedRemark" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="RejectedRemark" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="RejectedById" Type="Int32" />
           <Property Name="RejectedDate" Type="DateTime" Precision="3" />
           <Property Name="Phase1Completed" Type="Boolean" Nullable="false" />
@@ -2779,7 +2913,10 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <Property Name="Scenario" Type="Int32" Nullable="false" />
           <Property Name="Budgeted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="PR_Items" Relationship="KUBOnlinePRModel.FK_PR_Items_PurchaseRequisition" FromRole="PurchaseRequisition" ToRole="PR_Items" />
-          <NavigationProperty Name="PR_RecommenderII" Relationship="KUBOnlinePRModel.FK_PR_RecommenderII_PurchaseRequisition" FromRole="PurchaseRequisition" ToRole="PR_RecommenderII" />
+          <Property Name="VendorCompanyId" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PR_RecommenderCFO" Relationship="KUBOnlinePRModel.FK_PR_RecommenderCFO_PurchaseRequisition" FromRole="PurchaseRequisition" ToRole="PR_RecommenderCFO" />
+          <NavigationProperty Name="PR_RecommenderCOO" Relationship="KUBOnlinePRModel.FK_PR_RecommenderCOO_PurchaseRequisition" FromRole="PurchaseRequisition" ToRole="PR_RecommenderCOO" />
+          <NavigationProperty Name="PR_RecommenderHOC" Relationship="KUBOnlinePRModel.FK_PR_RecommenderII_PurchaseRequisition1" FromRole="PurchaseRequisition" ToRole="PR_RecommenderHOC" />
         </EntityType>
         <Association Name="FK_PurchaseRequisition_Customer">
           <End Type="KUBOnlinePRModel.Customer" Role="Customer" Multiplicity="1" />
@@ -2968,7 +3105,7 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
             <PropertyRef Name="message" />
           </Key>
           <Property Name="fromUserId" Type="Int32" />
-          <Property Name="FromUserName" Type="String" MaxLength="151" FixedLength="false" Unicode="true" />
+          <Property Name="FromUserName" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
           <Property Name="msgId" Type="Int32" Nullable="false" />
           <Property Name="msgDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="PRId" Type="Int32" />
@@ -3004,6 +3141,7 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <NavigationProperty Name="ItemType" Relationship="KUBOnlinePRModel.FK_PR_Items_ItemType" FromRole="PR_Items" ToRole="ItemType" />
           <NavigationProperty Name="PO_Item" Relationship="KUBOnlinePRModel.FK_PO_Item_PR_Items" FromRole="PR_Items" ToRole="PO_Item" />
           <NavigationProperty Name="PurchaseRequisition" Relationship="KUBOnlinePRModel.FK_PR_Items_PurchaseRequisition" FromRole="PR_Items" ToRole="PurchaseRequisition" />
+          <Property Name="sst" Type="Decimal" Precision="18" Scale="2" />
         </EntityType>
         <Association Name="FK_PR_Items_ItemCode">
           <End Type="KUBOnlinePRModel.FixedAsset" Role="FixedAsset" Multiplicity="0..1" />
@@ -3077,7 +3215,19 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="PR_RecommenderII">
+        <Association Name="FK_PRs_FileUpload_Project">
+          <End Type="KUBOnlinePRModel.Project" Role="Project" Multiplicity="0..1" />
+          <End Type="KUBOnlinePRModel.PRs_FileUpload" Role="PRs_FileUpload" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="projectId" />
+            </Principal>
+            <Dependent Role="PRs_FileUpload">
+              <PropertyRef Name="ProjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PR_RecommenderCFO">
           <Key>
             <PropertyRef Name="uuid" />
           </Key>
@@ -3087,29 +3237,103 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <Property Name="recommended" Type="Int32" Nullable="false" />
           <Property Name="recommendedDate" Type="DateTime" Precision="3" />
           <Property Name="lastRecommendedDate" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="PurchaseRequisition" Relationship="KUBOnlinePRModel.FK_PR_RecommenderII_PurchaseRequisition" FromRole="PR_RecommenderII" ToRole="PurchaseRequisition" />
-          <NavigationProperty Name="User" Relationship="KUBOnlinePRModel.FK_PR_RecommenderII_User" FromRole="PR_RecommenderII" ToRole="User" />
+          <NavigationProperty Name="PurchaseRequisition" Relationship="KUBOnlinePRModel.FK_PR_RecommenderCFO_PurchaseRequisition" FromRole="PR_RecommenderCFO" ToRole="PurchaseRequisition" />
+          <NavigationProperty Name="User" Relationship="KUBOnlinePRModel.FK_PR_RecommenderCFO_User" FromRole="PR_RecommenderCFO" ToRole="User" />
         </EntityType>
-        <Association Name="FK_PR_RecommenderII_PurchaseRequisition">
+        <EntityType Name="PR_RecommenderCOO">
+          <Key>
+            <PropertyRef Name="uuid" />
+          </Key>
+          <Property Name="uuid" Type="Guid" Nullable="false" />
+          <Property Name="recommenderId" Type="Int32" Nullable="false" />
+          <Property Name="PRId" Type="Int32" Nullable="false" />
+          <Property Name="recommended" Type="Int32" Nullable="false" />
+          <Property Name="recommendedDate" Type="DateTime" Precision="3" />
+          <Property Name="lastRecommendedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="PurchaseRequisition" Relationship="KUBOnlinePRModel.FK_PR_RecommenderCOO_PurchaseRequisition" FromRole="PR_RecommenderCOO" ToRole="PurchaseRequisition" />
+          <NavigationProperty Name="User" Relationship="KUBOnlinePRModel.FK_PR_RecommenderCOO_User" FromRole="PR_RecommenderCOO" ToRole="User" />
+        </EntityType>
+        <EntityType Name="PR_RecommenderHOC">
+          <Key>
+            <PropertyRef Name="uuid" />
+          </Key>
+          <Property Name="uuid" Type="Guid" Nullable="false" />
+          <Property Name="recommenderId" Type="Int32" Nullable="false" />
+          <Property Name="PRId" Type="Int32" Nullable="false" />
+          <Property Name="recommended" Type="Int32" Nullable="false" />
+          <Property Name="recommendedDate" Type="DateTime" Precision="3" />
+          <Property Name="lastRecommendedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="PurchaseRequisition" Relationship="KUBOnlinePRModel.FK_PR_RecommenderII_PurchaseRequisition1" FromRole="PR_RecommenderHOC" ToRole="PurchaseRequisition" />
+          <NavigationProperty Name="User" Relationship="KUBOnlinePRModel.FK_PR_RecommenderII_User1" FromRole="PR_RecommenderHOC" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_PR_RecommenderCFO_PurchaseRequisition">
           <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="1" />
-          <End Type="KUBOnlinePRModel.PR_RecommenderII" Role="PR_RecommenderII" Multiplicity="*" />
+          <End Type="KUBOnlinePRModel.PR_RecommenderCFO" Role="PR_RecommenderCFO" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PurchaseRequisition">
               <PropertyRef Name="PRId" />
             </Principal>
-            <Dependent Role="PR_RecommenderII">
+            <Dependent Role="PR_RecommenderCFO">
               <PropertyRef Name="PRId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PR_RecommenderII_User">
+        <Association Name="FK_PR_RecommenderCFO_User">
           <End Type="KUBOnlinePRModel.User" Role="User" Multiplicity="1" />
-          <End Type="KUBOnlinePRModel.PR_RecommenderII" Role="PR_RecommenderII" Multiplicity="*" />
+          <End Type="KUBOnlinePRModel.PR_RecommenderCFO" Role="PR_RecommenderCFO" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="userId" />
             </Principal>
-            <Dependent Role="PR_RecommenderII">
+            <Dependent Role="PR_RecommenderCFO">
+              <PropertyRef Name="recommenderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_RecommenderCOO_PurchaseRequisition">
+          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.PR_RecommenderCOO" Role="PR_RecommenderCOO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseRequisition">
+              <PropertyRef Name="PRId" />
+            </Principal>
+            <Dependent Role="PR_RecommenderCOO">
+              <PropertyRef Name="PRId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_RecommenderCOO_User">
+          <End Type="KUBOnlinePRModel.User" Role="User" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.PR_RecommenderCOO" Role="PR_RecommenderCOO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="PR_RecommenderCOO">
+              <PropertyRef Name="recommenderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_RecommenderII_PurchaseRequisition1">
+          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.PR_RecommenderHOC" Role="PR_RecommenderHOC" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseRequisition">
+              <PropertyRef Name="PRId" />
+            </Principal>
+            <Dependent Role="PR_RecommenderHOC">
+              <PropertyRef Name="PRId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_RecommenderII_User1">
+          <End Type="KUBOnlinePRModel.User" Role="User" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.PR_RecommenderHOC" Role="PR_RecommenderHOC" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="PR_RecommenderHOC">
               <PropertyRef Name="recommenderId" />
             </Dependent>
           </ReferentialConstraint>
@@ -3174,6 +3398,7 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <EntitySetMapping Name="PRs_FileUpload">
             <EntityTypeMapping TypeName="KUBOnlinePRModel.PRs_FileUpload">
               <MappingFragment StoreEntitySet="PRs_FileUpload">
+                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
                 <ScalarProperty Name="uuid" ColumnName="uuid" />
                 <ScalarProperty Name="fileEntryId" ColumnName="fileEntryId" />
                 <ScalarProperty Name="PRId" ColumnName="PRId" />
@@ -3535,6 +3760,7 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <EntitySetMapping Name="PurchaseRequisitions">
             <EntityTypeMapping TypeName="KUBOnlinePRModel.PurchaseRequisition">
               <MappingFragment StoreEntitySet="PurchaseRequisition">
+                <ScalarProperty Name="VendorCompanyId" ColumnName="VendorCompanyId" />
                 <ScalarProperty Name="Budgeted" ColumnName="Budgeted" />
                 <ScalarProperty Name="Scenario" ColumnName="Scenario" />
                 <ScalarProperty Name="StatusId" ColumnName="StatusId" />
@@ -3593,6 +3819,7 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <EntitySetMapping Name="PR_Items">
             <EntityTypeMapping TypeName="KUBOnlinePRModel.PR_Items">
               <MappingFragment StoreEntitySet="PR_Items">
+                <ScalarProperty Name="sst" ColumnName="sst" />
                 <ScalarProperty Name="plannedReceiptDate" ColumnName="plannedReceiptDate" />
                 <ScalarProperty Name="jobTaskNo" ColumnName="jobTaskNo" />
                 <ScalarProperty Name="jobNo" ColumnName="jobNo" />
@@ -3612,9 +3839,33 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="PR_RecommenderII">
-            <EntityTypeMapping TypeName="KUBOnlinePRModel.PR_RecommenderII">
-              <MappingFragment StoreEntitySet="PR_RecommenderII">
+          <EntitySetMapping Name="PR_RecommenderCFO">
+            <EntityTypeMapping TypeName="KUBOnlinePRModel.PR_RecommenderCFO">
+              <MappingFragment StoreEntitySet="PR_RecommenderCFO">
+                <ScalarProperty Name="lastRecommendedDate" ColumnName="lastRecommendedDate" />
+                <ScalarProperty Name="recommendedDate" ColumnName="recommendedDate" />
+                <ScalarProperty Name="recommended" ColumnName="recommended" />
+                <ScalarProperty Name="PRId" ColumnName="PRId" />
+                <ScalarProperty Name="recommenderId" ColumnName="recommenderId" />
+                <ScalarProperty Name="uuid" ColumnName="uuid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PR_RecommenderCOO">
+            <EntityTypeMapping TypeName="KUBOnlinePRModel.PR_RecommenderCOO">
+              <MappingFragment StoreEntitySet="PR_RecommenderCOO">
+                <ScalarProperty Name="lastRecommendedDate" ColumnName="lastRecommendedDate" />
+                <ScalarProperty Name="recommendedDate" ColumnName="recommendedDate" />
+                <ScalarProperty Name="recommended" ColumnName="recommended" />
+                <ScalarProperty Name="PRId" ColumnName="PRId" />
+                <ScalarProperty Name="recommenderId" ColumnName="recommenderId" />
+                <ScalarProperty Name="uuid" ColumnName="uuid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PR_RecommenderHOC">
+            <EntityTypeMapping TypeName="KUBOnlinePRModel.PR_RecommenderHOC">
+              <MappingFragment StoreEntitySet="PR_RecommenderHOC">
                 <ScalarProperty Name="lastRecommendedDate" ColumnName="lastRecommendedDate" />
                 <ScalarProperty Name="recommendedDate" ColumnName="recommendedDate" />
                 <ScalarProperty Name="recommended" ColumnName="recommended" />

@@ -24,23 +24,6 @@
             }
         });
     }
-        //$.ajax({
-        //    url: UrlGetProjectInfo,
-        //    method: 'GET',
-        //    data: { projectId: $("#ProjectName").val() },
-        //    success: function (resp) {
-        //        if (resp.projectInfo.PaperVerified === false) {
-        //            $("#PaperRefNo").prop("readonly", false);
-        //            $("#BidWaiverRefNo").prop("readonly", false);
-        //            $(".attachment").removeClass("d-none");
-        //        } else {
-        //            $("#PaperRefNo").prop("readonly", true);
-        //            $("#BidWaiverRefNo").prop("readonly", true);
-        //            $(".attachment").addClass("d-none");
-        //        }
-        //    }
-        //});
-    //}
     
     $(document).on("click", ".saveSubmitProcDetail", function (e) {
         e.preventDefault();
@@ -69,6 +52,7 @@
                 ItemsId = $(PRItemTable.row(i).data()[0]).val();
             }
             var unitPrice = $(input).find("input[name='UnitPrice']").val(); var totalPrice = $(input).find("input[name='TotalPrice']").val();
+            var SST = $(input).find("input[name='SST']").val();
             var ItemTypeId = $(input).find(".TypeId option:selected").val();           
             if (ItemTypeId === "") {
                 alert("Please insert item type in PR items table before save/submit.");
@@ -92,6 +76,8 @@
                 JobNo = null;
             if (JobTaskNo === "Select job task no here")
                 JobTaskNo = null;
+            if (SST === undefined)
+                SST = "";
             fd.append("NewPRForm.PRItemListObject[" + i + "].ItemsId", ItemsId);
             fd.append("NewPRForm.PRItemListObject[" + i + "].DateRequired", $(input).find("input[name='DateRequired']").val());
             fd.append("NewPRForm.PRItemListObject[" + i + "].ItemTypeId", ItemTypeId);
@@ -103,7 +89,8 @@
             fd.append("NewPRForm.PRItemListObject[" + i + "].JobNo", JobNo);
             fd.append("NewPRForm.PRItemListObject[" + i + "].JobTaskNo", JobTaskNo);
             fd.append("NewPRForm.PRItemListObject[" + i + "].UnitPrice", unitPrice);
-            fd.append("NewPRForm.PRItemListObject[" + i + "].TotalPrice", totalPrice);
+            fd.append("NewPRForm.PRItemListObject[" + i + "].SST", SST);
+            fd.append("NewPRForm.PRItemListObject[" + i + "].TotalPrice", totalPrice);           
         });
 
         if (kill === false) {
@@ -258,6 +245,38 @@
             });
 
     });
+
+    $("#ApprovePreparedJointRecommendedII").click(function (e) {
+
+        e.preventDefault();
+        $.post(UrlApprovePreparedJointRecommendedII, {
+
+            PRId: PRId
+
+        }, function (resp) {
+            alert(resp);
+            $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab');
+            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
+            generatePRItemTable();
+        });
+
+    });
+
+    $("#ApprovePreparedJointRecommendedIII").click(function (e) {
+
+        e.preventDefault();
+        $.post(UrlApprovePreparedJointRecommendedIII, {
+
+            PRId: PRId
+
+        }, function (resp) {
+            alert(resp);
+            $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab');
+            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
+            generatePRItemTable();
+        });
+
+    });
   
     //phase 1 reviewer approver approval logic
     $(document).on("click", ".approveRejectDetail", function (e) {
@@ -393,15 +412,38 @@
     });
 
     $(document).on("change", ".UnitPrice", function () {
-        //var UnitPrice = $(this).parent().parent().find("input[name='UnitPrice']").val();
-        var Quantity = $(this).parent().parent().parent().find("input[name='Quantity']").val();
-        var TotalPrice = $(this).val() * Quantity;
+        var UnitPrice = $(this).val();
+        var Quantity = $("#" + $(this).parent().parent().parent().find("input[name='Quantity']")[0].id).val();
+        var SST = $("#" + $(this).parent().parent().parent().find("input[name='SST']")[0].id).val();
+        if (SST === "") {
+            SST = 0;
+        }
+        var TotalPrice = parseInt(UnitPrice) * parseInt(Quantity) + parseInt(SST);
         var AmountRequired = 0;
-        $(this).parent().parent().parent().find("input[name='TotalPrice']").val(TotalPrice);
+        $("#" + $(this).parent().parent().parent().find("input[name='TotalPrice']")[0].id).val(TotalPrice);
         for (var i = 0; i < $(".TotalPrice").length; i++) {
             if ($(".TotalPrice")[i].value !== "") {
                 AmountRequired += parseInt($(".TotalPrice")[i].value);
             }            
+        }
+        $("#AmountRequired").val(AmountRequired);
+    });
+
+    $(document).on("change", ".SST", function () {
+        var UnitPrice = $("#" + $(this).parent().parent().find("input[name='UnitPrice']")[0].id).val();
+        var Quantity = $("#" + $(this).parent().parent().parent().find("input[name='Quantity']")[0].id).val();
+        var SST = $(this).val();
+        if (UnitPrice === "") {
+            UnitPrice = 0;
+        }
+        var TotalPrice = parseInt(UnitPrice) * parseInt(Quantity) + parseInt(SST);
+        var AmountRequired = 0;
+        $("#" + $(this).parent().parent().find("input[name='TotalPrice']")[0].id).val(TotalPrice);
+        //$(this).parent().parent().parent().find("input[name='TotalPrice']").val(TotalPrice);
+        for (var i = 0; i < $(".TotalPrice").length; i++) {
+            if ($(".TotalPrice")[i].value !== "") {
+                AmountRequired += parseInt($(".TotalPrice")[i].value);
+            }
         }
         $("#AmountRequired").val(AmountRequired);
     });

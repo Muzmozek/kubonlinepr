@@ -17,8 +17,10 @@ namespace KUBOnlinePRPM.Models
         public System.Guid uuid { get; set; }
         public int fileEntryId { get; set; }
         public int PRId { get; set; }
+        public Nullable<int> ProjectId { get; set; }
     
         public virtual FileUpload FileUpload { get; set; }
         public virtual PurchaseRequisition PurchaseRequisition { get; set; }
+        public virtual Project Project { get; set; }
     }
 }
