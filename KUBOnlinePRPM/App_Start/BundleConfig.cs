@@ -13,7 +13,8 @@ namespace KUBOnlinePRPM
                         "~/Assets/jquery-migrate/jquery-migrate.min.js",
                         "~/Assets/popper.min.js",
                         "~/Assets/bootstrap/bootstrap.js",
-                        //"~/Assets/jquery-validate/jquery.validate.unobtrusive.js",
+                        "~/Assets/jquery-validate/jquery.validate.js",
+                        "~/Assets/jquery-validate/jquery.validate.unobtrusive.js",
                         "~/Assets/cookiejs/jquery.cookie.js"
                         ));
 
@@ -68,6 +69,9 @@ namespace KUBOnlinePRPM
                         "~/Assets/datatables/js/responsive.bootstrap4.js",
                         "~/Assets/datatables/js/dataTables.select.js",
                         "~/Assets/datatables/js/dataTables.buttons.js",
+                        "~/Assets/datatables/js/jszip.js",
+                        "~/Assets/datatables/js/pdfmake.js",
+                        "~/Assets/datatables/js/vfs_fonts.js",
                         "~/Assets/datatables/js/buttons.flash.js",
                         "~/Assets/datatables/js/buttons.html5.js",
                         "~/Assets/datatables/js/buttons.print.js",

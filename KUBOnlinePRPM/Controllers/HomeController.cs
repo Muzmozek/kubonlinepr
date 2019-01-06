@@ -214,6 +214,7 @@ namespace KUBOnlinePRPM.Controllers
                 {
                     uuid = Guid.NewGuid(),
                     message = "Username " + model.Username + " failed to login to the Online PR system on " + DateTime.Now,
+                    msgType = "Trail",
                     msgDate = DateTime.Now
                 };
                 db.NotificationMsgs.Add(userAuditTrail);

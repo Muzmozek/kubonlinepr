@@ -25,7 +25,14 @@
     <tbody>
         <tr>
             <td>@Html.ActionLink(@Model.SuperAdmin.firstName, "Edit", "UsersAdmin", new { id = @Model.SuperAdmin.userId }, new { target = "_blank" })</td>
-            <td>@Html.ActionLink(@Model.HeadOfGPSS.firstName, "Edit", "UsersAdmin", new { id = @Model.HeadOfGPSS.userId }, new { target = "_blank" })</td>
+            @if (Model.HeadOfGPSS != null)
+            {
+                <td>@Html.ActionLink(@Model.HeadOfGPSS.firstName, "Edit", "UsersAdmin", new { id = @Model.HeadOfGPSS.userId }, new { target = "_blank" })</td>
+            }
+            else
+            {
+                <td></td>
+            }
         </tr>
     </tbody>
 

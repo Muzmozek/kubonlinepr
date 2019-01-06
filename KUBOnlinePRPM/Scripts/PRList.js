@@ -3,7 +3,7 @@
         serverSide: false,
         dom: '<"btn-FloatLeft"l><"btn-FloatRight"B><"btn-FloatRight"f>tip',
 buttons: [
-            'csv', 'excel', 'pdf', 'print'
+            'csv', 'excelHtml5', 'pdf', 'print'
         ],
         processing: true,
         paging: true,

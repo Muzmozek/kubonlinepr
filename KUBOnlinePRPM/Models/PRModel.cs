@@ -11,6 +11,7 @@ namespace KUBOnlinePRPM.Models
     public class PRModel
     {
         public int UserId { get; set; }
+        public string UserName { get; set; }
         public string FullName { get; set; }
         public List<RoleList> RoleIdList { get; set; }
         public string Type { get; set; }
@@ -23,6 +24,8 @@ namespace KUBOnlinePRPM.Models
         public HttpPostedFileBase PaperRefNoFile { get; set; }
         public string PaperRefNoFileName { get; set; }
         public HttpPostedFileBase BidWaiverRefNoFile { get; set; }
+        public HttpPostedFileBase UploadFile { get; set; }
+        public string FileDescription { get; set; }
         public string BidWaiverRefNoFileName { get; set; }
         public List<NotiListTable> NotiListObject { get; set; }
         public List<PRListTable> PRListObject { get; set; }
@@ -97,7 +100,7 @@ namespace KUBOnlinePRPM.Models
         public DateTime RecommendDateII { get; set; }
         public int AdminId { get; set; }
         public string AdminName { get; set; }
-        public string SpecReviewer { get; set; }
+        public string SpecReviewerId { get; set; }
         public bool SelectSave { get; set; }
         public int Saved { get; set; }
         public bool SelectSubmit { get; set; }
@@ -136,6 +139,7 @@ namespace KUBOnlinePRPM.Models
         public string PRNo { get; set; }
         public DateTime PRDate { get; set; }
         public string RequestorName { get; set; }
+        public string CompanyName { get; set; }
         public string VendorCompany { get; set; }
         public decimal? AmountRequired { get; set; }
         public int PRAging { get; set; }
@@ -145,6 +149,7 @@ namespace KUBOnlinePRPM.Models
     {
         public int CustId { get; set; }
         public int ItemsId { get; set; }
+        public string ItemType { get; set; }
         public int? ItemTypeId { get; set; }
         public int PRId { get; set; }
 
@@ -171,7 +176,7 @@ namespace KUBOnlinePRPM.Models
         public string JobNo { get; set; }
         public int? JobNoId { get; set; }
         public string JobTaskNo { get; set; }
-        public string JobTaskNoId { get; set; }
+        public int? JobTaskNoId { get; set; }
         public decimal? SST { get; set; }
     }
     public class RoleList

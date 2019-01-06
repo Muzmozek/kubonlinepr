@@ -50,15 +50,16 @@ namespace KUBOnlinePRPM.Models
         public virtual DbSet<FixedAsset> FixedAssets { get; set; }
         public virtual DbSet<GL> GLs { get; set; }
         public virtual DbSet<Item> Items { get; set; }
-        public virtual DbSet<JobTask> JobTasks { get; set; }
         public virtual DbSet<PopulateItemList> PopulateItemLists { get; set; }
         public virtual DbSet<PaymentTerm> PaymentTerms { get; set; }
         public virtual DbSet<PurchaseOrder> PurchaseOrders { get; set; }
-        public virtual DbSet<PurchaseRequisition> PurchaseRequisitions { get; set; }
         public virtual DbSet<MessageList> MessageLists { get; set; }
-        public virtual DbSet<PR_Items> PR_Items { get; set; }
         public virtual DbSet<PR_RecommenderCFO> PR_RecommenderCFO { get; set; }
         public virtual DbSet<PR_RecommenderCOO> PR_RecommenderCOO { get; set; }
         public virtual DbSet<PR_RecommenderHOC> PR_RecommenderHOC { get; set; }
+        public virtual DbSet<Group> Groups { get; set; }
+        public virtual DbSet<PurchaseRequisition> PurchaseRequisitions { get; set; }
+        public virtual DbSet<PR_Items> PR_Items { get; set; }
+        public virtual DbSet<JobTask> JobTasks { get; set; }
     }
 }

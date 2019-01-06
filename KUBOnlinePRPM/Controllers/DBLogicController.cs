@@ -11,6 +11,12 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity.Validation;
+using Excel = Microsoft.Office.Interop.Excel;
+using System.Reflection;
+using System.Data.Entity.Core.EntityClient;
+using System.Data.Entity.Core.Objects;
+using System.Data.Common;
+using System.IO;
 
 namespace KUBOnlinePRPM.Controllers
 {
@@ -90,6 +96,13 @@ namespace KUBOnlinePRPM.Controllers
                     db.SaveChanges();
                 }
 
+                if ((model.PaperRefNoFile != null && model.NewPRForm.PaperRefNo != null) || (model.BidWaiverRefNoFile != null && model.NewPRForm.BidWaiverRefNo != null))
+                {
+                    generatePRNo.PaperAttachment = true;
+                    generatePRNo.BidWaiverRefNo = model.NewPRForm.BidWaiverRefNo;
+                    generatePRNo.PaperRefNo = model.NewPRForm.PaperRefNo;
+                }
+
                 if (model.NewPRForm.SelectSave == true)
                 {
                     generateMsg.uuid = Guid.NewGuid();
@@ -104,13 +117,7 @@ namespace KUBOnlinePRPM.Controllers
                 {
                     generatePRNo.Submited = generatePRNo.Submited + 1;
                     generatePRNo.SubmitDate = DateTime.Now;
-                    generatePRNo.PRAging = model.NewPRForm.PRAging;
-                    if ((model.PaperRefNoFile != null && model.NewPRForm.PaperRefNo != null) || (model.BidWaiverRefNoFile != null && model.NewPRForm.BidWaiverRefNo != null))
-                    {
-                        generatePRNo.PaperAttachment = true;
-                        generatePRNo.BidWaiverRefNo = model.NewPRForm.BidWaiverRefNo;
-                        generatePRNo.PaperRefNo = model.NewPRForm.PaperRefNo;
-                    }
+                    generatePRNo.PRAging = model.NewPRForm.PRAging;                   
                     generatePRNo.StatusId = "PR09";
                     generateMsg.uuid = Guid.NewGuid();
                     generateMsg.message = model.FullName + " has submit new PR  No. " + _objNewPR.PRNo;
@@ -120,10 +127,10 @@ namespace KUBOnlinePRPM.Controllers
                     generateMsg.msgType = "Trail";
                     db.NotificationMsgs.Add(generateMsg);
 
-
                     var getHOD = (from m in db.Users
                                   join n in db.Users_Roles on m.userId equals n.userId
-                                  where n.roleId == "R02" && m.companyId == model.CustId
+                                  join o in db.Users on m.userId equals o.superiorId
+                                  where n.roleId == "R02" && m.companyId == model.CustId && o.userId == model.UserId
                                   select new NewPRModel()
                                   {
                                       HODApproverId = m.userId,
@@ -485,7 +492,8 @@ namespace KUBOnlinePRPM.Controllers
 
                     var getHOD = (from m in db.Users
                                   join n in db.Users_Roles on m.userId equals n.userId
-                                  where n.roleId == "R02" && m.companyId == x.CustId
+                                  join o in db.Users on m.userId equals o.superiorId
+                                  where n.roleId == "R02" && m.companyId == x.CustId && o.userId == x.UserId
                                   select new NewPRModel()
                                   {
                                       HODApproverId = m.userId,
@@ -638,6 +646,7 @@ namespace KUBOnlinePRPM.Controllers
                             message = x.FullName + " create new item from PR No. " + FormerPRDetails.PRNo
                         };
                         db.NotificationMsgs.Add(newPRItem);
+                        db.SaveChanges();
                     }
                     else
                     {
@@ -740,21 +749,9 @@ namespace KUBOnlinePRPM.Controllers
                             };
                             db.NotificationMsgs.Add(_objDetails_Quantity);
                             objPRItemDetails.quantity = value.Quantity;
+                            objPRItemDetails.outStandingQuantity = value.Quantity;
+                            objPRItemDetails.totalPrice = (value.Quantity * value.UnitPrice) + value.SST;
                         }
-                        //if (objPRItemDetails.outStandingQuantity != value.OutstandingQuantity)
-                        //{
-                        //    NotificationMsg _objDetails_OutStandingQuantity = new NotificationMsg
-                        //    {
-                        //        uuid = Guid.NewGuid(),
-                        //        PRId = x.PRId,
-                        //        msgDate = DateTime.Now,
-                        //        fromUserId = x.UserId,
-                        //        msgType = "Trail",
-                        //        message = x.FullName + " change Outstanding Quantity in PRNo : " + FormerPRDetails.PRNo + " items from " + objPRItemDetails.outStandingQuantity + " to " + value.OutstandingQuantity
-                        //    };
-                        //    db.NotificationMsgs.Add(_objDetails_OutStandingQuantity);
-                        //    objPRItemDetails.outStandingQuantity = value.OutstandingQuantity;
-                        //}
                         if (objPRItemDetails.unitPrice != value.UnitPrice)
                         {
                             PR_Items FormerUnitPrice = db.PR_Items.FirstOrDefault(m => m.unitPrice == objPRItemDetails.unitPrice);
@@ -774,34 +771,35 @@ namespace KUBOnlinePRPM.Controllers
                             }
                             db.NotificationMsgs.Add(_objDetails_NotificationMsg);
                             objPRItemDetails.unitPrice = value.UnitPrice;
+                            objPRItemDetails.totalPrice = (value.Quantity * value.UnitPrice) + value.SST;
                         }
-                        if (objPRItemDetails.totalPrice != value.TotalPrice)
-                        {
-                            PR_Items FormerTotalPrice = db.PR_Items.FirstOrDefault(m => m.totalPrice == objPRItemDetails.totalPrice);
-                            NotificationMsg _objDetails_NotificationMsg = new NotificationMsg();
-                            _objDetails_NotificationMsg.uuid = Guid.NewGuid();
-                            _objDetails_NotificationMsg.PRId = x.PRId;
-                            _objDetails_NotificationMsg.msgDate = DateTime.Now;
-                            _objDetails_NotificationMsg.fromUserId = x.UserId;
-                            _objDetails_NotificationMsg.msgType = "Trail";
-                            if (FormerTotalPrice.totalPrice == null)
-                            {
-                                _objDetails_NotificationMsg.message = x.FullName + " set Total PRice to " + value.TotalPrice + " for PRNo L " + FormerPRDetails.PRNo;
-                            }
-                            else
-                            {
-                                _objDetails_NotificationMsg.message = x.FullName + " change Total Price in PRNo : " + FormerPRDetails.PRNo + " items from " + objPRItemDetails.unitPrice + " to " + value.UnitPrice;
-                            }
+                        //if (objPRItemDetails.totalPrice != value.TotalPrice)
+                        //{
+                        //    PR_Items FormerTotalPrice = db.PR_Items.FirstOrDefault(m => m.totalPrice == objPRItemDetails.totalPrice);
+                        //    NotificationMsg _objDetails_NotificationMsg = new NotificationMsg();
+                        //    _objDetails_NotificationMsg.uuid = Guid.NewGuid();
+                        //    _objDetails_NotificationMsg.PRId = x.PRId;
+                        //    _objDetails_NotificationMsg.msgDate = DateTime.Now;
+                        //    _objDetails_NotificationMsg.fromUserId = x.UserId;
+                        //    _objDetails_NotificationMsg.msgType = "Trail";
+                        //    if (FormerTotalPrice.totalPrice == null)
+                        //    {
+                        //        _objDetails_NotificationMsg.message = x.FullName + " set Total PRice to " + value.TotalPrice + " for PRNo L " + FormerPRDetails.PRNo;
+                        //    }
+                        //    else
+                        //    {
+                        //        _objDetails_NotificationMsg.message = x.FullName + " change Total Price in PRNo : " + FormerPRDetails.PRNo + " items from " + objPRItemDetails.unitPrice + " to " + value.UnitPrice;
+                        //    }
 
-                            db.NotificationMsgs.Add(_objDetails_NotificationMsg);
-                            objPRItemDetails.totalPrice = value.TotalPrice;
-                        }
+                        //    db.NotificationMsgs.Add(_objDetails_NotificationMsg);
+                        //    objPRItemDetails.totalPrice = value.TotalPrice;
+                        //}
                         if (x.NewPRForm.StatusId == "PR02")
                         {
                             FormerPRDetails.AmountPOBalance = FormerPRDetails.AmountPOBalance + objPRItemDetails.outStandingQuantity;
                         }
-                    }
-                    db.SaveChanges();
+                        db.SaveChanges();
+                    }                   
                 }
             }
             catch (DbEntityValidationException e)
@@ -1016,6 +1014,250 @@ namespace KUBOnlinePRPM.Controllers
             objPODetails.TotalPrice = TotalPrice;
             db.SaveChanges();
         }
+        public void EntityToNavHeaderExcel(DateTime startDate, DateTime endDate, string ExtractFileLocation)
+        {
+            //try
+            //{
+                Excel.Application oXL;
+                Excel.Workbook oWB;
+                Excel.Worksheet oSheet;
+                Excel.Range oRange;
+                // Start Excel and get Application object.
+                oXL = new Excel.Application();
+
+                // Set some properties
+                oXL.Visible = true;
+                oXL.DisplayAlerts = false;
+
+                // Get a new workbook. 
+                oWB = oXL.Workbooks.Add(Missing.Value);
+
+                // Get the active sheet 
+                oSheet = (Excel.Worksheet)oWB.ActiveSheet;
+                oSheet.Name = "Purchase Header";
+
+                oSheet.Cells[1, 1] = "OPEN PO TRANSACTION";
+                oSheet.Cells[1, 2] = "Purchase Header";
+                oSheet.Cells[1, 3] = "38";
+                DataTable dt = GetPOHeaderTable(startDate, endDate);
+
+                int rowCount = 3;
+                foreach (DataRow dr in dt.Rows)
+                {
+                    rowCount += 1;
+                    for (int i = 1; i < dt.Columns.Count + 1; i++)
+                    {
+                        // Add the header the first time through 
+                        if (rowCount == 4)
+                            oSheet.Cells[3, i] = dt.Columns[i - 1].ColumnName;
+                        oSheet.Cells[rowCount, i] = dr[i - 1].ToString();
+                    }
+                }
+
+                oRange = oSheet.Range[oSheet.Cells[1, 1], oSheet.Cells[rowCount, dt.Columns.Count]];
+                oRange.Columns.AutoFit();
+
+                // Save the sheet and close 
+                oSheet = null;
+                oRange = null;
+
+                ;
+                oWB.SaveAs(Server.MapPath("~/Documents/TestNavHeaderTemplate-" + startDate.ToString("yyyyMMdd") + "to" + endDate.ToString("yyyyMMdd") + "-" + DateTime.Now.ToString("yyyyMMdd") + ".xlsx"), Excel.XlFileFormat.xlOpenXMLWorkbook, Missing.Value,
+                  Missing.Value, false, false,
+                  Excel.XlSaveAsAccessMode.xlNoChange, Excel.XlSaveConflictResolution.xlUserResolution, true, Missing.Value, Missing.Value, Missing.Value);
+
+                //using (MemoryStream ms = new MemoryStream())
+                //{
+                //    using (FileStream fileStream = new FileStream("file.bin", FileMode.Open, FileAccess.Read))
+                //    {
+                //        fileStream.CopyTo(ms);
+                //    }
+                //    //Here you delete the saved file
+                //    File.Delete(fileName);
+                //    ms.Position = 0;
+                //    return File(stream, "attachment;filename=myfile.xls", "myfile.xls");
+                //}
+
+                oWB = null;
+                oXL.Quit();
+
+                
+
+                Excel.Application oXL1;
+                Excel.Workbook oWB1;
+                Excel.Worksheet oSheet1;
+                Excel.Range oRange1;
+
+                oXL1 = new Excel.Application();
+
+                // Set some properties
+                oXL1.Visible = true;
+                oXL1.DisplayAlerts = false;
+
+                // Get a new workbook. 
+                oWB1 = oXL1.Workbooks.Add(Missing.Value);
+
+                // Get the active sheet 
+                oSheet1 = (Excel.Worksheet)oWB1.ActiveSheet;
+                oSheet1.Name = "Purchase Line";
+
+                oSheet1.Cells[1, 1] = "OPEN TRANSACTION";
+                oSheet1.Cells[1, 2] = "Purchase Line";
+                oSheet1.Cells[1, 3] = "39";
+                DataTable dt1 = GetPOLineTable(startDate, endDate);
+
+                int rowCount1 = 3;
+                foreach (DataRow dr in dt1.Rows)
+                {
+                    rowCount1 += 1;
+                    for (int i = 1; i < dt1.Columns.Count + 1; i++)
+                    {
+                        // Add the header the first time through 
+                        if (rowCount1 == 4)
+                            oSheet1.Cells[3, i] = dt1.Columns[i - 1].ColumnName;
+                        oSheet1.Cells[rowCount1, i] = dr[i - 1].ToString();
+                    }
+                }
+
+                oRange1 = oSheet1.Range[oSheet1.Cells[1, 1], oSheet1.Cells[rowCount1, dt1.Columns.Count]];
+                oRange1.Columns.AutoFit();
+
+                // Save the sheet and close 
+                oSheet1 = null;
+                oRange1 = null;
+                oWB1.SaveAs(Server.MapPath("~/Documents/TestNavLinerTemplate-" + startDate.ToString("yyyyMMdd") + "to" + endDate.ToString("yyyyMMdd") + "-" + DateTime.Now.ToString("yyyyMMdd") + ".xlsx"), Excel.XlFileFormat.xlOpenXMLWorkbook, Missing.Value,
+                  Missing.Value, false, false,
+                  Excel.XlSaveAsAccessMode.xlNoChange, Excel.XlSaveConflictResolution.xlUserResolution, true, Missing.Value, Missing.Value, Missing.Value);
+                oWB1.Close(Missing.Value, Missing.Value, Missing.Value);
+                oWB1 = null;
+                oXL1.Quit();
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw ex;
+            //}
+        }
+        public void EntityToNavLineExcel(string excelFilePath, string sheetName, DateTime startDate, DateTime endDate, string Type)
+        {
+
+            try
+            {
+                if (Type == "Header")
+                {
+                    Excel.Application oXL;
+                    Excel.Workbook oWB;
+                    Excel.Worksheet oSheet;
+                    Excel.Range oRange;
+                    // Start Excel and get Application object.
+                    oXL = new Excel.Application();
+
+                    // Set some properties
+                    oXL.Visible = true;
+                    oXL.DisplayAlerts = false;
+
+                    // Get a new workbook. 
+                    oWB = oXL.Workbooks.Add(Missing.Value);
+
+                    // Get the active sheet 
+                    oSheet = (Excel.Worksheet)oWB.ActiveSheet;
+                    oSheet.Name = sheetName;
+
+                    oSheet.Cells[1, 1] = "OPEN PO TRANSACTION";
+                    oSheet.Cells[1, 2] = "Purchase Header";
+                    oSheet.Cells[1, 3] = "38";
+                    DataTable dt = GetPOHeaderTable(startDate, endDate);
+
+                    int rowCount = 3;
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        rowCount += 1;
+                        for (int i = 1; i < dt.Columns.Count + 1; i++)
+                        {
+                            // Add the header the first time through 
+                            if (rowCount == 4)
+                                oSheet.Cells[3, i] = dt.Columns[i - 1].ColumnName;
+                            oSheet.Cells[rowCount, i] = dr[i - 1].ToString();
+                        }
+                    }
+
+                    oRange = oSheet.Range[oSheet.Cells[1, 1], oSheet.Cells[rowCount, dt.Columns.Count]];
+                    oRange.Columns.AutoFit();
+
+                    // Save the sheet and close 
+                    oSheet = null;
+                    oRange = null;
+                    oWB.SaveAs(excelFilePath, Excel.XlFileFormat.xlWorkbookNormal, Missing.Value,
+                      Missing.Value, Missing.Value, Missing.Value,
+                      Excel.XlSaveAsAccessMode.xlExclusive, Missing.Value,
+                      Missing.Value, Missing.Value, Missing.Value);
+                    oWB.Close(Missing.Value, Missing.Value, Missing.Value);
+                    oWB = null;
+                    oXL.Quit();
+                }
+                else
+                {
+                    Excel.Application oXL;
+                    Excel.Workbook oWB;
+                    Excel.Worksheet oSheet;
+                    Excel.Range oRange;
+
+                    oXL = new Excel.Application();
+
+                    // Set some properties
+                    oXL.Visible = true;
+                    oXL.DisplayAlerts = false;
+
+                    // Get a new workbook. 
+                    oWB = oXL.Workbooks.Add(Missing.Value);
+
+                    // Get the active sheet 
+                    oSheet = (Excel.Worksheet)oWB.ActiveSheet;
+                    oSheet.Name = sheetName;
+
+                    oSheet.Cells[1, 1] = "OPEN TRANSACTION";
+                    oSheet.Cells[1, 2] = "Purchase Line";
+                    oSheet.Cells[1, 3] = "39";
+                    DataTable dt1 = GetPOLineTable(startDate, endDate);
+
+                    int rowCount = 3;
+                    foreach (DataRow dr in dt1.Rows)
+                    {
+                        rowCount += 1;
+                        for (int i = 1; i < dt1.Columns.Count + 1; i++)
+                        {
+                            // Add the header the first time through 
+                            if (rowCount == 4)
+                                oSheet.Cells[3, i] = dt1.Columns[i - 1].ColumnName;
+                            oSheet.Cells[rowCount, i] = dr[i - 1].ToString();
+                        }
+                    }
+
+                    oRange = oSheet.Range[oSheet.Cells[1, 1], oSheet.Cells[rowCount, dt1.Columns.Count]];
+                    oRange.Columns.AutoFit();
+
+                    // Save the sheet and close 
+                    oSheet = null;
+                    oRange = null;
+                    oWB.SaveAs(excelFilePath, Excel.XlFileFormat.xlWorkbookNormal, Missing.Value,
+                      Missing.Value, Missing.Value, Missing.Value,
+                      Excel.XlSaveAsAccessMode.xlExclusive, Missing.Value,
+                      Missing.Value, Missing.Value, Missing.Value);
+                    oWB.Close(Missing.Value, Missing.Value, Missing.Value);
+                    oWB = null;
+                    oXL.Quit();
+                }
+
+                // Process the DataTable                
+
+                return;
+                // Resize the columns 
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         //NewPO balnket        
         protected SqlConnection OpenDBConnection()
         {
@@ -1104,6 +1346,155 @@ namespace KUBOnlinePRPM.Controllers
             }).ToList();
 
             return MessageList;
+        }
+        protected DataTable GetPOHeaderTable(DateTime startDate, DateTime endDate)
+        {
+            SqlConnection conn = null;
+            DataTable returnDT = new DataTable("POHeaderTable");
+            string info = "";
+            try
+            {
+                SqlDataAdapter SQLDataADP = new SqlDataAdapter();
+                SQLDataADP.TableMappings.Add("Table", "POHeaderTable");
+                conn = OpenDBConnection();
+                conn.InfoMessage += (object obj, SqlInfoMessageEventArgs e) =>
+                {
+                    info = e.Message.ToString();
+                };
+                string sql = "";
+                sql = "SELECT 'Order'                       AS [Document Type], " +
+                               "m.pono                        AS [No.], " +
+                               "n.vendorno                    AS [Buy-from Vendor No.], " +
+                               "n.vendorno                    AS [Pay-to Vendor No.], " +
+                               "''                            AS [Your Reference], " +
+                               "m.prepareddate                AS [Order Date], " +
+                               "m.submitdate                  AS [Posting Date], " +
+                               "''                            AS [Expected Receipt Date], " +
+                               "Concat ('Order', ' ', m.pono) AS [Posting Description], " +
+                               "o.abbreviation                AS [Location Code], " +
+                               "''                            AS [Shortcut Dimension 1 Code], " +
+                               "''                            AS [Shortcut Dimension 2 Code], " +
+                               "''                            AS [Vendor Posting Group], " +
+                               "''                            AS [Currency Code] " +
+                        "FROM   [KUBOnlinePR].[dbo].[purchaseorder] m " +
+                               "LEFT JOIN vendor n " +
+                                      "ON ( m.paytovendorid = n.vendorid ) " +
+                               "LEFT JOIN customer o " +
+                                      "ON ( m.custid = o.custid ) " +
+                        "WHERE m.SubmitDate between @startDate and @endDate and n.vendorNo IS NOT NULL";
+
+                SqlCommand SQLcmd = new SqlCommand(sql, conn)
+                {
+                    CommandType = CommandType.Text
+                };
+                SQLDataADP.SelectCommand = SQLcmd;
+
+                SQLcmd.Parameters.Add("@startDate", SqlDbType.DateTime);
+                SQLcmd.Parameters["@startDate"].Value = startDate.ToShortDateString();
+                SQLcmd.Parameters.Add("@endDate", SqlDbType.DateTime);
+                SQLcmd.Parameters["@endDate"].Value = endDate.ToShortDateString();
+
+                SQLDataADP.Fill(returnDT);
+            }
+            catch (Exception ex)
+            {
+                Debug.Print("Report - " + ex.Message);
+            }
+            finally
+            {
+                CloseDBConnection(conn);
+            }
+
+            return returnDT;
+        }
+        protected DataTable GetPOLineTable(DateTime startDate, DateTime endDate)
+        {
+            SqlConnection conn = null;
+            DataTable returnDT = new DataTable("POLineTable");
+            string info = "";
+            try
+            {
+                SqlDataAdapter SQLDataADP = new SqlDataAdapter();
+                SQLDataADP.TableMappings.Add("Table", "POLineTable");
+                conn = OpenDBConnection();
+                conn.InfoMessage += (object obj, SqlInfoMessageEventArgs e) =>
+                {
+                    info = e.Message.ToString();
+                };
+                string sql = "";
+                sql = "SELECT 'Order'        AS [Document Type], " +
+                               "m.pono         AS [Document No.], " +
+                               "''             AS [Line No.], " +
+                               "n.vendorno     AS [Buy-from Vendor No.], " +
+                               "q.type         AS [Type], " +
+                               "r.itemcode     AS [No.], " +
+                               "o.abbreviation AS [Location Code], " +
+                               "r.description  AS [Description], " +
+                               "r.uom          AS [Unit of Measure], " +
+                               "p.quantity     AS [Quantity], " +
+                               "p.[unitprice]  AS [Direct Unit Cost], " +
+                               "p.[totalprice] AS [Amount], " +
+                               "u.projectCode AS [Dim-Project], " +
+                               "v.projectcode  AS [Dim-Department] " +
+                        "FROM   [KUBOnlinePR].[dbo].[purchaseorder] m " +
+                               "LEFT JOIN vendor n " +
+                                      "ON ( m.paytovendorid = n.vendorid ) " +
+                               "LEFT JOIN customer o " +
+                                      "ON ( m.custid = o.custid ) " +
+                               "LEFT JOIN po_item p " +
+                                      "ON ( m.poid = p.poid ) " +
+                               "LEFT JOIN itemtype q " +
+                                      "ON ( p.itemtypeid = q.itemtypeid ) " +
+                               "LEFT JOIN populateitemlist r " +
+                                      "ON ( p.itemtypeid = r.itemtypeid " +
+                                           "AND p.codeid = r.codeid ) " +
+                               "LEFT JOIN project u " +
+                                      "ON ( m.projectid = u.projectid and u.dimension = 'PROJECT' ) " +
+                               "LEFT JOIN project v " +
+                                      "ON ( m.projectid = v.projectid and v.dimension = 'DEPARTMENT' ) " +
+                        "WHERE m.SubmitDate between @startDate and @endDate and n.vendorNo IS NOT NULL";
+
+                SqlCommand SQLcmd = new SqlCommand(sql, conn)
+                {
+                    CommandType = CommandType.Text
+                };
+                SQLDataADP.SelectCommand = SQLcmd;
+
+                SQLcmd.Parameters.Add("@startDate", SqlDbType.DateTime);
+                SQLcmd.Parameters["@startDate"].Value = startDate.ToShortDateString();
+                SQLcmd.Parameters.Add("@endDate", SqlDbType.DateTime);
+                SQLcmd.Parameters["@endDate"].Value = endDate.ToShortDateString();
+
+                SQLDataADP.Fill(returnDT);
+
+                string DocNo = ""; int LineNo = 0;
+                foreach (DataRow row in returnDT.Rows)
+                {
+
+                    if (row["Document No."].ToString() != DocNo)
+                    {
+                        row["Line No."] = 10000;
+                        LineNo = 10000;
+                    }
+                    else
+                    {
+                        LineNo = LineNo + 10000;
+                        row["Line No."] = LineNo;
+                    }
+                    DocNo = row["Document No."].ToString();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.Print("Report - " + ex.Message);
+            }
+            finally
+            {
+                CloseDBConnection(conn);
+            }
+
+            return returnDT;
         }
         protected void CloseDBConnection(SqlConnection conn)
         {

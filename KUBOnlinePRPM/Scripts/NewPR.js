@@ -1,34 +1,35 @@
-﻿$(document).on('ready', function () {
-    var j = 1; var k = 0; var PRItemTable;
+﻿var j = 1; var k = 0; var PRItemTable;
 
+function generatePRItemTable() {
+    PRItemTable = $('#PRItemTable').DataTable({
+        serverSide: false,
+        //dom: 'frtiS',
+        processing: true,
+        deferRender: true,
+        ordering: false,
+        paging: false,
+        searching: false,
+        bAutoWidth: false,
+        stateSave: true,
+        columnDefs: [
+            { visible: false, targets: [0] }
+        ],
+        destroy: true,
+        //aaSorting: [12, "desc"],
+        responsive: {
+            breakpoints: [
+                { name: 'desktop', width: 1024 },
+                { name: 'tablet', width: 768 },
+                { name: 'phone', width: 480 }
+            ]
+        }
+    });
+}
+
+$(document).on('ready', function () {
     $.HSCore.components.HSFileAttachment.init('.js-file-attachment');
     $.HSCore.helpers.HSFocusState.init();
     generatePRItemTable();
-
-    function generatePRItemTable() {
-        PRItemTable = $('#PRItemTable').DataTable({
-            serverSide: false,
-            //dom: 'frtiS',
-            processing: true,
-            deferRender: true,
-            ordering: false,
-            paging: false,
-            searching: false,
-            bAutoWidth: false,
-            columnDefs: [
-                { visible: false, targets: [0] }
-            ],
-            destroy: true,
-            //aaSorting: [12, "desc"],
-            responsive: {
-                breakpoints: [
-                    { name: 'desktop', width: 1024 },
-                    { name: 'tablet', width: 768 },
-                    { name: 'phone', width: 480 }
-                ]
-            }
-        });
-    }
     
     $(document).on("click", ".AddPRItem", function (e) {
         e.preventDefault();
@@ -137,8 +138,8 @@
             var unitPrice = $(input).find("input[name='UnitPrice']").val(); var totalPrice = $(input).find("input[name='TotalPrice']").val();
             var ItemTypeId = $(input).find(".TypeId option:selected").val();
             var UoM = $(input).find("input[name='UoM']").val(); var CodeId = $(input).find(".CodeId option:selected").val();
-            var JobNo = $(input).find(".JobNoId option:selected").text();
-            var JobTaskNo = $(input).find(".JobTaskNoId option:selected").text();
+            var JobNoId = $(input).find(".JobNoId option:selected").val();
+            var JobTaskNoId = $(input).find(".JobTaskNoId option:selected").val();
             if (unitPrice === undefined)
                 unitPrice = "";
             if (totalPrice === undefined)
@@ -149,10 +150,10 @@
                 ItemTypeId = "";
             if (CodeId === undefined)
                 CodeId = "";
-            if (JobNo === undefined)
-                JobNo = "";
-            if (JobTaskNo === undefined)
-                JobTaskNo = "";
+            if (JobNoId === undefined)
+                JobNoId = "";
+            if (JobTaskNoId === undefined)
+                JobTaskNoId = "";
 
             fd.append("NewPRForm.PRItemListObject[" + i + "].ItemsId", ItemsId);
             fd.append("NewPRForm.PRItemListObject[" + i + "].DateRequired", $(input).find("input[name='DateRequired']").val());
@@ -162,8 +163,8 @@
             fd.append("NewPRForm.PRItemListObject[" + i + "].CustPONo", $(input).find("input[name='CustPONo']").val());
             fd.append("NewPRForm.PRItemListObject[" + i + "].Quantity", $(input).find("input[name='Quantity']").val());
             fd.append("NewPRForm.PRItemListObject[" + i + "].UOM", UoM);
-            fd.append("NewPRForm.PRItemListObject[" + i + "].JobNo", JobNo);
-            fd.append("NewPRForm.PRItemListObject[" + i + "].JobTaskNo", JobTaskNo);
+            fd.append("NewPRForm.PRItemListObject[" + i + "].JobNoId", JobNoId);
+            fd.append("NewPRForm.PRItemListObject[" + i + "].JobTaskNoId", JobTaskNoId);
             fd.append("NewPRForm.PRItemListObject[" + i + "].UnitPrice", unitPrice);
             fd.append("NewPRForm.PRItemListObject[" + i + "].TotalPrice", totalPrice);
         });
@@ -186,6 +187,7 @@
             cache: false,
             beforeSend: function () {
                 $("body").addClass("loading");
+                PRItemTable.state.save();
             },
             dataType: "json",
             success: function (resp) {
@@ -197,44 +199,29 @@
                         alert("The PR has been saved");
                         window.location = $("#UrlPRTabs").attr('href') + "?type=" + PRType;
                     });
-                } else if (resp.success && resp.Saved) {
+                }
+                else if (resp.success && resp.Saved) {
                     alert("The PR has been saved");
                     $("body").removeClass("loading");
                     $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab');
                     $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
-                } else if (resp.success && resp.Submited) {
+                }
+                else if (resp.success && resp.Submited) {
                         alert("The PR has been submitted");
                         window.location = $("#UrlPRList").attr('href') + "?type=" + PRType;
-                } else if (resp.success === false && resp.exception === true) {
-                    alert("Validation error. Please see the validation messages.");
-                    $('#ContentWrapper').html(resp.view);
-                    $.ajax({
-                        url: UrlGetProjectInfo,
-                        method: 'GET',
-                        data: { projectId: resp.ProjectId },
-                        success: function (resp) {
-                            if (resp.projectInfo.PaperVerified === false) {
-                                $("#PaperRefNo").prop("readonly", false);
-                                $("#BidWaiverRefNo").prop("readonly", false);
-                                $(".attachment").removeClass("d-none");
-                            } else {
-                                $("#PaperRefNo").prop("readonly", true);
-                                $("#BidWaiverRefNo").prop("readonly", true);
-                                $(".attachment").addClass("d-none");
-                            }
-                            //var BudgetedAmount = resp.projectInfo.BudgetedAmount;
-                            //var UtilizedToDate = resp.projectInfo.UtilizedToDate;
-                            //var BudgetBalance = resp.projectInfo.BudgetBalance;
-                            //$("#BudgetedAmount").val(BudgetedAmount);
-                            //$("#UtilizedToDate").val(UtilizedToDate);
-                            //$("#BudgetBalance").val(BudgetBalance);                            
-                        }
-                    });
-                    $.HSCore.helpers.HSFileAttachments.init();
-                    $.HSCore.components.HSFileAttachment.init('.js-file-attachment');
-                    generatePRItemTable();
-                    $("body").removeClass("loading");
                 }
+                else if (resp.success === false) {
+                    windows.location = resp.url;
+                }
+            },
+            error: function (err) {
+                alert("Validation error");
+                $.each(err.responseJSON, function (key, input) {
+                    //$('input[name="' + input.name + '"]').val(input.value);
+                    $('span[data-valmsg-for="' + input.key + '"]').text(input.errors[0]);
+                });
+                
+                $("body").removeClass("loading");
             }
         });
     });

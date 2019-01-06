@@ -19,5 +19,7 @@ namespace KUBOnlinePRPM.Models
         public int custId { get; set; }
         public string UoM { get; set; }
         public string ItemDescription { get; set; }
+        public string ItemCode { get; set; }
+        public string Description { get; set; }
     }
 }

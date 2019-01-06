@@ -33,8 +33,8 @@ namespace KUBOnlinePRPM.Models
         public Nullable<decimal> unitPrice { get; set; }
         public Nullable<decimal> totalPrice { get; set; }
         public string location { get; set; }
-        public string jobNo { get; set; }
-        public string jobTaskNo { get; set; }
+        public Nullable<int> jobNoId { get; set; }
+        public Nullable<int> jobTaskNoId { get; set; }
         public Nullable<System.DateTime> plannedReceiptDate { get; set; }
         public Nullable<decimal> sst { get; set; }
     

@@ -34,9 +34,14 @@
                             <div class="d-flex align-self-center">PR Date</div>
                         </div>
                     </th>
+                    @*<th class="desktop">
+            <div class="media">
+                <div class="d-flex align-self-center">Requestor Name</div>
+            </div>
+        </th>*@
                     <th class="desktop">
                         <div class="media">
-                            <div class="d-flex align-self-center">Requestor Name</div>
+                            <div class="d-flex align-self-center">Company Name</div>
                         </div>
                     </th>
                     <th class="desktop">
@@ -69,7 +74,8 @@
                     <td class="d-none">@Html.DisplayFor(modelItem => item.PRId)</td>
                     <td class="all"><a class="PRDetailsButton btn btn-md u-btn-blue g-mr-5 g-mb-15">@Html.DisplayFor(modelItem => item.PRNo)</a></td>
                     <td class="desktop">@Html.DisplayFor(modelItem => item.PRDate)</td>
-                    <td class="desktop">@Html.DisplayFor(modelItem => item.RequestorName)</td>
+                    <td class="desktop">@Html.DisplayFor(modelItem => item.CompanyName)</td>
+                    @*<td class="desktop">@Html.DisplayFor(modelItem => item.RequestorName)</td>*@
                     <td class="desktop">@Html.DisplayFor(modelItem => item.VendorCompany)</td>
                     <td class="desktop">@Html.DisplayFor(modelItem => item.AmountRequired)</td>
                     <td class="desktop">@Html.DisplayFor(modelItem => item.PRAging)</td>

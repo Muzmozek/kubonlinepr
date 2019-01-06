@@ -16,7 +16,7 @@ namespace KUBOnlinePRPM.Models
         public DateTime PODate { get; set; }
         public string PRNo { get; set; }
         public string PRFlow { get; set; }
-        public string Description { get; set; }
+        public string Messages { get; set; }
         public string PODescription { get; set; }
         public string VendorCompany { get; set; }
         public decimal AmountRequired { get; set; }

@@ -13,6 +13,9 @@ namespace KUBOnlinePRPM.Models
         public string Type { get; set; }
         public int CustId { get; set; }
         public int PRId { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public string ExtractFileLocation { get; set; }
         public List<NotiListTable> NotiListObject { get; set; }
         public List<QuestionAnswerModels> MessageListModel { get; set; }
     }

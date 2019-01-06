@@ -495,6 +495,7 @@ namespace KUBOnlinePRPM.Controllers
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
                 PurchaseRequisition updatePR = db.PurchaseRequisitions.First(m => m.PRId == PRModel.PRId);
+                var updatePRItem = db.PR_Items.ToList<PR_Items>().Where(m => m.PRId == PRModel.PRId);
                 updatePR.StatusId = "PR14";
                 db.SaveChanges();
 
@@ -529,26 +530,26 @@ namespace KUBOnlinePRPM.Controllers
                     db.SaveChanges();
 
                     int TotalQuantity = 0;
-                    foreach (var value in PRModel.NewPRForm.PRItemListObject)
+                    foreach (var value in updatePRItem)
                     {
                         PO_Item _objNewPOItem = new PO_Item
                         {
                             uuid = Guid.NewGuid(),
                             POId = newPO.POId,
-                            itemsId = value.ItemsId,
-                            itemTypeId = value.ItemTypeId,
-                            dateRequired = value.DateRequired,
-                            description = value.Description,
-                            codeId = value.CodeId.Value,
-                            custPONo = value.CustPONo,
-                            quantity = value.Quantity,
-                            unitPrice = value.UnitPrice.Value,
-                            totalPrice = value.TotalPrice.Value
+                            itemsId = value.itemsId,
+                            itemTypeId = value.itemTypeId,
+                            dateRequired = value.dateRequired,
+                            description = value.description,
+                            codeId = value.codeId.Value,
+                            custPONo = value.custPONo,
+                            quantity = value.quantity,
+                            unitPrice = value.unitPrice.Value,
+                            totalPrice = value.totalPrice.Value
                         };
                         db.PO_Item.Add(_objNewPOItem);
                         db.SaveChanges();
 
-                        PR_Items _objUpdatePRItem = db.PR_Items.First(m => m.itemsId == value.ItemsId);
+                        PR_Items _objUpdatePRItem = db.PR_Items.First(m => m.itemsId == value.itemsId);
                         _objUpdatePRItem.outStandingQuantity = _objUpdatePRItem.outStandingQuantity - _objNewPOItem.quantity;
 
                         newPO.POAging = 0;

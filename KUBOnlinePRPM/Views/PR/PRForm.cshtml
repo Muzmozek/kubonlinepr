@@ -142,10 +142,10 @@
             <td class="c4_1" style="width:98px">
                 Date
             </td>
-            <td rowspan="2" colspan="5" class="c11_2">
+            <td rowspan="2" colspan="4" class="c11_2">
                 Description / Specification
             </td>
-            <td rowspan="2" class="c11_2" style="width:65px">
+            <td rowspan="2" class="c11_2" colspan="2">
                 Item code
             </td>
             <td rowspan="2" class="c11_2" style="width:65px">
@@ -169,7 +169,7 @@
                 <br />(RM)
             </td>
             <td class="c11_2" style="width:70px">
-                GST
+                SST
             </td>
             <td class="c11_15" style="width:103px">
                 Amount
@@ -188,17 +188,20 @@
         </tr>
         @for (int i = 0; i < @Model.NewPRForm.PRItemListObject.Count; i++)
         {
-            <tr class="c1_2">
+            decimal? UnitPrice = Model.NewPRForm.PRItemListObject[i].UnitPrice;
+            decimal Quantity = Model.NewPRForm.PRItemListObject[i].Quantity;
+            decimal Total = UnitPrice.Value * Quantity;
+<tr class="c1_2">
                 <td class="c4_1" style="width:98px">@Model.NewPRForm.PRItemListObject[i].DateRequired.ToShortDateString()</td>
-                <td colspan="5" class="c11_3">@Model.NewPRForm.PRItemListObject[i].Description<br /><br />@*@Html.Raw(Html.Encode(item.Remarks).Replace("\r\n", "<br /><br />").Replace("\n", "<br />"))*@</td>
-                <td class="c11_2" style="width:65px">@Model.NewPRForm.PRItemListObject[i].CodeId</td>
-                <td class="c11_2" style="width:65px">@Model.NewPRForm.PRItemListObject[i].CodeId</td>
+                <td colspan="4" class="c11_3">@Model.NewPRForm.PRItemListObject[i].Description<br /><br />@*@Html.Raw(Html.Encode(item.Remarks).Replace("\r\n", "<br /><br />").Replace("\n", "<br />"))*@</td>
+                <td colspan="2" class="c11_2">@Model.NewPRForm.PRItemListObject[i].ItemCode</td>
+                <td class="c11_2" style="width:65px">@*@Model.NewPRForm.PRItemListObject[i].ItemCode*@</td>
                 <td class="c11_2" style="width:78px">@Model.NewPRForm.PRItemListObject[i].CustPONo</td>
                 <td class="c11_2" style="width:75px">@Model.NewPRForm.PRItemListObject[i].Quantity</td>
                 <td class="c11_2" style="width:44px">@Model.NewPRForm.PRItemListObject[i].UOM</td>
                 <td class="c11_2" style="width:88px">@Convert.ToDecimal(Model.NewPRForm.PRItemListObject[i].UnitPrice).ToString("#,##0.00")</td>
-                <td class="c11_2" style="width:97px">@Convert.ToDecimal(Model.NewPRForm.PRItemListObject[i].TotalPrice).ToString("#,##0.00")</td>
-                <td class="c11_2" style="width:70px">@*@item.GST*@</td>
+                <td class="c11_2" style="width:97px">@Total</td>
+                <td class="c11_2" style="width:70px">@Convert.ToDecimal(Model.NewPRForm.PRItemListObject[i].SST).ToString("#,##0.00")</td>
                 <td class="c11_15" style="width:103px">@Convert.ToDecimal(Model.NewPRForm.PRItemListObject[i].TotalPrice).ToString("#,##0.00")</td>
             </tr>
         }
@@ -208,8 +211,8 @@
             {
                 <tr class="c1_2">
                     <td class="c4_1" style="width:98px"></td>
-                    <td colspan="5" class="c11_3"><br /><br />@*@Html.Raw(Html.Encode(item.Remarks).Replace("\r\n", "<br /><br />").Replace("\n", "<br />"))*@</td>
-                    <td class="c11_2" style="width:65px"></td>
+                    <td colspan="4" class="c11_3"><br /><br />@*@Html.Raw(Html.Encode(item.Remarks).Replace("\r\n", "<br /><br />").Replace("\n", "<br />"))*@</td>
+                    <td colspan="2" class="c11_2"></td>
                     <td class="c11_2" style="width:65px"></td>
                     <td class="c11_2" style="width:78px"></td>
                     <td class="c11_2" style="width:75px"></td>
@@ -453,7 +456,14 @@
                 <img src="@Context.Server.MapPath("~/Images/signature.png")" width="66" height="50" />
             </td>
             <td class="td2" style="height:40px; border-right:1px solid black;">
-                <img src="@Context.Server.MapPath("~/Images/signature.png")" width="66" height="50" />
+                @if (Model.NewPRForm.Scenario == 1 && Model.NewPRForm.ReviewerName == null)
+                {
+
+                }
+                else
+                {
+                    <img src="@Context.Server.MapPath("~/Images/signature.png")" width="66" height="50" />
+                }
             </td>
         </tr>
         <tr>
@@ -473,7 +483,14 @@
             <td class="td2" style="border-bottom: 1px solid black; padding-bottom:10px;">Date: @Model.NewPRForm.HODApprovedDate1.ToShortDateString()</td>
             @if (Model.NewPRForm.Scenario == 1)
             {
-                <td class="td2" style="border-right: 1px solid black; padding-bottom:10px; border-bottom: 1px solid black">Date: @Model.NewPRForm.ReviewedDate.ToShortDateString()</td>
+                if (Model.NewPRForm.ReviewerName != null)
+                {
+                    <td class="td2" style="border-right: 1px solid black; padding-bottom:10px; border-bottom: 1px solid black">Date: @Model.NewPRForm.ReviewedDate.ToShortDateString()</td>
+                }
+                else
+                {
+                    <td class="td2" style="border-right: 1px solid black; padding-bottom:10px; border-bottom: 1px solid black">Date:</td>
+                }
             }
             else
             {

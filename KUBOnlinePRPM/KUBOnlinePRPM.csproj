@@ -91,6 +91,9 @@
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -191,6 +194,9 @@
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GL.cs">
+      <DependentUpon>KUBOnlinePR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Group.cs">
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Item.cs">
@@ -510,8 +516,11 @@
     <Content Include="Assets\datatables\js\jquery.dataTables.js" />
     <Content Include="Assets\datatables\js\jquery.dataTables.min.js" />
     <Content Include="Assets\datatables\js\jquery.js" />
+    <Content Include="Assets\datatables\js\jszip.js" />
+    <Content Include="Assets\datatables\js\pdfmake.js" />
     <Content Include="Assets\datatables\js\responsive.bootstrap4.js" />
     <Content Include="Assets\datatables\js\semantic.js" />
+    <Content Include="Assets\datatables\js\vfs_fonts.js" />
     <Content Include="Assets\fancybox\jquery.fancybox.css" />
     <Content Include="Assets\fancybox\jquery.fancybox.js" />
     <Content Include="Assets\fancybox\jquery.fancybox.min.css" />
@@ -5633,8 +5642,11 @@
     <Content Include="Views\UsersAdmin\Heirarchy.cshtml" />
     <Content Include="Views\Shared\PREmailTemplate.cshtml" />
     <Content Include="Views\Shared\POEmailTemplate.cshtml" />
+    <Content Include="Scripts\ExcelGenerator.js" />
+    <Content Include="Views\Shared\MessageEmailTemplate.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Documents\" />
     <Folder Include="Views\NotiLogic\" />
   </ItemGroup>
   <ItemGroup>

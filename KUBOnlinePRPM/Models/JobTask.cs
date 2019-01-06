@@ -15,6 +15,7 @@ namespace KUBOnlinePRPM.Models
     public partial class JobTask
     {
         public System.Guid uuid { get; set; }
+        public int jobTaskNoId { get; set; }
         public string jobNo { get; set; }
         public string jobTaskNo { get; set; }
         public int custId { get; set; }

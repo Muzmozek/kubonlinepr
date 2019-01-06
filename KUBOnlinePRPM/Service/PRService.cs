@@ -35,7 +35,7 @@ namespace KUBOnlinePRPM.Service
 
         public bool CheckAmountScenarioThree(decimal amount)
         {
-            if (amount >= 50001 && amount <= 300000)
+            if (amount >= 50001)
                 return true;
 
             return false;
@@ -66,15 +66,16 @@ namespace KUBOnlinePRPM.Service
 
 
             var HOGPSS = (from u in _db.Users
-                          join ur in _db.Users_Roles on u.userId equals ur.userId
-                          join r in _db.Roles on ur.roleId equals r.roleId
+                          join ur in _db.Users_Roles on u.userId equals ur.userId into s                          
+                          from t in s.DefaultIfEmpty()
+                          join r in _db.Roles on t.roleId equals r.roleId
                           where r.name == "HOGPSS"
                           select new UserViewModel
                           {
                               firstName = u.firstName,
                               lastName = u.lastName,
                               userId = u.userId
-                          }).First();
+                          }).FirstOrDefault();
 
             records.HeadOfGPSS = HOGPSS;
 
