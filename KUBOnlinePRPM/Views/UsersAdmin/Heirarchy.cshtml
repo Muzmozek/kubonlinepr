@@ -24,10 +24,10 @@
     </thead>
     <tbody>
         <tr>
-            <td>@Html.ActionLink(@Model.SuperAdmin.firstName, "Edit", "UsersAdmin", new { id = @Model.SuperAdmin.userId }, new { target = "_blank" })</td>
+            <td>@Html.ActionLink(@Model.SuperAdmin.firstName + ' ' + @Model.HeadOfGPSS.lastName, "Edit", "UsersAdmin", new { id = @Model.SuperAdmin.userId }, new { target = "_blank" })</td>
             @if (Model.HeadOfGPSS != null)
             {
-                <td>@Html.ActionLink(@Model.HeadOfGPSS.firstName, "Edit", "UsersAdmin", new { id = @Model.HeadOfGPSS.userId }, new { target = "_blank" })</td>
+                <td>@Html.ActionLink(@Model.HeadOfGPSS.firstName + ' ' + @Model.HeadOfGPSS.lastName, "Edit", "UsersAdmin", new { id = @Model.HeadOfGPSS.userId }, new { target = "_blank" })</td>
             }
             else
             {
@@ -67,7 +67,7 @@
                     <ol>
                         @foreach (var x in member.HOCs)
                         {
-                            <li>@Html.ActionLink(@x.firstName, "Edit", "UsersAdmin", new { id = @x.userId }, new { target = "_blank" })</li>
+                            <li>@Html.ActionLink(@x.firstName + ' ' + @x.lastName, "Edit", "UsersAdmin", new { id = @x.userId }, new { target = "_blank" })</li>
                         }
                     </ol>
                 </td>
@@ -91,7 +91,7 @@
                             @foreach (var x in member.ITs)
                             {
                                 <tr>
-                                    <td>@Html.ActionLink(@x.firstName, "Edit", "UsersAdmin", new { id = @x.userId }, new { target = "_blank" })</td>
+                                    <td>@Html.ActionLink(@x.firstName + ' ' + @x.lastName, "Edit", "UsersAdmin", new { id = @x.userId }, new { target = "_blank" })</td>
                                 </tr>
                             }
                         </table>
@@ -117,7 +117,7 @@
                             @foreach (var x in member.PMOs)
                             {
                                 <tr>
-                                    <td>@Html.ActionLink(@x.firstName, "Edit", "UsersAdmin", new { id = @x.userId }, new { target = "_blank" })</td>
+                                    <td>@Html.ActionLink(@x.firstName + ' ' + @x.lastName, "Edit", "UsersAdmin", new { id = @x.userId }, new { target = "_blank" })</td>
                                 </tr>
                             }
                         </table>
@@ -143,7 +143,7 @@
                             @foreach (var x in member.HSEs)
                             {
                                 <tr>
-                                    <td>@Html.ActionLink(@x.firstName, "Edit", "UsersAdmin", new { id = @x.userId }, new { target = "_blank" })</td>
+                                    <td>@Html.ActionLink(@x.firstName + ' ' + @x.lastName, "Edit", "UsersAdmin", new { id = @x.userId }, new { target = "_blank" })</td>
                                 </tr>
                             }
                         </table>
@@ -159,7 +159,7 @@
                     <ol>
                         @foreach (var x in member.HODs)
                         {
-                            <li>@Html.ActionLink(@x.firstName, "Edit", "UsersAdmin", new { id = @x.userId }, new { target = "_blank" })</li>
+                            <li>@Html.ActionLink(@x.firstName+' '+@x.lastName, "Edit", "UsersAdmin", new { id = @x.userId }, new { target = "_blank" })</li>
                         }
                     </ol>
                 </td>
@@ -170,7 +170,7 @@
                     Requestors
                 </td>
                 <td>
-                    @Html.ActionLink("Add New User", "Create", "UsersAdmin",null, new { target = "_blank" })
+                    
 
                     @if (member.Requestors.Count > 0)
                     {
@@ -188,7 +188,7 @@
                             @foreach (var x in member.Requestors)
                             {
                                 <tr>
-                                    <td>@Html.ActionLink(@x.firstName, "Edit", "UsersAdmin", new { id = @x.userId }, new { target = "_blank" })</td>
+                                    <td>@Html.ActionLink(@x.firstName + ' ' + @x.lastName, "Edit", "UsersAdmin", new { id = @x.userId }, new { target = "_blank" })</td>
                                     <td>&nbsp;</td>
                                 </tr>
                             }
@@ -200,3 +200,5 @@
 
     </table>
 }
+
+<br/><br /><br />
