@@ -11,7 +11,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity.Validation;
-using Excel = Microsoft.Office.Interop.Excel;
+
 using System.Reflection;
 using System.Data.Entity.Core.EntityClient;
 using System.Data.Entity.Core.Objects;
@@ -1039,250 +1039,250 @@ namespace KUBOnlinePRPM.Controllers
             objPODetails.TotalPrice = TotalPrice;
             db.SaveChanges();
         }
-        public void EntityToNavHeaderExcel(DateTime startDate, DateTime endDate, string ExtractFileLocation)
-        {
-            //try
-            //{
-            Excel.Application oXL;
-            Excel.Workbook oWB;
-            Excel.Worksheet oSheet;
-            Excel.Range oRange;
-            // Start Excel and get Application object.
-            oXL = new Excel.Application();
+        //public void EntityToNavHeaderExcel(DateTime startDate, DateTime endDate, string ExtractFileLocation)
+        //{
+        //    //try
+        //    //{
+        //    Excel.Application oXL;
+        //    Excel.Workbook oWB;
+        //    Excel.Worksheet oSheet;
+        //    Excel.Range oRange;
+        //    // Start Excel and get Application object.
+        //    oXL = new Excel.Application();
 
-            // Set some properties
-            oXL.Visible = true;
-            oXL.DisplayAlerts = false;
+        //    // Set some properties
+        //    oXL.Visible = true;
+        //    oXL.DisplayAlerts = false;
 
-            // Get a new workbook. 
-            oWB = oXL.Workbooks.Add(Missing.Value);
+        //    // Get a new workbook. 
+        //    oWB = oXL.Workbooks.Add(Missing.Value);
 
-            // Get the active sheet 
-            oSheet = (Excel.Worksheet)oWB.ActiveSheet;
-            oSheet.Name = "Purchase Header";
+        //    // Get the active sheet 
+        //    oSheet = (Excel.Worksheet)oWB.ActiveSheet;
+        //    oSheet.Name = "Purchase Header";
 
-            oSheet.Cells[1, 1] = "OPEN PO TRANSACTION";
-            oSheet.Cells[1, 2] = "Purchase Header";
-            oSheet.Cells[1, 3] = "38";
-            DataTable dt = GetPOHeaderTable(startDate, endDate);
+        //    oSheet.Cells[1, 1] = "OPEN PO TRANSACTION";
+        //    oSheet.Cells[1, 2] = "Purchase Header";
+        //    oSheet.Cells[1, 3] = "38";
+        //    DataTable dt = GetPOHeaderTable(startDate, endDate);
 
-            int rowCount = 3;
-            foreach (DataRow dr in dt.Rows)
-            {
-                rowCount += 1;
-                for (int i = 1; i < dt.Columns.Count + 1; i++)
-                {
-                    // Add the header the first time through 
-                    if (rowCount == 4)
-                        oSheet.Cells[3, i] = dt.Columns[i - 1].ColumnName;
-                    oSheet.Cells[rowCount, i] = dr[i - 1].ToString();
-                }
-            }
+        //    int rowCount = 3;
+        //    foreach (DataRow dr in dt.Rows)
+        //    {
+        //        rowCount += 1;
+        //        for (int i = 1; i < dt.Columns.Count + 1; i++)
+        //        {
+        //            // Add the header the first time through 
+        //            if (rowCount == 4)
+        //                oSheet.Cells[3, i] = dt.Columns[i - 1].ColumnName;
+        //            oSheet.Cells[rowCount, i] = dr[i - 1].ToString();
+        //        }
+        //    }
 
-            oRange = oSheet.Range[oSheet.Cells[1, 1], oSheet.Cells[rowCount, dt.Columns.Count]];
-            oRange.Columns.AutoFit();
+        //    oRange = oSheet.Range[oSheet.Cells[1, 1], oSheet.Cells[rowCount, dt.Columns.Count]];
+        //    oRange.Columns.AutoFit();
 
-            // Save the sheet and close 
-            oSheet = null;
-            oRange = null;
+        //    // Save the sheet and close 
+        //    oSheet = null;
+        //    oRange = null;
 
-            ;
-            oWB.SaveAs(Server.MapPath("~/Documents/TestNavHeaderTemplate-" + startDate.ToString("yyyyMMdd") + "to" + endDate.ToString("yyyyMMdd") + "-" + DateTime.Now.ToString("yyyyMMdd") + ".xlsx"), Excel.XlFileFormat.xlOpenXMLWorkbook, Missing.Value,
-              Missing.Value, false, false,
-              Excel.XlSaveAsAccessMode.xlNoChange, Excel.XlSaveConflictResolution.xlUserResolution, true, Missing.Value, Missing.Value, Missing.Value);
+        //    ;
+        //    oWB.SaveAs(Server.MapPath("~/Documents/TestNavHeaderTemplate-" + startDate.ToString("yyyyMMdd") + "to" + endDate.ToString("yyyyMMdd") + "-" + DateTime.Now.ToString("yyyyMMdd") + ".xlsx"), Excel.XlFileFormat.xlOpenXMLWorkbook, Missing.Value,
+        //      Missing.Value, false, false,
+        //      Excel.XlSaveAsAccessMode.xlNoChange, Excel.XlSaveConflictResolution.xlUserResolution, true, Missing.Value, Missing.Value, Missing.Value);
 
-            //using (MemoryStream ms = new MemoryStream())
-            //{
-            //    using (FileStream fileStream = new FileStream("file.bin", FileMode.Open, FileAccess.Read))
-            //    {
-            //        fileStream.CopyTo(ms);
-            //    }
-            //    //Here you delete the saved file
-            //    File.Delete(fileName);
-            //    ms.Position = 0;
-            //    return File(stream, "attachment;filename=myfile.xls", "myfile.xls");
-            //}
+        //    //using (MemoryStream ms = new MemoryStream())
+        //    //{
+        //    //    using (FileStream fileStream = new FileStream("file.bin", FileMode.Open, FileAccess.Read))
+        //    //    {
+        //    //        fileStream.CopyTo(ms);
+        //    //    }
+        //    //    //Here you delete the saved file
+        //    //    File.Delete(fileName);
+        //    //    ms.Position = 0;
+        //    //    return File(stream, "attachment;filename=myfile.xls", "myfile.xls");
+        //    //}
 
-            oWB = null;
-            oXL.Quit();
+        //    oWB = null;
+        //    oXL.Quit();
 
 
 
-            Excel.Application oXL1;
-            Excel.Workbook oWB1;
-            Excel.Worksheet oSheet1;
-            Excel.Range oRange1;
+        //    Excel.Application oXL1;
+        //    Excel.Workbook oWB1;
+        //    Excel.Worksheet oSheet1;
+        //    Excel.Range oRange1;
 
-            oXL1 = new Excel.Application();
+        //    oXL1 = new Excel.Application();
 
-            // Set some properties
-            oXL1.Visible = true;
-            oXL1.DisplayAlerts = false;
+        //    // Set some properties
+        //    oXL1.Visible = true;
+        //    oXL1.DisplayAlerts = false;
 
-            // Get a new workbook. 
-            oWB1 = oXL1.Workbooks.Add(Missing.Value);
+        //    // Get a new workbook. 
+        //    oWB1 = oXL1.Workbooks.Add(Missing.Value);
 
-            // Get the active sheet 
-            oSheet1 = (Excel.Worksheet)oWB1.ActiveSheet;
-            oSheet1.Name = "Purchase Line";
+        //    // Get the active sheet 
+        //    oSheet1 = (Excel.Worksheet)oWB1.ActiveSheet;
+        //    oSheet1.Name = "Purchase Line";
 
-            oSheet1.Cells[1, 1] = "OPEN TRANSACTION";
-            oSheet1.Cells[1, 2] = "Purchase Line";
-            oSheet1.Cells[1, 3] = "39";
-            DataTable dt1 = GetPOLineTable(startDate, endDate);
+        //    oSheet1.Cells[1, 1] = "OPEN TRANSACTION";
+        //    oSheet1.Cells[1, 2] = "Purchase Line";
+        //    oSheet1.Cells[1, 3] = "39";
+        //    DataTable dt1 = GetPOLineTable(startDate, endDate);
 
-            int rowCount1 = 3;
-            foreach (DataRow dr in dt1.Rows)
-            {
-                rowCount1 += 1;
-                for (int i = 1; i < dt1.Columns.Count + 1; i++)
-                {
-                    // Add the header the first time through 
-                    if (rowCount1 == 4)
-                        oSheet1.Cells[3, i] = dt1.Columns[i - 1].ColumnName;
-                    oSheet1.Cells[rowCount1, i] = dr[i - 1].ToString();
-                }
-            }
+        //    int rowCount1 = 3;
+        //    foreach (DataRow dr in dt1.Rows)
+        //    {
+        //        rowCount1 += 1;
+        //        for (int i = 1; i < dt1.Columns.Count + 1; i++)
+        //        {
+        //            // Add the header the first time through 
+        //            if (rowCount1 == 4)
+        //                oSheet1.Cells[3, i] = dt1.Columns[i - 1].ColumnName;
+        //            oSheet1.Cells[rowCount1, i] = dr[i - 1].ToString();
+        //        }
+        //    }
 
-            oRange1 = oSheet1.Range[oSheet1.Cells[1, 1], oSheet1.Cells[rowCount1, dt1.Columns.Count]];
-            oRange1.Columns.AutoFit();
+        //    oRange1 = oSheet1.Range[oSheet1.Cells[1, 1], oSheet1.Cells[rowCount1, dt1.Columns.Count]];
+        //    oRange1.Columns.AutoFit();
 
-            // Save the sheet and close 
-            oSheet1 = null;
-            oRange1 = null;
-            oWB1.SaveAs(Server.MapPath("~/Documents/TestNavLinerTemplate-" + startDate.ToString("yyyyMMdd") + "to" + endDate.ToString("yyyyMMdd") + "-" + DateTime.Now.ToString("yyyyMMdd") + ".xlsx"), Excel.XlFileFormat.xlOpenXMLWorkbook, Missing.Value,
-              Missing.Value, false, false,
-              Excel.XlSaveAsAccessMode.xlNoChange, Excel.XlSaveConflictResolution.xlUserResolution, true, Missing.Value, Missing.Value, Missing.Value);
-            oWB1.Close(Missing.Value, Missing.Value, Missing.Value);
-            oWB1 = null;
-            oXL1.Quit();
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw ex;
-            //}
-        }
-        public void EntityToNavLineExcel(string excelFilePath, string sheetName, DateTime startDate, DateTime endDate, string Type)
-        {
+        //    // Save the sheet and close 
+        //    oSheet1 = null;
+        //    oRange1 = null;
+        //    oWB1.SaveAs(Server.MapPath("~/Documents/TestNavLinerTemplate-" + startDate.ToString("yyyyMMdd") + "to" + endDate.ToString("yyyyMMdd") + "-" + DateTime.Now.ToString("yyyyMMdd") + ".xlsx"), Excel.XlFileFormat.xlOpenXMLWorkbook, Missing.Value,
+        //      Missing.Value, false, false,
+        //      Excel.XlSaveAsAccessMode.xlNoChange, Excel.XlSaveConflictResolution.xlUserResolution, true, Missing.Value, Missing.Value, Missing.Value);
+        //    oWB1.Close(Missing.Value, Missing.Value, Missing.Value);
+        //    oWB1 = null;
+        //    oXL1.Quit();
+        //    //}
+        //    //catch (Exception ex)
+        //    //{
+        //    //    throw ex;
+        //    //}
+        //}
+        //public void EntityToNavLineExcel(string excelFilePath, string sheetName, DateTime startDate, DateTime endDate, string Type)
+        //{
 
-            try
-            {
-                if (Type == "Header")
-                {
-                    Excel.Application oXL;
-                    Excel.Workbook oWB;
-                    Excel.Worksheet oSheet;
-                    Excel.Range oRange;
-                    // Start Excel and get Application object.
-                    oXL = new Excel.Application();
+        //    try
+        //    {
+        //        if (Type == "Header")
+        //        {
+        //            Excel.Application oXL;
+        //            Excel.Workbook oWB;
+        //            Excel.Worksheet oSheet;
+        //            Excel.Range oRange;
+        //            // Start Excel and get Application object.
+        //            oXL = new Excel.Application();
 
-                    // Set some properties
-                    oXL.Visible = true;
-                    oXL.DisplayAlerts = false;
+        //            // Set some properties
+        //            oXL.Visible = true;
+        //            oXL.DisplayAlerts = false;
 
-                    // Get a new workbook. 
-                    oWB = oXL.Workbooks.Add(Missing.Value);
+        //            // Get a new workbook. 
+        //            oWB = oXL.Workbooks.Add(Missing.Value);
 
-                    // Get the active sheet 
-                    oSheet = (Excel.Worksheet)oWB.ActiveSheet;
-                    oSheet.Name = sheetName;
+        //            // Get the active sheet 
+        //            oSheet = (Excel.Worksheet)oWB.ActiveSheet;
+        //            oSheet.Name = sheetName;
 
-                    oSheet.Cells[1, 1] = "OPEN PO TRANSACTION";
-                    oSheet.Cells[1, 2] = "Purchase Header";
-                    oSheet.Cells[1, 3] = "38";
-                    DataTable dt = GetPOHeaderTable(startDate, endDate);
+        //            oSheet.Cells[1, 1] = "OPEN PO TRANSACTION";
+        //            oSheet.Cells[1, 2] = "Purchase Header";
+        //            oSheet.Cells[1, 3] = "38";
+        //            DataTable dt = GetPOHeaderTable(startDate, endDate);
 
-                    int rowCount = 3;
-                    foreach (DataRow dr in dt.Rows)
-                    {
-                        rowCount += 1;
-                        for (int i = 1; i < dt.Columns.Count + 1; i++)
-                        {
-                            // Add the header the first time through 
-                            if (rowCount == 4)
-                                oSheet.Cells[3, i] = dt.Columns[i - 1].ColumnName;
-                            oSheet.Cells[rowCount, i] = dr[i - 1].ToString();
-                        }
-                    }
+        //            int rowCount = 3;
+        //            foreach (DataRow dr in dt.Rows)
+        //            {
+        //                rowCount += 1;
+        //                for (int i = 1; i < dt.Columns.Count + 1; i++)
+        //                {
+        //                    // Add the header the first time through 
+        //                    if (rowCount == 4)
+        //                        oSheet.Cells[3, i] = dt.Columns[i - 1].ColumnName;
+        //                    oSheet.Cells[rowCount, i] = dr[i - 1].ToString();
+        //                }
+        //            }
 
-                    oRange = oSheet.Range[oSheet.Cells[1, 1], oSheet.Cells[rowCount, dt.Columns.Count]];
-                    oRange.Columns.AutoFit();
+        //            oRange = oSheet.Range[oSheet.Cells[1, 1], oSheet.Cells[rowCount, dt.Columns.Count]];
+        //            oRange.Columns.AutoFit();
 
-                    // Save the sheet and close 
-                    oSheet = null;
-                    oRange = null;
-                    oWB.SaveAs(excelFilePath, Excel.XlFileFormat.xlWorkbookNormal, Missing.Value,
-                      Missing.Value, Missing.Value, Missing.Value,
-                      Excel.XlSaveAsAccessMode.xlExclusive, Missing.Value,
-                      Missing.Value, Missing.Value, Missing.Value);
-                    oWB.Close(Missing.Value, Missing.Value, Missing.Value);
-                    oWB = null;
-                    oXL.Quit();
-                }
-                else
-                {
-                    Excel.Application oXL;
-                    Excel.Workbook oWB;
-                    Excel.Worksheet oSheet;
-                    Excel.Range oRange;
+        //            // Save the sheet and close 
+        //            oSheet = null;
+        //            oRange = null;
+        //            oWB.SaveAs(excelFilePath, Excel.XlFileFormat.xlWorkbookNormal, Missing.Value,
+        //              Missing.Value, Missing.Value, Missing.Value,
+        //              Excel.XlSaveAsAccessMode.xlExclusive, Missing.Value,
+        //              Missing.Value, Missing.Value, Missing.Value);
+        //            oWB.Close(Missing.Value, Missing.Value, Missing.Value);
+        //            oWB = null;
+        //            oXL.Quit();
+        //        }
+        //        else
+        //        {
+        //            Excel.Application oXL;
+        //            Excel.Workbook oWB;
+        //            Excel.Worksheet oSheet;
+        //            Excel.Range oRange;
 
-                    oXL = new Excel.Application();
+        //            oXL = new Excel.Application();
 
-                    // Set some properties
-                    oXL.Visible = true;
-                    oXL.DisplayAlerts = false;
+        //            // Set some properties
+        //            oXL.Visible = true;
+        //            oXL.DisplayAlerts = false;
 
-                    // Get a new workbook. 
-                    oWB = oXL.Workbooks.Add(Missing.Value);
+        //            // Get a new workbook. 
+        //            oWB = oXL.Workbooks.Add(Missing.Value);
 
-                    // Get the active sheet 
-                    oSheet = (Excel.Worksheet)oWB.ActiveSheet;
-                    oSheet.Name = sheetName;
+        //            // Get the active sheet 
+        //            oSheet = (Excel.Worksheet)oWB.ActiveSheet;
+        //            oSheet.Name = sheetName;
 
-                    oSheet.Cells[1, 1] = "OPEN TRANSACTION";
-                    oSheet.Cells[1, 2] = "Purchase Line";
-                    oSheet.Cells[1, 3] = "39";
-                    DataTable dt1 = GetPOLineTable(startDate, endDate);
+        //            oSheet.Cells[1, 1] = "OPEN TRANSACTION";
+        //            oSheet.Cells[1, 2] = "Purchase Line";
+        //            oSheet.Cells[1, 3] = "39";
+        //            DataTable dt1 = GetPOLineTable(startDate, endDate);
 
-                    int rowCount = 3;
-                    foreach (DataRow dr in dt1.Rows)
-                    {
-                        rowCount += 1;
-                        for (int i = 1; i < dt1.Columns.Count + 1; i++)
-                        {
-                            // Add the header the first time through 
-                            if (rowCount == 4)
-                                oSheet.Cells[3, i] = dt1.Columns[i - 1].ColumnName;
-                            oSheet.Cells[rowCount, i] = dr[i - 1].ToString();
-                        }
-                    }
+        //            int rowCount = 3;
+        //            foreach (DataRow dr in dt1.Rows)
+        //            {
+        //                rowCount += 1;
+        //                for (int i = 1; i < dt1.Columns.Count + 1; i++)
+        //                {
+        //                    // Add the header the first time through 
+        //                    if (rowCount == 4)
+        //                        oSheet.Cells[3, i] = dt1.Columns[i - 1].ColumnName;
+        //                    oSheet.Cells[rowCount, i] = dr[i - 1].ToString();
+        //                }
+        //            }
 
-                    oRange = oSheet.Range[oSheet.Cells[1, 1], oSheet.Cells[rowCount, dt1.Columns.Count]];
-                    oRange.Columns.AutoFit();
+        //            oRange = oSheet.Range[oSheet.Cells[1, 1], oSheet.Cells[rowCount, dt1.Columns.Count]];
+        //            oRange.Columns.AutoFit();
 
-                    // Save the sheet and close 
-                    oSheet = null;
-                    oRange = null;
-                    oWB.SaveAs(excelFilePath, Excel.XlFileFormat.xlWorkbookNormal, Missing.Value,
-                      Missing.Value, Missing.Value, Missing.Value,
-                      Excel.XlSaveAsAccessMode.xlExclusive, Missing.Value,
-                      Missing.Value, Missing.Value, Missing.Value);
-                    oWB.Close(Missing.Value, Missing.Value, Missing.Value);
-                    oWB = null;
-                    oXL.Quit();
-                }
+        //            // Save the sheet and close 
+        //            oSheet = null;
+        //            oRange = null;
+        //            oWB.SaveAs(excelFilePath, Excel.XlFileFormat.xlWorkbookNormal, Missing.Value,
+        //              Missing.Value, Missing.Value, Missing.Value,
+        //              Excel.XlSaveAsAccessMode.xlExclusive, Missing.Value,
+        //              Missing.Value, Missing.Value, Missing.Value);
+        //            oWB.Close(Missing.Value, Missing.Value, Missing.Value);
+        //            oWB = null;
+        //            oXL.Quit();
+        //        }
 
-                // Process the DataTable                
+        //        // Process the DataTable                
 
-                return;
-                // Resize the columns 
+        //        return;
+        //        // Resize the columns 
 
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
         //NewPO balnket        
         protected SqlConnection OpenDBConnection()
         {
