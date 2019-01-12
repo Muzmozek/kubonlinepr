@@ -100,18 +100,54 @@ namespace KUBOnlinePRPM.Controllers.Admin
         // POST: UsersAdmin/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> Edit([Bind(Include = "userId,companyId,createByUserId,createDate,modifiedByUserId,modifiedDate,userName,password,passwordReset,passwordModifiedDate,reminderQueryQuestion,reminderQueryAnswer,emailAddress,firstName,lastName,employeeNo,jobTitle,loginDate,loginLatLng,loginAddress,lastLoginDate,lastFailedLoginDate,failedLoginAttempts,lockout,lockoutDate,status,telephoneNo,address,extensionNo")] User user)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        db.Entry(user).State = EntityState.Modified;
+        //        await db.SaveChangesAsync();
+        //        return RedirectToAction("Index");
+        //    }
+        //    ViewBag.companyId = new SelectList(db.Customers, "custId", "name", user.companyId);
+        //    return View(user);
+        //}
+
+        [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "uuid,userId,companyId,createByUserId,createDate,modifiedByUserId,modifiedDate,userName,password,passwordReset,passwordModifiedDate,reminderQueryQuestion,reminderQueryAnswer,emailAddress,firstName,lastName,employeeNo,jobTitle,loginDate,loginLatLng,loginAddress,lastLoginDate,lastFailedLoginDate,failedLoginAttempts,lockout,lockoutDate,status,telephoneNo,address,extensionNo")] User user)
+        public async Task<ActionResult> EditUser(int? id)
         {
-            if (ModelState.IsValid)
+            //if (ModelState.IsValid)
+            //{
+            //    db.Entry(user).State = EntityState.Modified;
+            //    await db.SaveChangesAsync();
+            //    return RedirectToAction("Index");
+            //}
+            //ViewBag.companyId = new SelectList(db.Customers, "custId", "name", user.companyId);
+            //return View(user);
+
+            if (id == null)
             {
-                db.Entry(user).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ViewBag.companyId = new SelectList(db.Customers, "custId", "name", user.companyId);
-            return View(user);
+            var studentToUpdate = await db.Users.FindAsync(id);
+            if (TryUpdateModel(studentToUpdate, "",
+               new string[] { "companyId", "userName", "emailAddress", "firstName", "lastName", "employeeNo", "jobTitle", "status", "telephoneNo", "address", "extensionNo" }))
+            {
+                try
+                {
+                    await db.SaveChangesAsync();
+
+                    return RedirectToAction("Index");
+                }
+                catch (DataException /* dex */)
+                {
+                    //Log the error (uncomment dex variable name and add a line here to write a log.
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                }
+            }
+            return View(studentToUpdate);
         }
 
         // GET: UsersAdmin/Delete/5
