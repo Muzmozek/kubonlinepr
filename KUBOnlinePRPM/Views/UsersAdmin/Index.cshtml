@@ -12,105 +12,106 @@
 </p>
 <table class="table" id="userListTable">
     <thead>
-        <th>
-            @Html.DisplayNameFor(model => model.userName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.emailAddress)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.firstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.lastName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.employeeNo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.jobTitle)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.lastLoginDate)
-        </th>
-        <th>
-            Role
-        </th>
-        <th>
-
-        </th>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.userName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.emailAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.firstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.lastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.employeeNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.jobTitle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.lastLoginDate)
+            </th>
+            <th>
+                Role
+            </th>
+            <th></th>
+        </tr>
+    <thead>
     </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.userName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.emailAddress)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.firstName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.lastName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.employeeNo)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.jobTitle)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.lastLoginDate)
-                    </td>
-                    <td>
-                        <h5>@item.Customer.name ( @item.Customer.abbreviation )</h5>
-                        <ol>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.userName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.emailAddress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.firstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.lastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.employeeNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.jobTitle)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.lastLoginDate)
+                </td>
+                <td>
+                    <h5>@item.Customer.name ( @item.Customer.abbreviation )</h5>
+                    <ol>
 
-                            @foreach (var x in item.Users_Roles)
-                            {
-                                <li>@x.Role.name</li>
-                            }
-                        </ol>
-                    </td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = item.userId }) |
-                        @Html.ActionLink("Details", "Details", new { id = item.userId }) |
-                        @Html.ActionLink("Delete", "Delete", new { id = item.userId })
-                    </td>
-                </tr>
-            }
-        </tbody>
+                        @foreach (var x in item.Users_Roles)
+                        {
+                            <li>@x.Role.name</li>
+                        }
+                    </ol>
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.userId }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.userId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.userId })
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>
 
 @section scripts{
-<script>
-    $(document).ready(function () {
-        UserListTable = $('#userListTable').DataTable({
-            serverSide: false,
-            //dom: 'frtiS',
-            processing: true,
-            paging: true,
-            deferRender: true,
-            ordering: true,
-            bAutoWidth: false,
-            columnDefs: [
-                { visible: false, targets: [0] }
-            ],
-            destroy: true,
-            aaSorting: [1, "desc"],
-            responsive: {
-                breakpoints: [
-                    { name: 'desktop', width: 1024 },
-                    { name: 'tablet', width: 768 },
-                    { name: 'phone', width: 480 }
-                ]
-            }
-        });
+    <script>
+        $(document).ready(function () {
+            UserListTable = $('#userListTable').DataTable({
+                serverSide: false,
+                //dom: 'frtiS',
+                processing: true,
+                paging: true,
+                deferRender: true,
+                ordering: true,
+                bAutoWidth: false,
+                //columnDefs: [
+                //    { visible: false, targets: [0] }
+                //],
+                destroy: true,
+                aaSorting: [0, "asc"],
+                responsive: {
+                    breakpoints: [
+                        { name: 'desktop', width: 1024 },
+                        { name: 'tablet', width: 768 },
+                        { name: 'phone', width: 480 }
+                    ]
+                }
+            });
 
-    });
-</script>
+        });
+    </script>
 }
 

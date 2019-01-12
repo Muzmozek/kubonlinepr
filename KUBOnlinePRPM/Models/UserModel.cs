@@ -11,6 +11,7 @@ namespace KUBOnlinePRPM.Models
         public string Password { get; set; }
         public string FullName { get; set; }
         public int? CompanyId { get; set; }
+        public int? ChildCompanyId { get; set; }
         public string CompanyName { get; set; }
         public string Role { get; set; }
         public string RoleId { get; set; }

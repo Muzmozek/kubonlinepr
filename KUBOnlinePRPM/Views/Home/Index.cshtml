@@ -11,16 +11,20 @@
         <h2 class="h3 g-font-weight-300 g-mb-35">Business Application Portal</h2>
     </div>
 
-                    @*<input class="form-control rounded g-px-20 g-py-12 mb-3" placeholder="Username" type="text">*@
-                    @Html.TextBoxFor(m => m.Username, new { @id = "Username", @class = "form-control rounded g-px-20 g-py-12 mb-3", @autocomplete = "off", @placeholder = "Username", @type = "text" })
-                    @*<input class="form-control rounded g-px-20 g-py-12 mb-3" placeholder="Password" type="text">*@
-                    @Html.TextBoxFor(m => m.Password, new { @id = "Password", @class = "form-control rounded g-px-20 g-py-12 mb-3", @autocomplete = "off", @placeholder = "Password", @type = "password" })
-                    <div class="d-flex text-center">
-                        @Html.ValidationMessageFor(m => m.Username, null, new { @class = "g-color-red" })
-                    </div>
-                    <div class="g-mb-0">
-                        <button id="SubmitLogin" class="btn btn-block u-btn-blue g-font-weight-600 g-font-size-18 text-uppercase g-px-25 g-py-13" type="submit">LOGIN</button>
-                    </div>
+    @*<input class="form-control rounded g-px-20 g-py-12 mb-3" placeholder="Username" type="text">*@
+    @Html.TextBoxFor(m => m.Username, new { @id = "Username", @class = "form-control rounded g-px-20 g-py-12 mb-3", @autocomplete = "off", @placeholder = "Username", @type = "text" })
+
+    @*<input class="form-control rounded g-px-20 g-py-12 mb-3" placeholder="Password" type="text">*@
+    @Html.TextBoxFor(m => m.Password, new { @id = "Password", @class = "form-control rounded g-px-20 g-py-12 mb-3", @autocomplete = "off", @placeholder = "Password", @type = "password" })
+    <div class="d-flex text-center">
+        @Html.ValidationMessageFor(m => m.Username, null, new { @class = "g-color-red" })
+        @Html.ValidationMessageFor(m => m.Password, null, new { @class = "g-color-red" })
+    </div>
+    <div class="g-mb-0">
+        <button id="SubmitLogin" class="btn btn-block u-btn-blue g-font-weight-600 g-font-size-18 text-uppercase g-px-25 g-py-13" type="submit">LOGIN</button>
+    </div>
+    <div class="modal">
+    </div>
 }
 @*</form>*@
 @*</div>*@
@@ -31,11 +35,4 @@
         var UrlIndex = "@Url.Action("Index", "Home")";
     </script>
     <script src="~/Scripts/Login.js"></script>
-    <script>
-        $(function () {
-            
-            $("#Username").val("procurement")
-            $("#Password").val("welcome123$")
-        });
-    </script>
 }

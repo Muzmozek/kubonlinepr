@@ -30,7 +30,14 @@ $(document).on('ready', function () {
     $.HSCore.components.HSFileAttachment.init('.js-file-attachment');
     $.HSCore.helpers.HSFocusState.init();
     generatePRItemTable();
-    
+
+    $(window).keydown(function (event) {
+        if (event.keyCode === 13 && $(event.target)[0] !== $("textarea")[0]) {
+            event.preventDefault();
+            return false;
+        }
+    });
+
     $(document).on("click", ".AddPRItem", function (e) {
         e.preventDefault();
         var field = ['[name="DateRequired"]', '[name="Description"]', '[name="Quantity"]'];
@@ -210,18 +217,21 @@ $(document).on('ready', function () {
                         alert("The PR has been submitted");
                         window.location = $("#UrlPRList").attr('href') + "?type=" + PRType;
                 }
+                else if (resp.success === false && resp.exception === false) {
+                    alert("Validation error");
+                    $.each(resp.data, function (key, input) {
+                        //$('input[name="' + input.name + '"]').val(input.value);
+                        $('span[data-valmsg-for="' + input.key + '"]').text(input.errors[0]);
+                    });
+                    $("body").removeClass("loading");
+                }
+                else if (resp.success === false && resp.exception === true) {
+                    alert(resp.message);
+                    $("body").removeClass("loading");
+                }
                 else if (resp.success === false) {
                     windows.location = resp.url;
                 }
-            },
-            error: function (err) {
-                alert("Validation error");
-                $.each(err.responseJSON, function (key, input) {
-                    //$('input[name="' + input.name + '"]').val(input.value);
-                    $('span[data-valmsg-for="' + input.key + '"]').text(input.errors[0]);
-                });
-                
-                $("body").removeClass("loading");
             }
         });
     });

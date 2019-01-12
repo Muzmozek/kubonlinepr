@@ -13,9 +13,13 @@
                 SelectedUserId: selectedUserId
 
             }, function (resp) {
-                alert(resp);
-                Custombox.modal.close();
-                $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
+                if (resp.success === true) {
+                    alert(resp.message);
+                    Custombox.modal.close();
+                    $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
+                } else {
+                    windows.location = resp.url;
+                }                
             });
         }
     });

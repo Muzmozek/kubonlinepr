@@ -78,12 +78,16 @@
                 },
                 dataType: "json",
                 success: function (resp) {
-                    $("body").removeClass("loading");
-                    alert(resp);
-                    $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
-                        generatePRItemTable();
-                    });
-                    $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
+                    if (resp.success === true) {
+                        $("body").removeClass("loading");
+                        alert(resp.message);
+                        $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
+                            generatePRItemTable();
+                        });
+                        $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
+                    } else {
+                        window.location = resp.url;
+                    }                    
                 }
             });
         }       
@@ -261,6 +265,53 @@
     });
   
     //phase 1 reviewer approver approval logic
+    $("#ApproveInitialPRReview").click(function (e) {
+
+        e.preventDefault();
+        $.post(UrlApproveInitialPRReview, {
+
+            PRId: PRId,
+            //RejectRemark: $("textarea#RejectRemark").val()
+
+        }, function (resp) {
+            if (resp.success === true) {
+                alert(resp.message);
+                $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
+                    generatePRItemTable();
+                });
+                $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
+                Custombox.modal.close();
+            } else {
+                window.location = resp.url;
+            }
+            
+        });
+
+    });
+
+    $("#RejectInitialPRReview").click(function (e) {
+
+        e.preventDefault();
+        $.post(UrlRejectInitialPRReview, {
+
+            PRId: PRId,
+            RejectRemark: $("textarea#RejectRemark").val()
+
+        }, function (resp) {
+            if (resp.success === true) {
+                alert(resp.message);
+                $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
+                    generatePRItemTable();
+                });
+                $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
+                Custombox.modal.close();
+            } else {
+                window.location = resp.url;
+            }           
+        });
+
+    });
+
     $(document).on("click", ".approveRejectDetail", function (e) {
         e.preventDefault();
         /*var Reviewer = false;*/ var Approver = "";
@@ -431,24 +482,24 @@
     });
 
     $(".CancelPR").click(function (e) {
-
-        e.preventDefault(); var URL = ""; var CancelType = "";
-        if ($(".CancelPR")[0].id === "CancelPR") {
-            URL = UrlCancelPR;
-        } else if ($(".CancelPR")[0].id === "CancelPRProc") {
-            URL = UrlCancelPR;
-        }
-        $.post(URL, {
-            PRId: PRId,
-            CancelType: $(".CancelPR")[0].id
-        }, function (resp) {
-            alert(resp);
-            $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
-                generatePRItemTable();
+        e.preventDefault();
+            $.post(UrlCancelPR, {
+                PRId: PRId,
+                CancelType: $(".CancelPR")[0].id
+            }, function (resp) {
+                if (resp.success === true && resp.flow === "newPR") {
+                    window.location = UrlPRCard + "?type=" + POType;
+                } else if (resp.success === false) {
+                    window.location = resp.url;
+                }
+                else {
+                    alert(resp.message);
+                    $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
+                        generatePRItemTable();
+                    });
+                    $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
+                }                                
             });
-            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
-        });
-
     });
 
     $("#RecommendCancel").click(function (e) {

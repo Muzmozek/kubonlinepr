@@ -25,7 +25,7 @@ namespace KUBOnlinePRPM.Controllers
                                               join r in db.PurchaseRequisitions on m.PRId equals r.PRId into s
                                               from q in p.DefaultIfEmpty()
                                               from t in s.DefaultIfEmpty()
-                                              where q.toUserId == userId && m.msgType == "Task"
+                                              where q.toUserId == userId && m.msgType == "Task" && m.done == null
                                               select new NotiListTable()
                                               {
                                                   MsgId = m.msgId,

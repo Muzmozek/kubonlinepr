@@ -29,6 +29,7 @@ namespace KUBOnlinePRPM.Models
             this.PRs_FileUpload = new HashSet<PRs_FileUpload>();
             this.PurchaseOrders = new HashSet<PurchaseOrder>();
             this.PR_Items = new HashSet<PR_Items>();
+            this.PR_Finance = new HashSet<PR_Finance>();
         }
     
         public System.Guid uuid { get; set; }
@@ -100,5 +101,7 @@ namespace KUBOnlinePRPM.Models
         public virtual VendorStaff VendorStaff { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_Items> PR_Items { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PR_Finance> PR_Finance { get; set; }
     }
 }

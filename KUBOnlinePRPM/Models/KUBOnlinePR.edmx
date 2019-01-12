@@ -5,6 +5,16 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="KUBOnlinePRModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ChildCustomer">
+          <Key>
+            <PropertyRef Name="childCustId" />
+          </Key>
+          <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="childCustId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="custId" Type="int" />
+          <Property Name="name" Type="nvarchar" MaxLength="150" />
+          <Property Name="abbreviation" Type="varchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="Customer">
           <Key>
             <PropertyRef Name="custId" />
@@ -187,6 +197,17 @@
           <Property Name="approverApprovedDate" Type="datetime" />
           <Property Name="lastApprovedDate" Type="datetime" />
         </EntityType>
+        <EntityType Name="PR_Finance">
+          <Key>
+            <PropertyRef Name="uuid" />
+          </Key>
+          <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="reviewerId" Type="int" Nullable="false" />
+          <Property Name="PRId" Type="int" Nullable="false" />
+          <Property Name="reviewed" Type="int" Nullable="false" />
+          <Property Name="reviewedDate" Type="datetime" />
+          <Property Name="lastReviewedDate" Type="datetime" />
+        </EntityType>
         <EntityType Name="PR_HOD">
           <Key>
             <PropertyRef Name="uuid" />
@@ -296,7 +317,7 @@
           <Property Name="custId" Type="int" Nullable="false" />
           <Property Name="dimension" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="projectCode" Type="nvarchar" MaxLength="20" Nullable="false" />
-          <Property Name="projectName" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="projectName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="paperVerified" Type="bit" Nullable="false" />
           <Property Name="budgetedAmount" Type="numeric" Precision="18" Scale="2" Nullable="false" />
           <Property Name="utilizedToDate" Type="numeric" Precision="18" Scale="2" Nullable="false" />
@@ -414,6 +435,7 @@
           <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="userId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="companyId" Type="int" />
+          <Property Name="childCompanyId" Type="int" />
           <Property Name="createByUserId" Type="int" />
           <Property Name="createDate" Type="datetime" />
           <Property Name="modifiedByUserId" Type="int" />
@@ -486,7 +508,7 @@
           <Property Name="lastModifyDate" Type="datetime" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'KUBOnlinePR.dbo.MessageList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'KUBOnlinePR_Test.dbo.MessageList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="MessageList">
           <Key>
             <PropertyRef Name="msgId" />
@@ -505,7 +527,7 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.MessageList' does not have a prima
           <Property Name="ToUserName" Type="nvarchar" MaxLength="151" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PopulateItemList">
           <Key>
             <PropertyRef Name="codeId" />
@@ -772,6 +794,30 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
             </Principal>
             <Dependent Role="PR_Approver">
               <PropertyRef Name="approverId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_Finance_PurchaseRequisition">
+          <End Role="PurchaseRequisition" Type="Self.PurchaseRequisition" Multiplicity="1" />
+          <End Role="PR_Finance" Type="Self.PR_Finance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseRequisition">
+              <PropertyRef Name="PRId" />
+            </Principal>
+            <Dependent Role="PR_Finance">
+              <PropertyRef Name="PRId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_Finance_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="PR_Finance" Type="Self.PR_Finance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="PR_Finance">
+              <PropertyRef Name="reviewerId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1207,6 +1253,18 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_User_ChildCustomer">
+          <End Role="ChildCustomer" Type="Self.ChildCustomer" Multiplicity="0..1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ChildCustomer">
+              <PropertyRef Name="childCustId" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="childCompanyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_User_Customer">
           <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
           <End Role="User" Type="Self.User" Multiplicity="*" />
@@ -1304,6 +1362,7 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="KUBOnlinePRModelStoreContainer">
+          <EntitySet Name="ChildCustomer" EntityType="Self.ChildCustomer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FileUpload" EntityType="Self.FileUpload" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FixedAsset" EntityType="Self.FixedAsset" Schema="dbo" store:Type="Tables" />
@@ -1319,6 +1378,7 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <EntitySet Name="POStatus" EntityType="Self.POStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PR_Admin" EntityType="Self.PR_Admin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PR_Approver" EntityType="Self.PR_Approver" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PR_Finance" EntityType="Self.PR_Finance" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PR_HOD" EntityType="Self.PR_HOD" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PR_Items" EntityType="Self.PR_Items" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PR_PaperApprover" EntityType="Self.PR_PaperApprover" Schema="dbo" store:Type="Tables" />
@@ -1446,6 +1506,14 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <AssociationSet Name="FK_PR_Approver_User" Association="Self.FK_PR_Approver_User">
             <End Role="User" EntitySet="User" />
             <End Role="PR_Approver" EntitySet="PR_Approver" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_Finance_PurchaseRequisition" Association="Self.FK_PR_Finance_PurchaseRequisition">
+            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisition" />
+            <End Role="PR_Finance" EntitySet="PR_Finance" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_Finance_User" Association="Self.FK_PR_Finance_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="PR_Finance" EntitySet="PR_Finance" />
           </AssociationSet>
           <AssociationSet Name="FK_PR_HOD_PurchaseRequisition" Association="Self.FK_PR_HOD_PurchaseRequisition">
             <End Role="PurchaseRequisition" EntitySet="PurchaseRequisition" />
@@ -1591,6 +1659,10 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
             <End Role="VendorStaff" EntitySet="VendorStaff" />
             <End Role="PurchaseRequisition" EntitySet="PurchaseRequisition" />
           </AssociationSet>
+          <AssociationSet Name="FK_User_ChildCustomer" Association="Self.FK_User_ChildCustomer">
+            <End Role="ChildCustomer" EntitySet="ChildCustomer" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
           <AssociationSet Name="FK_User_Customer" Association="Self.FK_User_Customer">
             <End Role="Customer" EntitySet="Customer" />
             <End Role="User" EntitySet="User" />
@@ -1680,7 +1752,7 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           </Key>
           <Property Name="uuid" Type="Guid" Nullable="false" />
           <Property Name="projectId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="projectName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="projectName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="paperVerified" Type="Boolean" Nullable="false" />
           <Property Name="budgetedAmount" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="utilizedToDate" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
@@ -1792,6 +1864,9 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <NavigationProperty Name="PR_RecommenderCOO" Relationship="KUBOnlinePRModel.FK_PR_RecommenderCOO_User" FromRole="User" ToRole="PR_RecommenderCOO" />
           <NavigationProperty Name="PR_RecommenderHOC" Relationship="KUBOnlinePRModel.FK_PR_RecommenderII_User1" FromRole="User" ToRole="PR_RecommenderHOC" />
           <NavigationProperty Name="PurchaseRequisitions" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_User" FromRole="User" ToRole="PurchaseRequisition" />
+          <NavigationProperty Name="PR_Finance" Relationship="KUBOnlinePRModel.FK_PR_Finance_User" FromRole="User" ToRole="PR_Finance" />
+          <Property Name="childCompanyId" Type="Int32" />
+          <NavigationProperty Name="ChildCustomer" Relationship="KUBOnlinePRModel.FK_User_ChildCustomer" FromRole="User" ToRole="ChildCustomer" />
         </EntityType>
         <EntityType Name="Users_Roles">
           <Key>
@@ -2292,6 +2367,20 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
             <End Role="PR_Items" EntitySet="PR_Items" />
           </AssociationSet>
           <EntitySet Name="JobTasks" EntityType="KUBOnlinePRModel.JobTask" />
+          <EntitySet Name="ChildCustomers" EntityType="KUBOnlinePRModel.ChildCustomer" />
+          <EntitySet Name="PR_Finance" EntityType="KUBOnlinePRModel.PR_Finance" />
+          <AssociationSet Name="FK_PR_Finance_PurchaseRequisition" Association="KUBOnlinePRModel.FK_PR_Finance_PurchaseRequisition">
+            <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
+            <End Role="PR_Finance" EntitySet="PR_Finance" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_Finance_User" Association="KUBOnlinePRModel.FK_PR_Finance_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="PR_Finance" EntitySet="PR_Finance" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_ChildCustomer" Association="KUBOnlinePRModel.FK_User_ChildCustomer">
+            <End Role="ChildCustomer" EntitySet="ChildCustomers" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ItemType">
           <Key>
@@ -3041,6 +3130,7 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <NavigationProperty Name="Vendor" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_Vendor" FromRole="PurchaseRequisition" ToRole="Vendor" />
           <NavigationProperty Name="VendorStaff" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_VendorStaff" FromRole="PurchaseRequisition" ToRole="VendorStaff" />
           <NavigationProperty Name="PR_Items" Relationship="KUBOnlinePRModel.FK_PR_Items_PurchaseRequisition" FromRole="PurchaseRequisition" ToRole="PR_Items" />
+          <NavigationProperty Name="PR_Finance" Relationship="KUBOnlinePRModel.FK_PR_Finance_PurchaseRequisition" FromRole="PurchaseRequisition" ToRole="PR_Finance" />
         </EntityType>
         <Association Name="FK_PurchaseRequisition_Customer">
           <End Type="KUBOnlinePRModel.Customer" Role="Customer" Multiplicity="1" />
@@ -3368,6 +3458,66 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <Property Name="jobTaskNo" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="custId" Type="Int32" Nullable="false" />
         </EntityType>
+        <EntityType Name="ChildCustomer">
+          <Key>
+            <PropertyRef Name="childCustId" />
+          </Key>
+          <Property Name="uuid" Type="Guid" Nullable="false" />
+          <Property Name="childCustId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="custId" Type="Int32" />
+          <Property Name="name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="abbreviation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Users" Relationship="KUBOnlinePRModel.FK_User_ChildCustomer" FromRole="ChildCustomer" ToRole="User" />
+        </EntityType>
+        <EntityType Name="PR_Finance">
+          <Key>
+            <PropertyRef Name="uuid" />
+          </Key>
+          <Property Name="uuid" Type="Guid" Nullable="false" />
+          <Property Name="reviewerId" Type="Int32" Nullable="false" />
+          <Property Name="PRId" Type="Int32" Nullable="false" />
+          <Property Name="reviewed" Type="Int32" Nullable="false" />
+          <Property Name="reviewedDate" Type="DateTime" Precision="3" />
+          <Property Name="lastReviewedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="PurchaseRequisition" Relationship="KUBOnlinePRModel.FK_PR_Finance_PurchaseRequisition" FromRole="PR_Finance" ToRole="PurchaseRequisition" />
+          <NavigationProperty Name="User" Relationship="KUBOnlinePRModel.FK_PR_Finance_User" FromRole="PR_Finance" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_PR_Finance_PurchaseRequisition">
+          <End Type="KUBOnlinePRModel.PurchaseRequisition" Role="PurchaseRequisition" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.PR_Finance" Role="PR_Finance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseRequisition">
+              <PropertyRef Name="PRId" />
+            </Principal>
+            <Dependent Role="PR_Finance">
+              <PropertyRef Name="PRId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_Finance_User">
+          <End Type="KUBOnlinePRModel.User" Role="User" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.PR_Finance" Role="PR_Finance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="PR_Finance">
+              <PropertyRef Name="reviewerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_ChildCustomer">
+          <End Type="KUBOnlinePRModel.ChildCustomer" Role="ChildCustomer" Multiplicity="0..1" />
+          <End Type="KUBOnlinePRModel.User" Role="User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ChildCustomer">
+              <PropertyRef Name="childCustId" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="childCompanyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3469,6 +3619,7 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="KUBOnlinePRModel.User">
               <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="childCompanyId" ColumnName="childCompanyId" />
                 <ScalarProperty Name="department" ColumnName="department" />
                 <ScalarProperty Name="superiorId" ColumnName="superiorId" />
                 <ScalarProperty Name="uuid" ColumnName="uuid" />
@@ -3913,6 +4064,29 @@ warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a 
                 <ScalarProperty Name="jobTaskNo" ColumnName="jobTaskNo" />
                 <ScalarProperty Name="jobNo" ColumnName="jobNo" />
                 <ScalarProperty Name="jobTaskNoId" ColumnName="jobTaskNoId" />
+                <ScalarProperty Name="uuid" ColumnName="uuid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ChildCustomers">
+            <EntityTypeMapping TypeName="KUBOnlinePRModel.ChildCustomer">
+              <MappingFragment StoreEntitySet="ChildCustomer">
+                <ScalarProperty Name="abbreviation" ColumnName="abbreviation" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="custId" ColumnName="custId" />
+                <ScalarProperty Name="childCustId" ColumnName="childCustId" />
+                <ScalarProperty Name="uuid" ColumnName="uuid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PR_Finance">
+            <EntityTypeMapping TypeName="KUBOnlinePRModel.PR_Finance">
+              <MappingFragment StoreEntitySet="PR_Finance">
+                <ScalarProperty Name="lastReviewedDate" ColumnName="lastReviewedDate" />
+                <ScalarProperty Name="reviewedDate" ColumnName="reviewedDate" />
+                <ScalarProperty Name="reviewed" ColumnName="reviewed" />
+                <ScalarProperty Name="PRId" ColumnName="PRId" />
+                <ScalarProperty Name="reviewerId" ColumnName="reviewerId" />
                 <ScalarProperty Name="uuid" ColumnName="uuid" />
               </MappingFragment>
             </EntityTypeMapping>

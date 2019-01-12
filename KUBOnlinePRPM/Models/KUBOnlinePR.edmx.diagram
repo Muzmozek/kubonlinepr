@@ -107,6 +107,11 @@
         <AssociationConnector Association="KUBOnlinePRModel.FK_PO_Item_PR_Items" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Items_PurchaseRequisition" />
         <EntityTypeShape EntityType="KUBOnlinePRModel.JobTask" Width="1.5" PointX="3.375" PointY="4.75" />
+        <EntityTypeShape EntityType="KUBOnlinePRModel.ChildCustomer" Width="1.5" PointX="5.375" PointY="0.75" />
+        <EntityTypeShape EntityType="KUBOnlinePRModel.PR_Finance" Width="1.5" PointX="15.75" PointY="37.75" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Finance_PurchaseRequisition" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Finance_User" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_User_ChildCustomer" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

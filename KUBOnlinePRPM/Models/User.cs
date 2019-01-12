@@ -36,6 +36,7 @@ namespace KUBOnlinePRPM.Models
             this.PR_RecommenderCOO = new HashSet<PR_RecommenderCOO>();
             this.PR_RecommenderHOC = new HashSet<PR_RecommenderHOC>();
             this.PurchaseRequisitions = new HashSet<PurchaseRequisition>();
+            this.PR_Finance = new HashSet<PR_Finance>();
         }
     
         public System.Guid uuid { get; set; }
@@ -70,6 +71,7 @@ namespace KUBOnlinePRPM.Models
         public Nullable<int> extensionNo { get; set; }
         public Nullable<int> superiorId { get; set; }
         public string department { get; set; }
+        public Nullable<int> childCompanyId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Customer> Customers { get; set; }
@@ -110,5 +112,8 @@ namespace KUBOnlinePRPM.Models
         public virtual ICollection<PR_RecommenderHOC> PR_RecommenderHOC { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseRequisition> PurchaseRequisitions { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PR_Finance> PR_Finance { get; set; }
+        public virtual ChildCustomer ChildCustomer { get; set; }
     }
 }

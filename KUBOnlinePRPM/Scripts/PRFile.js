@@ -62,14 +62,16 @@
                 }, false);
                 return xhr;
             },
-            success: function (result) {
-                
-                //$("body").removeClass("loading");
-                Custombox.modal.close();
-                generatePRFileTable();
-                $("#nav-4-1-primary-hor-center--Files").load(UrlPRTabs + ' #AttachmentTab');
-                $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
-                alert("Upload Success!");
+            success: function (resp) {
+                if (resp.success === true) {
+                    Custombox.modal.close();
+                    generatePRFileTable();
+                    $("#nav-4-1-primary-hor-center--Files").load(UrlPRTabs + ' #AttachmentTab');
+                    $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
+                    alert(resp.message);
+                } else {
+                    windows.location = resp.url;
+                }
             },
             error: function () { },
             data: fd,

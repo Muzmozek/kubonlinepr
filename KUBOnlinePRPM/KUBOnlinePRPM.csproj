@@ -184,6 +184,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ChildCustomer.cs">
+      <DependentUpon>KUBOnlinePR.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Customer.cs">
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
     </Compile>
@@ -262,6 +265,9 @@
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PR_Approver.cs">
+      <DependentUpon>KUBOnlinePR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PR_Finance.cs">
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PR_HOD.cs">

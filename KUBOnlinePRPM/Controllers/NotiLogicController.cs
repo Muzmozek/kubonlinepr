@@ -18,7 +18,7 @@ namespace KUBOnlinePRPM.Controllers
         private static KUBOnlinePREntities db = new KUBOnlinePREntities();
         protected void SendEmailPRNotification(PRModel PR, string PRFlow)
         {
-            var myEmail = db.Users.SingleOrDefault(x => x.userId == PR.UserId).emailAddress;
+            var myEmail = db.Users.Select(x =>  new { Email = x.emailAddress, UserId = x.userId }).Where(x => x.UserId == PR.UserId).FirstOrDefault();
             var getReceipientDetails = new UserModel()
             {
                 UserId = PR.NewPRForm.ApproverId,
@@ -29,7 +29,11 @@ namespace KUBOnlinePRPM.Controllers
 
             if (PRFlow == "ApprovalInitial")
             {
-                NotiMessage = PR.FullName + " has send email notification for initial approval for PRNo : " + PR.NewPRForm.PRNo + " to " + getReceipientDetails.FullName + " (HOD).";
+                NotiMessage = PR.FullName + " has send email notification for initial approval for PRNo : " + PR.NewPRForm.PRNo + " to " + getReceipientDetails.FullName;
+            }
+            else if (PRFlow == "ReviewalInitial")
+            {
+                NotiMessage = PR.FullName + " has send email notification for PR reviewal for PRNo : " + PR.NewPRForm.PRNo + " to " + getReceipientDetails.FullName;
             }
             else if(PRFlow == "ToHOGPSSNoti")
             {
@@ -102,7 +106,7 @@ namespace KUBOnlinePRPM.Controllers
 
             MailMessage mail = new MailMessage
             {
-                From = new MailAddress("info@kubtel.com"),
+                From = new MailAddress("pr-admin@kub.com"),
                 Subject = "[PR Online]  A new PR to be approved - " + PRInfo.PRNo,
                 Body = result,
                 IsBodyHtml = true
@@ -112,18 +116,21 @@ namespace KUBOnlinePRPM.Controllers
                 mail.To.Add(new MailAddress(getReceipientDetails.EmailAddress));
             } else
             {
-                mail.To.Add(new MailAddress("muzhafar@kubtel.com"));
+                //mail.To.Add(new MailAddress("muzhafar@kubtel.com"));
+                mail.To.Add(new MailAddress("syafiq.khairil@kub.com"));
             }
             
             SmtpClient smtp = new SmtpClient
             {
-                //smtp.Host = "pops.kub.com";
-                Host = "outlook.office365.com",
-                //smtp.Host = "smtp.gmail.com";
+                //Host = "relay.kub.com",
+                Host = "mail.kub.com",
+                //Host = "outlook.office365.com",
+                //Host = "smtp.gmail.com";
                 Port = 587,
+                //Port = 110,
                 //smtp.Port = 25;
                 EnableSsl = true,
-                Credentials = new System.Net.NetworkCredential("info@kubtel.com", "welcome123$")
+                Credentials = new System.Net.NetworkCredential("pr-admin@kub.com", "welcome123$")
             };
             //smtp.Credentials = new System.Net.NetworkCredential("ocm@kubtel.com", "welcome123$");
             smtp.Send(mail);
@@ -139,7 +146,7 @@ namespace KUBOnlinePRPM.Controllers
         }
         protected void SendEmailPONotification(PRModel PR, string POFlow)
         {
-            var myEmail = db.Users.SingleOrDefault(x => x.userId == PR.UserId).emailAddress;
+            var myEmail = db.Users.Select(x => new { Email = x.emailAddress, UserId = x.userId }).Where(x => x.UserId == PR.UserId).FirstOrDefault();
             var getRequestorDetails = (from m in db.PurchaseRequisitions
                                        join n in db.Users on m.PreparedById equals n.userId
                                        where m.PRId == PR.PRId
@@ -151,7 +158,8 @@ namespace KUBOnlinePRPM.Controllers
                                        }).FirstOrDefault();
             var getHODDetails = (from m in db.PR_HOD
                                  join n in db.Users on m.HODId equals n.userId
-                                 where m.PRId == PR.PRId
+                                 join o in db.Users on n.userId equals o.superiorId
+                                 where m.PRId == PR.PRId && o.userId == getRequestorDetails.UserId
                                  select new UserModel()
                                  {
                                      UserId = n.userId,
@@ -346,7 +354,7 @@ namespace KUBOnlinePRPM.Controllers
 
                 MailMessage mail = new MailMessage
                 {
-                    From = new MailAddress("info@kubtel.com"),
+                    From = new MailAddress("pr-admin@kub.com"),
                     Subject = "[PR Online] " + POMessage + " for - " + POInfo.PONo,
                     Body = result,
                     IsBodyHtml = true
@@ -358,18 +366,21 @@ namespace KUBOnlinePRPM.Controllers
                 }
                 else
                 {
-                    mail.To.Add(new MailAddress("muzhafar@kubtel.com"));
+                    //mail.To.Add(new MailAddress("muzhafar@kubtel.com"));
+                    mail.To.Add(new MailAddress("syafiq.khairil@kub.com")); 
                 }
 
                 SmtpClient smtp = new SmtpClient
                 {
-                    //smtp.Host = "pops.kub.com";
-                    Host = "outlook.office365.com",
-                    //smtp.Host = "smtp.gmail.com";
+                    //Host = "relay.kub.com",
+                    Host = "mail.kub.local",
+                    //Host = "outlook.office365.com",
+                    //Host = "smtp.gmail.com";
                     Port = 587,
+                    //Port = 110,
                     //smtp.Port = 25;
-                    EnableSsl = true,
-                    Credentials = new System.Net.NetworkCredential("info@kubtel.com", "welcome123$")
+                    EnableSsl = false,
+                    Credentials = new System.Net.NetworkCredential("pr-admin@kub.com", "welcome123$")
                 };
                 //smtp.Credentials = new System.Net.NetworkCredential("ocm@kubtel.com", "welcome123$");
                 smtp.Send(mail);

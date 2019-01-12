@@ -16,6 +16,7 @@ namespace KUBOnlinePRPM.Models
         public List<RoleList> RoleIdList { get; set; }
         public string Type { get; set; }
         public int CustId { get; set; }
+        public int ChildCustId { get; set; }
         public int PRCustId { get; set; }
         public int PRId { get; set; }
         public int MsgId { get; set; }
@@ -89,12 +90,13 @@ namespace KUBOnlinePRPM.Models
         public int ApproverId { get; set; }
         public string ApproverName { get; set; }
         public DateTime ApprovedDate { get; set; }
-        public int ReviewerId { get; set; }
+        public int? ReviewerId { get; set; }
         public string ReviewerName { get; set; }
-        public DateTime ReviewedDate { get; set; }
-        public int RecommenderId { get; set; }
+        public DateTime? ReviewedDate { get; set; }
+        public string ReviewerEmail { get; set; }
+        public int? RecommenderId { get; set; }
         public string RecommenderName { get; set; }
-        public DateTime RecommendDate { get; set; }
+        public DateTime? RecommendDate { get; set; }
         public int RecommenderIdII { get; set; }
         public string RecommenderNameII { get; set; }
         public DateTime RecommendDateII { get; set; }

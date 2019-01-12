@@ -17,7 +17,7 @@ namespace KUBOnlinePRPM.Service
         }
 
         // check project amount
-        public bool CheckAmountScenarioOne(decimal amount)
+        public bool CheckAmountScenarioOne(decimal amount, int custId)
         {
             if (amount <= 20000)
                 return true;
@@ -25,17 +25,24 @@ namespace KUBOnlinePRPM.Service
             return false;
         }
 
-        public bool CheckAmountScenarioTwo(decimal amount)
+        public bool CheckAmountScenarioTwo(decimal amount, int custId)
         {
-            if (amount >= 20001 && amount <= 50000)
+            if (custId == 4 && amount >= decimal.Parse("20000.01") && amount <= 500000)
+                return true;
+
+
+            if (amount >= decimal.Parse("20000.01") && amount <= 50000)
                 return true;
 
             return false;
         }
 
-        public bool CheckAmountScenarioThree(decimal amount)
+        public bool CheckAmountScenarioThree(decimal amount, int custId)
         {
-            if (amount >= 50001)
+            if (custId == 4 && amount >= decimal.Parse("500000.01"))
+                return true;
+
+            if (amount >= decimal.Parse("50000.01"))
                 return true;
 
             return false;

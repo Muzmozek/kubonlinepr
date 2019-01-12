@@ -61,5 +61,7 @@ namespace KUBOnlinePRPM.Models
         public virtual DbSet<PurchaseRequisition> PurchaseRequisitions { get; set; }
         public virtual DbSet<PR_Items> PR_Items { get; set; }
         public virtual DbSet<JobTask> JobTasks { get; set; }
+        public virtual DbSet<ChildCustomer> ChildCustomers { get; set; }
+        public virtual DbSet<PR_Finance> PR_Finance { get; set; }
     }
 }

@@ -376,7 +376,7 @@
         </tr>
         <tr style="height:10px" class="r42">
             <td class="c42_1" style="width:98px">
-                Justification
+                Remark
             </td>
             <td class="c42_2" style="width:21px">
                 :
@@ -456,13 +456,27 @@
                 <img src="@Context.Server.MapPath("~/Images/signature.png")" width="66" height="50" />
             </td>
             <td class="td2" style="height:40px; border-right:1px solid black;">
-                @if (Model.NewPRForm.Scenario == 1 && Model.NewPRForm.ReviewerName == null)
+                @if (Model.NewPRForm.Scenario == 1)
                 {
+                    if (Model.NewPRForm.ReviewedDate == null)
+                    {
 
+                    }
+                    else
+                    {
+                        <img src="@Context.Server.MapPath("~/Images/signature.png")" width="66" height="50" />
+                    }
                 }
                 else
                 {
-                    <img src="@Context.Server.MapPath("~/Images/signature.png")" width="66" height="50" />
+                    if (Model.NewPRForm.RecommendDate == null)
+                    {
+
+                    }
+                    else
+                    {
+                        <img src="@Context.Server.MapPath("~/Images/signature.png")" width="66" height="50" />
+                    }
                 }
             </td>
         </tr>
@@ -485,7 +499,7 @@
             {
                 if (Model.NewPRForm.ReviewerName != null)
                 {
-                    <td class="td2" style="border-right: 1px solid black; padding-bottom:10px; border-bottom: 1px solid black">Date: @Model.NewPRForm.ReviewedDate.ToShortDateString()</td>
+                    <td class="td2" style="border-right: 1px solid black; padding-bottom:10px; border-bottom: 1px solid black">Date: @Model.NewPRForm.ReviewedDate.Value.ToShortDateString()</td>
                 }
                 else
                 {
@@ -494,7 +508,14 @@
             }
             else
             {
-                <td class="td2" style="border-right: 1px solid black; padding-bottom:10px; border-bottom: 1px solid black">Date: @Model.NewPRForm.RecommendDate.ToShortDateString()</td>
+                if (Model.NewPRForm.RecommendDate != null)
+                {
+                    <td class="td2" style="border-right: 1px solid black; padding-bottom:10px; border-bottom: 1px solid black">Date: @Model.NewPRForm.RecommendDate.Value.ToShortDateString()</td>
+                }
+                else
+                {
+                    <td class="td2" style="border-right: 1px solid black; padding-bottom:10px; border-bottom: 1px solid black">Date:</td>
+                }
             }
 
         </tr>
@@ -575,13 +596,13 @@
             }
             else if (Model.NewPRForm.Scenario == 2)
             {
-                <td class="td2" style="border-bottom: 1px solid black; padding-bottom:10px;">Date: @Model.NewPRForm.ReviewedDate.ToShortDateString()</td>
+                <td class="td2" style="border-bottom: 1px solid black; padding-bottom:10px;">Date: @Model.NewPRForm.ReviewedDate.Value.ToShortDateString()</td>
                 <td class="td2" style="border-bottom: 1px solid black; padding-bottom:10px;">Date: </td>
                 <td class="td2" style="border-right: 1px solid black; padding-bottom:10px; border-bottom: 1px solid black">Date: @Model.NewPRForm.ApprovedDate.ToShortDateString()</td>
             }
             else
             {
-                <td class="td2" style="border-bottom: 1px solid black; padding-bottom:10px;">Date: @Model.NewPRForm.ReviewedDate.ToShortDateString()</td>
+                <td class="td2" style="border-bottom: 1px solid black; padding-bottom:10px;">Date: @Model.NewPRForm.ReviewedDate.Value.ToShortDateString()</td>
                 <td class="td2" style="border-bottom: 1px solid black; padding-bottom:10px;">Date: @Model.NewPRForm.RecommendDateII.ToShortDateString()</td>
                 <td class="td2" style="border-right: 1px solid black; padding-bottom:10px; border-bottom: 1px solid black">Date: @Model.NewPRForm.ApprovedDate.ToShortDateString()</td>
             }
