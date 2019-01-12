@@ -25,7 +25,7 @@ namespace KUBOnlinePRPM.Controllers.Admin
         {
             try
             {
-                EntityToNavHeaderExcel(model.StartDate, model.EndDate, model.ExtractFileLocation);
+                //EntityToNavHeaderExcel(model.StartDate, model.EndDate, model.ExtractFileLocation);
                 //model.NotiListObject = (from m in db.NotificationMsgs
                 //                        join n in db.Users on m.fromUserId equals n.userId
                 //                        join o in db.NotiGroups on m.msgId equals o.msgId into p
