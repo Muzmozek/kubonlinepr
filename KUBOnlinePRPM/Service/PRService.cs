@@ -66,11 +66,9 @@ namespace KUBOnlinePRPM.Service
                              firstName = u.firstName,
                              lastName = u.lastName,
                              userId = u.userId
-                         }).First();
+                         }).ToList();
 
             records.SuperAdmin = SuperAdmin;
-
-
 
             var HOGPSS = (from u in _db.Users
                           join ur in _db.Users_Roles on u.userId equals ur.userId into s                          
@@ -82,20 +80,20 @@ namespace KUBOnlinePRPM.Service
                               firstName = u.firstName,
                               lastName = u.lastName,
                               userId = u.userId
-                          }).FirstOrDefault();
+                          }).ToList();
 
             records.HeadOfGPSS = HOGPSS;
 
             // loop by Customer
             var customers = _db.Customers.ToList();
-
+           
             records.Members = new List<SubsidiaryLevel>();
 
             foreach (Customer customer in customers)
             {
                 var procurements = (from u in _db.Users
                                     join ur in _db.Users_Roles on u.userId equals ur.userId
-                                    join r in _db.Roles on ur.roleId equals r.roleId
+                                    join r in _db.Roles on ur.roleId equals r.roleId                                   
                                     where r.name == "Procurement"
                                     && u.Customer.abbreviation == customer.abbreviation
                                     select new UserViewModel
@@ -108,13 +106,14 @@ namespace KUBOnlinePRPM.Service
                 var hoc = (from u in _db.Users
                            join ur in _db.Users_Roles on u.userId equals ur.userId
                            join r in _db.Roles on ur.roleId equals r.roleId
-                           where r.name == "HOC"
+                           where (r.name == "HOC" || r.name == "GMD")
                            && u.Customer.abbreviation == customer.abbreviation
                            select new UserViewModel
                            {
                                firstName = u.firstName,
                                lastName = u.lastName,
-                               userId = u.userId
+                               userId = u.userId,
+                               CustId = u.companyId.Value
                            }).ToList();
 
                 var it = (from u in _db.Users
@@ -153,6 +152,18 @@ namespace KUBOnlinePRPM.Service
                                userId = u.userId
                            }).ToList();
 
+                var admin = (from u in _db.Users
+                           join ur in _db.Users_Roles on u.userId equals ur.userId
+                           join r in _db.Roles on ur.roleId equals r.roleId
+                           where r.name == "Admin"
+                           && u.Customer.abbreviation == customer.abbreviation
+                           select new UserViewModel
+                           {
+                               firstName = u.firstName,
+                               lastName = u.lastName,
+                               userId = u.userId
+                           }).ToList();
+
                 var hod = (from u in _db.Users
                            join ur in _db.Users_Roles on u.userId equals ur.userId
                            join r in _db.Roles on ur.roleId equals r.roleId
@@ -174,10 +185,21 @@ namespace KUBOnlinePRPM.Service
                                  {
                                      firstName = u.firstName,
                                      lastName = u.lastName,
-                                     userId = u.userId
-                                    
+                                     userId = u.userId,
+                                     superiorId = u.superiorId
                                  }).ToList();
 
+                foreach (var r in requestor)
+                {
+                    if (r.superiorId != null)
+                    {
+                        var superior = _db.Users.Find(r.superiorId);
+
+                        r.superiorFirstName = superior.firstName;
+                        r.superiorLastName = superior.lastName;
+                    }
+
+                }
 
                 records.Members.Add(new SubsidiaryLevel()
                 {
@@ -185,10 +207,12 @@ namespace KUBOnlinePRPM.Service
                     SubsidiaryName = customer.abbreviation,
                     HOCs = hoc,
                     HODs = hod,
+                    Procurements = procurements,
                     Requestors = requestor,
                     ITs = it,
                     PMOs = pmo,
-                    HSEs = hse
+                    HSEs = hse,
+                    Admin = admin
                 });
 
             }

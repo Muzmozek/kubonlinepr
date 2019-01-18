@@ -7,9 +7,9 @@
 
 <h2>Users Heirarchy</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+@*<p>
+        @Html.ActionLink("Create New", "Create")
+    </p>*@
 <table class="table">
     <thead>
         <tr>
@@ -20,31 +20,44 @@
                 Head Of GPSS
             </th>
         </tr>
-    
+
     </thead>
     <tbody>
         <tr>
-            <td>@Html.ActionLink(@Model.SuperAdmin.firstName + ' ' + @Model.HeadOfGPSS.lastName, "Edit", "UsersAdmin", new { id = @Model.SuperAdmin.userId }, new { target = "_blank" })</td>
-            @if (Model.HeadOfGPSS != null)
-            {
-                <td>@Html.ActionLink(@Model.HeadOfGPSS.firstName + ' ' + @Model.HeadOfGPSS.lastName, "Edit", "UsersAdmin", new { id = @Model.HeadOfGPSS.userId }, new { target = "_blank" })</td>
-            }
-            else
-            {
-                <td></td>
-            }
+            <td>
+                <ol>
+                    @foreach (var item in Model.SuperAdmin)
+                    {
+                        if (Model.SuperAdmin != null)
+                        {
+                            <li>@Html.ActionLink(item.firstName + ' ' + item.lastName, "Edit", "UsersAdmin", new { id = item.userId }, new { target = "_blank" })</li>
+                        }
+                    }
+                </ol>
+            </td>
+            <td>
+                <ol>
+                    @foreach (var item in Model.HeadOfGPSS)
+                    {
+                        if (Model.HeadOfGPSS != null)
+                        {
+                            <li>@Html.ActionLink(item.firstName + ' ' + item.lastName, "Edit", "UsersAdmin", new { id = item.userId }, new { target = "_blank" })</li>
+                        }
+                    }
+                </ol>
+            </td>
         </tr>
     </tbody>
 
-</table>
+        </table>
 
 <h5>Users</h5>
 
 @foreach (var member in Model.Members)
 {
-<h3>@member.SubsidiaryName</h3>
+    <h3>@member.SubsidiaryName</h3>
 
-    
+
 
     <table class="table table-light table-striped">
         <thead>
@@ -60,9 +73,19 @@
         </thead>
         <tbody>
             <tr>
-                <td>
-                    HOC
-                </td>
+                @if (member.SubsidiaryName == "KUBM")
+                {
+                    <td>
+                        GMD
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        HOC
+                    </td>
+                }
+
                 <td>
                     <ol>
                         @foreach (var x in member.HOCs)
@@ -153,24 +176,71 @@
 
             <tr>
                 <td>
-                    HOD
+                    Admin
                 </td>
                 <td>
-                    <ol>
-                        @foreach (var x in member.HODs)
-                        {
-                            <li>@Html.ActionLink(@x.firstName+' '+@x.lastName, "Edit", "UsersAdmin", new { id = @x.userId }, new { target = "_blank" })</li>
-                        }
-                    </ol>
+                    @if (member.Admin.Count > 0)
+                    {
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Username
+                                    </th>
+                                </tr>
+                            </thead>
+                            @foreach (var x in member.Admin)
+                            {
+                                <tr>
+                                    <td>@Html.ActionLink(@x.firstName + ' ' + @x.lastName, "Edit", "UsersAdmin", new { id = @x.userId }, new { target = "_blank" })</td>
+                                </tr>
+                            }
+                        </table>
+                    }
                 </td>
-             </tr>
+            </tr>
+
+            <tr>
+                <td>
+                    Team Leader & HOD
+                </td>
+                <td>
+                    @if (member.HODs.Count > 0)
+                    {
+                        <ol>
+                            @foreach (var x in member.HODs)
+                            {
+                                <li>@Html.ActionLink(@x.firstName + ' ' + @x.lastName, "Edit", "UsersAdmin", new { id = @x.userId }, new { target = "_blank" })</li>
+                            }
+                        </ol>
+                    }
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Procurement
+                </td>
+                <td>
+                    @if (member.Procurements.Count > 0)
+                    {
+                        <ol>
+                            @foreach (var x in member.Procurements)
+                            {
+                                <li>@Html.ActionLink(@x.firstName + ' ' + @x.lastName, "Edit", "UsersAdmin", new { id = @x.userId }, new { target = "_blank" })</li>
+                            }
+                        </ol>
+                    }
+                </td>
+
+            </tr>
 
             <tr>
                 <td>
                     Requestors
                 </td>
                 <td>
-                    
+
 
                     @if (member.Requestors.Count > 0)
                     {
@@ -189,7 +259,14 @@
                             {
                                 <tr>
                                     <td>@Html.ActionLink(@x.firstName + ' ' + @x.lastName, "Edit", "UsersAdmin", new { id = @x.userId }, new { target = "_blank" })</td>
-                                    <td>&nbsp;</td>
+                                    @if (x.superiorId != null)
+                                    {
+                                        <td>@Html.ActionLink(@x.superiorFirstName, "Edit", "UsersAdmin", new { id = @x.superiorId }, new { target = "_blank" })</td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
                                 </tr>
                             }
                         </table>
@@ -201,4 +278,4 @@
     </table>
 }
 
-<br/><br /><br />
+<br /><br /><br />
