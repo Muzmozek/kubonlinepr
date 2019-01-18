@@ -1,4 +1,4 @@
-﻿$(document).ready(function () {
+﻿function generatePOItemTable() {
     POItemTable = $('#POItemTable').DataTable({
         serverSide: false,
         //dom: 'frtiS',
@@ -9,7 +9,7 @@
         searching: false,
         bAutoWidth: false,
         columnDefs: [
-                { visible: false, targets: [0] }
+            { visible: false, targets: [0] }
         ],
         destroy: true,
         //aaSorting: [12, "desc"],
@@ -19,6 +19,21 @@
                 { name: 'tablet', width: 768 },
                 { name: 'phone', width: 480 }
             ]
+        }
+    });
+}
+
+$(document).ready(function () {
+    $.ajaxSetup({
+        beforeSend: function () { $("body").addClass("loading"); }
+    });
+
+    generatePOItemTable();
+
+    $(window).keydown(function (event) {
+        if (event.keyCode === 13 && $(event.target)[0] !== $("textarea")[0]) {
+            event.preventDefault();
+            return false;
         }
     });
 
@@ -50,7 +65,7 @@
     $(document).on("click", ".saveSubmitDetail", function (e) {
         e.preventDefault();
         var fd = new FormData(); var other_data; var POType; var URL;
-            POType = $("#POType").val();
+        POType = $("#POType").val();
         other_data = $("#PODetails").serializeArray();
         var PRId = $("#PRId").val();
         $.each(other_data, function (key, input) {
@@ -75,9 +90,6 @@
             contentType: false,
             processData: false,
             cache: false,
-            beforeSend: function () {
-                $("body").addClass("loading");
-            },
             dataType: "json",
             success: function (resp) {
                 if (resp.success && resp.Saved) {
@@ -114,8 +126,17 @@
             PaymentTermsId: $("#PaymentTermsCode").find("option:selected").val()
 
         }, function (resp) {
-            alert(resp);
-            $("#nav-4-1-primary-hor-center--PODetails").load(UrlSaveSubmitDetails + ' #PODetailsTab');
+            if (resp.success === true) {
+                alert(resp.message);
+                $("#nav-4-1-primary-hor-center--PODetails").load(UrlSaveSubmitDetails + ' #PODetailsTab', function () {
+                    $("body").removeClass("loading");
+                    generatePOItemTable();
+                });
+            } else if (resp.success === false && resp.exception === true) {
+                alert(resp.message);
+            } else {
+                window.location = resp.url;
+            }
         });
     });
 
@@ -126,7 +147,10 @@
 
         }, function (resp) {
             alert(resp);
-            $("#nav-4-1-primary-hor-center--PODetails").load(UrlSaveSubmitDetails + ' #PODetailsTab');
+            $("#nav-4-1-primary-hor-center--PODetails").load(UrlSaveSubmitDetails + ' #PODetailsTab', function () {
+                $("body").removeClass("loading");
+                generatePOItemTable();
+            });
         });
     });
 });

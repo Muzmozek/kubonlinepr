@@ -38,9 +38,6 @@ namespace KUBOnlinePRPM.Models
         public Nullable<System.DateTime> plannedReceiptDate { get; set; }
         public Nullable<decimal> sst { get; set; }
     
-        public virtual FixedAsset FixedAsset { get; set; }
-        public virtual GL GL { get; set; }
-        public virtual Item Item { get; set; }
         public virtual ItemType ItemType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PO_Item> PO_Item { get; set; }

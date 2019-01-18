@@ -18,7 +18,6 @@ namespace KUBOnlinePRPM.Models
         public GL()
         {
             this.PO_Item = new HashSet<PO_Item>();
-            this.PR_Items = new HashSet<PR_Items>();
         }
     
         public System.Guid uuid { get; set; }
@@ -35,7 +34,5 @@ namespace KUBOnlinePRPM.Models
         public virtual ItemType ItemType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PO_Item> PO_Item { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PR_Items> PR_Items { get; set; }
     }
 }

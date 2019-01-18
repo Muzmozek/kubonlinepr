@@ -10,7 +10,7 @@
     <div id="MessagePanel" class="u-shadow-v2 g-brd-around g-brd-gray-light-v4 g-line-height-2 g-pa-40 g-mb-30" role="alert">
         @foreach (var MessageList in Model.MessageListModel)
         {
-            if (@MessageList.MsgType == "Task" || @MessageList.MsgType == "Message")
+            if (@MessageList.MsgType == "Message")
             {
                 <div class="row margin-left-10 margin-bottom-5">
                     <div class="col-md-8">
@@ -24,7 +24,7 @@
                     </div>
                 </div>
             }
-            else
+            else if (@MessageList.MsgType != "Task")
             {
                 <div class="row margin-left-10 margin-bottom-5">
                     <div class="col-md-10">

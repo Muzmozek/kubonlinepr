@@ -11,6 +11,7 @@ namespace KUBOnlinePRPM.Models
     public class PRModel
     {
         public int UserId { get; set; }
+        public int FinalApproverId { get; set; }
         public string UserName { get; set; }
         public string FullName { get; set; }
         public List<RoleList> RoleIdList { get; set; }
@@ -115,6 +116,7 @@ namespace KUBOnlinePRPM.Models
         public int ApproverApproved { get; set; }
         public int AdminApproved { get; set; }
         public string StatusId { get; set; }
+        public string RoleId { get; set; }
         public string PRStatus { get; set; }
         public DateTime LastModifyDate { get; set; }
         public DateTime SubmitDate { get; set; }
@@ -157,7 +159,7 @@ namespace KUBOnlinePRPM.Models
 
         [Required(ErrorMessage = "Date and time cannot be empty")]
         [DataType(DataType.DateTime)]
-        [Range(typeof(DateTime), "1/1/1966", "1/1/2020")]
+        [Range(typeof(DateTime), "1/1/2000", "1/1/2022")]
         public DateTime DateRequired { get; set; }
 
         [Required]

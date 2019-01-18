@@ -44,8 +44,6 @@
         <EntityTypeShape EntityType="KUBOnlinePRModel.PR_Approver" Width="1.5" PointX="18.75" PointY="41.625" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Approver_User" />
         <EntityTypeShape EntityType="KUBOnlinePRModel.POStatu" Width="1.5" PointX="8.25" PointY="59.75" />
-        <EntityTypeShape EntityType="KUBOnlinePRModel.PR_PaperApprover" Width="1.5" PointX="21.75" PointY="45.75" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_PaperApprover_User" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_Customer_Customer" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_Project_Customer" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_Vendor_Customer" />
@@ -85,7 +83,6 @@
         <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Admin_PurchaseRequisition" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Approver_PurchaseRequisition" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PR_HOD_PurchaseRequisition" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_PaperApprover_PurchaseRequisition" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Recommender_PurchaseRequisition" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PR_RecommenderCFO_PurchaseRequisition" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PR_RecommenderCOO_PurchaseRequisition" />
@@ -99,19 +96,19 @@
         <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseRequisition_User" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseRequisition_Vendor" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseRequisition_VendorStaff" />
-        <EntityTypeShape EntityType="KUBOnlinePRModel.PR_Items" Width="1.5" PointX="15.75" PointY="53.25" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Items_ItemCode" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Items_GLs" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Items_Items" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Items_ItemType" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PO_Item_PR_Items" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Items_PurchaseRequisition" />
         <EntityTypeShape EntityType="KUBOnlinePRModel.JobTask" Width="1.5" PointX="3.375" PointY="4.75" />
         <EntityTypeShape EntityType="KUBOnlinePRModel.ChildCustomer" Width="1.5" PointX="5.375" PointY="0.75" />
         <EntityTypeShape EntityType="KUBOnlinePRModel.PR_Finance" Width="1.5" PointX="15.75" PointY="37.75" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Finance_PurchaseRequisition" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Finance_User" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_User_ChildCustomer" />
+        <EntityTypeShape EntityType="KUBOnlinePRModel.PR_Items" Width="1.5" PointX="15.75" PointY="53.5" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Items_ItemType" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PO_Item_PR_Items" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Items_PurchaseRequisition" />
+        <EntityTypeShape EntityType="KUBOnlinePRModel.PR_PaperApprover" Width="1.5" PointX="21.75" PointY="45.75" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_PaperApprover_PurchaseRequisition" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_PaperApprover_User" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

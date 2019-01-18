@@ -30,10 +30,12 @@ namespace KUBOnlinePRPM.Controllers
             }
         }
     }
+
     public class HomeController : DBLogicController
     {
         private KUBOnlinePREntities db = new KUBOnlinePREntities();
         private KUBHelper KUBHelper = new KUBHelper();
+
         public ActionResult Index()
         {
             if (Request["UserName"] != null && (Request["PRId"] != null || Request["POId"] != null) && Request["PRType"] != null)

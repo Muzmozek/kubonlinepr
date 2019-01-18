@@ -20,7 +20,6 @@ namespace KUBOnlinePRPM.Models
             this.PR_Admin = new HashSet<PR_Admin>();
             this.PR_Approver = new HashSet<PR_Approver>();
             this.PR_HOD = new HashSet<PR_HOD>();
-            this.PR_PaperApprover = new HashSet<PR_PaperApprover>();
             this.PR_Recommender = new HashSet<PR_Recommender>();
             this.PR_RecommenderCFO = new HashSet<PR_RecommenderCFO>();
             this.PR_RecommenderCOO = new HashSet<PR_RecommenderCOO>();
@@ -28,8 +27,9 @@ namespace KUBOnlinePRPM.Models
             this.PR_Reviewer = new HashSet<PR_Reviewer>();
             this.PRs_FileUpload = new HashSet<PRs_FileUpload>();
             this.PurchaseOrders = new HashSet<PurchaseOrder>();
-            this.PR_Items = new HashSet<PR_Items>();
             this.PR_Finance = new HashSet<PR_Finance>();
+            this.PR_Items = new HashSet<PR_Items>();
+            this.PR_PaperApprover = new HashSet<PR_PaperApprover>();
         }
     
         public System.Guid uuid { get; set; }
@@ -78,8 +78,6 @@ namespace KUBOnlinePRPM.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_HOD> PR_HOD { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PR_PaperApprover> PR_PaperApprover { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_Recommender> PR_Recommender { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_RecommenderCFO> PR_RecommenderCFO { get; set; }
@@ -100,8 +98,10 @@ namespace KUBOnlinePRPM.Models
         public virtual Vendor Vendor { get; set; }
         public virtual VendorStaff VendorStaff { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PR_Finance> PR_Finance { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_Items> PR_Items { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PR_Finance> PR_Finance { get; set; }
+        public virtual ICollection<PR_PaperApprover> PR_PaperApprover { get; set; }
     }
 }

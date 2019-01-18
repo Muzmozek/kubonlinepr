@@ -1,6 +1,12 @@
 ﻿$(document).ready(function () {
+    $.HSCore.components.HSFileAttachment.init('.js-file-attachment');
+    $.HSCore.helpers.HSFocusState.init();
     generatePRItemTable();
-    
+
+    $.ajaxSetup({
+        beforeSend: function () { $("body").addClass("loading"); }
+    });
+
     $(document).on("click", ".saveSubmitProcDetail", function (e) {
         e.preventDefault();
         var fd = new FormData(); var other_data; var PRType; var URL;
@@ -8,30 +14,30 @@
             fd.append("NewPRForm.SelectSave", true);
             URL = UrlSavePreparedProcurement;
         } else if ($(this)[0].id === "SubmitPreparedProcurement") {
-            if ($("#VendorId").val() === "") {
-                alert("Please insert vendor company here");
-                $("#VendorId").focus();
-                return false;
-            }
             fd.append("NewPRForm.SelectSubmit", true);
             URL = UrlSubmitPreparedProcurement;
         }
         other_data = $(".checkFiles").serializeArray();
-        $.each(other_data, function (key, input) {
-            fd.append(input.name, input.value);
+        $.each(other_data, function (i, input) {
+            if (input.name === "NewPRForm.SpecReviewerId") {
+                fd.append(input.name, input.value);
+            }
+            if (i < 24) {
+                fd.append(input.name, input.value);
+            }
         });
         var data = PRItemTable.$("tr");
-        var ItemsId; var kill = false;
+        var ItemsId;
         $.each(data, function (i, input) {
             if ($(PRItemTable.row(i).data()[0]).val() === "") {
                 ItemsId = 0;
             } else {
                 ItemsId = $(PRItemTable.row(i).data()[0]).val();
             }
-            var unitPrice = $(input).find("input[name='UnitPrice']").val(); var totalPrice = $(input).find("input[name='TotalPrice']").val();
-            var SST = $(input).find("input[name='SST']").val();
+            var unitPrice = $(input).find("#UnitPrice" + k).val(); var totalPrice = $(input).find("#TotalPrice" + k).val();
+            var SST = $(input).find("#SST" + k).val(); var CustPONo = $(input).siblings("tr.child").find("#CustPONo" + k).val();
             var ItemTypeId = $(input).find(".TypeId option:selected").val();           
-            var UoM = $(input).find("input[name='UoM']").val(); var CodeId = $(input).find(".CodeId option:selected").val();
+            var UoM = $(input).find("#UoM" + k).val(); var CodeId = $(input).find(".CodeId option:selected").val();
             var JobNoId = $(input).find(".JobNoId option:selected").val();
             var JobTaskNoId = $(input).find(".JobTaskNoId option:selected").val();
             if (unitPrice === undefined)
@@ -44,6 +50,8 @@
                 ItemTypeId = "";
             if (CodeId === undefined)
                 CodeId = "";
+            if (CustPONo === undefined)
+                CustPONo = "";
             if (JobNoId === undefined)
                 JobNoId = "";
             if (JobTaskNoId === undefined)
@@ -51,12 +59,12 @@
             if (SST === undefined)
                 SST = "";
             fd.append("NewPRForm.PRItemListObject[" + i + "].ItemsId", ItemsId);
-            fd.append("NewPRForm.PRItemListObject[" + i + "].DateRequired", $(input).find("input[name='DateRequired']").val());
+            fd.append("NewPRForm.PRItemListObject[" + i + "].DateRequired", $(input).find("#DateRequired" +  k).val());
             fd.append("NewPRForm.PRItemListObject[" + i + "].ItemTypeId", ItemTypeId);
             fd.append("NewPRForm.PRItemListObject[" + i + "].CodeId", CodeId);
-            fd.append("NewPRForm.PRItemListObject[" + i + "].Description", $(input).find("input[name='Description']").val());
-            fd.append("NewPRForm.PRItemListObject[" + i + "].CustPONo", $(input).find("input[name='CustPONo']").val());
-            fd.append("NewPRForm.PRItemListObject[" + i + "].Quantity", $(input).find("input[name='Quantity']").val());
+            fd.append("NewPRForm.PRItemListObject[" + i + "].Description", $(input).find("#Description" + k).val());
+            fd.append("NewPRForm.PRItemListObject[" + i + "].CustPONo", CustPONo);
+            fd.append("NewPRForm.PRItemListObject[" + i + "].Quantity", $(input).find("#Quantity" + k).val());
             fd.append("NewPRForm.PRItemListObject[" + i + "].UOM", UoM);
             fd.append("NewPRForm.PRItemListObject[" + i + "].JobNoId", JobNoId);
             fd.append("NewPRForm.PRItemListObject[" + i + "].JobTaskNoId", JobTaskNoId);
@@ -65,7 +73,6 @@
             fd.append("NewPRForm.PRItemListObject[" + i + "].TotalPrice", totalPrice);           
         });
 
-        if (kill === false) {
             $.ajax({
                 url: URL,
                 type: 'POST',
@@ -73,24 +80,29 @@
                 contentType: false,
                 processData: false,
                 cache: false,
-                beforeSend: function () {
-                    $("body").addClass("loading");
-                },
                 dataType: "json",
                 success: function (resp) {
                     if (resp.success === true) {
-                        $("body").removeClass("loading");
                         alert(resp.message);
                         $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
                             generatePRItemTable();
                         });
-                        $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
+                        $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                            $("body").removeClass("loading");
+                        });
+                    }
+                        else if (resp.success === false && resp.exception === false) {
+                        alert("Validation error");
+                        $.each(resp.data, function (key, input) {
+                            //$('input[name="' + input.name + '"]').val(input.value);
+                            $('span[data-valmsg-for="' + input.key + '"]').text(input.errors[0]);                            
+                        });
+                        $("body").removeClass("loading");
                     } else {
                         window.location = resp.url;
                     }                    
                 }
-            });
-        }       
+            });     
     });
 
     // scenario 1
@@ -108,7 +120,9 @@
             $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
                 generatePRItemTable();
             });
-            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
+            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                $("body").removeClass("loading");
+            });
             Custombox.modal.close();
         });
 
@@ -128,7 +142,9 @@
             $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
                 generatePRItemTable();
             });
-            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
+            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                $("body").removeClass("loading");
+            });
         });
 
     });
@@ -149,7 +165,9 @@
             $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
                 generatePRItemTable();
             });
-            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
+            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                $("body").removeClass("loading");
+            });
             Custombox.modal.close();
         });
 
@@ -169,7 +187,9 @@
             $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
                 generatePRItemTable();
             });
-            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
+            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                $("body").removeClass("loading");
+            });
         });
 
     });
@@ -190,7 +210,9 @@
             $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
                 generatePRItemTable();
             });
-            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
+            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                $("body").removeClass("loading");
+            });
             Custombox.modal.close();
         });
 
@@ -208,7 +230,9 @@
             $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
                 generatePRItemTable();
             });
-            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
+            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                $("body").removeClass("loading");
+            });
         });
 
     });
@@ -225,7 +249,9 @@
                 $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
                     generatePRItemTable();
                 });
-                $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
+                $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                    $("body").removeClass("loading");
+                });
             });
 
     });
@@ -242,7 +268,9 @@
             $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
                 generatePRItemTable();
             });
-            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
+            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                $("body").removeClass("loading");
+            });
         });
 
     });
@@ -259,7 +287,9 @@
             $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
                 generatePRItemTable();
             });
-            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
+            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                $("body").removeClass("loading");
+            });
         });
 
     });
@@ -268,25 +298,33 @@
     $("#ApproveInitialPRReview").click(function (e) {
 
         e.preventDefault();
-        $.post(UrlApproveInitialPRReview, {
-
-            PRId: PRId,
-            //RejectRemark: $("textarea#RejectRemark").val()
-
-        }, function (resp) {
-            if (resp.success === true) {
-                alert(resp.message);
-                $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
-                    generatePRItemTable();
-                });
-                $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
-                Custombox.modal.close();
-            } else {
-                window.location = resp.url;
-            }
-            
+        var fd = new FormData(); var other_data;
+        other_data = $(".checkFiles").serializeArray();
+        $.each(other_data, function (i, input) {
+            fd.append(input.name, input.value);
         });
-
+        $.ajax({
+            url: UrlApproveInitialPRReview,
+            type: 'POST',
+            data: fd,
+            contentType: false,
+            processData: false,
+            cache: false,
+            dataType: "json",
+            success: function (resp) {
+                if (resp.success === true) {
+                    alert(resp.message);
+                    $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
+                        generatePRItemTable();
+                    });
+                    $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                        $("body").removeClass("loading");
+                    });
+                } else {
+                    window.location = resp.url;
+                }
+            }
+        });
     });
 
     $("#RejectInitialPRReview").click(function (e) {
@@ -303,7 +341,9 @@
                 $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
                     generatePRItemTable();
                 });
-                $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
+                $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                    $("body").removeClass("loading");
+                });
                 Custombox.modal.close();
             } else {
                 window.location = resp.url;
@@ -314,22 +354,50 @@
 
     $(document).on("click", ".approveRejectDetail", function (e) {
         e.preventDefault();
-        /*var Reviewer = false;*/ var Approver = "";
+        var fd = new FormData(); var Approver = "";
         //if (ifIT !== "" || ifPMO !== "" || ifHSE !== "")
         //    Reviewer = true;
-        if (ifHOD !== "")
-            Approver = "HOD";
-        else if (ifHOGPSS !== "")
-            Approver = "ifHOGPSS";
+        fd.append("PRId", PRId); fd.append("NewPRForm.BudgetDescription", $("#BudgetDescription").val());
+        fd.append("NewPRForm.StatusId", $("#StatusId").val()); fd.append("NewPRForm.Justification", $("#Justification").val());
+        if (ifHOGPSS !== "" && ifHOD !== "" && $("#StatusId").val() !== "PR10") {
+            fd.append("UserName", "HOD"); Approver = "HOD";
+        }
+        else if (ifHOGPSS !== "") {
+            fd.append("UserName", "ifHOGPSS"); Approver = "ifHOGPSS";
+            fd.append("FinalApproverId", $("#HOGPSSList option:selected").val());
+        }
+        else if (ifHOD !== "") {
+            fd.append("UserName", "HOD"); Approver = "HOD";
+        }
+            
         if ($(this)[0].id === "ApprovePR" || $(this)[0].id === "VerifiedPRPaper") {
-            $.post(UrlApproved, {
-                PRId: PRId,
-                PRType: POType,
-                //Reviewer: Reviewer,
-                Approver: Approver
-            }, function (resp) {
-                alert("The PR has been approved");
-                window.location = $("#UrlPRList").attr('href') + "?type=" + POType;
+            $.ajax({
+                url: UrlApproved,
+                type: 'POST',
+                data: fd,
+                contentType: false,
+                processData: false,
+                cache: false,
+                dataType: "json",
+                success: function (resp) {
+                    if (resp.success === true) {
+                        alert("The PR has been approved");
+                        $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
+                            generatePRItemTable();
+                        });
+                        $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                            $("body").removeClass("loading");
+                        });
+                    } else if (resp.success === false) {
+                        alert("Validation error");
+                        $.each(resp.data, function (key, input) {
+                            $('span[data-valmsg-for="' + input.key + '"]').text(input.errors[0]);
+                        });
+                        $("body").removeClass("loading");
+                    } else {
+                        window.location = resp.url;
+                    }
+                }
             });
         }
         else if ($(this)[0].id === "RejectPR" || $(this)[0].id === "RejectPRPaper") {
@@ -356,6 +424,7 @@
                 $("#VendorStaffId").html(resp.html);
                 $("#VendorEmail").val("");
                 $("#VendorContactNo").val("");
+                $("body").removeClass("loading");
             }
         });
     });
@@ -369,6 +438,7 @@
             success: function (resp) {
                 $("#VendorEmail").val(resp.VendorStaffIdInfo.VendorEmail);
                 $("#VendorContactNo").val(resp.VendorStaffIdInfo.VendorContactNo);
+                $("body").removeClass("loading");
             }
         });
     });
@@ -383,6 +453,9 @@
             selectlistid = $(this)[0].id.substring(10, 13);
         }
         var ItemTypeId = $(this).val();
+        if (ItemTypeId === "") {
+            ItemTypeId = 0;
+        }
         $.ajax({
             url: UrlItemTypeInfo,
             method: 'GET',
@@ -393,6 +466,7 @@
             success: function (resp) {
                 $("#CodeId" + selectlistid).html(resp.html);
                 $("#CodeId" + selectlistid).prop("disabled", false);
+                $("body").removeClass("loading");
             }
         });
     });
@@ -416,6 +490,7 @@
             success: function (resp) {                
                 var UoM = resp.ItemCodeInfo.UOM;              
                 $("#UoM" + selectlistid).val(UoM);
+                $("body").removeClass("loading");
             }
         });
     });
@@ -440,42 +515,43 @@
             success: function (resp) {
                 $("#JobTaskNoId" + selectlistid).html(resp.html);
                 $("#JobTaskNoId" + selectlistid).prop("disabled", false);
+                $("body").removeClass("loading");
             }
         });
     });
 
     $(document).on("change", ".UnitPrice", function () {
-        var UnitPrice = $(this).val();
-        var Quantity = $("#" + $(this).parent().parent().parent().find("input[name='Quantity']")[0].id).val();
-        var SST = $("#" + $(this).parent().parent().parent().find("input[name='SST']")[0].id).val();
+        var UnitPrice = parseFloat($(this).val());
+        var Quantity = $("#Quantity" + $(this)[0].id.substring(9, 10)).val();
+        var SST = $("#SST" + $(this)[0].id.substring(9, 10)).val();
         if (SST === "") {
             SST = 0;
         }
-        var TotalPrice = parseInt(UnitPrice) * parseInt(Quantity) + parseInt(SST);
-        var AmountRequired = 0;
+        var TotalPrice = (UnitPrice * Quantity + parseFloat(SST)).toFixed(2);
+        var AmountRequired = parseFloat(0);
         $("#" + $(this).parent().parent().parent().find("input[name='TotalPrice']")[0].id).val(TotalPrice);
         for (var i = 0; i < $(".TotalPrice").length; i++) {
             if ($(".TotalPrice")[i].value !== "") {
-                AmountRequired += parseInt($(".TotalPrice")[i].value);
+                AmountRequired = (parseFloat(AmountRequired) + parseFloat($(".TotalPrice")[i].value)).toFixed(2);
             }            
         }
         $("#AmountRequired").val(AmountRequired);
     });
 
     $(document).on("change", ".SST", function () {
-        var UnitPrice = $("#" + $(this).parent().parent().find("input[name='UnitPrice']")[0].id).val();
-        var Quantity = $("#" + $(this).parent().parent().parent().find("input[name='Quantity']")[0].id).val();
-        var SST = $(this).val();
+        var UnitPrice = $("#UnitPrice" + $(this)[0].id.substring(3, 4)).val();
+        var Quantity = $("#Quantity" + $(this)[0].id.substring(3, 4)).val();
+        var SST = parseFloat($(this).val());
         if (UnitPrice === "") {
             UnitPrice = 0;
         }
-        var TotalPrice = parseInt(UnitPrice) * parseInt(Quantity) + parseInt(SST);
-        var AmountRequired = 0;
+        var TotalPrice = (parseFloat(UnitPrice) * Quantity + SST).toFixed(2);
+        var AmountRequired = parseFloat(0);
         $("#" + $(this).parent().parent().find("input[name='TotalPrice']")[0].id).val(TotalPrice);
         //$(this).parent().parent().parent().find("input[name='TotalPrice']").val(TotalPrice);
         for (var i = 0; i < $(".TotalPrice").length; i++) {
             if ($(".TotalPrice")[i].value !== "") {
-                AmountRequired += parseInt($(".TotalPrice")[i].value);
+                AmountRequired = (parseFloat(AmountRequired) + parseFloat($(".TotalPrice")[i].value)).toFixed(2);
             }
         }
         $("#AmountRequired").val(AmountRequired);
@@ -497,7 +573,9 @@
                     $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
                         generatePRItemTable();
                     });
-                    $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
+                    $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                        $("body").removeClass("loading");
+                    });
                 }                                
             });
     });
@@ -512,7 +590,9 @@
             $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
                 generatePRItemTable();
             });
-            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
+            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                $("body").removeClass("loading");
+            });
         });
 
     });
@@ -527,7 +607,9 @@
             $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
                 generatePRItemTable();
             });
-            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
+            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                $("body").removeClass("loading");
+            });
         });
 
     });
@@ -547,17 +629,21 @@
             contentType: false,
             processData: false,
             cache: false,
-            beforeSend: function () {
-                $("body").addClass("loading");
-            },
             dataType: "json",
             success: function (resp) {
-                alert(resp);
-                $("body").removeClass("loading");                
-                $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
-                    generatePRItemTable();
-                });
-                $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
+                if (resp.success === true) {
+                    alert(resp.message);
+                    $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
+                        generatePRItemTable();
+                    });
+                    $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                        $("body").removeClass("loading");
+                    });
+                } else if (resp.success === false && resp.exception === true) {
+                    alert(resp.message);
+                } else {
+                    window.location = resp.url;
+                }               
             }
         });
 

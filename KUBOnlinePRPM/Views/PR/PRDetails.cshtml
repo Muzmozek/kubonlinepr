@@ -34,7 +34,7 @@
                             <span>Project/Dept/Branch/Estate Name *</span>
                         </div>
                         <div class="d-flex col-md-6 col-sm-6">
-                            @if (Session["ifAdmin"] != null || Session["ifProcurement"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null)
+                            @if (Session["ifAdmin"] != null || Session["ifProcurement"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null || Session["ifCFO"] != null || Session["ifCOO"] != null || Session["ifGMD"] != null || Session["ifFinance"] != null)
                             {
                                 @Html.DropDownListFor(m => m.NewPRForm.ProjectId, (IEnumerable<SelectListItem>
                             )ViewBag.ProjectNameList, "Select project here", new { @id = "ProjectName", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
@@ -55,7 +55,7 @@
                     </div>
                 </section>
             </div>
-            @if (Session["ifAdmin"] != null || Session["ifProcurement"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null || (Model.NewPRForm.PaperVerified == true || Model.NewPRForm.PaperAttachment == true || Model.NewPRForm.StatusId == "PR09"))
+            @if (Session["ifAdmin"] != null || Session["ifProcurement"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null || Session["ifCFO"] != null || Session["ifCOO"] != null || Session["ifGMD"] != null || Session["ifFinance"] != null || (Model.NewPRForm.PaperVerified == true || Model.NewPRForm.PaperAttachment == true || Model.NewPRForm.StatusId == "PR09"))
             {
                 <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
                     <section>
@@ -136,7 +136,7 @@
                             <span>Budgeted *</span>
                         </div>
                         <div class="d-flex col-md-8 col-sm-8">
-                            @if (Session["ifAdmin"] != null || Session["ifProcurement"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null)
+                            @if (Session["ifAdmin"] != null || Session["ifProcurement"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null || Session["ifCFO"] != null || Session["ifCOO"] != null || Session["ifGMD"] != null || Session["ifFinance"] != null)
                             {
                                 @Html.DropDownListFor(m => m.NewPRForm.Value, (IEnumerable<SelectListItem>
                                     )ViewBag.BudgetedList, "", new { @id = "Budgeted", @class = "custom-select g-width-100vw g-height-40 g-color-black g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
@@ -151,28 +151,6 @@
                     </div>
                 </section>
             </div>
-            @*<div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-5--md g-mb-30">
-                <section>
-                    <div class="row">
-                        <div class="col-md-4 col-sm-4 formfield">
-                            <span>Reviewer</span>
-                        </div>
-                        <div class="d-flex col-md-8 col-sm-8">
-                            @if (Session["ifAdmin"] != null || Session["ifReviewer"] != null || Session["ifApprover"] != null)
-                            {
-                            @Html.DropDownListFor(m => m.NewPRForm.ReviewerId, (IEnumerable<SelectListItem>
-                                )ViewBag.ReviewerNameList, new { @id = "Reviewer", @class = "custom-select g-width-100vw g-height-40 g-color-black g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
-                                @Html.HiddenFor(m => m.NewPRForm.ReviewerId)
-                                }
-                                else
-                                {
-                                @Html.DropDownListFor(m => m.NewPRForm.ReviewerId, (IEnumerable<SelectListItem>
-                                    )ViewBag.ReviewerNameList, "Select project here", new { @id = "Reviewer", @class = "custom-select g-width-100vw g-height-40 g-color-black g-color-primary--hover text-left g-rounded-20" })
-                                    }
-                        </div>
-                    </div>
-                </section>
-            </div>*@
         </div>
         <div class="col-md-6">
             <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
@@ -241,61 +219,39 @@
                 </div>
             }
             @*<div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md g-mb-20">
-                <section>
-                    <div class="row">
-                        <label class="form-check-inline u-check g-pl-25">
-                            @if (Session["ifAdmin"] != null || Session["ifReviewer"] != null || Session["ifApprover"] != null)
-                            {
-                            if (Model.NewPRForm.Unbudgeted == true)
-                            {
-                            <input id="UnbudgetedDetails" name="NewPRForm.Unbudgeted" class="g-hidden-xs-up g-pos-abs g-top-0 g-left-0" checked="" type="checkbox" disabled="disabled">
-                            }
-                            else
-                            {
-                            <input id="UnbudgetedDetails" name="NewPRForm.Unbudgeted" class="g-hidden-xs-up g-pos-abs g-top-0 g-left-0" type="checkbox" disabled="disabled">
-                            }
-                            }
-                            else
-                            {
-                            if (Model.NewPRForm.Unbudgeted == true)
-                            {
-                            <input id="UnbudgetedDetails" name="NewPRForm.Unbudgeted" class="g-hidden-xs-up g-pos-abs g-top-0 g-left-0" checked="" type="checkbox">
-                            }
-                            else
-                            {
-                            <input id="UnbudgetedDetails" name="NewPRForm.Unbudgeted" class="g-hidden-xs-up g-pos-abs g-top-0 g-left-0" type="checkbox">
-                            }
-                            }
-                            <div class="u-check-icon-checkbox-v4 g-absolute-centered--y g-left-0">
-                                <i class="fa" data-check-icon="&#xf00c"></i>
-                            </div>
-                            Unbudgeted
-                        </label>
-                    </div>
-                </section>
-            </div>*@
-            @*<div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-15 g-pa-5--md g-mb-30">
-                <section>
-                    <div class="row">
-                        <div class="col-md-4 col-sm-4 formfield">
-                            <span>Approver</span>
-                        </div>
-                        <div class="d-flex col-md-8 col-sm-8">
-                            @if (Session["ifAdmin"] != null || Session["ifReviewer"] != null || Session["ifApprover"] != null)
-                            {
-                            @Html.DropDownListFor(m => m.NewPRForm.ApproverId, (IEnumerable<SelectListItem>
-                                )ViewBag.ApproverNameList, new { @id = "Approver", @class = "custom-select g-width-100vw g-height-40 g-color-black g-color-primary--hover text-left g-rounded-20", @disabled = "disabled" })
-                                @Html.HiddenFor(m => m.NewPRForm.ApproverId)
+                    <section>
+                        <div class="row">
+                            <label class="form-check-inline u-check g-pl-25">
+                                @if (Session["ifAdmin"] != null || Session["ifReviewer"] != null || Session["ifApprover"] != null)
+                                {
+                                if (Model.NewPRForm.Unbudgeted == true)
+                                {
+                                <input id="UnbudgetedDetails" name="NewPRForm.Unbudgeted" class="g-hidden-xs-up g-pos-abs g-top-0 g-left-0" checked="" type="checkbox" disabled="disabled">
                                 }
                                 else
                                 {
-                                @Html.DropDownListFor(m => m.NewPRForm.ApproverId, (IEnumerable<SelectListItem>
-                                    )ViewBag.ApproverNameList, new { @id = "Approver", @class = "custom-select g-width-100vw g-height-40 g-color-black g-color-primary--hover text-left g-rounded-20" })
-                                    }
+                                <input id="UnbudgetedDetails" name="NewPRForm.Unbudgeted" class="g-hidden-xs-up g-pos-abs g-top-0 g-left-0" type="checkbox" disabled="disabled">
+                                }
+                                }
+                                else
+                                {
+                                if (Model.NewPRForm.Unbudgeted == true)
+                                {
+                                <input id="UnbudgetedDetails" name="NewPRForm.Unbudgeted" class="g-hidden-xs-up g-pos-abs g-top-0 g-left-0" checked="" type="checkbox">
+                                }
+                                else
+                                {
+                                <input id="UnbudgetedDetails" name="NewPRForm.Unbudgeted" class="g-hidden-xs-up g-pos-abs g-top-0 g-left-0" type="checkbox">
+                                }
+                                }
+                                <div class="u-check-icon-checkbox-v4 g-absolute-centered--y g-left-0">
+                                    <i class="fa" data-check-icon="&#xf00c"></i>
+                                </div>
+                                Unbudgeted
+                            </label>
                         </div>
-                    </div>
-                </section>
-            </div>*@
+                    </section>
+                </div>*@
         </div>
         @if (((Session["ifAdmin"] != null && Model.NewPRForm.Submited == 1) || (Session["ifProcurement"] != null && Model.NewPRForm.Submited == 1)) || Model.NewPRForm.Scenario > 0)
         {
@@ -313,6 +269,11 @@
                             </div>
                             <div class="d-flex col-md-8 col-sm-8">
                                 @Html.DropDownListFor(m => m.NewPRForm.VendorId, (IEnumerable<SelectListItem>)ViewBag.VendorList, "Select vendor company here", new { @id = "VendorId", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                            </div>
+                        </div>
+                        <div class="row has-danger">
+                            <div class="d-flex offset-md-6 offset-sm-6 col-md-6 col-sm-6">
+                                @Html.ValidationMessageFor(m => m.NewPRForm.VendorId, null, new { @class = "form-control-feedback" })
                             </div>
                         </div>
                     </section>
@@ -412,7 +373,7 @@
                             <span>Purchase Type *</span>
                         </div>
                         <div class="d-flex col-md-8 col-sm-8">
-                            @if (Session["ifAdmin"] != null || Session["ifProcurement"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null)
+                            @if (Session["ifAdmin"] != null || Session["ifProcurement"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || (Session["ifHOD"] != null && Session["ifFinance"] == null) || Session["ifHOGPSS"] != null || Session["ifHOC"] != null || Session["ifCFO"] != null || Session["ifCOO"] != null || Session["ifGMD"] != null)
                             {
                                 @Html.DropDownListFor(m => m.NewPRForm.PurchaseTypeId, (IEnumerable<SelectListItem>
                             )ViewBag.PurchaseTypeList, "Select Purchase type here", new { @id = "PurchaseType", @class = "custom-select g-width-100vw g-height-40 g-color-black g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
@@ -440,7 +401,7 @@
                         </div>
                         <div class="d-flex col-md-8 col-sm-8">
                             @*<input id="inputGroup-3_1" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10" placeholder="" type="text">*@
-                            @if (Session["ifAdmin"] != null || Session["ifProcurement"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null)
+                            @if (Session["ifAdmin"] != null || Session["ifProcurement"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || (Session["ifHOD"] != null && Session["ifFinance"] == null) || Session["ifHOGPSS"] != null || Session["ifHOC"] != null || Session["ifCFO"] != null || Session["ifCOO"] != null || Session["ifGMD"] != null)
                             {
                                 @Html.TextBoxFor(m => m.NewPRForm.BudgetDescription, new { @id = "BudgetDescription", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
                             }
@@ -465,7 +426,7 @@
                         </div>
                         <div class="d-flex col-md-8 col-sm-8">
                             @*<input id="inputGroup-3_1" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10" placeholder="Unit (RM)" type="text">*@
-                            @if (Session["ifAdmin"] != null || Session["ifProcurement"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null)
+                            @if (Session["ifAdmin"] != null || Session["ifProcurement"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || (Session["ifHOD"] != null && Session["ifFinance"] == null) || Session["ifHOGPSS"] != null || Session["ifHOC"] != null || Session["ifCFO"] != null || Session["ifCOO"] != null || Session["ifGMD"] != null)
                             {
                                 @Html.TextBoxFor(m => m.NewPRForm.BudgetedAmount, String.Format("{0:n}", Model.NewPRForm.BudgetedAmount), new { @id = "BudgetedAmount", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "Unit (RM)", @type = "text", @readonly = true })
                             }
@@ -490,7 +451,7 @@
                         </div>
                         <div class="d-flex col-md-8 col-sm-8">
                             @*<input id="inputGroup-3_1" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10" placeholder="" type="text">*@
-                            @if (Session["ifAdmin"] != null || Session["ifProcurement"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null)
+                            @if (Session["ifAdmin"] != null || Session["ifProcurement"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || (Session["ifHOD"] != null && Session["ifFinance"] == null) || Session["ifHOGPSS"] != null || Session["ifHOC"] != null || Session["ifCFO"] != null || Session["ifCOO"] != null || Session["ifGMD"] != null)
                             {
                                 @Html.TextBoxFor(m => m.NewPRForm.Justification, new { @id = "Justification", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
                             }
@@ -518,7 +479,7 @@
                         </div>
                         <div class="d-flex col-md-8 col-sm-8">
                             @*<input id="inputGroup-3_2" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10" placeholder="Unit (RM)" type="text">*@
-                            @if (Session["ifAdmin"] != null || Session["ifProcurement"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null)
+                            @if (Session["ifAdmin"] != null || Session["ifProcurement"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || (Session["ifHOD"] != null && Session["ifFinance"] == null) || Session["ifHOGPSS"] != null || Session["ifHOC"] != null || Session["ifCFO"] != null || Session["ifCOO"] != null || Session["ifGMD"] != null)
                             {
                                 @Html.TextBoxFor(m => m.NewPRForm.UtilizedToDate, String.Format("{0:n}", Model.NewPRForm.UtilizedToDate), new { @id = "UtilizedToDate", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "Unit (RM)", @type = "text", @readonly = true })
                             }
@@ -530,7 +491,7 @@
                     </div>
                 </section>
             </div>
-            @if (Session["ifAdmin"] != null || Session["ifProcurement"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null)
+            @if (Session["ifAdmin"] != null || Session["ifProcurement"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHSE"] != null || (Session["ifHOD"] != null && Session["ifFinance"] == null) || Session["ifHOGPSS"] != null || Session["ifHOC"] != null || Session["ifGMD"] != null || Session["ifCFO"] != null || Session["ifCOO"] != null || Session["ifFinance"] != null)
             {
                 <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
                     <section>
@@ -575,48 +536,60 @@
                                 <div class="d-flex align-self-center">Date required</div>
                             </div>
                         </th>
-                        @if (Session["ifProcurement"] != null || ((Session["ifSuperAdmin"] != null || Session["ifAdmin"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null || Session["ifCOO"] != null || Session["ifCFO"] != null) && Model.NewPRForm.StatusId != "PR02") && Model.NewPRForm.Submited == 1 && Model.NewPRForm.StatusId != "PR09" && Model.NewPRForm.StatusId != "PR10" && Model.NewPRForm.PRItemListObject[0].CodeId != null)
+                        @*@if (Session["ifProcurement"] != null || ((Session["ifSuperAdmin"] != null || Session["ifAdmin"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null || Session["ifCOO"] != null || Session["ifCFO"] != null) && Model.NewPRForm.StatusId != "PR02") && Model.NewPRForm.Submited == 1 && Model.NewPRForm.StatusId != "PR09" && Model.NewPRForm.StatusId != "PR10" && Model.NewPRForm.PRItemListObject[0].CodeId != null)
+                            {*@
+                        <th class="desktop">
+                            <div class="media">
+                                <div class="d-flex align-self-center">Item Type</div>
+                            </div>
+                        </th>
+                        <th class="desktop">
+                            <div class="media">
+                                <div class="d-flex align-self-center">Item Code</div>
+                            </div>
+                        </th>
+                        @if (Model.NewPRForm.Submited == 0)
                         {
                             <th class="desktop">
                                 <div class="media">
-                                    <div class="d-flex align-self-center">Item Type</div>
-                                </div>
-                            </th>
-                            <th class="desktop">
-                                <div class="media">
-                                    <div class="d-flex align-self-center">Item Code</div>
-                                </div>
-                            </th>
-                            <th class="tablet">
-                                <div class="media">
                                     <div class="d-flex align-self-center">Description/Spec</div>
-                                </div>
-                            </th>
-                            <th class="tablet">
-                                <div class="media">
-                                    <div class="d-flex align-self-center">Cust PO No</div>
                                 </div>
                             </th>
                         }
                         else
                         {
-                            <th class="desktop">
+                            <th class="tablet">
                                 <div class="media">
                                     <div class="d-flex align-self-center">Description/Spec</div>
                                 </div>
                             </th>
-                            <th class="desktop">
-                                <div class="media">
-                                    <div class="d-flex align-self-center">Cust PO No</div>
-                                </div>
-                            </th>
                         }
+
+                        <th class="tablet">
+                            <div class="media">
+                                <div class="d-flex align-self-center">Cust PO No</div>
+                            </div>
+                        </th>
+                        @*}
+                            else
+                            {
+                                <th class="desktop">
+                                    <div class="media">
+                                        <div class="d-flex align-self-center">Description/Spec</div>
+                                    </div>
+                                </th>
+                                <th class="desktop">
+                                    <div class="media">
+                                        <div class="d-flex align-self-center">Cust PO No</div>
+                                    </div>
+                                </th>
+                            }*@
                         <th class="desktop">
                             <div class="media">
                                 <div class="d-flex align-self-center">Quantity</div>
                             </div>
                         </th>
-                        @if (Session["ifProcurement"] != null || ((Session["ifSuperAdmin"] != null || Session["ifAdmin"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null || Session["ifCOO"] != null || Session["ifCFO"] != null) && Model.NewPRForm.StatusId != "PR02") && Model.NewPRForm.Submited == 1 && Model.NewPRForm.StatusId != "PR09" && Model.NewPRForm.StatusId != "PR10" && Model.NewPRForm.PRItemListObject[0].CodeId != null)
+                        @if (Session["ifProcurement"] != null || ((Session["ifSuperAdmin"] != null || Session["ifAdmin"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || (Session["ifHOD"] != null && Session["ifFinance"] == null) || Session["ifHOGPSS"] != null || Session["ifHOC"] != null || Session["ifCOO"] != null || Session["ifCFO"] != null || Session["ifGMD"] != null) && Model.NewPRForm.StatusId != "PR02") && Model.NewPRForm.Submited == 1 && Model.NewPRForm.StatusId != "PR09" && Model.NewPRForm.StatusId != "PR10" && Model.NewPRForm.StatusId != "PR19" && Model.NewPRForm.PRItemListObject[0].CodeId != null)
                         {
                             <th class="tablet">
                                 <div class="media">
@@ -658,130 +631,146 @@
                 </thead>
                 <tbody>
                     @{
-                        int i = 1;
+                        int i = 1; int k = 0;
                         foreach (var item in Model.NewPRForm.PRItemListObject)
                         {
                             var ItemsId = "ItemsId" + i; var DateRequired = "DateRequired" + i; var Description = "Description" + i; var CustPONo = "CustPONo" + i; var ItemTypeId = "ItemTypeId" + i; var JobNoId = "JobNoId" + i; var JobTaskNoId = "JobTaskNoId" + i;
                             var Quantity = "Quantity" + i; var CodeId = "CodeId" + i; var UoM = "UoM" + i; var UnitPrice = "UnitPrice" + i; var TotalPrice = "TotalPrice" + i; var SST = "SST" + i;
-                    <tr>
-                        <td class="d-none"><input id="@ItemsId" class="Id form-control custom-filter desktop" type="text" name="@ItemsId" value="@item.ItemsId" /></td>
+                            <tr>
+                                <td class="d-none"><input id="@ItemsId" class="Id form-control custom-filter desktop" type="text" name="@ItemsId" value="@item.ItemsId" /></td>
 
-                        @if (Session["ifProcurement"] != null || ((Session["ifAdmin"] != null || Session["ifSuperAdmin"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null || Session["ifCOO"] != null || Session["ifCFO"] != null) && Model.NewPRForm.StatusId != "PR02") && Model.NewPRForm.Submited == 1 && Model.NewPRForm.StatusId != "PR09" && Model.NewPRForm.StatusId != "PR10" && Model.NewPRForm.PRItemListObject[0].CodeId != null)
-                        {
-                            <td>
-                                <input id="@DateRequired" class="form-control rounded-0 form-control-md" value="@item.DateRequired.ToString(" yyyy-MM-dd")" name="DateRequired" type="text" readonly>
-                            </td>
-                            if ((Session["ifAdmin"] != null || Session["ifSuperAdmin"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null) && Model.NewPRForm.Scenario != 0 || (Session["ifProcurement"] != null && Model.NewPRForm.Submited == 1) || Model.NewPRForm.Scenario > 0)
-                            {
-                                if (Model.NewPRForm.Scenario > 0)
+                                @if (Session["ifProcurement"] != null || ((Session["ifAdmin"] != null || Session["ifSuperAdmin"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null || Session["ifCOO"] != null || Session["ifCFO"] != null || Session["ifGMD"] != null || Session["ifFinance"] != null || Session["ifRequestor"] != null) && Model.NewPRForm.StatusId != "PR02") && Model.NewPRForm.Submited >= 1 && Model.NewPRForm.PRItemListObject[0].CodeId != null)
                                 {
                                     <td>
-                                        @Html.TextBoxFor(m => item.ItemType, new { @id = ItemTypeId, @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
+                                        <input id="@DateRequired" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" value="@item.DateRequired.ToString(" yyyy-MM-dd")" name="DateRequired" type="text" readonly>
+                                    </td>
+                                    //if ((Session["ifAdmin"] != null || Session["ifSuperAdmin"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null) && Model.NewPRForm.Scenario != 0 || (Session["ifProcurement"] != null && Model.NewPRForm.Submited == 1) || Model.NewPRForm.Scenario > 0)
+                                    //{
+                                    if (Model.NewPRForm.Scenario > 0 || Model.NewPRForm.StatusId == "PR19" || Model.NewPRForm.StatusId == "PR09" || Model.NewPRForm.StatusId == "PR10")
+                                    {
+                                        <td>
+                                            @Html.TextBoxFor(m => item.ItemType, new { @id = ItemTypeId, @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(m => item.ItemCode, new { @id = CodeId, @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            @Html.DropDownListFor(m => item.ItemTypeId, (IEnumerable<SelectListItem>)ViewData["ItemTypeList" + i], "Select item type here", new { @id = ItemTypeId, @class = "TypeId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                                            @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[i].ItemTypeId, null, new { @class = "form-control-feedback" })
+                                        </td>
+                                        <td>
+                                            @Html.DropDownListFor(m => item.CodeId, (IEnumerable<SelectListItem>)ViewData["ItemCodeList" + i], "Select item code here", new { @id = CodeId, @class = "CodeId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
+                                            @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[i].CodeId, null, new { @class = "form-control-feedback" })
+                                        </td>
+                                    }
+
+                                    //}
+                                    <td>
+                                        <input id="@Description" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="Description" value="@item.Description" type="text" readonly>
                                     </td>
                                     <td>
-                                        @Html.TextBoxFor(m => item.ItemCode, new { @id = CodeId, @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
+                                        <input id="@CustPONo" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="CustPONo" value="@item.CustPONo" type="text" readonly>
                                     </td>
+                                    <td>
+                                        <input id="@Quantity" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="Quantity" value="@item.Quantity" type="text" readonly>
+                                    </td>
+                                    if ((Session["ifAdmin"] != null || Session["ifSuperAdmin"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null || Session["ifCOO"] != null || Session["ifCFO"] != null || Session["ifGMD"] != null || Session["ifFinance"] != null) && Model.NewPRForm.Scenario != 0 || (Session["ifProcurement"] != null && Model.NewPRForm.Submited == 1) || Model.NewPRForm.Scenario > 0)
+                                    {
+                                        <td>
+                                            <input id="@UoM" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="UoM" value="@item.UOM" type="text" readonly>
+                                        </td>
+                                        if (Model.NewPRForm.Scenario > 0 || Model.NewPRForm.StatusId == "PR19" || Model.NewPRForm.StatusId == "PR09")
+                                        {
+                                            <td>
+                                                @Html.TextBoxFor(m => item.JobNo, new { @id = JobNoId, @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
+                                            </td>
+                                            <td>
+                                                @Html.TextBoxFor(m => item.JobTaskNo, new { @id = JobTaskNoId, @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
+                                            </td>
 
 
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                @Html.DropDownListFor(m => item.JobNoId, (IEnumerable<SelectListItem>)ViewData["JobNoList" + i], "Select job no here", new { @id = JobNoId, @class = "JobNoId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                                            </td>
+                                            <td>
+                                                @Html.DropDownListFor(m => item.JobTaskNoId, (IEnumerable<SelectListItem>)ViewData["JobTaskList" + i], "Select job task no here", new { @id = JobTaskNoId, @class = "JobTaskNoId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
+                                            </td>
+                                        }
+                                        <td>
+                                            <div class="has-danger">
+                                                <input id="@UnitPrice" class="UnitPrice form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="UnitPrice" value="@item.UnitPrice" type="text">
+                                                @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[i].UnitPrice, null, new { @class = "form-control-feedback" })
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input id="@SST" class="SST form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="SST" value="@item.SST" type="text">
+                                        </td>
+                                        <td>
+                                            <input id="@TotalPrice" class="TotalPrice form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="TotalPrice" value="@item.TotalPrice" type="text" readonly>
+                                        </td>
+                                    }
                                 }
                                 else
                                 {
                                     <td>
-                                        @Html.DropDownListFor(m => item.ItemTypeId, (IEnumerable<SelectListItem>)ViewData["ItemTypeList" + i], "Select item type here", new { @id = ItemTypeId, @class = "TypeId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                                        <div class="has-danger">
+                                            <input id="@DateRequired" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" value="@item.DateRequired.ToString("yyyy-MM-dd")" name="NewPRForm.PRItemListObject[@k].DateRequired" type="date">
+                                            @*</div>
+                                                <div class="row ">*@
+                                            @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[k].DateRequired, null, new { @class = "form-control-feedback" })
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="has-danger">
+                                            @Html.DropDownListFor(m => item.ItemTypeId, (IEnumerable<SelectListItem>)ViewData["ItemTypeList" + i], "Select item type here", new { @id = ItemTypeId, @class = "TypeId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                                            @*</div>
+                                                <div class="row ">*@
+                                            @Html.ValidationMessageFor(m => item.ItemTypeId, null, new { @class = "form-control-feedback" })
+                                        </div>
                                     </td>
                                     <td>
                                         @Html.DropDownListFor(m => item.CodeId, (IEnumerable<SelectListItem>)ViewData["ItemCodeList" + i], "Select item code here", new { @id = CodeId, @class = "CodeId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
+                                        @Html.ValidationMessageFor(m => item.CodeId, null, new { @class = "form-control-feedback" })
                                     </td>
+                                    <td>
+                                        <div class="has-danger">
+                                            <input id="@Description" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="NewPRForm.PRItemListObject[@k].Description" value="@item.Description" type="text">
+                                            @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[k].Description, null, new { @class = "form-control-feedback" })
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input id="@CustPONo" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="CustPONo" value="@item.CustPONo" type="text">
+                                    </td>
+                                    <td>
+                                        <div class="has-danger">
+                                            <input id="@Quantity" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="NewPRForm.PRItemListObject[@k].Quantity" value="@item.Quantity" type="text">
+                                            @*</div>
+                                                <div class="row ">*@
+                                            @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[k].Quantity, null, new { @class = "form-control-feedback" })
+                                        </div>
+                                    </td>
+                                    if ((Session["ifRequestor"] != null || Session["ifSuperAdmin"] != null) && Model.NewPRForm.Submited == 0 && Model.NewPRForm.Scenario == 0)
+                                    {
+                                        <td>
+                                            <div class="g-width-30 row">
+                                                <a class="g-color-gray-dark-v5 g-text-underline--none--hover g-pa-5 AddPRItem" data-toggle="tooltip" data-placement="top" data-original-title="Add">
+                                                    <i class="icon-plus g-font-size-18 g-mr-7"></i>
+                                                </a>
+                                                @*<a class="g-color-gray-dark-v5 g-text-underline--none--hover g-pa-5 RemovePRItem" data-toggle="tooltip" data-placement="top" data-original-title="Delete">
+                                                        <i class="icon-trash g-font-size-18 g-mr-7"></i>
+                                                    </a>*@
+                                            </div>
+                                        </td>
+                                    }
                                 }
-
-                            }
-                            <td>
-                                <input id="@Description" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="Description" value="@item.Description" type="text" readonly>
-                            </td>
-                            <td>
-                                <input id="@CustPONo" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="CustPONo" value="@item.CustPONo" type="text" readonly>
-                            </td>
-                            <td>
-                                <input id="@Quantity" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="Quantity" value="@item.Quantity" type="text" readonly>
-                            </td>
-                            if ((Session["ifAdmin"] != null || Session["ifSuperAdmin"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null || Session["ifCOO"] != null || Session["ifCFO"] != null) && Model.NewPRForm.Scenario != 0 || (Session["ifProcurement"] != null && Model.NewPRForm.Submited == 1) || Model.NewPRForm.Scenario > 0)
-                            {
-                                <td>
-                                    <input id="@UoM" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="UoM" value="@item.UOM" type="text" readonly>
-                                </td>
-                                if (Model.NewPRForm.Scenario > 0)
-                                {
-                                    <td>
-                                        @Html.TextBoxFor(m => item.JobNo, new { @id = JobNoId, @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
-                                    </td>
-                                    <td>
-                                        @Html.TextBoxFor(m => item.JobTaskNo, new { @id = JobTaskNoId, @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
-                                    </td>
-
-
-                                }
-                                else
-                                {
-                                    <td>
-                                        @Html.DropDownListFor(m => item.JobNoId, (IEnumerable<SelectListItem>)ViewData["JobNoList" + i], "Select job no here", new { @id = JobNoId, @class = "JobNoId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
-                                    </td>
-                                    <td>
-                                        @Html.DropDownListFor(m => item.JobTaskNoId, (IEnumerable<SelectListItem>)ViewData["JobTaskList" + i], "Select job task no here", new { @id = JobTaskNoId, @class = "JobTaskNoId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
-                                    </td>
-                                }
-                                <td>
-                                    <div class="has-danger">
-                                        <input id="@UnitPrice" class="UnitPrice form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="UnitPrice" value="@item.UnitPrice" type="text">
-                                        @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[i].UnitPrice, null, new { @class = "form-control-feedback" })
-                                    </div>
-                                </td>
-                                <td>
-                                    <input id="@SST" class="SST form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="SST" value="@item.SST" type="text">
-                                </td>
-                                <td>
-                                    <input id="@TotalPrice" class="TotalPrice form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="TotalPrice" value="@item.TotalPrice" type="text" readonly>
-                                </td>
-                            }
-                        }
-                        else
-                        {
-                            <td>
-                                <div class="has-danger">
-                                    <input id="@DateRequired" class="form-control rounded-0 form-control-md" value="@item.DateRequired.ToString("yyyy-MM-dd")" name="DateRequired" type="date">
-                                    @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[i].DateRequired, null, new { @class = "form-control-feedback" })
-                                </div>
-                            </td>
-                            <td>
-                                <div class="has-danger">
-                                    <input id="@Description" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="Description" value="@item.Description" type="text">
-                                    @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[i].Description, null, new { @class = "form-control-feedback" })
-                                </div>
-                            </td>
-                            <td>
-                                <input id="@CustPONo" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="CustPONo" value="@item.CustPONo" type="text">
-                            </td>
-                            <td>
-                                <div class="has-danger">
-                                    <input id="@Quantity" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="Quantity" value="@item.Quantity" type="text">
-                                    @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[i].Quantity, null, new { @class = "form-control-feedback" })
-                                </div>
-                            </td>
-                            if ((Session["ifRequestor"] != null || Session["ifSuperAdmin"] != null) && Model.NewPRForm.Submited == 0 && Model.NewPRForm.Scenario == 0)
-                            {
-                                <td>
-                                    <div class="g-width-30 row">
-                                        <a class="g-color-gray-dark-v5 g-text-underline--none--hover g-pa-5 AddPRItem" data-toggle="tooltip" data-placement="top" data-original-title="Add">
-                                            <i class="icon-plus g-font-size-18 g-mr-7"></i>
-                                        </a>
-                                        @*<a class="g-color-gray-dark-v5 g-text-underline--none--hover g-pa-5 RemovePRItem" data-toggle="tooltip" data-placement="top" data-original-title="Delete">
-                            <i class="icon-trash g-font-size-18 g-mr-7"></i>
-                        </a>*@
-                                    </div>
-                                </td>
-                            }
-                        }
-                    </tr>
-                            i++;
+                            </tr>
+                            i++; k++;
                         }
                     }
                 </tbody>
@@ -789,35 +778,66 @@
         </div>
         <div id="counter" class="d-none">@i</div>
 
-        @if ((Session["ifAdmin"] != null || Session["ifSuperAdmin"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null || Session["ifCOO"] != null || Session["ifCFO"] != null) && Model.NewPRForm.Scenario != 0 || (Session["ifProcurement"] != null && Model.NewPRForm.Submited == 1) || Model.NewPRForm.Scenario > 0)
+        @if ((Session["ifAdmin"] != null || Session["ifSuperAdmin"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || (Session["ifHOD"] != null && Session["ifFinance"] == null) || Session["ifHOGPSS"] != null || Session["ifHOC"] != null || Session["ifCOO"] != null || Session["ifCFO"] != null) && Model.NewPRForm.Scenario != 0 || (Session["ifProcurement"] != null && Model.NewPRForm.Submited == 1) || Model.NewPRForm.Scenario > 0)
         {
-        <div class="col-md-6 col-sm-6">
+            <div class="col-md-6 col-sm-6">
 
-            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
-                <section>
-                    <div class="row">
-                        <div class="col-md-4 col-sm-4 formfield">
-                            <span>Specs Reviewer</span>
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
+                    <section>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 formfield">
+                                <span>Specs Reviewer</span>
+                            </div>
+                            <div class="d-flex col-md-8 col-sm-8">
+                                @*<select class="custom-select g-width-100vw g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" id="SpecsReviewer">
+                                        <option value="IT">IT</option>
+                                        <option value="HSE">HSE</option>
+                                        <option value="PMO">PMO</option>
+                                    </select>*@
+                                @Html.DropDownListFor(m => m.NewPRForm.SpecReviewerId, (IEnumerable<SelectListItem>
+                                )ViewBag.SpecReviewerList, "", new { @id = "SpecReviewer", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                            </div>
                         </div>
-                        <div class="d-flex col-md-8 col-sm-8">
-                            @*<select class="custom-select g-width-100vw g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" id="SpecsReviewer">
-                                <option value="IT">IT</option>
-                                <option value="HSE">HSE</option>
-                                <option value="PMO">PMO</option>
-                            </select>*@
-                            @Html.DropDownListFor(m => m.NewPRForm.SpecReviewerId, (IEnumerable<SelectListItem>
-                            )ViewBag.SpecReviewerList, "", new { @id = "SpecReviewer", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                        <div class="row">
+                            <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                                @Html.ValidationMessageFor(m => m.NewPRForm.SpecReviewerId, null, new { @class = "form-control-feedback" })
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
-                            @Html.ValidationMessageFor(m => m.NewPRForm.SpecReviewerId, null, new { @class = "form-control-feedback" })
-                        </div>
-                    </div>
-                </section>
+                    </section>
+                </div>
+
             </div>
+        }
+        @if (Session["ifHOGPSS"] != null && Model.NewPRForm.PaperAttachment == true && Model.NewPRForm.StatusId == "PR10")
+        {
+            <div class="col-md-6 col-sm-6">
 
-        </div>
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
+                    <section>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 formfield">
+                                <span>Final Approver</span>
+                            </div>
+                            <div class="d-flex col-md-8 col-sm-8">
+                                @*<select class="custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" id="HOGPSSList">
+                                        <option value="R04">HOC</option>
+                                        <option value="R11">COO</option>
+                                        <option value="R12">CFO</option>
+                                        <option value="R14">GMD</option>
+                                    </select>*@
+                                @Html.DropDownListFor(m => m.FinalApproverId, (IEnumerable<SelectListItem>
+                                )ViewBag.HOGPSSList, "", new { @id = "HOGPSSList", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                            </div>
+                        </div>
+                        <div class="row has-danger">
+                            <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                                @Html.ValidationMessageFor(m => m.FinalApproverId, null, new { @class = "form-control-feedback" })
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+            </div>
         }
         @if (Model.NewPRForm.Rejected == 1)
         {
@@ -852,7 +872,7 @@
                                     <a id="SubmitPR" class="saveSubmitDetail btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">SUBMIT</a>
                                 }
 
-                                @if (((Model.NewPRForm.StatusId == "PR02") && Session["ifAdmin"] != null) || (Model.NewPRForm.StatusId == "PR02" && Session["ifProcurement"] != null))
+                                @if (Model.NewPRForm.StatusId == "PR02" && Session["ifProcurement"] != null)
                                 {
                                     <a id="SavePreparedProcurement" class="saveSubmitProcDetail btn btn-md u-btn-white g-mr-5 g-mb-15">SAVE</a>
 
@@ -910,8 +930,8 @@
                                 }
 
                                 @if ((Model.NewPRForm.StatusId == "PR05" && Session["ifHOC"] != null && Model.CustId != 2 && Model.NewPRForm.Scenario == 1) ||
-                                    (Model.NewPRForm.StatusId == "PR05" && Session["ifHOD"] != null && Model.CustId == 2 && Model.NewPRForm.Scenario == 1) || (Model.NewPRForm.StatusId == "PR05" && Session["ifHOC"] != null && Model.CustId != 2 && Model.NewPRForm.Scenario == 2) ||
-                                    (Model.NewPRForm.StatusId == "PR05" && Session["ifHOD"] != null && Model.CustId == 2 && Model.NewPRForm.Scenario == 2) || (Model.NewPRForm.StatusId == "PR05" && (Session["ifHOC"] != null && Model.CustId == 2) && Model.NewPRForm.Scenario == 3))
+                                    (Model.NewPRForm.StatusId == "PR05" && ((Session["ifHOD"] != null && Session["ifFinance"] == null) || Session["ifCOO"] != null || Session["ifGMD"] != null) && Model.CustId == 2 && Model.NewPRForm.Scenario == 1) || (Model.NewPRForm.StatusId == "PR05" && Session["ifHOC"] != null && Model.CustId != 2 && Model.NewPRForm.Scenario == 2) ||
+                                    (Model.NewPRForm.StatusId == "PR05" && ((Session["ifHOD"] != null && Session["ifFinance"] == null) || Session["ifCOO"] != null || Session["ifGMD"] != null) && Model.CustId == 2 && Model.NewPRForm.Scenario == 2) || (Model.NewPRForm.StatusId == "PR05" && (Session["ifGMD"] != null && Model.CustId == 2) && Model.NewPRForm.Scenario == 3) || (Model.NewPRForm.StatusId == "PR05" && Model.FinalApproverId != 0 && (Session["ifHOC"] != null || Session["ifCOO"] != null || Session["ifCFO"] != null || Session["ifGMD"] != null)))
                                 {
                                     <a href="#RejectModal" class=" btn btn-md u-btn-white g-mr-5 g-mb-15" data-modal-target="#RejectModal" data-modal-effect="fadein">REJECT</a>
 
@@ -926,7 +946,7 @@
                                         REJECT
                                     </a>
                                 }
-                                @if (Model.NewPRForm.StatusId == "PR09" && Session["ifHOD"] != null)
+                                @if (Model.NewPRForm.StatusId == "PR09" && (Session["ifHOD"] != null && Session["ifFinance"] == null))
                                 {
                                     <a id="ApprovePR" class="approveRejectDetail btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">APPROVE</a>
                                     <a class="btn btn-md text-white u-btn-blue g-mr-5 g-mb-15" href="#RejectModal" data-modal-target="#RejectModal" data-modal-effect="fadein">
@@ -952,7 +972,7 @@
                                 {
                                     <a id="CancelPRFlow" class="CancelPR btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">CANCEL</a>
                                 }
-                                @if (Model.NewPRForm.StatusId == "PR15" && Session["ifHOD"] != null)
+                                @if (Model.NewPRForm.StatusId == "PR15" && (Session["ifHOD"] != null && Session["ifFinance"] == null))
                                 {
                                     <a id="RecommendCancel" class="RecommendCancel btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">RECOMMENDED</a>
                                 }
@@ -979,7 +999,7 @@
         {
             <a id="RejectInitialPRReview" class="btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">REJECT</a>
         }
-        @if ((Model.NewPRForm.StatusId == "PR09" && Session["ifHOD"] != null) || (Model.NewPRForm.StatusId == "PR10" && Session["ifHOGPSS"] != null))
+        @if ((Model.NewPRForm.StatusId == "PR09" && (Session["ifHOD"] != null && Session["ifFinance"] == null)) || (Model.NewPRForm.StatusId == "PR10" && Session["ifHOGPSS"] != null))
         {
             <a id="RejectPR" class="approveRejectDetail btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">REJECT</a>
         }

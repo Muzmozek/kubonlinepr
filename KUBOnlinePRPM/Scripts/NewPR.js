@@ -1,4 +1,4 @@
-﻿var j = 1; var k = 0; var PRItemTable;
+﻿var j = parseInt($("#counter").text()) + 1; var k = parseInt($("#counter").text()); var l = 0;
 
 function generatePRItemTable() {
     PRItemTable = $('#PRItemTable').DataTable({
@@ -38,31 +38,23 @@ $(document).on('ready', function () {
         }
     });
 
+    if (POType !== null) {
+        k = parseInt($("#counter").text()) - 1;
+    }
+
     $(document).on("click", ".AddPRItem", function (e) {
         e.preventDefault();
-        var field = ['[name="DateRequired"]', '[name="Description"]', '[name="Quantity"]'];
-        var flag = false;
-        for (var i = 0; i < field.length; i++) {
-            var ele = $.trim($(this).parent().parent().parent().find(field[i]).val());
-            if (!ele.length) {
-                flag = true;
-                $(this).parent().parent().parent().find(field[i]).addClass('error');
-            } else {
-                $(this).parent().parent().parent().find(field[i]).removeClass('error');
-            }
-        }
-        if (!flag) {
-            var id = "ItemCode" + j;
             PRItemTable.row.add([
-                    '<td class="d-none"><input id="ItemsId' + j + '" class="Id form-control custom-filter desktop" type="text" name="ItemsId" value="" /></td>',
-                    '<input id="DateRequired' + j + '" class="form-control rounded-0 form-control-md" name="DateRequired" type="date"><span class="field-validation-error form-control-feedback" data-valmsg-for="NewPRForm.PRItemListObject[' + j + '].DateRequired" data-valmsg-replace="true"></span>',
-                    '<input id="Description' + j + '" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="Description" type="text">',
-                    '<input id="CustPONo' + j + '" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="CustPONo" type="text">',
-                    '<input id="Quantity' + j + '" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="Quantity" type="text">',
+                '<td class="d-none"><input id="ItemsId' + j + '" class="Id form-control custom-filter desktop" type="text" name="ItemsId" value="" /></td>',
+                '<div class="has-danger"><input id="DateRequired' + j + '" class="form-control rounded-0 form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus" name="NewPRForm.PRItemListObject[' + k + '].DateRequired" type="date"><span class="field-validation-error form-control-feedback" data-valmsg-for="NewPRForm.PRItemListObject[' + k + '].DateRequired" data-valmsg-replace="true"></span></div>',
+                '<div class="has-danger"><select class="TypeId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" data-val="true" data-val-number="The field ItemTypeId must be a number." id="ItemTypeId' + j + '" name="item.ItemTypeId"><option value="">Select item type here</option><option value = "2" > FA</option ><option value="1">GL</option><option value="3">Item</option></select><span class="field-validation-valid form-control-feedback" data-valmsg-for="item.ItemTypeId" data-valmsg-replace="true"></span></div>',
+                '<div class="has-danger"><select class="CodeId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" data-val="true" data-val-number="The field CodeId must be a number." disabled="disabled" id="CodeId' + j + '" name="item.CodeId"><option value="">Select item code here</option></select><span class= "field-validation-valid form-control-feedback" data-valmsg-for= "item.CodeId" data-valmsg-replace= "true" ></span ></div>',
+                '<div class="has-danger"><input id="Description' + j + '" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="NewPRForm.PRItemListObject[' + k + '].Description" type="text"><span class="field-validation-error form-control-feedback" data-valmsg-for="NewPRForm.PRItemListObject[' + k + '].Description" data-valmsg-replace="true"></span></div>',
+                    '<div class="has-danger"><input id="CustPONo' + j + '" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="CustPONo" type="text"></div>',
+                '<div class="has-danger"><input id="Quantity' + j + '" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="NewPRForm.PRItemListObject[' + k + '].Quantity" type="text"><span class="field-validation-error form-control-feedback" data-valmsg-for="NewPRForm.PRItemListObject[' + k + '].Quantity" data-valmsg-replace="true"></span></div>',
                     '<div class="g-width-70 row"><a class="g-color-gray-dark-v5 g-text-underline--none--hover g-pa-5 AddPRItem" data-toggle="tooltip" data-placement="top" data-original-title="Add"><i class="icon-plus g-font-size-18 g-mr-7"></i></a><a class="g-color-gray-dark-v5 g-text-underline--none--hover g-pa-5 RemovePRItem" data-toggle="tooltip" data-placement="top" data-original-title="Delete"><i class="icon-trash g-font-size-18 g-mr-7"></i></a></div>'
             ]).draw(false);
-            j++;
-        }
+        j++; k++;
     });
 
     $(document).on("change", "#ProjectName", function () {
@@ -89,7 +81,7 @@ $(document).on('ready', function () {
                 $("#BudgetedAmount").val(BudgetedAmount);
                 $("#UtilizedToDate").val(UtilizedToDate);
                 $("#BudgetBalance").val(BudgetBalance);
-
+                $("body").removeClass("loading");
                 //to do - generate itemcode when select projectId
                 //$(".CodeId").select(resp.ItemCodeList);
             }
@@ -126,24 +118,28 @@ $(document).on('ready', function () {
         fd.append("PaperRefNoFile", $(".checkFiles").find('[name="PaperRefNoFile"]')[0].files[0]);
         fd.append("BidWaiverRefNoFile", $(".checkFiles").find('[name="BidWaiverRefNoFile"]')[0].files[0]);
         other_data = $(".checkFiles").serializeArray();        
-        $.each(other_data, function (key, input) {
+        $.each(other_data, function (i, input) {
             //if (input.name === "NewPRForm.Budgeted" && input.value === "on")
             //    fd.append(input.name, true);
             //else if (input.name === "NewPRForm.Budgeted" && input.value === "off")
             //    fd.append(input.name, false);
-            //else
+            if (POType !== null && i < 17) {
                 fd.append(input.name, input.value);
+            } else if (PRType === $("#NewPR").find("#PRType").val() && i < 11) {
+                fd.append(input.name, input.value);
+            }        
         });              
-        var data = PRItemTable.$("tr");
+        var data = PRItemTable.$("tbody tr");
         var ItemsId;
         $.each(data, function (i, input) {
+            l = i + 1;
             if ($(PRItemTable.row(i).data()[0]).val() === "") {
                 ItemsId = 0;
             } else {
                 ItemsId = $(PRItemTable.row(i).data()[0]).val();
             }
             var unitPrice = $(input).find("input[name='UnitPrice']").val(); var totalPrice = $(input).find("input[name='TotalPrice']").val();
-            var ItemTypeId = $(input).find(".TypeId option:selected").val();
+            var ItemTypeId = $(input).find(".TypeId option:selected").val(); var CustPONo = $(input).siblings("tr.child").find("#CustPONo" + l).val();
             var UoM = $(input).find("input[name='UoM']").val(); var CodeId = $(input).find(".CodeId option:selected").val();
             var JobNoId = $(input).find(".JobNoId option:selected").val();
             var JobTaskNoId = $(input).find(".JobTaskNoId option:selected").val();
@@ -157,18 +153,20 @@ $(document).on('ready', function () {
                 ItemTypeId = "";
             if (CodeId === undefined)
                 CodeId = "";
+            if (CustPONo === undefined)
+                CustPONo = "";
             if (JobNoId === undefined)
                 JobNoId = "";
             if (JobTaskNoId === undefined)
                 JobTaskNoId = "";
 
             fd.append("NewPRForm.PRItemListObject[" + i + "].ItemsId", ItemsId);
-            fd.append("NewPRForm.PRItemListObject[" + i + "].DateRequired", $(input).find("input[name='DateRequired']").val());
+            fd.append("NewPRForm.PRItemListObject[" + i + "].DateRequired", $(input).find("input[name='NewPRForm.PRItemListObject[" + i + "].DateRequired']").val());
             fd.append("NewPRForm.PRItemListObject[" + i + "].ItemTypeId", ItemTypeId);
             fd.append("NewPRForm.PRItemListObject[" + i + "].CodeId", CodeId);           
-            fd.append("NewPRForm.PRItemListObject[" + i + "].Description", $(input).find("input[name='Description']").val());            
-            fd.append("NewPRForm.PRItemListObject[" + i + "].CustPONo", $(input).find("input[name='CustPONo']").val());
-            fd.append("NewPRForm.PRItemListObject[" + i + "].Quantity", $(input).find("input[name='Quantity']").val());
+            fd.append("NewPRForm.PRItemListObject[" + i + "].Description", $(input).find("input[name='NewPRForm.PRItemListObject[" + i + "].Description']").val());
+            fd.append("NewPRForm.PRItemListObject[" + i + "].CustPONo", CustPONo);
+            fd.append("NewPRForm.PRItemListObject[" + i + "].Quantity", $(input).find("input[name='NewPRForm.PRItemListObject[" + i + "].Quantity']").val());
             fd.append("NewPRForm.PRItemListObject[" + i + "].UOM", UoM);
             fd.append("NewPRForm.PRItemListObject[" + i + "].JobNoId", JobNoId);
             fd.append("NewPRForm.PRItemListObject[" + i + "].JobTaskNoId", JobTaskNoId);
@@ -193,7 +191,6 @@ $(document).on('ready', function () {
             processData: false,
             cache: false,
             beforeSend: function () {
-                $("body").addClass("loading");
                 PRItemTable.state.save();
             },
             dataType: "json",
@@ -204,14 +201,19 @@ $(document).on('ready', function () {
                         PRType: PRType
                     }, function (resp) {
                         alert("The PR has been saved");
-                        window.location = $("#UrlPRTabs").attr('href') + "?type=" + PRType;
+                        window.location = resp.url;
                     });
                 }
                 else if (resp.success && resp.Saved) {
                     alert("The PR has been saved");
-                    $("body").removeClass("loading");
-                    $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab');
-                    $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
+                    $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
+                        generatePRItemTable();
+                    });
+                    $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                    });
+                    $("#nav-4-1-primary-hor-center--Files").load(UrlPRTabs + ' #AttachmentTab', function () {
+                        $("body").removeClass("loading");
+                    });
                 }
                 else if (resp.success && resp.Submited) {
                         alert("The PR has been submitted");
@@ -227,7 +229,6 @@ $(document).on('ready', function () {
                 }
                 else if (resp.success === false && resp.exception === true) {
                     alert(resp.message);
-                    $("body").removeClass("loading");
                 }
                 else if (resp.success === false) {
                     windows.location = resp.url;

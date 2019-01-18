@@ -81,10 +81,10 @@ form {
     background-color: transparent;
 }
 
-.error {
+/*.error {
     border: 1px solid red;
     transition: border-color .25s ease;
-}
+}*/
 
 .u-nav-v4-1.u-nav-primary .nav-link.active {
     border-color: #72c02c darkgray white;

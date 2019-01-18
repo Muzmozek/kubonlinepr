@@ -456,7 +456,7 @@
                 <img src="@Context.Server.MapPath("~/Images/signature.png")" width="66" height="50" />
             </td>
             <td class="td2" style="height:40px; border-right:1px solid black;">
-                @if (Model.NewPRForm.Scenario == 1)
+                @if (Model.NewPRForm.Scenario == 1 || Model.FinalApproverId != 0)
                 {
                     if (Model.NewPRForm.ReviewedDate == null)
                     {
@@ -483,7 +483,7 @@
         <tr>
             <td class="td2" style="">Name: @Model.NewPRForm.RequestorName</td>
             <td class="td2" style="">Name: @Model.NewPRForm.HODApproverName</td>
-            @if (Model.NewPRForm.Scenario == 1)
+            @if (Model.NewPRForm.Scenario == 1 || Model.FinalApproverId != 0)
             {
                 <td class="td2" style=" border-right: 1px solid black;">Name: @Model.NewPRForm.ReviewerName</td>
             }
@@ -495,7 +495,7 @@
         <tr>
             <td class="td2" style="border-bottom: 1px solid black; padding-bottom:10px;">Date: @Model.NewPRForm.PreparedDate.ToShortDateString()</td>
             <td class="td2" style="border-bottom: 1px solid black; padding-bottom:10px;">Date: @Model.NewPRForm.HODApprovedDate1.ToShortDateString()</td>
-            @if (Model.NewPRForm.Scenario == 1)
+            @if (Model.NewPRForm.Scenario == 1 || Model.FinalApproverId != 0)
             {
                 if (Model.NewPRForm.ReviewerName != null)
                 {
@@ -533,7 +533,7 @@
         </tr>
         <tr>
 
-            @if (Model.NewPRForm.Scenario == 1)
+            @if (Model.NewPRForm.Scenario == 1 || Model.FinalApproverId != 0)
             {
                 <td class="td2" style="height:50px;"></td>
                 <td class="td2" style="height:50px;"></td>
@@ -567,7 +567,7 @@
         </tr>
         <tr>
 
-            @if (Model.NewPRForm.Scenario == 1)
+            @if (Model.NewPRForm.Scenario == 1 || Model.FinalApproverId != 0)
             {
                 <td class="td2" style="">Name: </td>
                 <td class="td2" style="">Name: </td>
@@ -588,7 +588,7 @@
         </tr>
         <tr>
 
-            @if (Model.NewPRForm.Scenario == 1)
+            @if (Model.NewPRForm.Scenario == 1 || Model.FinalApproverId != 0)
             {
                 <td class="td2" style="border-bottom: 1px solid black; padding-bottom:10px;">Date: </td>
                 <td class="td2" style="border-bottom: 1px solid black; padding-bottom:10px;">Date: </td>

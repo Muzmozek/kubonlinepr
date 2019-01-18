@@ -74,7 +74,8 @@ namespace KUBOnlinePRPM.Controllers
                     //itemsId = value.ItemsId,
                     dateRequired = value.DateRequired,
                     description = value.Description,
-                    //codeId = value.CodeId,
+                    itemTypeId = value.ItemTypeId,
+                    codeId = value.CodeId,
                     custPONo = value.CustPONo,
                     quantity = value.Quantity,
                     outStandingQuantity = value.Quantity
@@ -94,12 +95,22 @@ namespace KUBOnlinePRPM.Controllers
                 db.SaveChanges();
             }
 
-            if ((model.PaperRefNoFile != null && model.NewPRForm.PaperRefNo != null) || (model.BidWaiverRefNoFile != null && model.NewPRForm.BidWaiverRefNo != null))
+            //if ((model.PaperRefNoFile != null && model.NewPRForm.PaperRefNo != null) || (model.BidWaiverRefNoFile != null && model.NewPRForm.BidWaiverRefNo != null))
+            //{
+            //    generatePRNo.PaperAttachment = true;
+            //    generatePRNo.BidWaiverRefNo = model.NewPRForm.BidWaiverRefNo;
+            //    generatePRNo.PaperRefNo = model.NewPRForm.PaperRefNo;
+            //}
+            if (model.PaperRefNoFile != null && model.NewPRForm.PaperRefNo != null)
             {
                 generatePRNo.PaperAttachment = true;
-                generatePRNo.BidWaiverRefNo = model.NewPRForm.BidWaiverRefNo;
                 generatePRNo.PaperRefNo = model.NewPRForm.PaperRefNo;
             }
+            if (model.BidWaiverRefNoFile != null && model.NewPRForm.BidWaiverRefNo != null)
+            {
+                generatePRNo.BidWaiverRefNo = model.NewPRForm.BidWaiverRefNo;
+            }
+            db.SaveChanges();
 
             if (model.NewPRForm.SelectSave == true)
             {
@@ -128,10 +139,11 @@ namespace KUBOnlinePRPM.Controllers
                 var getHOD = new List<NewPRModel>();
                 if (model.CustId == 2)
                 {
+                    int getPRPreparerChildCustId = db.Users.First(m => m.userId == generatePRNo.PreparedById).childCompanyId.Value;
                     getHOD = (from m in db.Users
                               join n in db.Users_Roles on m.userId equals n.userId
                               join o in db.ChildCustomers on m.childCompanyId equals o.childCustId
-                              where n.roleId == "R02" && m.companyId == model.CustId && m.childCompanyId == model.ChildCustId
+                              where (n.roleId == "R02" || n.roleId == "R10") &&  m.companyId == model.CustId && m.childCompanyId == getPRPreparerChildCustId
                               select new NewPRModel()
                               {
                                   HODApproverId = m.userId,
@@ -153,17 +165,22 @@ namespace KUBOnlinePRPM.Controllers
                               }).ToList();
                 }
 
+                int HODApproverId = 0;
                 foreach (var item in getHOD)
                 {
-                    PR_HOD _objHOD = new PR_HOD
+                    if (HODApproverId != item.HODApproverId)
                     {
-                        uuid = Guid.NewGuid(),
-                        HODId = item.HODApproverId,
-                        PRId = _objNewPR.PRId,
-                        HODApprovedP1 = model.NewPRForm.HODApproverApprovedP1
-                    };
-                    db.PR_HOD.Add(_objHOD);
-                    db.SaveChanges();
+                        PR_HOD _objHOD = new PR_HOD
+                        {
+                            uuid = Guid.NewGuid(),
+                            HODId = item.HODApproverId,
+                            PRId = _objNewPR.PRId,
+                            HODApprovedP1 = model.NewPRForm.HODApproverApprovedP1
+                        };
+                        db.PR_HOD.Add(_objHOD);
+                        db.SaveChanges();
+                    }
+                    HODApproverId = item.HODApproverId;
                 }
 
                 var getProcList = (from m in db.Users
@@ -434,6 +451,206 @@ namespace KUBOnlinePRPM.Controllers
                 db.NotificationMsgs.Add(_objDetails_VendorStaffId);
                 FormerPRDetails.VendorStaffId = x.NewPRForm.VendorStaffId;
             }
+
+            foreach (var value in x.NewPRForm.PRItemListObject)
+            {
+                PR_Items objPRItemDetails = db.PR_Items.FirstOrDefault(m => m.itemsId == value.ItemsId);
+                if (objPRItemDetails == null)
+                {
+                    PR_Items _objNewPRItem = new PR_Items
+                    {
+                        uuid = Guid.NewGuid(),
+                        PRId = x.PRId,
+                        dateRequired = value.DateRequired,
+                        description = value.Description,
+                        itemTypeId = value.ItemTypeId,
+                        codeId = value.CodeId,
+                        custPONo = value.CustPONo,
+                        quantity = value.Quantity,
+                        outStandingQuantity = value.Quantity,
+                        unitPrice = value.UnitPrice,
+                        totalPrice = value.TotalPrice
+                    };
+                    if (x.NewPRForm.StatusId == "PR02")
+                    {
+                        FormerPRDetails.AmountPOBalance = FormerPRDetails.AmountPOBalance + _objNewPRItem.outStandingQuantity;
+                    }
+                    db.PR_Items.Add(_objNewPRItem);
+
+                    NotificationMsg newPRItem = new NotificationMsg()
+                    {
+                        uuid = Guid.NewGuid(),
+                        PRId = x.PRId,
+                        msgDate = DateTime.Now,
+                        fromUserId = x.UserId,
+                        msgType = "Trail",
+                        message = x.FullName + " create new item from PR No. " + FormerPRDetails.PRNo
+                    };
+                    db.NotificationMsgs.Add(newPRItem);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    if (objPRItemDetails.dateRequired != value.DateRequired)
+                    {
+                        NotificationMsg _objDetails_dateRequired = new NotificationMsg
+                        {
+                            uuid = Guid.NewGuid(),
+                            PRId = x.PRId,
+                            msgDate = DateTime.Now,
+                            fromUserId = x.UserId,
+                            msgType = "Trail",
+                            message = x.FullName + " change dateRequired in PRNo : " + FormerPRDetails.PRNo + " items from " + objPRItemDetails.dateRequired + " to " + value.DateRequired
+                        };
+                        db.NotificationMsgs.Add(_objDetails_dateRequired);
+                        objPRItemDetails.dateRequired = value.DateRequired;
+                    }
+                    if (objPRItemDetails.description != value.Description)
+                    {
+                        NotificationMsg _objDetails_Description = new NotificationMsg
+                        {
+                            uuid = Guid.NewGuid(),
+                            PRId = x.PRId,
+                            msgDate = DateTime.Now,
+                            fromUserId = x.UserId,
+                            msgType = "Trail",
+                            message = x.FullName + " change description in PRNo : " + FormerPRDetails.PRNo + " items from " + objPRItemDetails.description + " to " + value.Description
+                        };
+                        db.NotificationMsgs.Add(_objDetails_Description);
+                        objPRItemDetails.description = value.Description;
+                    }
+                    if (objPRItemDetails.itemTypeId != value.ItemTypeId)
+                    {
+
+                        ItemType formerItemTypeId = db.ItemTypes.FirstOrDefault(m => m.itemTypeId == objPRItemDetails.itemTypeId);
+                        ItemType itemTypeIdChanges = db.ItemTypes.FirstOrDefault(m => m.itemTypeId == value.ItemTypeId);
+
+                        NotificationMsg _objDetails_ItemTypeId = new NotificationMsg();
+                        _objDetails_ItemTypeId.uuid = Guid.NewGuid();
+                        _objDetails_ItemTypeId.PRId = x.PRId;
+                        _objDetails_ItemTypeId.msgDate = DateTime.Now;
+                        _objDetails_ItemTypeId.fromUserId = x.UserId;
+                        _objDetails_ItemTypeId.msgType = "Trail";
+                        if (formerItemTypeId == null)
+                        {
+                            _objDetails_ItemTypeId.message = x.FullName + " set ItemDescription to " + itemTypeIdChanges.type + " in PRNo : " + FormerPRDetails.PRNo;
+                        }
+                        else if (itemTypeIdChanges == null)
+                        {
+                            _objDetails_ItemTypeId.message = x.FullName + " change ItemDescription in PRNo : " + FormerPRDetails.PRNo + " items from " + formerItemTypeId.type + " to " + itemTypeIdChanges;
+                        } else
+                        {
+                            _objDetails_ItemTypeId.message = x.FullName + " change ItemDescription in PRNo : " + FormerPRDetails.PRNo + " items from " + formerItemTypeId.type + " to " + itemTypeIdChanges.type;
+                        }
+                        db.NotificationMsgs.Add(_objDetails_ItemTypeId);
+                        objPRItemDetails.itemTypeId = value.ItemTypeId;
+                    }
+                    if (objPRItemDetails.codeId != value.CodeId)
+                    {
+                        
+                            var formerCodeId = db.PR_Items.First(m => m.PRId == x.PRId);
+                            var FormerItemCode = db.PopulateItemLists.Select(m => new { ItemDescription = m.ItemDescription, CodeId = m.codeId, CustId = m.custId }).Where(m => m.CustId == FormerPRDetails.CustId).Where(m => m.CodeId == formerCodeId.codeId).FirstOrDefault();
+                            var NewItemCode = db.PopulateItemLists.Select(m => new { ItemDescription = m.ItemDescription, CodeId = m.codeId, CustId = m.custId }).Where(m => m.CustId == FormerPRDetails.CustId).Where(m => m.CodeId == value.CodeId).FirstOrDefault();
+                            NotificationMsg _objDetails_CodeId = new NotificationMsg();
+                            _objDetails_CodeId.uuid = Guid.NewGuid();
+                            _objDetails_CodeId.PRId = x.PRId;
+                            _objDetails_CodeId.msgDate = DateTime.Now;
+                            _objDetails_CodeId.fromUserId = x.UserId;
+                            _objDetails_CodeId.msgType = "Trail";
+                        if (FormerItemCode == null)
+                        {
+                            _objDetails_CodeId.message = x.FullName + " change Item Code to " + NewItemCode.ItemDescription + " for PR No: " + FormerPRDetails.PRNo;
+                        }
+                        else if (NewItemCode == null)
+                        {
+                            _objDetails_CodeId.message = x.FullName + " change Item Code from " + FormerItemCode.ItemDescription + " to NULL for PR No: " + FormerPRDetails.PRNo;
+                        }
+                        else
+                        {
+                            _objDetails_CodeId.message = x.FullName + " change Item Code from " + FormerItemCode.ItemDescription + " to " + NewItemCode.ItemDescription + " for PR No: " + FormerPRDetails.PRNo;
+                        }
+                        db.NotificationMsgs.Add(_objDetails_CodeId);
+                        objPRItemDetails.codeId = value.CodeId;
+                    }
+                    if (objPRItemDetails.custPONo != value.CustPONo)
+                    {
+                        NotificationMsg _objDetails_custPONo = new NotificationMsg
+                        {
+                            uuid = Guid.NewGuid(),
+                            PRId = x.PRId,
+                            msgDate = DateTime.Now,
+                            fromUserId = x.UserId,
+                            msgType = "Trail",
+                            message = x.FullName + " change cust PONo in PRNo : " + FormerPRDetails.PRNo + " items from " + objPRItemDetails.custPONo + " to " + value.CustPONo
+                        };
+                        db.NotificationMsgs.Add(_objDetails_custPONo);
+                        objPRItemDetails.custPONo = value.CustPONo;
+                    }
+                    if (objPRItemDetails.quantity != value.Quantity)
+                    {
+                        NotificationMsg _objDetails_Quantity = new NotificationMsg
+                        {
+                            uuid = Guid.NewGuid(),
+                            PRId = x.PRId,
+                            msgDate = DateTime.Now,
+                            fromUserId = x.UserId,
+                            msgType = "Trail",
+                            message = x.FullName + " change Quantity in PRNo : " + FormerPRDetails.PRNo + " items from " + objPRItemDetails.quantity + " to " + value.Quantity
+                        };
+                        db.NotificationMsgs.Add(_objDetails_Quantity);
+                        objPRItemDetails.quantity = value.Quantity;
+                        objPRItemDetails.outStandingQuantity = value.Quantity;
+                        objPRItemDetails.totalPrice = (value.Quantity * value.UnitPrice) + value.SST;
+                    }
+                    if (objPRItemDetails.unitPrice != value.UnitPrice)
+                    {
+                        PR_Items FormerUnitPrice = db.PR_Items.FirstOrDefault(m => m.unitPrice == objPRItemDetails.unitPrice);
+                        NotificationMsg _objDetails_NotificationMsg = new NotificationMsg();
+                        _objDetails_NotificationMsg.uuid = Guid.NewGuid();
+                        _objDetails_NotificationMsg.PRId = x.PRId;
+                        _objDetails_NotificationMsg.msgDate = DateTime.Now;
+                        _objDetails_NotificationMsg.fromUserId = x.UserId;
+                        _objDetails_NotificationMsg.msgType = "Trail";
+                        if (FormerUnitPrice.unitPrice == null)
+                        {
+                            _objDetails_NotificationMsg.message = x.FullName + " set Unit Price to " + value.UnitPrice + " in PRNo : " + FormerPRDetails.PRNo;
+                        }
+                        else
+                        {
+                            _objDetails_NotificationMsg.message = x.FullName + " change Unit Price in PRNo : " + FormerPRDetails.PRNo + " items from " + objPRItemDetails.unitPrice + " to " + value.UnitPrice;
+                        }
+                        db.NotificationMsgs.Add(_objDetails_NotificationMsg);
+                        objPRItemDetails.unitPrice = value.UnitPrice;
+                        objPRItemDetails.totalPrice = (value.Quantity * value.UnitPrice) + value.SST;
+                    }
+                    //if (objPRItemDetails.totalPrice != value.TotalPrice)
+                    //{
+                    //    PR_Items FormerTotalPrice = db.PR_Items.FirstOrDefault(m => m.totalPrice == objPRItemDetails.totalPrice);
+                    //    NotificationMsg _objDetails_NotificationMsg = new NotificationMsg();
+                    //    _objDetails_NotificationMsg.uuid = Guid.NewGuid();
+                    //    _objDetails_NotificationMsg.PRId = x.PRId;
+                    //    _objDetails_NotificationMsg.msgDate = DateTime.Now;
+                    //    _objDetails_NotificationMsg.fromUserId = x.UserId;
+                    //    _objDetails_NotificationMsg.msgType = "Trail";
+                    //    if (FormerTotalPrice.totalPrice == null)
+                    //    {
+                    //        _objDetails_NotificationMsg.message = x.FullName + " set Total PRice to " + value.TotalPrice + " for PRNo L " + FormerPRDetails.PRNo;
+                    //    }
+                    //    else
+                    //    {
+                    //        _objDetails_NotificationMsg.message = x.FullName + " change Total Price in PRNo : " + FormerPRDetails.PRNo + " items from " + objPRItemDetails.unitPrice + " to " + value.UnitPrice;
+                    //    }
+
+                    //    db.NotificationMsgs.Add(_objDetails_NotificationMsg);
+                    //    objPRItemDetails.totalPrice = value.TotalPrice;
+                    //}
+                    if (x.NewPRForm.StatusId == "PR02")
+                    {
+                        FormerPRDetails.AmountPOBalance = FormerPRDetails.AmountPOBalance + objPRItemDetails.outStandingQuantity;
+                    }
+                    db.SaveChanges();
+                }
+            }
             //if (x.NewPRForm.SelectSave == true && (x.NewPRForm.StatusId == "PR01" || x.NewPRForm.StatusId == "PR07"))
             if (x.NewPRForm.SelectSave == true && x.NewPRForm.StatusId == "PR01")
             {
@@ -472,11 +689,20 @@ namespace KUBOnlinePRPM.Controllers
             {
                 FormerPRDetails.Submited = FormerPRDetails.Submited + 1;
                 FormerPRDetails.SubmitDate = DateTime.Now;
-                if ((x.PaperRefNoFile != null && x.NewPRForm.PaperRefNo != null) || (x.BidWaiverRefNoFile != null && x.NewPRForm.BidWaiverRefNo != null))
+                //if ((x.PaperRefNoFile != null && x.NewPRForm.PaperRefNo != null) || (x.BidWaiverRefNoFile != null && x.NewPRForm.BidWaiverRefNo != null))
+                //{
+                //    FormerPRDetails.PaperAttachment = true;
+                //    FormerPRDetails.BidWaiverRefNo = x.NewPRForm.BidWaiverRefNo;
+                //    FormerPRDetails.PaperRefNo = x.NewPRForm.PaperRefNo;
+                //}
+                if (x.PaperRefNoFile != null && x.NewPRForm.PaperRefNo != null)
                 {
                     FormerPRDetails.PaperAttachment = true;
-                    FormerPRDetails.BidWaiverRefNo = x.NewPRForm.BidWaiverRefNo;
                     FormerPRDetails.PaperRefNo = x.NewPRForm.PaperRefNo;
+                }
+                if (x.BidWaiverRefNoFile != null && x.NewPRForm.BidWaiverRefNo != null)
+                {
+                    FormerPRDetails.BidWaiverRefNo = x.NewPRForm.BidWaiverRefNo;
                 }
                 FormerPRDetails.StatusId = "PR19";
                 NotificationMsg _objSubmited = new NotificationMsg
@@ -493,10 +719,11 @@ namespace KUBOnlinePRPM.Controllers
                 var getHOD = new List<NewPRModel>();
                 if (FormerPRDetails.CustId == 2)
                 {
+                    int getPRPreparerChildCustId = db.Users.First(m => m.userId == FormerPRDetails.PreparedById).childCompanyId.Value;
                     getHOD = (from m in db.Users
                               join n in db.Users_Roles on m.userId equals n.userId
                               join o in db.ChildCustomers on m.childCompanyId equals o.childCustId
-                              where n.roleId == "R02" && m.companyId == FormerPRDetails.CustId && m.childCompanyId == x.ChildCustId
+                              where (n.roleId == "R02" || n.roleId == "R10") && m.companyId == x.CustId && m.childCompanyId == getPRPreparerChildCustId
                               select new NewPRModel()
                               {
                                   HODApproverId = m.userId,
@@ -518,17 +745,22 @@ namespace KUBOnlinePRPM.Controllers
                               }).ToList();
                 }
 
+                int HODApproverId = 0;
                 foreach (var item in getHOD)
                 {
-                    PR_HOD _objHOD = new PR_HOD
+                    if (HODApproverId != item.HODApproverId)
                     {
-                        uuid = Guid.NewGuid(),
-                        HODId = item.HODApproverId,
-                        PRId = FormerPRDetails.PRId,
-                        HODApprovedP1 = x.NewPRForm.HODApproverApprovedP1
-                    };
-                    db.PR_HOD.Add(_objHOD);
-                    db.SaveChanges();
+                        PR_HOD _objHOD = new PR_HOD
+                        {
+                            uuid = Guid.NewGuid(),
+                            HODId = item.HODApproverId,
+                            PRId = FormerPRDetails.PRId,
+                            HODApprovedP1 = x.NewPRForm.HODApproverApprovedP1
+                        };
+                        db.PR_HOD.Add(_objHOD);
+                        db.SaveChanges();
+                    }
+                    HODApproverId = item.HODApproverId;
                 }
 
                     var getProcList = (from m in db.Users
@@ -651,196 +883,6 @@ namespace KUBOnlinePRPM.Controllers
             //    db.NotificationMsgs.Add(_objSubmited);
             //}
             //db.SaveChanges();
-
-            foreach (var value in x.NewPRForm.PRItemListObject)
-            {
-                PR_Items objPRItemDetails = db.PR_Items.FirstOrDefault(m => m.itemsId == value.ItemsId);
-                if (objPRItemDetails == null)
-                {
-                    PR_Items _objNewPRItem = new PR_Items
-                    {
-                        uuid = Guid.NewGuid(),
-                        PRId = x.PRId,
-                        dateRequired = value.DateRequired,
-                        description = value.Description,
-                        codeId = value.CodeId,
-                        custPONo = value.CustPONo,
-                        quantity = value.Quantity,
-                        outStandingQuantity = value.Quantity,
-                        unitPrice = value.UnitPrice,
-                        totalPrice = value.TotalPrice
-                    };
-                    if (x.NewPRForm.StatusId == "PR02")
-                    {
-                        FormerPRDetails.AmountPOBalance = FormerPRDetails.AmountPOBalance + _objNewPRItem.outStandingQuantity;
-                    }
-                    db.PR_Items.Add(_objNewPRItem);
-
-                    NotificationMsg newPRItem = new NotificationMsg()
-                    {
-                        uuid = Guid.NewGuid(),
-                        PRId = x.PRId,
-                        msgDate = DateTime.Now,
-                        fromUserId = x.UserId,
-                        msgType = "Trail",
-                        message = x.FullName + " create new item from PR No. " + FormerPRDetails.PRNo
-                    };
-                    db.NotificationMsgs.Add(newPRItem);
-                    db.SaveChanges();
-                }
-                else
-                {
-                    if (objPRItemDetails.dateRequired != value.DateRequired)
-                    {
-                        NotificationMsg _objDetails_dateRequired = new NotificationMsg
-                        {
-                            uuid = Guid.NewGuid(),
-                            PRId = x.PRId,
-                            msgDate = DateTime.Now,
-                            fromUserId = x.UserId,
-                            msgType = "Trail",
-                            message = x.FullName + " change dateRequired in PRNo : " + FormerPRDetails.PRNo + " items from " + objPRItemDetails.dateRequired + " to " + value.DateRequired
-                        };
-                        db.NotificationMsgs.Add(_objDetails_dateRequired);
-                        objPRItemDetails.dateRequired = value.DateRequired;
-                    }
-                    if (objPRItemDetails.description != value.Description)
-                    {
-                        NotificationMsg _objDetails_Description = new NotificationMsg
-                        {
-                            uuid = Guid.NewGuid(),
-                            PRId = x.PRId,
-                            msgDate = DateTime.Now,
-                            fromUserId = x.UserId,
-                            msgType = "Trail",
-                            message = x.FullName + " change description in PRNo : " + FormerPRDetails.PRNo + " items from " + objPRItemDetails.description + " to " + value.Description
-                        };
-                        db.NotificationMsgs.Add(_objDetails_Description);
-                        objPRItemDetails.description = value.Description;
-                    }
-                    if (objPRItemDetails.itemTypeId != value.ItemTypeId)
-                    {
-                        ItemType formerItemTypeId = db.ItemTypes.FirstOrDefault(m => m.itemTypeId == objPRItemDetails.itemTypeId);
-                        ItemType itemTypeIdChanges = db.ItemTypes.First(m => m.itemTypeId == value.ItemTypeId);
-
-                        NotificationMsg _objDetails_ItemTypeId = new NotificationMsg();
-                        _objDetails_ItemTypeId.uuid = Guid.NewGuid();
-                        _objDetails_ItemTypeId.PRId = x.PRId;
-                        _objDetails_ItemTypeId.msgDate = DateTime.Now;
-                        _objDetails_ItemTypeId.fromUserId = x.UserId;
-                        _objDetails_ItemTypeId.msgType = "Trail";
-                        if (formerItemTypeId == null)
-                        {
-                            _objDetails_ItemTypeId.message = x.FullName + " set ItemDescription to " + itemTypeIdChanges.type + " in PRNo : " + FormerPRDetails.PRNo;
-                        }
-                        else
-                        {
-                            _objDetails_ItemTypeId.message = x.FullName + " change ItemDescription in PRNo : " + FormerPRDetails.PRNo + " items from " + formerItemTypeId.type + " to " + itemTypeIdChanges.type;
-                        }
-                        db.NotificationMsgs.Add(_objDetails_ItemTypeId);
-                        objPRItemDetails.itemTypeId = value.ItemTypeId;
-                    }
-                    if (objPRItemDetails.codeId != value.CodeId)
-                    {
-                        var formerItemDescription = db.PopulateItemLists.FirstOrDefault(m => m.codeId == objPRItemDetails.codeId);
-                        var ItemDescriptionChanges = db.PopulateItemLists.First(m => m.codeId == value.CodeId);
-
-                        NotificationMsg _objDetails_CodeId = new NotificationMsg();
-                        _objDetails_CodeId.uuid = Guid.NewGuid();
-                        _objDetails_CodeId.PRId = x.PRId;
-                        _objDetails_CodeId.msgDate = DateTime.Now;
-                        _objDetails_CodeId.fromUserId = x.UserId;
-                        _objDetails_CodeId.msgType = "Trail";
-                        if (formerItemDescription == null)
-                        {
-                            _objDetails_CodeId.message = x.FullName + " set ItemDescription to " + ItemDescriptionChanges.ItemDescription + " in PRNo : " + FormerPRDetails.PRNo;
-                        }
-                        else
-                        {
-                            _objDetails_CodeId.message = x.FullName + " change ItemDescription in PRNo : " + FormerPRDetails.PRNo + " items from " + formerItemDescription.ItemDescription + " to " + ItemDescriptionChanges.ItemDescription;
-                        }
-                        db.NotificationMsgs.Add(_objDetails_CodeId);
-                        objPRItemDetails.codeId = value.CodeId;
-                    }
-                    if (objPRItemDetails.custPONo != value.CustPONo)
-                    {
-                        NotificationMsg _objDetails_custPONo = new NotificationMsg
-                        {
-                            uuid = Guid.NewGuid(),
-                            PRId = x.PRId,
-                            msgDate = DateTime.Now,
-                            fromUserId = x.UserId,
-                            msgType = "Trail",
-                            message = x.FullName + " change cust PONo in PRNo : " + FormerPRDetails.PRNo + " items from " + objPRItemDetails.custPONo + " to " + value.CustPONo
-                        };
-                        db.NotificationMsgs.Add(_objDetails_custPONo);
-                        objPRItemDetails.custPONo = value.CustPONo;
-                    }
-                    if (objPRItemDetails.quantity != value.Quantity)
-                    {
-                        NotificationMsg _objDetails_Quantity = new NotificationMsg
-                        {
-                            uuid = Guid.NewGuid(),
-                            PRId = x.PRId,
-                            msgDate = DateTime.Now,
-                            fromUserId = x.UserId,
-                            msgType = "Trail",
-                            message = x.FullName + " change Quantity in PRNo : " + FormerPRDetails.PRNo + " items from " + objPRItemDetails.quantity + " to " + value.Quantity
-                        };
-                        db.NotificationMsgs.Add(_objDetails_Quantity);
-                        objPRItemDetails.quantity = value.Quantity;
-                        objPRItemDetails.outStandingQuantity = value.Quantity;
-                        objPRItemDetails.totalPrice = (value.Quantity * value.UnitPrice) + value.SST;
-                    }
-                    if (objPRItemDetails.unitPrice != value.UnitPrice)
-                    {
-                        PR_Items FormerUnitPrice = db.PR_Items.FirstOrDefault(m => m.unitPrice == objPRItemDetails.unitPrice);
-                        NotificationMsg _objDetails_NotificationMsg = new NotificationMsg();
-                        _objDetails_NotificationMsg.uuid = Guid.NewGuid();
-                        _objDetails_NotificationMsg.PRId = x.PRId;
-                        _objDetails_NotificationMsg.msgDate = DateTime.Now;
-                        _objDetails_NotificationMsg.fromUserId = x.UserId;
-                        _objDetails_NotificationMsg.msgType = "Trail";
-                        if (FormerUnitPrice.unitPrice == null)
-                        {
-                            _objDetails_NotificationMsg.message = x.FullName + " set Unit Price to " + value.UnitPrice + " in PRNo : " + FormerPRDetails.PRNo;
-                        }
-                        else
-                        {
-                            _objDetails_NotificationMsg.message = x.FullName + " change Unit Price in PRNo : " + FormerPRDetails.PRNo + " items from " + objPRItemDetails.unitPrice + " to " + value.UnitPrice;
-                        }
-                        db.NotificationMsgs.Add(_objDetails_NotificationMsg);
-                        objPRItemDetails.unitPrice = value.UnitPrice;
-                        objPRItemDetails.totalPrice = (value.Quantity * value.UnitPrice) + value.SST;
-                    }
-                    //if (objPRItemDetails.totalPrice != value.TotalPrice)
-                    //{
-                    //    PR_Items FormerTotalPrice = db.PR_Items.FirstOrDefault(m => m.totalPrice == objPRItemDetails.totalPrice);
-                    //    NotificationMsg _objDetails_NotificationMsg = new NotificationMsg();
-                    //    _objDetails_NotificationMsg.uuid = Guid.NewGuid();
-                    //    _objDetails_NotificationMsg.PRId = x.PRId;
-                    //    _objDetails_NotificationMsg.msgDate = DateTime.Now;
-                    //    _objDetails_NotificationMsg.fromUserId = x.UserId;
-                    //    _objDetails_NotificationMsg.msgType = "Trail";
-                    //    if (FormerTotalPrice.totalPrice == null)
-                    //    {
-                    //        _objDetails_NotificationMsg.message = x.FullName + " set Total PRice to " + value.TotalPrice + " for PRNo L " + FormerPRDetails.PRNo;
-                    //    }
-                    //    else
-                    //    {
-                    //        _objDetails_NotificationMsg.message = x.FullName + " change Total Price in PRNo : " + FormerPRDetails.PRNo + " items from " + objPRItemDetails.unitPrice + " to " + value.UnitPrice;
-                    //    }
-
-                    //    db.NotificationMsgs.Add(_objDetails_NotificationMsg);
-                    //    objPRItemDetails.totalPrice = value.TotalPrice;
-                    //}
-                    if (x.NewPRForm.StatusId == "PR02")
-                    {
-                        FormerPRDetails.AmountPOBalance = FormerPRDetails.AmountPOBalance + objPRItemDetails.outStandingQuantity;
-                    }
-                    db.SaveChanges();
-                }
-            }
         }
         protected void POSaveDbLogic(POModel POModel)
         {
@@ -1371,6 +1413,72 @@ namespace KUBOnlinePRPM.Controllers
             }).ToList();
 
             return MessageList;
+        }
+        protected List<PRModel> getHOGPSSList(int CustId)
+        {
+            SqlConnection conn = null;
+            DataSet returnDS = new DataSet("HOGPSSList");
+            string info = "";
+            try
+            {
+                SqlDataAdapter SQLDataADP = new SqlDataAdapter();
+                SQLDataADP.TableMappings.Add("Table", "HOGPSSList");
+                conn = OpenDBConnection();
+                conn.InfoMessage += (object obj, SqlInfoMessageEventArgs e) =>
+                {
+                    info = e.Message.ToString();
+                };
+                string sql = "";
+                sql = "SELECT m.[userid], " +
+                               "m.[username] + ' (' + o.[name] + ')' AS [Name] " +
+                        "FROM   [user] m " +
+                               "LEFT JOIN users_roles n " +
+                                      "ON ( m.userid = n.userid ) " +
+                               "LEFT JOIN role o " +
+                                      "ON ( n.roleid = o.roleid ) " +
+                        "WHERE  n.roleid = 'R04' " +
+                               "AND m.companyid = @CustId " +
+                        "UNION " +
+                        "SELECT m.[userid], " +
+                               "m.[username] + ' (' + o.[name] + ')' AS [Name] " +
+                        "FROM   [user] m " +
+                               "LEFT JOIN users_roles n " +
+                                      "ON ( m.userid = n.userid ) " +
+                               "LEFT JOIN role o " +
+                                      "ON ( n.roleid = o.roleid ) " +
+                        "WHERE  n.roleid = 'R11' " +
+                                "OR n.roleid = 'R12' " +
+                                "OR n.roleid = 'R14' ";
+
+                SqlCommand SQLcmd = new SqlCommand(sql, conn)
+                {
+                    CommandType = CommandType.Text
+                };
+                SQLDataADP.SelectCommand = SQLcmd;
+                SQLcmd.Parameters.Add("@CustId", SqlDbType.Int);
+                SQLcmd.Parameters["@CustId"].Value = CustId;
+
+                SQLDataADP.Fill(returnDS);
+            }
+            catch (Exception ex)
+            {
+                Debug.Print("Report - " + ex.Message);
+            }
+            finally
+            {
+                CloseDBConnection(conn);
+            }
+
+            var HOGPSSList = returnDS.Tables[0].AsEnumerable().Select(
+            dataRow => new PRModel
+            {
+                //Uid = uid,
+                //ChatId = dataRow.Field<int>("chatid"),
+                FinalApproverId = dataRow.Field<int>("userid"),
+                UserName = dataRow.Field<string>("Name")
+            }).ToList();
+
+            return HOGPSSList;
         }
         protected DataTable GetPOHeaderTable(DateTime startDate, DateTime endDate)
         {

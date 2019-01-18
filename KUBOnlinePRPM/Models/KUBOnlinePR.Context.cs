@@ -46,7 +46,6 @@ namespace KUBOnlinePRPM.Models
         public virtual DbSet<PR_Reviewer> PR_Reviewer { get; set; }
         public virtual DbSet<PR_Approver> PR_Approver { get; set; }
         public virtual DbSet<POStatu> POStatus { get; set; }
-        public virtual DbSet<PR_PaperApprover> PR_PaperApprover { get; set; }
         public virtual DbSet<FixedAsset> FixedAssets { get; set; }
         public virtual DbSet<GL> GLs { get; set; }
         public virtual DbSet<Item> Items { get; set; }
@@ -59,9 +58,10 @@ namespace KUBOnlinePRPM.Models
         public virtual DbSet<PR_RecommenderHOC> PR_RecommenderHOC { get; set; }
         public virtual DbSet<Group> Groups { get; set; }
         public virtual DbSet<PurchaseRequisition> PurchaseRequisitions { get; set; }
-        public virtual DbSet<PR_Items> PR_Items { get; set; }
         public virtual DbSet<JobTask> JobTasks { get; set; }
         public virtual DbSet<ChildCustomer> ChildCustomers { get; set; }
         public virtual DbSet<PR_Finance> PR_Finance { get; set; }
+        public virtual DbSet<PR_Items> PR_Items { get; set; }
+        public virtual DbSet<PR_PaperApprover> PR_PaperApprover { get; set; }
     }
 }
