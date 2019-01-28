@@ -34,10 +34,10 @@
             } else {
                 ItemsId = $(PRItemTable.row(i).data()[0]).val();
             }
-            var unitPrice = $(input).find("#UnitPrice" + k).val(); var totalPrice = $(input).find("#TotalPrice" + k).val();
-            var SST = $(input).find("#SST" + k).val(); var CustPONo = $(input).siblings("tr.child").find("#CustPONo" + k).val();
+            var unitPrice = $(input).find("#UnitPrice" + (i + 1)).val(); var totalPrice = $(input).find("#TotalPrice" + (i+1)).val();
+            var SST = $(input).find("#SST" + (i + 1)).val(); var CustPONo = $(input).siblings("tr.child").find("#CustPONo" + (i + 1)).val();
             var ItemTypeId = $(input).find(".TypeId option:selected").val();           
-            var UoM = $(input).find("#UoM" + k).val(); var CodeId = $(input).find(".CodeId option:selected").val();
+            var UoM = $(input).find("#UoM" + (i + 1)).val(); var CodeId = $(input).find(".CodeId option:selected").val();
             var JobNoId = $(input).find(".JobNoId option:selected").val();
             var JobTaskNoId = $(input).find(".JobTaskNoId option:selected").val();
             if (unitPrice === undefined)
@@ -59,12 +59,12 @@
             if (SST === undefined)
                 SST = "";
             fd.append("NewPRForm.PRItemListObject[" + i + "].ItemsId", ItemsId);
-            fd.append("NewPRForm.PRItemListObject[" + i + "].DateRequired", $(input).find("#DateRequired" +  k).val());
+            fd.append("NewPRForm.PRItemListObject[" + i + "].DateRequired", $(input).find("#DateRequired" + (i + 1)).val());
             fd.append("NewPRForm.PRItemListObject[" + i + "].ItemTypeId", ItemTypeId);
             fd.append("NewPRForm.PRItemListObject[" + i + "].CodeId", CodeId);
-            fd.append("NewPRForm.PRItemListObject[" + i + "].Description", $(input).find("#Description" + k).val());
+            fd.append("NewPRForm.PRItemListObject[" + i + "].Description", $(input).find("#Description" + (i + 1)).val());
             fd.append("NewPRForm.PRItemListObject[" + i + "].CustPONo", CustPONo);
-            fd.append("NewPRForm.PRItemListObject[" + i + "].Quantity", $(input).find("#Quantity" + k).val());
+            fd.append("NewPRForm.PRItemListObject[" + i + "].Quantity", $(input).find("#Quantity" + (i + 1)).val());
             fd.append("NewPRForm.PRItemListObject[" + i + "].UOM", UoM);
             fd.append("NewPRForm.PRItemListObject[" + i + "].JobNoId", JobNoId);
             fd.append("NewPRForm.PRItemListObject[" + i + "].JobTaskNoId", JobTaskNoId);
@@ -616,7 +616,7 @@
 
     $("#IssuePO").click(function (e) {
         e.preventDefault();
-        var fd = new FormData(); var other_data; var PRType; var URL;
+        var fd = new FormData(); var other_data;
         other_data = $(".checkFiles").serializeArray();
         $.each(other_data, function (key, input) {
             fd.append(input.name, input.value);

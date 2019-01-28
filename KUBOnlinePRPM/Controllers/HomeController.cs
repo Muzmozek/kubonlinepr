@@ -157,7 +157,7 @@ namespace KUBOnlinePRPM.Controllers
                     validate = BCrypt.CheckPassword(model.Password, CheckUserPassword.Password);
                 }
 
-                var directoryEntry = new DirectoryEntry("LDAP://172.16.0.2/DC=kub,DC=local");
+                //var directoryEntry = new DirectoryEntry("LDAP://172.16.0.2/DC=kub,DC=local");
                 //directoryEntry.Username = "win2k8";
                 //directoryEntry.Password = "Quantum111?";
                 //if (validate == true)

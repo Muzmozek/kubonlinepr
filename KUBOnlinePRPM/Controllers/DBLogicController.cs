@@ -1480,7 +1480,7 @@ namespace KUBOnlinePRPM.Controllers
 
             return HOGPSSList;
         }
-        protected DataTable GetPOHeaderTable(DateTime startDate, DateTime endDate)
+        protected List<POHeaderTable> GetPOHeaderTable(DateTime startDate, DateTime endDate)
         {
             SqlConnection conn = null;
             DataTable returnDT = new DataTable("POHeaderTable");
@@ -1509,7 +1509,7 @@ namespace KUBOnlinePRPM.Controllers
                                "''                            AS [Shortcut Dimension 2 Code], " +
                                "''                            AS [Vendor Posting Group], " +
                                "''                            AS [Currency Code] " +
-                        "FROM   [KUBOnlinePR].[dbo].[purchaseorder] m " +
+                        "FROM   purchaseorder m " +
                                "LEFT JOIN vendor n " +
                                       "ON ( m.paytovendorid = n.vendorid ) " +
                                "LEFT JOIN customer o " +
@@ -1527,7 +1527,7 @@ namespace KUBOnlinePRPM.Controllers
                 SQLcmd.Parameters.Add("@endDate", SqlDbType.DateTime);
                 SQLcmd.Parameters["@endDate"].Value = endDate.ToShortDateString();
 
-                SQLDataADP.Fill(returnDT);
+                SQLDataADP.Fill(returnDT);                    
             }
             catch (Exception ex)
             {
@@ -1538,9 +1538,28 @@ namespace KUBOnlinePRPM.Controllers
                 CloseDBConnection(conn);
             }
 
-            return returnDT;
+            var POHeaderList = returnDT.AsEnumerable().Select(
+                dataRow => new POHeaderTable
+                {
+                    DocumentType = dataRow.Field<string>("Document Type"),
+                    No = dataRow.Field<string>("No."),
+                    BuyFromVendorNo = dataRow.Field<string>("Buy-from Vendor No."),
+                    PayToVendorNo = dataRow.Field<string>("Pay-to Vendor No."),
+                    YourReference = dataRow.Field<string>("Your Reference"),
+                    OrderDate = dataRow.Field<DateTime>("Order Date"),
+                    PostingDate = dataRow.Field<DateTime>("Posting Date"),
+                    ExpectedReceiptDate = dataRow.Field<string>("Expected Receipt Date"),
+                    PostingDescription = dataRow.Field<string>("Posting Description"),
+                    LocationCode = dataRow.Field<string>("Location Code"),
+                    ShortcutDimension1Code = dataRow.Field<string>("Shortcut Dimension 1 Code"),
+                    ShortcutDimension2Code = dataRow.Field<string>("Shortcut Dimension 2 Code"),
+                    VendorPostingGroup = dataRow.Field<string>("Vendor Posting Group"),
+                    CurrencyCode = dataRow.Field<string>("Currency Code")
+                }).ToList();
+
+            return POHeaderList;
         }
-        protected DataTable GetPOLineTable(DateTime startDate, DateTime endDate)
+        protected List<POLineTable> GetPOLineTable(DateTime startDate, DateTime endDate)
         {
             SqlConnection conn = null;
             DataTable returnDT = new DataTable("POLineTable");
@@ -1569,7 +1588,7 @@ namespace KUBOnlinePRPM.Controllers
                                "p.[totalprice] AS [Amount], " +
                                "u.projectCode AS [Dim-Project], " +
                                "v.projectcode  AS [Dim-Department] " +
-                        "FROM   [KUBOnlinePR].[dbo].[purchaseorder] m " +
+                        "FROM   purchaseorder m " +
                                "LEFT JOIN vendor n " +
                                       "ON ( m.paytovendorid = n.vendorid ) " +
                                "LEFT JOIN customer o " +
@@ -1603,7 +1622,6 @@ namespace KUBOnlinePRPM.Controllers
                 string DocNo = ""; int LineNo = 0;
                 foreach (DataRow row in returnDT.Rows)
                 {
-
                     if (row["Document No."].ToString() != DocNo)
                     {
                         row["Line No."] = 10000;
@@ -1615,8 +1633,7 @@ namespace KUBOnlinePRPM.Controllers
                         row["Line No."] = LineNo;
                     }
                     DocNo = row["Document No."].ToString();
-
-                }
+                }                
             }
             catch (Exception ex)
             {
@@ -1627,8 +1644,28 @@ namespace KUBOnlinePRPM.Controllers
                 CloseDBConnection(conn);
             }
 
-            return returnDT;
+            var POLineList = returnDT.AsEnumerable().Select(
+                dataRow => new POLineTable
+                {
+                    DocumentType = dataRow.Field<string>("Document Type"),
+                    DocumentNo = dataRow.Field<string>("Document No."),
+                    LineNo = dataRow.Field<string>("Line No."),
+                    BuyFromVendorNo = dataRow.Field<string>("Buy-from Vendor No."),
+                    Type = dataRow.Field<string>("Type"),
+                    No = dataRow.Field<string>("No."),
+                    LocationCode = dataRow.Field<string>("Location Code"),
+                    Description = dataRow.Field<string>("Description"),
+                    UnitofMeasure = dataRow.Field<string>("Unit of Measure"),
+                    Quantity = dataRow.Field<int?>("Quantity"),
+                    DirectUnitCost = dataRow.Field<decimal?>("Direct Unit Cost"),
+                    Amount = dataRow.Field<decimal?>("Amount"),
+                    DimProject = dataRow.Field<string>("Dim-Project"),
+                    DimDepartment = dataRow.Field<string>("Dim-Department")
+                }).ToList();
+
+            return POLineList;
         }
+
         protected void CloseDBConnection(SqlConnection conn)
         {
             if ((conn != null))

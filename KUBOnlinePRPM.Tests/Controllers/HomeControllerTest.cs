@@ -8,6 +8,9 @@ using KUBOnlinePRPM;
 using KUBOnlinePRPM.Controllers;
 using System.Net.Mail;
 using KUBOnlinePRPM.Models;
+using System.Data.SqlClient;
+using System.Data;
+using System.Diagnostics;
 
 namespace KUBOnlinePRPM.Tests.Controllers
 {
@@ -199,7 +202,7 @@ namespace KUBOnlinePRPM.Tests.Controllers
         {
             var getFinance = (from m in db.Users
                               join n in db.Users_Roles on m.userId equals n.userId
-                              where n.roleId == "R13" && m.companyId == 2
+                              where n.roleId == "R13" && m.companyId == 3
                               select new NewPRModel()
                               {
                                   ReviewerId = m.userId,
@@ -208,15 +211,15 @@ namespace KUBOnlinePRPM.Tests.Controllers
                               }).ToList();
 
             var getLeader = (from m in db.Users
-                          join n in db.Users_Roles on m.userId equals n.userId
-                          join o in db.ChildCustomers on m.childCompanyId equals o.childCustId
-                          where (n.roleId == "R02" || n.roleId == "R10") && m.companyId == 2 && m.childCompanyId == 2
-                          select new NewPRModel()
-                          {
-                              HODApproverId = m.userId,
-                              HODApproverName = m.firstName + " " + m.lastName,
-                              ApproverEmail = m.emailAddress
-                          }).ToList();
+                             join n in db.Users_Roles on m.userId equals n.userId
+                             join o in db.ChildCustomers on m.childCompanyId equals o.childCustId
+                             where (n.roleId == "R02" || n.roleId == "R10") && m.companyId == 3 && m.childCompanyId == 16
+                             select new NewPRModel()
+                             {
+                                 HODApproverId = m.userId,
+                                 HODApproverName = m.firstName + " " + m.lastName,
+                                 ApproverEmail = m.emailAddress
+                             }).ToList();
             int LeaderUserId = 0; string getLeaderName = "";
             foreach (var item in getLeader)
             {
@@ -230,7 +233,7 @@ namespace KUBOnlinePRPM.Tests.Controllers
             var getHOD = (from m in db.Users
                           join o in db.Users on m.superiorId equals o.userId
                           join n in db.Users_Roles on o.userId equals n.userId
-                          where (n.roleId == "R02" || n.roleId == "R11" || n.roleId == "R14") && m.companyId == 2 && m.userId == 180
+                          where (n.roleId == "R02" || n.roleId == "R11" || n.roleId == "R14") && m.companyId == 3 && m.userId == 203
                           select new PRModel()
                           {
                               UserId = o.userId,
@@ -246,10 +249,10 @@ namespace KUBOnlinePRPM.Tests.Controllers
                 }
                 HODUserId = item.UserId;
             }
-            
+
             var getProcList = (from m in db.Users
                                join n in db.Users_Roles on m.userId equals n.userId
-                               where n.roleId == "R03" && m.companyId == 2
+                               where n.roleId == "R03" && m.companyId == 3
                                select new NewPRModel()
                                {
                                    AdminId = m.userId,
@@ -272,6 +275,257 @@ namespace KUBOnlinePRPM.Tests.Controllers
         {
             int POId = 44;
             var PONo = "PO-" + DateTime.Now.Year + "-" + string.Format("{0}{1}", 0, POId.ToString("D4"));
+        }
+
+        [TestMethod]
+        public void GetPOHeaderTable()
+        {
+            SqlConnection conn = null;
+            DataTable returnDT = new DataTable("POHeaderTable");
+            string info = "";
+            try
+            {
+                SqlDataAdapter SQLDataADP = new SqlDataAdapter();
+                SQLDataADP.TableMappings.Add("Table", "POHeaderTable");
+                conn = OpenDBConnection();
+                conn.InfoMessage += (object obj, SqlInfoMessageEventArgs e) =>
+                {
+                    info = e.Message.ToString();
+                };
+                string sql = "";
+                sql = "SELECT 'Order'                       AS [Document Type], " +
+                               "m.pono                        AS [No.], " +
+                               "n.vendorno                    AS [Buy-from Vendor No.], " +
+                               "n.vendorno                    AS [Pay-to Vendor No.], " +
+                               "''                            AS [Your Reference], " +
+                               "m.prepareddate                AS [Order Date], " +
+                               "m.submitdate                  AS [Posting Date], " +
+                               "''                            AS [Expected Receipt Date], " +
+                               "Concat ('Order', ' ', m.pono) AS [Posting Description], " +
+                               "o.abbreviation                AS [Location Code], " +
+                               "''                            AS [Shortcut Dimension 1 Code], " +
+                               "''                            AS [Shortcut Dimension 2 Code], " +
+                               "''                            AS [Vendor Posting Group], " +
+                               "''                            AS [Currency Code] " +
+                        "FROM   purchaseorder m " +
+                               "LEFT JOIN vendor n " +
+                                      "ON ( m.paytovendorid = n.vendorid ) " +
+                               "LEFT JOIN customer o " +
+                                      "ON ( m.custid = o.custid ) " +
+                        "WHERE m.SubmitDate between @startDate and @endDate and n.vendorNo IS NOT NULL";
+
+                SqlCommand SQLcmd = new SqlCommand(sql, conn)
+                {
+                    CommandType = CommandType.Text
+                };
+                SQLDataADP.SelectCommand = SQLcmd;
+
+                SQLcmd.Parameters.Add("@startDate", SqlDbType.DateTime);
+                SQLcmd.Parameters["@startDate"].Value = DateTime.Parse("2018-01-01").ToShortDateString();
+                SQLcmd.Parameters.Add("@endDate", SqlDbType.DateTime);
+                SQLcmd.Parameters["@endDate"].Value = DateTime.Now.ToShortDateString();
+
+                SQLDataADP.Fill(returnDT);
+            }
+            catch (Exception ex)
+            {
+                Debug.Print("Report - " + ex.Message);
+            }
+            finally
+            {
+                CloseDBConnection(conn);
+            }
+
+            var POHeaderList = returnDT.AsEnumerable().Select(
+                dataRow => new POHeaderTable
+                {
+                    DocumentType = dataRow.Field<string>("Document Type"),
+                    No = dataRow.Field<string>("No."),
+                    BuyFromVendorNo = dataRow.Field<string>("Buy-from Vendor No."),
+                    PayToVendorNo = dataRow.Field<string>("Pay-to Vendor No."),
+                    YourReference = dataRow.Field<string>("Your Reference"),
+                    OrderDate = dataRow.Field<DateTime>("Order Date"),
+                    PostingDate = dataRow.Field<DateTime>("Posting Date"),
+                    ExpectedReceiptDate = dataRow.Field<string>("Expected Receipt Date"),
+                    PostingDescription = dataRow.Field<string>("Posting Description"),
+                    LocationCode = dataRow.Field<string>("Location Code"),
+                    ShortcutDimension1Code = dataRow.Field<string>("Shortcut Dimension 1 Code"),
+                    ShortcutDimension2Code = dataRow.Field<string>("Shortcut Dimension 2 Code"),
+                    VendorPostingGroup = dataRow.Field<string>("Vendor Posting Group"),
+                    CurrencyCode = dataRow.Field<string>("Currency Code")
+                }).ToList();
+
+            //return POHeaderList;
+        }
+
+        [TestMethod]
+        public void GetPOLineTable()
+        {
+            SqlConnection conn = null;
+            DataTable returnDT = new DataTable("POLineTable");
+            string info = "";
+            try
+            {
+                SqlDataAdapter SQLDataADP = new SqlDataAdapter();
+                SQLDataADP.TableMappings.Add("Table", "POLineTable");
+                conn = OpenDBConnection();
+                conn.InfoMessage += (object obj, SqlInfoMessageEventArgs e) =>
+                {
+                    info = e.Message.ToString();
+                };
+                string sql = "";
+                sql = "SELECT 'Order'        AS [Document Type], " +
+                               "m.pono         AS [Document No.], " +
+                               "''             AS [Line No.], " +
+                               "n.vendorno     AS [Buy-from Vendor No.], " +
+                               "q.type         AS [Type], " +
+                               "r.itemcode     AS [No.], " +
+                               "o.abbreviation AS [Location Code], " +
+                               "r.description  AS [Description], " +
+                               "r.uom          AS [Unit of Measure], " +
+                               "p.quantity     AS [Quantity], " +
+                               "p.[unitprice]  AS [Direct Unit Cost], " +
+                               "p.[totalprice] AS [Amount], " +
+                               "u.projectCode AS [Dim-Project], " +
+                               "v.projectcode  AS [Dim-Department] " +
+                        "FROM   purchaseorder m " +
+                               "LEFT JOIN vendor n " +
+                                      "ON ( m.paytovendorid = n.vendorid ) " +
+                               "LEFT JOIN customer o " +
+                                      "ON ( m.custid = o.custid ) " +
+                               "LEFT JOIN po_item p " +
+                                      "ON ( m.poid = p.poid ) " +
+                               "LEFT JOIN itemtype q " +
+                                      "ON ( p.itemtypeid = q.itemtypeid ) " +
+                               "LEFT JOIN populateitemlist r " +
+                                      "ON ( p.itemtypeid = r.itemtypeid " +
+                                           "AND p.codeid = r.codeid ) " +
+                               "LEFT JOIN project u " +
+                                      "ON ( m.projectid = u.projectid and u.dimension = 'PROJECT' ) " +
+                               "LEFT JOIN project v " +
+                                      "ON ( m.projectid = v.projectid and v.dimension = 'DEPARTMENT' ) " +
+                        "WHERE m.SubmitDate between @startDate and @endDate and n.vendorNo IS NOT NULL";
+
+                SqlCommand SQLcmd = new SqlCommand(sql, conn)
+                {
+                    CommandType = CommandType.Text
+                };
+                SQLDataADP.SelectCommand = SQLcmd;
+
+                SQLcmd.Parameters.Add("@startDate", SqlDbType.DateTime);
+                SQLcmd.Parameters["@startDate"].Value = DateTime.Parse("2018-01-01").ToShortDateString();
+                SQLcmd.Parameters.Add("@endDate", SqlDbType.DateTime);
+                SQLcmd.Parameters["@endDate"].Value = DateTime.Now.ToShortDateString();
+
+                SQLDataADP.Fill(returnDT);
+
+                string DocNo = ""; int LineNo = 0;
+                foreach (DataRow row in returnDT.Rows)
+                {
+                    if (row["Document No."].ToString() != DocNo)
+                    {
+                        row["Line No."] = 10000;
+                        LineNo = 10000;
+                    }
+                    else
+                    {
+                        LineNo = LineNo + 10000;
+                        row["Line No."] = LineNo;
+                    }
+                    DocNo = row["Document No."].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.Print("Report - " + ex.Message);
+            }
+            finally
+            {
+                CloseDBConnection(conn);
+            }
+
+            var POLineList = returnDT.AsEnumerable().Select(
+                dataRow => new POLineTable
+                {
+                    DocumentType = dataRow.Field<string>("Document Type"),
+                    DocumentNo = dataRow.Field<string>("Document No."),
+                    LineNo = dataRow.Field<string>("Line No."),
+                    BuyFromVendorNo = dataRow.Field<string>("Buy-from Vendor No."),
+                    Type = dataRow.Field<string>("Type"),
+                    No = dataRow.Field<string>("No."),
+                    LocationCode = dataRow.Field<string>("Location Code"),
+                    Description = dataRow.Field<string>("Description"),
+                    UnitofMeasure = dataRow.Field<string>("Unit of Measure"),
+                    Quantity = dataRow.Field<int?>("Quantity"),
+                    DirectUnitCost = dataRow.Field<decimal?>("Direct Unit Cost"),
+                    Amount = dataRow.Field<decimal?>("Amount"),
+                    DimProject = dataRow.Field<string>("Dim-Project"),
+                    DimDepartment = dataRow.Field<string>("Dim-Department")
+                }).ToList();
+        }
+
+        protected SqlConnection OpenDBConnection()
+        {
+            SqlConnection conn = null;
+            try
+            {
+
+                conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["MainConnectionString"].ConnectionString);
+                //conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["ADConnectionString"].ConnectionString);
+                conn.Open();
+                //Debug.Print("Connected")
+            }
+            catch
+            {
+                if (conn.State == System.Data.ConnectionState.Open)
+                {
+                    conn.Close();
+                }
+
+                conn = null;
+                Debug.Print("Failed");
+            }
+            return conn;
+        }
+
+        protected void CloseDBConnection(SqlConnection conn)
+        {
+            if ((conn != null))
+            {
+                conn.Close();
+            }
+            //Debug.Print("Connection Closed")
+        }
+
+        [TestMethod]
+        public void TestRecommender()
+        {
+            //var PR = db.PurchaseRequisitions.First(x => x.PRId == 161);
+            int CustId = 3;
+            var getReqChildCustId = db.Users.First(m => m.userId == 203);
+            var getRecommenderIII = new List<PRModel>();
+            if (CustId == 2 || (CustId == 3 && getReqChildCustId.childCompanyId == 16) || CustId == 4)
+            /*if (PR.CustId == 2 || (PR.CustId == 3 && getReqChildCustId.childCompanyId == 16) || PR.CustId == 4)*/  //childCompanyId = kubma or customer = kubgaz
+            {
+                //PR.StatusId = "PR18";
+                //db.SaveChanges();
+
+                //PR_RecommenderCOO SaveRecommenderInfo = db.PR_RecommenderCOO.First(m => m.PRId == PR.PRId);
+                //SaveRecommenderInfo.recommendedDate = DateTime.Now;
+                //SaveRecommenderInfo.recommended = 1;
+                //db.SaveChanges();
+
+                //getRecommenderIII = (from m in db.Users
+                //                     join n in db.Users_Roles on m.userId equals n.userId
+                //                     //join o in db.Roles on n.roleId equals o.roleId
+                //                     where n.roleId == "R12" && m.companyId == 2
+                //                     select new PRModel()
+                //                     {
+                //                         UserId = n.userId,
+                //                         FullName = m.firstName + " " + m.lastName,
+                //                         EmailAddress = m.emailAddress
+                //                     }).ToList();
+            }
         }
     }
 }

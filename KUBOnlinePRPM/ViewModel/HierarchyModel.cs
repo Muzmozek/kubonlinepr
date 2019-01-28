@@ -20,6 +20,7 @@ namespace KUBOnlinePRPM.Service
         public List<UserViewModel> HODs { get; set; }
         public List<UserViewModel> Requestors { get; set; }
         public List<UserViewModel> Admin { get; set; }
+        public List<UserViewModel> Finance { get; set; }
         public List<UserViewModel> ITs { get; set; }
         public List<UserViewModel> PMOs { get; set; }
         public List<UserViewModel> HSEs { get; set; }

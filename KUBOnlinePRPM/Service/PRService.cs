@@ -164,6 +164,18 @@ namespace KUBOnlinePRPM.Service
                                userId = u.userId
                            }).ToList();
 
+                var finance = (from u in _db.Users
+                             join ur in _db.Users_Roles on u.userId equals ur.userId
+                             join r in _db.Roles on ur.roleId equals r.roleId
+                             where r.name == "Finance"
+                             && u.Customer.abbreviation == customer.abbreviation
+                             select new UserViewModel
+                             {
+                                 firstName = u.firstName,
+                                 lastName = u.lastName,
+                                 userId = u.userId
+                             }).ToList();
+
                 var hod = (from u in _db.Users
                            join ur in _db.Users_Roles on u.userId equals ur.userId
                            join r in _db.Roles on ur.roleId equals r.roleId
@@ -210,6 +222,7 @@ namespace KUBOnlinePRPM.Service
                     Procurements = procurements,
                     Requestors = requestor,
                     ITs = it,
+                    Finance = finance,
                     PMOs = pmo,
                     HSEs = hse,
                     Admin = admin

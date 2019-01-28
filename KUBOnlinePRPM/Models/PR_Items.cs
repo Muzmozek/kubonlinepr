@@ -39,8 +39,8 @@ namespace KUBOnlinePRPM.Models
         public Nullable<decimal> sst { get; set; }
     
         public virtual ItemType ItemType { get; set; }
+        public virtual PurchaseRequisition PurchaseRequisition { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PO_Item> PO_Item { get; set; }
-        public virtual PurchaseRequisition PurchaseRequisition { get; set; }
     }
 }

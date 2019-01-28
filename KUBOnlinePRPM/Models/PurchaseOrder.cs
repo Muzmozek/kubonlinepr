@@ -41,14 +41,15 @@ namespace KUBOnlinePRPM.Models
         public int CustId { get; set; }
         public int TotalQuantity { get; set; }
         public decimal TotalPrice { get; set; }
+        public string VendorQuoteNo { get; set; }
     
         public virtual PaymentTerm PaymentTerm { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PO_Item> PO_Item { get; set; }
         public virtual POStatu POStatu { get; set; }
         public virtual Project Project { get; set; }
         public virtual Vendor Vendor { get; set; }
         public virtual VendorStaff VendorStaff { get; set; }
         public virtual PurchaseRequisition PurchaseRequisition { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PO_Item> PO_Item { get; set; }
     }
 }

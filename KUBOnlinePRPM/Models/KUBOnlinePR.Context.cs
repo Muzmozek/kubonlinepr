@@ -37,7 +37,6 @@ namespace KUBOnlinePRPM.Models
         public virtual DbSet<Vendor> Vendors { get; set; }
         public virtual DbSet<VendorStaff> VendorStaffs { get; set; }
         public virtual DbSet<ItemType> ItemTypes { get; set; }
-        public virtual DbSet<PO_Item> PO_Item { get; set; }
         public virtual DbSet<NotificationMsg> NotificationMsgs { get; set; }
         public virtual DbSet<NotiGroup> NotiGroups { get; set; }
         public virtual DbSet<PR_Admin> PR_Admin { get; set; }
@@ -63,5 +62,6 @@ namespace KUBOnlinePRPM.Models
         public virtual DbSet<PR_Finance> PR_Finance { get; set; }
         public virtual DbSet<PR_Items> PR_Items { get; set; }
         public virtual DbSet<PR_PaperApprover> PR_PaperApprover { get; set; }
+        public virtual DbSet<PO_Item> PO_Item { get; set; }
     }
 }

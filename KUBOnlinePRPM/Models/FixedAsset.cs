@@ -14,12 +14,6 @@ namespace KUBOnlinePRPM.Models
     
     public partial class FixedAsset
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public FixedAsset()
-        {
-            this.PO_Item = new HashSet<PO_Item>();
-        }
-    
         public System.Guid uuid { get; set; }
         public int codeId { get; set; }
         public int itemTypeId { get; set; }
@@ -33,7 +27,5 @@ namespace KUBOnlinePRPM.Models
         public virtual Customer Customer { get; set; }
         public virtual ItemType ItemType { get; set; }
         public virtual User User { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PO_Item> PO_Item { get; set; }
     }
 }

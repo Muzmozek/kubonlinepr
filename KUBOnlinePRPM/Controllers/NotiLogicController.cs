@@ -5,6 +5,7 @@ using System.Net.Mail;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
@@ -137,7 +138,10 @@ namespace KUBOnlinePRPM.Controllers
                 Credentials = new System.Net.NetworkCredential("info@kubtel.com", "welcome123$")
                 //Credentials = new System.Net.NetworkCredential("pr@kub.com", "welcome123$")
             };
-            smtp.Send(mail);
+            if (ConfigurationManager.AppSettings["SentEmail"] == "true")
+            {
+                smtp.Send(mail);
+            }
 
             NotiGroup _objSendToUserId = new NotiGroup
             {
@@ -245,14 +249,18 @@ namespace KUBOnlinePRPM.Controllers
                                                  FullName = n.firstName + " " + n.lastName,
                                                  EmailAddress = n.emailAddress
                                              }).FirstOrDefault();
-                if (getRecommenderDetails != null)
+                if (getRecommenderDetails != null && getReviewerDetails != null)
                 {
                     sentEmailList.Add(getRecommenderDetails);
                     NotiMessage = PR.FullName + " has send email notification for " + POMessage + " for PRNo : " + PR.NewPRForm.PRNo + " to " + getRequestorDetails.FullName + " (Requestor), " + getHODDetails.FullName + " (HOD), " + getRecommenderDetails.FullName + " (Recommender), " + getReviewerDetails.FullName + " (Reviewer), " + getHOCDetails.FullName + " (Approver).";
                 }
-                else
+                else if (getReviewerDetails != null)
                 {
                     NotiMessage = PR.FullName + " has send email notification for " + POMessage + " for PRNo : " + PR.NewPRForm.PRNo + " to " + getRequestorDetails.FullName + " (Requestor), " + getHODDetails.FullName + " (HOD), " + getReviewerDetails.FullName + " (Reviewer), " + getHOCDetails.FullName + " (Approver).";
+                }
+                else
+                {
+                    NotiMessage = PR.FullName + " has send email notification for " + POMessage + " for PRNo : " + PR.NewPRForm.PRNo + " to " + getRequestorDetails.FullName + " (Requestor), " + getHODDetails.FullName + " (HOD), " + getHOCDetails.FullName + " (Approver).";
                 }
                 
             }
@@ -310,24 +318,30 @@ namespace KUBOnlinePRPM.Controllers
 
                 if (PR.CustId != 2)
                 {
-                    if (getRecommenderDetails != null)
+                    if (getRecommenderDetails != null && getReviewerDetails != null)
                     {
                         NotiMessage = PR.FullName + " has send email notification for " + POMessage + " for PRNo : " + PR.NewPRForm.PRNo + " to " + getRequestorDetails.FullName + " (Requestor), " + getHODDetails.FullName + " , " + getRecommenderDetails.FullName + " (Recommender), " + getRecommenderIIDetails.FullName + " , " + getRecommenderIIIDetails.FullName + " (COO), " + getRecommenderIVDetails.FullName + " (CFO), " + getReviewerDetails.FullName + " (Reviewer), " + getHOCDetails.FullName + " (Approver).";
                     }
-                    else
+                    else if (getReviewerDetails != null)
                     {
                         NotiMessage = PR.FullName + " has send email notification for " + POMessage + " for PRNo : " + PR.NewPRForm.PRNo + " to " + getRequestorDetails.FullName + " (Requestor), " + getHODDetails.FullName + " , " + getRecommenderIIDetails.FullName + " , " + getRecommenderIIIDetails.FullName + " (COO), " + getRecommenderIVDetails.FullName + " (CFO), " + getReviewerDetails.FullName + " (Reviewer), " + getHOCDetails.FullName + " (Approver).";
+                    } else
+                    {
+                        NotiMessage = PR.FullName + " has send email notification for " + POMessage + " for PRNo : " + PR.NewPRForm.PRNo + " to " + getRequestorDetails.FullName + " (Requestor), " + getHODDetails.FullName + " , " + getRecommenderIIDetails.FullName + " , " + getRecommenderIIIDetails.FullName + " (COO), " + getRecommenderIVDetails.FullName + " (CFO), " + getHOCDetails.FullName + " (Approver).";
                     }
                         
                 } else {
-                    if (getRecommenderDetails != null)
+                    if (getRecommenderDetails != null && getReviewerDetails != null)
                     {
                         NotiMessage = PR.FullName + " has send email notification for " + POMessage + " for PRNo : " + PR.NewPRForm.PRNo + " to " + getRequestorDetails.FullName + " (Requestor), " + getHODDetails.FullName + " , " + getRecommenderDetails.FullName + " (Recommender), " + getRecommenderIIIDetails.FullName + " (COO), " + getRecommenderIVDetails.FullName + " (CFO), " + getReviewerDetails.FullName + " (Reviewer), " + getHOCDetails.FullName + " (Approver).";
                     }
-                    else
+                    else if (getReviewerDetails != null)
                     {
                         NotiMessage = PR.FullName + " has send email notification for " + POMessage + " for PRNo : " + PR.NewPRForm.PRNo + " to " + getRequestorDetails.FullName + " (Requestor), " + getHODDetails.FullName + " , " + getRecommenderIIIDetails.FullName + " (COO), " + getRecommenderIVDetails.FullName + " (CFO), " + getReviewerDetails.FullName + " (Reviewer), " + getHOCDetails.FullName + " (Approver).";
-                    }                        
+                    } else
+                    {
+                        NotiMessage = PR.FullName + " has send email notification for " + POMessage + " for PRNo : " + PR.NewPRForm.PRNo + " to " + getRequestorDetails.FullName + " (Requestor), " + getHODDetails.FullName + " , " + getRecommenderIIIDetails.FullName + " (COO), " + getRecommenderIVDetails.FullName + " (CFO), " + getHOCDetails.FullName + " (Approver).";
+                    }                     
                 }               
             }
 
@@ -409,7 +423,10 @@ namespace KUBOnlinePRPM.Controllers
                     Credentials = new System.Net.NetworkCredential("info@kubtel.com", "welcome123$")
                     //Credentials = new System.Net.NetworkCredential("pr-admin@kub.com", "welcome123$")
                 };
-                smtp.Send(mail);
+                if (ConfigurationManager.AppSettings["SentEmail"] == "true")
+                {
+                    smtp.Send(mail);
+                }
 
                 NotiGroup _objSendToUserId = new NotiGroup
                 {

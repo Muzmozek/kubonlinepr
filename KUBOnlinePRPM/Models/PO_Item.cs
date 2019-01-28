@@ -16,6 +16,7 @@ namespace KUBOnlinePRPM.Models
     {
         public System.Guid uuid { get; set; }
         public int itemsId { get; set; }
+        public Nullable<int> itemTypeId { get; set; }
         public int POId { get; set; }
         public System.DateTime dateRequired { get; set; }
         public string description { get; set; }
@@ -24,12 +25,8 @@ namespace KUBOnlinePRPM.Models
         public int quantity { get; set; }
         public decimal unitPrice { get; set; }
         public decimal totalPrice { get; set; }
-        public Nullable<int> itemTypeId { get; set; }
     
-        public virtual FixedAsset FixedAsset { get; set; }
-        public virtual GL GL { get; set; }
-        public virtual Item Item { get; set; }
-        public virtual PurchaseOrder PurchaseOrder { get; set; }
         public virtual PR_Items PR_Items { get; set; }
+        public virtual PurchaseOrder PurchaseOrder { get; set; }
     }
 }

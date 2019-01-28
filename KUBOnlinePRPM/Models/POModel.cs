@@ -16,8 +16,13 @@ namespace KUBOnlinePRPM.Models
         public string StatusId { get; set; }
         public NewPOModel NewPOForm { get; set; }
         public List<POListTable> POListObject { get; set; }
+        public List<POHeaderTable> POHeaderList { get; set; }
+        public List<POLineTable> POLineList { get; set; }
         public decimal OutstandingQty { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
     }
+
     public class NewPOModel
     {
         public string CompanyName { get; set; }
@@ -52,6 +57,7 @@ namespace KUBOnlinePRPM.Models
         public string PaymentTermsCode { get; set; }
         public List<POItemsTable> POItemListObject { get; set; }
     }
+
     public class POListTable
     {
         public int POId { get; set; }
@@ -70,6 +76,7 @@ namespace KUBOnlinePRPM.Models
         public string Status { get; set; }
         public string POType { get; set; }
     }
+
     public class POItemsTable
     {
         public int ItemsId { get; set; }
@@ -85,5 +92,41 @@ namespace KUBOnlinePRPM.Models
         public string UOM { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal TotalPrice { get; set; }
+    }
+
+    public class POHeaderTable
+    {
+        public string DocumentType { get; set; }
+        public string No { get; set; }
+        public string BuyFromVendorNo { get; set;}
+        public string PayToVendorNo { get; set; }
+        public string YourReference { get; set; }
+        public DateTime OrderDate { get; set; }
+        public DateTime PostingDate { get; set; }
+        public string ExpectedReceiptDate { get; set; }
+        public string PostingDescription { get; set; }
+        public string LocationCode { get; set; }
+        public string ShortcutDimension1Code { get; set; }
+        public string ShortcutDimension2Code { get; set; }
+        public string VendorPostingGroup { get; set; }
+        public string CurrencyCode { get; set; }
+    }
+
+    public class POLineTable
+    {
+        public string DocumentType { get; set; }
+        public string DocumentNo { get; set; }
+        public string LineNo { get; set; }
+        public string BuyFromVendorNo { get; set; }
+        public string Type { get; set; }
+        public string No { get; set; }
+        public string LocationCode { get; set; }
+        public string Description { get; set; }
+        public string UnitofMeasure { get; set; }
+        public int? Quantity { get; set; }
+        public decimal? DirectUnitCost { get; set; }
+        public decimal? Amount { get; set; }
+        public string DimProject { get; set; }
+        public string DimDepartment { get; set; }
     }
 }

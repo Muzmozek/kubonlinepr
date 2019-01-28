@@ -202,6 +202,32 @@
 
             <tr>
                 <td>
+                    Finance
+                </td>
+                <td>
+                    @if (member.Finance.Count > 0)
+                    {
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Username
+                                    </th>
+                                </tr>
+                            </thead>
+                            @foreach (var x in member.Finance)
+                            {
+                                <tr>
+                                    <td>@Html.ActionLink(@x.firstName + ' ' + @x.lastName, "Edit", "UsersAdmin", new { id = @x.userId }, new { target = "_blank" })</td>
+                                </tr>
+                            }
+                        </table>
+                    }
+                </td>
+            </tr>
+
+            <tr>
+                <td>
                     Team Leader & HOD
                 </td>
                 <td>

@@ -353,6 +353,7 @@
           <Property Name="PODate" Type="datetime" Nullable="false" />
           <Property Name="projectId" Type="int" Nullable="false" />
           <Property Name="vendorId" Type="int" Nullable="false" />
+          <Property Name="VendorQuoteNo" Type="nvarchar" MaxLength="30" />
           <Property Name="vendorStaffId" Type="int" />
           <Property Name="PayToVendorId" Type="int" />
           <Property Name="PaymentTermsId" Type="int" />
@@ -699,42 +700,6 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
             </Principal>
             <Dependent Role="NotiGroup">
               <PropertyRef Name="toUserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PO_Item_GLs">
-          <End Role="GLs" Type="Self.GLs" Multiplicity="1" />
-          <End Role="PO_Item" Type="Self.PO_Item" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GLs">
-              <PropertyRef Name="codeId" />
-            </Principal>
-            <Dependent Role="PO_Item">
-              <PropertyRef Name="codeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PO_Item_ItemCodes">
-          <End Role="FixedAsset" Type="Self.FixedAsset" Multiplicity="1" />
-          <End Role="PO_Item" Type="Self.PO_Item" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="FixedAsset">
-              <PropertyRef Name="codeId" />
-            </Principal>
-            <Dependent Role="PO_Item">
-              <PropertyRef Name="codeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PO_Item_Items">
-          <End Role="Items" Type="Self.Items" Multiplicity="1" />
-          <End Role="PO_Item" Type="Self.PO_Item" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Items">
-              <PropertyRef Name="codeId" />
-            </Principal>
-            <Dependent Role="PO_Item">
-              <PropertyRef Name="codeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1440,18 +1405,6 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
             <End Role="User" EntitySet="User" />
             <End Role="NotiGroup" EntitySet="NotiGroup" />
           </AssociationSet>
-          <AssociationSet Name="FK_PO_Item_GLs" Association="Self.FK_PO_Item_GLs">
-            <End Role="GLs" EntitySet="GLs" />
-            <End Role="PO_Item" EntitySet="PO_Item" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PO_Item_ItemCodes" Association="Self.FK_PO_Item_ItemCodes">
-            <End Role="FixedAsset" EntitySet="FixedAsset" />
-            <End Role="PO_Item" EntitySet="PO_Item" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PO_Item_Items" Association="Self.FK_PO_Item_Items">
-            <End Role="Items" EntitySet="Items" />
-            <End Role="PO_Item" EntitySet="PO_Item" />
-          </AssociationSet>
           <AssociationSet Name="FK_PO_Item_PR_Items" Association="Self.FK_PO_Item_PR_Items">
             <End Role="PR_Items" EntitySet="PR_Items" />
             <End Role="PO_Item" EntitySet="PO_Item" />
@@ -2080,7 +2033,6 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
             <End Role="VendorStaff" EntitySet="VendorStaffs" />
           </AssociationSet>
           <EntitySet Name="ItemTypes" EntityType="KUBOnlinePRModel.ItemType" />
-          <EntitySet Name="PO_Item" EntityType="KUBOnlinePRModel.PO_Item" />
           <EntitySet Name="NotificationMsgs" EntityType="KUBOnlinePRModel.NotificationMsg" />
           <EntitySet Name="NotiGroups" EntityType="KUBOnlinePRModel.NotiGroup" />
           <AssociationSet Name="FK_NotiGroup_NotificationMsg" Association="KUBOnlinePRModel.FK_NotiGroup_NotificationMsg">
@@ -2148,25 +2100,13 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
             <End Role="User" EntitySet="Users" />
             <End Role="FixedAsset" EntitySet="FixedAssets" />
           </AssociationSet>
-          <AssociationSet Name="FK_PO_Item_ItemCodes1" Association="KUBOnlinePRModel.FK_PO_Item_ItemCodes1">
-            <End Role="FixedAsset" EntitySet="FixedAssets" />
-            <End Role="PO_Item" EntitySet="PO_Item" />
-          </AssociationSet>
           <AssociationSet Name="FK_GLs_ItemType" Association="KUBOnlinePRModel.FK_GLs_ItemType">
             <End Role="ItemType" EntitySet="ItemTypes" />
             <End Role="GL" EntitySet="GLs" />
           </AssociationSet>
-          <AssociationSet Name="FK_PO_Item_GLs" Association="KUBOnlinePRModel.FK_PO_Item_GLs">
-            <End Role="GL" EntitySet="GLs" />
-            <End Role="PO_Item" EntitySet="PO_Item" />
-          </AssociationSet>
           <AssociationSet Name="FK_Items_ItemType" Association="KUBOnlinePRModel.FK_Items_ItemType">
             <End Role="ItemType" EntitySet="ItemTypes" />
             <End Role="Item" EntitySet="Items" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PO_Item_Items" Association="KUBOnlinePRModel.FK_PO_Item_Items">
-            <End Role="Item" EntitySet="Items" />
-            <End Role="PO_Item" EntitySet="PO_Item" />
           </AssociationSet>
           <EntitySet Name="PopulateItemLists" EntityType="KUBOnlinePRModel.PopulateItemList" />
           <EntitySet Name="PaymentTerms" EntityType="KUBOnlinePRModel.PaymentTerm" />
@@ -2174,10 +2114,6 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
           <AssociationSet Name="FK_PurchaseOrder_PaymentTerms" Association="KUBOnlinePRModel.FK_PurchaseOrder_PaymentTerms">
             <End Role="PaymentTerm" EntitySet="PaymentTerms" />
             <End Role="PurchaseOrder" EntitySet="PurchaseOrders" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PO_Item_PurchaseOrder" Association="KUBOnlinePRModel.FK_PO_Item_PurchaseOrder">
-            <End Role="PurchaseOrder" EntitySet="PurchaseOrders" />
-            <End Role="PO_Item" EntitySet="PO_Item" />
           </AssociationSet>
           <AssociationSet Name="FK_PurchaseOrder_POStatus" Association="KUBOnlinePRModel.FK_PurchaseOrder_POStatus">
             <End Role="POStatu" EntitySet="POStatus" />
@@ -2305,10 +2241,6 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
             <End Role="ItemType" EntitySet="ItemTypes" />
             <End Role="PR_Items" EntitySet="PR_Items" />
           </AssociationSet>
-          <AssociationSet Name="FK_PO_Item_PR_Items" Association="KUBOnlinePRModel.FK_PO_Item_PR_Items">
-            <End Role="PR_Items" EntitySet="PR_Items" />
-            <End Role="PO_Item" EntitySet="PO_Item" />
-          </AssociationSet>
           <AssociationSet Name="FK_PR_Items_PurchaseRequisition" Association="KUBOnlinePRModel.FK_PR_Items_PurchaseRequisition">
             <End Role="PurchaseRequisition" EntitySet="PurchaseRequisitions" />
             <End Role="PR_Items" EntitySet="PR_Items" />
@@ -2322,6 +2254,15 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
             <End Role="User" EntitySet="Users" />
             <End Role="PR_PaperApprover" EntitySet="PR_PaperApprover" />
           </AssociationSet>
+          <EntitySet Name="PO_Item" EntityType="KUBOnlinePRModel.PO_Item" />
+          <AssociationSet Name="FK_PO_Item_PR_Items" Association="KUBOnlinePRModel.FK_PO_Item_PR_Items">
+            <End Role="PR_Items" EntitySet="PR_Items" />
+            <End Role="PO_Item" EntitySet="PO_Item" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PO_Item_PurchaseOrder" Association="KUBOnlinePRModel.FK_PO_Item_PurchaseOrder">
+            <End Role="PurchaseOrder" EntitySet="PurchaseOrders" />
+            <End Role="PO_Item" EntitySet="PO_Item" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ItemType">
           <Key>
@@ -2334,27 +2275,6 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
           <NavigationProperty Name="GLs" Relationship="KUBOnlinePRModel.FK_GLs_ItemType" FromRole="ItemType" ToRole="GL" />
           <NavigationProperty Name="Items" Relationship="KUBOnlinePRModel.FK_Items_ItemType" FromRole="ItemType" ToRole="Item" />
           <NavigationProperty Name="PR_Items" Relationship="KUBOnlinePRModel.FK_PR_Items_ItemType" FromRole="ItemType" ToRole="PR_Items" />
-        </EntityType>
-        <EntityType Name="PO_Item">
-          <Key>
-            <PropertyRef Name="uuid" />
-          </Key>
-          <Property Name="uuid" Type="Guid" Nullable="false" />
-          <Property Name="itemsId" Type="Int32" Nullable="false" />
-          <Property Name="POId" Type="Int32" Nullable="false" />
-          <Property Name="dateRequired" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="description" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
-          <Property Name="codeId" Type="Int32" Nullable="false" />
-          <Property Name="custPONo" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="quantity" Type="Int32" Nullable="false" />
-          <Property Name="unitPrice" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="totalPrice" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <NavigationProperty Name="FixedAsset" Relationship="KUBOnlinePRModel.FK_PO_Item_ItemCodes1" FromRole="PO_Item" ToRole="FixedAsset" />
-          <NavigationProperty Name="GL" Relationship="KUBOnlinePRModel.FK_PO_Item_GLs" FromRole="PO_Item" ToRole="GL" />
-          <NavigationProperty Name="Item" Relationship="KUBOnlinePRModel.FK_PO_Item_Items" FromRole="PO_Item" ToRole="Item" />
-          <NavigationProperty Name="PurchaseOrder" Relationship="KUBOnlinePRModel.FK_PO_Item_PurchaseOrder" FromRole="PO_Item" ToRole="PurchaseOrder" />
-          <Property Name="itemTypeId" Type="Int32" />
-          <NavigationProperty Name="PR_Items" Relationship="KUBOnlinePRModel.FK_PO_Item_PR_Items" FromRole="PO_Item" ToRole="PR_Items" />
         </EntityType>
         <EntityType Name="NotificationMsg">
           <Key>
@@ -2582,7 +2502,6 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
           <NavigationProperty Name="Customer" Relationship="KUBOnlinePRModel.FK_ItemCode_Customer" FromRole="FixedAsset" ToRole="Customer" />
           <NavigationProperty Name="ItemType" Relationship="KUBOnlinePRModel.FK_ItemCode_ItemType" FromRole="FixedAsset" ToRole="ItemType" />
           <NavigationProperty Name="User" Relationship="KUBOnlinePRModel.FK_ItemCodes_User1" FromRole="FixedAsset" ToRole="User" />
-          <NavigationProperty Name="PO_Item" Relationship="KUBOnlinePRModel.FK_PO_Item_ItemCodes1" FromRole="FixedAsset" ToRole="PO_Item" />
         </EntityType>
         <EntityType Name="GL">
           <Key>
@@ -2599,7 +2518,6 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
           <Property Name="createByUserId" Type="Int32" />
           <NavigationProperty Name="Customer" Relationship="KUBOnlinePRModel.FK_GLs_Customer" FromRole="GL" ToRole="Customer" />
           <NavigationProperty Name="ItemType" Relationship="KUBOnlinePRModel.FK_GLs_ItemType" FromRole="GL" ToRole="ItemType" />
-          <NavigationProperty Name="PO_Item" Relationship="KUBOnlinePRModel.FK_PO_Item_GLs" FromRole="GL" ToRole="PO_Item" />
         </EntityType>
         <EntityType Name="Item">
           <Key>
@@ -2616,7 +2534,6 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
           <Property Name="createByUserId" Type="Int32" />
           <NavigationProperty Name="Customer" Relationship="KUBOnlinePRModel.FK_Items_Customer" FromRole="Item" ToRole="Customer" />
           <NavigationProperty Name="ItemType" Relationship="KUBOnlinePRModel.FK_Items_ItemType" FromRole="Item" ToRole="ItemType" />
-          <NavigationProperty Name="PO_Item" Relationship="KUBOnlinePRModel.FK_PO_Item_Items" FromRole="Item" ToRole="PO_Item" />
           <Property Name="unitPrice" Type="Decimal" Precision="18" Scale="2" />
         </EntityType>
         <Association Name="FK_GLs_Customer">
@@ -2679,18 +2596,6 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PO_Item_ItemCodes1">
-          <End Type="KUBOnlinePRModel.FixedAsset" Role="FixedAsset" Multiplicity="1" />
-          <End Type="KUBOnlinePRModel.PO_Item" Role="PO_Item" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="FixedAsset">
-              <PropertyRef Name="codeId" />
-            </Principal>
-            <Dependent Role="PO_Item">
-              <PropertyRef Name="codeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_GLs_ItemType">
           <End Type="KUBOnlinePRModel.ItemType" Role="ItemType" Multiplicity="1" />
           <End Type="KUBOnlinePRModel.GL" Role="GL" Multiplicity="*" />
@@ -2703,18 +2608,6 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PO_Item_GLs">
-          <End Type="KUBOnlinePRModel.GL" Role="GL" Multiplicity="1" />
-          <End Type="KUBOnlinePRModel.PO_Item" Role="PO_Item" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GL">
-              <PropertyRef Name="codeId" />
-            </Principal>
-            <Dependent Role="PO_Item">
-              <PropertyRef Name="codeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Items_ItemType">
           <End Type="KUBOnlinePRModel.ItemType" Role="ItemType" Multiplicity="1" />
           <End Type="KUBOnlinePRModel.Item" Role="Item" Multiplicity="*" />
@@ -2724,18 +2617,6 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
             </Principal>
             <Dependent Role="Item">
               <PropertyRef Name="itemTypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PO_Item_Items">
-          <End Type="KUBOnlinePRModel.Item" Role="Item" Multiplicity="1" />
-          <End Type="KUBOnlinePRModel.PO_Item" Role="PO_Item" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Item">
-              <PropertyRef Name="codeId" />
-            </Principal>
-            <Dependent Role="PO_Item">
-              <PropertyRef Name="codeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2790,7 +2671,6 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
           <Property Name="POAging" Type="Int32" Nullable="false" />
           <Property Name="StatusId" Type="String" MaxLength="4" FixedLength="true" Unicode="true" />
           <NavigationProperty Name="PaymentTerm" Relationship="KUBOnlinePRModel.FK_PurchaseOrder_PaymentTerms" FromRole="PurchaseOrder" ToRole="PaymentTerm" />
-          <NavigationProperty Name="PO_Item" Relationship="KUBOnlinePRModel.FK_PO_Item_PurchaseOrder" FromRole="PurchaseOrder" ToRole="PO_Item" />
           <NavigationProperty Name="POStatu" Relationship="KUBOnlinePRModel.FK_PurchaseOrder_POStatus" FromRole="PurchaseOrder" ToRole="POStatu" />
           <NavigationProperty Name="Project" Relationship="KUBOnlinePRModel.FK_PurchaseOrder_Project" FromRole="PurchaseOrder" ToRole="Project" />
           <NavigationProperty Name="Vendor" Relationship="KUBOnlinePRModel.FK_PurchaseOrder_Vendor" FromRole="PurchaseOrder" ToRole="Vendor" />
@@ -2799,6 +2679,8 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
           <Property Name="TotalQuantity" Type="Int32" Nullable="false" />
           <Property Name="TotalPrice" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
           <NavigationProperty Name="PurchaseRequisition" Relationship="KUBOnlinePRModel.FK_PurchaseOrder_PurchaseRequisition" FromRole="PurchaseOrder" ToRole="PurchaseRequisition" />
+          <Property Name="VendorQuoteNo" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PO_Item" Relationship="KUBOnlinePRModel.FK_PO_Item_PurchaseOrder" FromRole="PurchaseOrder" ToRole="PO_Item" />
         </EntityType>
         <Association Name="FK_PurchaseOrder_PaymentTerms">
           <End Type="KUBOnlinePRModel.PaymentTerm" Role="PaymentTerm" Multiplicity="0..1" />
@@ -2809,18 +2691,6 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
             </Principal>
             <Dependent Role="PurchaseOrder">
               <PropertyRef Name="PaymentTermsId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PO_Item_PurchaseOrder">
-          <End Type="KUBOnlinePRModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="1" />
-          <End Type="KUBOnlinePRModel.PO_Item" Role="PO_Item" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PurchaseOrder">
-              <PropertyRef Name="POId" />
-            </Principal>
-            <Dependent Role="PO_Item">
-              <PropertyRef Name="POId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3342,8 +3212,8 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
           <Property Name="plannedReceiptDate" Type="DateTime" Precision="3" />
           <Property Name="sst" Type="Decimal" Precision="18" Scale="2" />
           <NavigationProperty Name="ItemType" Relationship="KUBOnlinePRModel.FK_PR_Items_ItemType" FromRole="PR_Items" ToRole="ItemType" />
-          <NavigationProperty Name="PO_Item" Relationship="KUBOnlinePRModel.FK_PO_Item_PR_Items" FromRole="PR_Items" ToRole="PO_Item" />
           <NavigationProperty Name="PurchaseRequisition" Relationship="KUBOnlinePRModel.FK_PR_Items_PurchaseRequisition" FromRole="PR_Items" ToRole="PurchaseRequisition" />
+          <NavigationProperty Name="PO_Item" Relationship="KUBOnlinePRModel.FK_PO_Item_PR_Items" FromRole="PR_Items" ToRole="PO_Item" />
         </EntityType>
         <Association Name="FK_PR_Items_ItemType">
           <End Type="KUBOnlinePRModel.ItemType" Role="ItemType" Multiplicity="0..1" />
@@ -3354,18 +3224,6 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
             </Principal>
             <Dependent Role="PR_Items">
               <PropertyRef Name="itemTypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PO_Item_PR_Items">
-          <End Type="KUBOnlinePRModel.PR_Items" Role="PR_Items" Multiplicity="1" />
-          <End Type="KUBOnlinePRModel.PO_Item" Role="PO_Item" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PR_Items">
-              <PropertyRef Name="itemsId" />
-            </Principal>
-            <Dependent Role="PO_Item">
-              <PropertyRef Name="itemsId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3415,6 +3273,48 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
             </Principal>
             <Dependent Role="PR_PaperApprover">
               <PropertyRef Name="approverId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PO_Item">
+          <Key>
+            <PropertyRef Name="uuid" />
+          </Key>
+          <Property Name="uuid" Type="Guid" Nullable="false" />
+          <Property Name="itemsId" Type="Int32" Nullable="false" />
+          <Property Name="itemTypeId" Type="Int32" />
+          <Property Name="POId" Type="Int32" Nullable="false" />
+          <Property Name="dateRequired" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="description" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="codeId" Type="Int32" Nullable="false" />
+          <Property Name="custPONo" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="quantity" Type="Int32" Nullable="false" />
+          <Property Name="unitPrice" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="totalPrice" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <NavigationProperty Name="PR_Items" Relationship="KUBOnlinePRModel.FK_PO_Item_PR_Items" FromRole="PO_Item" ToRole="PR_Items" />
+          <NavigationProperty Name="PurchaseOrder" Relationship="KUBOnlinePRModel.FK_PO_Item_PurchaseOrder" FromRole="PO_Item" ToRole="PurchaseOrder" />
+        </EntityType>
+        <Association Name="FK_PO_Item_PR_Items">
+          <End Type="KUBOnlinePRModel.PR_Items" Role="PR_Items" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.PO_Item" Role="PO_Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PR_Items">
+              <PropertyRef Name="itemsId" />
+            </Principal>
+            <Dependent Role="PO_Item">
+              <PropertyRef Name="itemsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PO_Item_PurchaseOrder">
+          <End Type="KUBOnlinePRModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.PO_Item" Role="PO_Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseOrder">
+              <PropertyRef Name="POId" />
+            </Principal>
+            <Dependent Role="PO_Item">
+              <PropertyRef Name="POId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3608,23 +3508,6 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="PO_Item">
-            <EntityTypeMapping TypeName="KUBOnlinePRModel.PO_Item">
-              <MappingFragment StoreEntitySet="PO_Item">
-                <ScalarProperty Name="itemTypeId" ColumnName="itemTypeId" />
-                <ScalarProperty Name="totalPrice" ColumnName="totalPrice" />
-                <ScalarProperty Name="unitPrice" ColumnName="unitPrice" />
-                <ScalarProperty Name="quantity" ColumnName="quantity" />
-                <ScalarProperty Name="custPONo" ColumnName="custPONo" />
-                <ScalarProperty Name="codeId" ColumnName="codeId" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="dateRequired" ColumnName="dateRequired" />
-                <ScalarProperty Name="POId" ColumnName="POId" />
-                <ScalarProperty Name="itemsId" ColumnName="itemsId" />
-                <ScalarProperty Name="uuid" ColumnName="uuid" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="NotificationMsgs">
             <EntityTypeMapping TypeName="KUBOnlinePRModel.NotificationMsg">
               <MappingFragment StoreEntitySet="NotificationMsg">
@@ -3795,6 +3678,7 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
           <EntitySetMapping Name="PurchaseOrders">
             <EntityTypeMapping TypeName="KUBOnlinePRModel.PurchaseOrder">
               <MappingFragment StoreEntitySet="PurchaseOrder">
+                <ScalarProperty Name="VendorQuoteNo" ColumnName="VendorQuoteNo" />
                 <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
                 <ScalarProperty Name="TotalQuantity" ColumnName="TotalQuantity" />
                 <ScalarProperty Name="CustId" ColumnName="CustId" />
@@ -3988,6 +3872,23 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
                 <ScalarProperty Name="approverApproved" ColumnName="approverApproved" />
                 <ScalarProperty Name="PRId" ColumnName="PRId" />
                 <ScalarProperty Name="approverId" ColumnName="approverId" />
+                <ScalarProperty Name="uuid" ColumnName="uuid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PO_Item">
+            <EntityTypeMapping TypeName="KUBOnlinePRModel.PO_Item">
+              <MappingFragment StoreEntitySet="PO_Item">
+                <ScalarProperty Name="totalPrice" ColumnName="totalPrice" />
+                <ScalarProperty Name="unitPrice" ColumnName="unitPrice" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="custPONo" ColumnName="custPONo" />
+                <ScalarProperty Name="codeId" ColumnName="codeId" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="dateRequired" ColumnName="dateRequired" />
+                <ScalarProperty Name="POId" ColumnName="POId" />
+                <ScalarProperty Name="itemTypeId" ColumnName="itemTypeId" />
+                <ScalarProperty Name="itemsId" ColumnName="itemsId" />
                 <ScalarProperty Name="uuid" ColumnName="uuid" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -336,33 +336,6 @@ namespace KUBOnlinePRPM.Controllers
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
-                int UserId = Int32.Parse(Session["UserId"].ToString());
-                int CustId = Int32.Parse(Session["CompanyId"].ToString());
-                var getRole = (from m in db.Users
-                               join n in db.Users_Roles on m.userId equals n.userId
-                               where m.userId == UserId
-                               select new RoleList()
-                               {
-                                   RoleId = n.roleId,
-                                   RoleName = n.Role.name
-                               }).ToList();
-                var PayToVendorQuery = (from m in db.Vendors
-                                        where m.custId == CustId
-                                        select new
-                                        {
-                                            VendorId = m.vendorId,
-                                            VendorName = m.vendorNo + " - " + m.name,
-                                            VendorNo = m.vendorNo,
-                                        }).OrderBy(c => c.VendorNo).ThenBy(c => c.VendorName);
-                var PaymentTermsCodeQuery = (from m in db.PaymentTerms
-                                             where m.custId == CustId
-                                             select new
-                                             {
-                                                 PaymentTermsId = m.paymentTermsId,
-                                                 PaymentDescription = m.paymentCode + " - " + m.paymentDescription,
-                                                 PaymentCode = m.paymentCode,
-                                             }).OrderBy(c => c.PaymentCode).ThenBy(c => c.PaymentDescription);
-
                 POModel PODetail = new POModel();
                 if (Session["POId"] == null)
                 {
@@ -375,6 +348,35 @@ namespace KUBOnlinePRPM.Controllers
                     PODetail.POId = Int32.Parse(Session["POId"].ToString());
                     PODetail.Type = Session["POType"].ToString();
                 }
+
+                int UserId = Int32.Parse(Session["UserId"].ToString());
+                int PRId = db.PurchaseOrders.First(m => m.POId == PODetail.POId).PRId.Value;
+                int PRCustId = db.PurchaseRequisitions.First(m => m.PRId == PRId).CustId;
+                var getRole = (from m in db.Users
+                               join n in db.Users_Roles on m.userId equals n.userId
+                               where m.userId == UserId
+                               select new RoleList()
+                               {
+                                   RoleId = n.roleId,
+                                   RoleName = n.Role.name
+                               }).ToList();
+                var PayToVendorQuery = (from m in db.Vendors
+                                        where m.custId == PRCustId
+                                        select new
+                                        {
+                                            VendorId = m.vendorId,
+                                            VendorName = m.vendorNo + " - " + m.name,
+                                            VendorNo = m.vendorNo,
+                                        }).OrderBy(c => c.VendorNo).ThenBy(c => c.VendorName);
+                var PaymentTermsCodeQuery = (from m in db.PaymentTerms
+                                             where m.custId == PRCustId
+                                             select new
+                                             {
+                                                 PaymentTermsId = m.paymentTermsId,
+                                                 PaymentDescription = m.paymentCode + " - " + m.paymentDescription,
+                                                 PaymentCode = m.paymentCode,
+                                             }).OrderBy(c => c.PaymentCode).ThenBy(c => c.PaymentDescription);
+
                 PODetail.UserId = Int32.Parse(Session["UserId"].ToString());
                 PODetail.NewPOForm = (from a in db.PurchaseOrders
                                       join b in db.Projects on a.projectId equals b.projectId
@@ -403,9 +405,7 @@ namespace KUBOnlinePRPM.Controllers
                                           StatusId = a.StatusId,
                                           Status = g.status,
                                           Submited = a.Submited
-                                      }).FirstOrDefault();
-                int PRId = db.PurchaseOrders.First(m => m.POId == PODetail.POId).PRId.Value;
-                int PRCustId = db.PurchaseRequisitions.First(m => m.PRId == PRId).CustId;
+                                      }).FirstOrDefault();             
                 PODetail.NewPOForm.POItemListObject = (from m in db.PO_Item
                                                        from n in db.PopulateItemLists.Where(x => m.codeId == x.codeId && m.itemTypeId == x.itemTypeId).DefaultIfEmpty()
                                                        join p in db.PR_Items on m.itemsId equals p.itemsId
@@ -498,7 +498,6 @@ namespace KUBOnlinePRPM.Controllers
             {
                 try
                 {
-
                     PurchaseRequisition updatePR = db.PurchaseRequisitions.First(m => m.PRId == PRModel.PRId);
                     var updatePRItem = db.PR_Items.ToList<PR_Items>().Where(m => m.PRId == PRModel.PRId);
                     updatePR.StatusId = "PR14";
@@ -513,12 +512,13 @@ namespace KUBOnlinePRPM.Controllers
                     {
                         PurchaseOrder newPO = new PurchaseOrder();
                         newPO.uuid = Guid.NewGuid();
-                        newPO.PRId = PRModel.PRId;
+                        newPO.PRId = updatePR.PRId;
                         newPO.PONo = "dummyset";
-                        newPO.CustId = PRModel.CustId;
+                        newPO.CustId = updatePR.CustId;
                         newPO.PODate = DateTime.Now;
-                        newPO.projectId = PRModel.NewPRForm.ProjectId;
-                        newPO.vendorId = PRModel.NewPRForm.VendorId.Value;
+                        newPO.projectId = updatePR.ProjectId;
+                        newPO.vendorId = updatePR.VendorId.Value;
+                        newPO.VendorQuoteNo = updatePR.VendorQuoteNo;
                         //newPO.vendorStaffId = PRModel.NewPRForm.VendorStaffId;
                         newPO.PreparedById = UserId;
                         newPO.PreparedDate = DateTime.Now;

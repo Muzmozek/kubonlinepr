@@ -23,6 +23,7 @@ namespace KUBOnlinePRPM.Models
         public int MsgId { get; set; }
         public bool Done { get; set; }
         public NewPRModel NewPRForm { get; set; }
+        public GroupList NewGroup { get; set; }
         public HttpPostedFileBase PaperRefNoFile { get; set; }
         public string PaperRefNoFileName { get; set; }
         public HttpPostedFileBase BidWaiverRefNoFile { get; set; }
@@ -72,6 +73,7 @@ namespace KUBOnlinePRPM.Models
         [Range(typeof(decimal), "0", "999999999999999999.99", ErrorMessage = "* Must be at least {2} integer long and {1} integer max.")]
         public decimal UtilizedToDate { get; set; }
         public decimal BudgetBalance { get; set; }
+        public bool Phase1Completed { get; set; }
         public int? VendorId { get; set; }
         public int? VendorStaffId { get; set; }
         public string CompanyName { get; set; }
@@ -187,5 +189,10 @@ namespace KUBOnlinePRPM.Models
     {
         public string RoleId { get; set; }
         public string RoleName { get; set; }
+    }
+    public class GroupList
+    {
+        public string GroupId { get; set; }
+        public string GroupName { get; set; }
     }
 }
