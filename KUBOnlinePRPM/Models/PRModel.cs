@@ -78,6 +78,7 @@ namespace KUBOnlinePRPM.Models
         public int? VendorStaffId { get; set; }
         public string CompanyName { get; set; }
         public string VendorCompanyId { get; set; }
+        public int? ChildCustId { get; set; }
         public string VendorName { get; set; }
         public string VendorEmail { get; set; }
         public string VendorContactName { get; set; }

@@ -228,8 +228,8 @@
 
         $('.assignRole').change(function () {
 
-            var action = (this.checked) ? "assign" : "remove";
-            var userId = @Model.userId;
+            var action = this.checked? "assign" : "remove";
+            var userId = parseInt(@Model.userId);
             var roleId = this.value;
 
             UpdateRoles(userId, roleId, action);
@@ -238,17 +238,17 @@
 
         function UpdateRoles(userId, roleId, action) {
 
-            Url = "/Roles/UpdateRoles";
+            Url = "@Url.Action("UpdateRoles", "Roles")";
 
             $.post(Url, {
                 userId: userId,
                 roleId: roleId,
-                action: action,
+                action: action
             }, function (resp) {
                 //console.log(resp)
                 //alert("Successfully update role");
                 if (resp.success) {
-
+                    alert("Successfully update role");
                 }
             });
         }

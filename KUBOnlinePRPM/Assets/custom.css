@@ -204,3 +204,7 @@ hr {
 #PRListTable tbody tr, #POListTable tbody tr, #NotificationTable tbody tr {
     cursor: pointer;
 }
+
+table.dataTable > tbody > tr.child ul.dtr-details {
+    width: 100%;
+}

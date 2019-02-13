@@ -351,7 +351,15 @@ namespace KUBOnlinePRPM.Controllers
 
                 int UserId = Int32.Parse(Session["UserId"].ToString());
                 int PRId = db.PurchaseOrders.First(m => m.POId == PODetail.POId).PRId.Value;
-                int PRCustId = db.PurchaseRequisitions.First(m => m.PRId == PRId).CustId;
+                var getPRCustId = db.PurchaseRequisitions.First(m => m.PRId == PRId); int PRCustId = 0;
+                var getPRPreparerChildCustId = db.Users.First(m => m.userId == getPRCustId.PreparedById);
+                if (getPRPreparerChildCustId.childCompanyId == 16)
+                {
+                    PRCustId = 6;
+                } else
+                {
+                    PRCustId = getPRCustId.CustId;
+                }
                 var getRole = (from m in db.Users
                                join n in db.Users_Roles on m.userId equals n.userId
                                where m.userId == UserId
@@ -395,7 +403,7 @@ namespace KUBOnlinePRPM.Controllers
                                           PreparedDate = a.PreparedDate,
                                           VendorName = c.name,
                                           VendorCode = c.vendorNo,
-                                          VendorQuoteNo = c.quotationNo,
+                                          VendorQuoteNo = a.VendorQuoteNo,
                                           //VendorContactName = d.vendorContactName,
                                           //VendorEmail = d.vendorEmail,
                                           //VendorStaffId = d.staffId,
@@ -640,10 +648,16 @@ namespace KUBOnlinePRPM.Controllers
                     int CustId = Int32.Parse(Session["CompanyId"].ToString());
                     int UserId = Int32.Parse(Session["UserId"].ToString());
                     PurchaseOrder updatePO = db.PurchaseOrders.First(m => m.POId == POId);
-                    var getScenario = db.PurchaseRequisitions.First(m => m.PRId == updatePO.PRId).Scenario;
+                    var getScenario = db.PurchaseRequisitions.First(m => m.PRId == updatePO.PRId);
                     updatePO.PayToVendorId = PayToVendorId;
                     updatePO.PaymentTermsId = PaymentTermsId;
                     updatePO.StatusId = "PO03";
+
+                    var getPRPreparerChildCustId = db.Users.First(m => m.userId == getScenario.PreparedById);
+                    if (getPRPreparerChildCustId.childCompanyId == 16)
+                    {
+                        CustId = 6;
+                    }
 
                     var POItemList = (from m in db.PO_Item
                                       from n in db.PopulateItemLists.Where(x => m.codeId == x.codeId && m.itemTypeId == x.itemTypeId).DefaultIfEmpty()
@@ -687,7 +701,7 @@ namespace KUBOnlinePRPM.Controllers
                     PRModel.UserId = UserId;
                     PRModel.CustId = updatePO.CustId;
                     PRModel.NewPRForm = new NewPRModel();
-                    PRModel.NewPRForm.Scenario = getScenario;
+                    PRModel.NewPRForm.Scenario = getScenario.Scenario;
                     SendEmailPONotification(PRModel, "ConfirmPO");
                     //XmlWriterSettings setting = new XmlWriterSettings();
                     //setting.ConformanceLevel = ConformanceLevel.Auto;

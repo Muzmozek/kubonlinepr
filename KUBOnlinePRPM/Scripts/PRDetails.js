@@ -1,4 +1,5 @@
 ﻿$(document).ready(function () {
+    $("body").removeClass("loading");
     $.HSCore.components.HSFileAttachment.init('.js-file-attachment');
     $.HSCore.helpers.HSFocusState.init();
     generatePRItemTable();
@@ -366,7 +367,7 @@
             fd.append("UserName", "ifHOGPSS"); Approver = "ifHOGPSS";
             fd.append("FinalApproverId", $("#HOGPSSList option:selected").val());
         }
-        else if (ifHOD !== "") {
+        else if (ifHOD !== "" || ifPMO !== "") {
             fd.append("UserName", "HOD"); Approver = "HOD";
         }
             

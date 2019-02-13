@@ -179,7 +179,18 @@ namespace KUBOnlinePRPM.Controllers
                                      FullName = n.firstName + " " + n.lastName,
                                      EmailAddress = n.emailAddress
                                  }).FirstOrDefault();
-            } else
+            } else if (PR.CustId == 3 && getRequestorDetails.ChildCompanyId == 16) {
+                getHODDetails = (from m in db.PR_HOD
+                                 join n in db.Users on m.HODId equals n.userId
+                                 where m.PRId == PR.PRId
+                                 select new UserModel()
+                                 {
+                                     UserId = n.userId,
+                                     FullName = n.firstName + " " + n.lastName,
+                                     EmailAddress = n.emailAddress
+                                 }).FirstOrDefault();
+            }
+            else
             {
                 getHODDetails = (from m in db.PR_HOD
                                  join n in db.Users on m.HODId equals n.userId
@@ -276,7 +287,7 @@ namespace KUBOnlinePRPM.Controllers
                                                  EmailAddress = n.emailAddress
                                              }).FirstOrDefault();
                 var getRecommenderIIDetails = new UserModel();
-                if (PR.CustId != 2)
+                if (PR.CustId == 1 || (PR.CustId == 3 && getRequestorDetails.ChildCompanyId != 16) || PR.CustId == 5)
                 {
                     getRecommenderIIDetails = (from m in db.PR_RecommenderHOC
                                                     join n in db.Users on m.recommenderId equals n.userId
@@ -316,7 +327,7 @@ namespace KUBOnlinePRPM.Controllers
                 sentEmailList.Add(getRecommenderIIIDetails);
                 sentEmailList.Add(getRecommenderIVDetails);
 
-                if (PR.CustId != 2)
+                if (PR.CustId == 1 || (PR.CustId == 3 && getRequestorDetails.ChildCompanyId != 16) || PR.CustId == 5)
                 {
                     if (getRecommenderDetails != null && getReviewerDetails != null)
                     {

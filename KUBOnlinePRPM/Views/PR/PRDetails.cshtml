@@ -564,7 +564,8 @@
                     </div>
                 </section>
             </div>
-            @if (Model.NewPRForm.StatusId != "PR19" && Model.NewPRForm.StatusId != "PR01" && Session["ifFinance"] == null && Session["ifRequestor"] == null)
+            @*@if (Model.NewPRForm.StatusId != "PR19" && Model.NewPRForm.StatusId != "PR01" && Session["ifFinance"] == null && Session["ifRequestor"] == null)*@
+            @if (Model.NewPRForm.Phase1Completed == true)
             {
                 <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
                     <section>
@@ -646,7 +647,7 @@
                                 <div class="d-flex align-self-center">Quantity</div>
                             </div>
                         </th>
-                        @if (Model.NewPRForm.Submited >= 1 && Model.NewPRForm.StatusId != "PR09" && Model.NewPRForm.StatusId != "PR10" && Model.NewPRForm.StatusId != "PR19" && (Model.NewPRForm.PRItemListObject[0].CodeId != null || Model.NewPRForm.StatusId == "PR02"))
+                        @if (Model.NewPRForm.Phase1Completed == true && Model.NewPRForm.StatusId != "PR09" && Model.NewPRForm.StatusId != "PR10" && Model.NewPRForm.StatusId != "PR19" && (Model.NewPRForm.PRItemListObject[0].CodeId != null || Model.NewPRForm.StatusId == "PR02"))
                         {
                             <th class="tablet">
                                 <div class="media">
@@ -696,12 +697,12 @@
                     <tr>
                         <td class="d-none"><input id="@ItemsId" class="Id form-control custom-filter desktop" type="text" name="@ItemsId" value="@item.ItemsId" /></td>
 
-                        @if (Model.NewPRForm.Submited >= 1 && Model.NewPRForm.StatusId != "PR09" && Model.NewPRForm.StatusId != "PR10" && Model.NewPRForm.StatusId != "PR19" && (Model.NewPRForm.PRItemListObject[0].CodeId != null || Model.NewPRForm.StatusId == "PR02"))
+                        @if (Model.NewPRForm.Phase1Completed == true && Model.NewPRForm.StatusId != "PR09" && Model.NewPRForm.StatusId != "PR10" && Model.NewPRForm.StatusId != "PR19" && (Model.NewPRForm.PRItemListObject[0].CodeId != null || Model.NewPRForm.StatusId == "PR02"))
                         {
                             <td>
                                 <input id="@DateRequired" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" value="@item.DateRequired.ToString(" yyyy-MM-dd")" name="DateRequired" type="text" readonly>
                             </td>
-                            if ((Model.NewPRForm.Phase1Completed == true && Session["ifProcurement"] == null) || Model.NewPRForm.Scenario > 0)
+                            if ((Model.NewPRForm.Phase1Completed == true && Session["ifProcurement"] == null) || Model.NewPRForm.Scenario > 0 || Model.NewPRForm.StatusId == "PR07")
                             {
                                 <td>
                                     @Html.TextBoxFor(m => item.ItemType, new { @id = ItemTypeId, @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
@@ -781,7 +782,7 @@
                         else
                         {
 
-                            if (Model.NewPRForm.Scenario > 0 || Model.NewPRForm.StatusId == "PR19" || Model.NewPRForm.StatusId == "PR09" || Model.NewPRForm.StatusId == "PR10" || (Model.NewPRForm.StatusId == "PR01" && Session["ifRequestor"] == null))
+                            if (Model.NewPRForm.Scenario > 0 || Model.NewPRForm.StatusId == "PR19" || Model.NewPRForm.StatusId == "PR09" || Model.NewPRForm.StatusId == "PR10" || Model.NewPRForm.StatusId == "PR07" || (Model.NewPRForm.StatusId == "PR01" && Session["ifRequestor"] == null))
                             {
                                 <td>
                                     <input id="@DateRequired" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" value="@item.DateRequired.ToString(" yyyy-MM-dd")" name="DateRequired" type="text" readonly>
@@ -990,22 +991,24 @@
 
                                     <a id="RecommendedPreparedRecommended" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">RECOMMENDED</a>
                                 }
-
-                                @if (((Model.NewPRForm.StatusId == "PR11" && Model.PRCustId != 2) || (Model.NewPRForm.StatusId == "PR17" && Model.PRCustId == 2)) && (Session["ifAdmin"] != null || (Session["ifHOC"] != null && Model.PRCustId != 2) || (Session["ifCOO"] != null && Model.PRCustId == 2)))
+                                @{ 
+                                    bool v = (Model.PRCustId == 2 || (Model.PRCustId == 3 && Model.NewPRForm.ChildCustId == 16) || Model.PRCustId == 4);
+                                    bool w = (Model.PRCustId == 1 || (Model.PRCustId == 3 && Model.NewPRForm.ChildCustId != 16) || Model.PRCustId == 5);
+                                }
+                                @if (((Model.NewPRForm.StatusId == "PR11" && w) || (Model.NewPRForm.StatusId == "PR17" && v)) && ((Session["ifHOC"] != null && w) || (Session["ifCOO"] != null && v)))
                                 {
 
                                     <a href="#RejectModal" class=" btn btn-md u-btn-white g-mr-5 g-mb-15" data-modal-target="#RejectModal" data-modal-effect="fadein">REJECT</a>
                                     <a id="ApprovePreparedJointRecommended" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">JOINTLY RECOMMENDED</a>
                                 }
 
-                                @if (((Model.NewPRForm.StatusId == "PR17" && Model.PRCustId != 2) || (Model.NewPRForm.StatusId == "PR18" && Model.PRCustId == 2)) && (Session["ifAdmin"] != null || (Session["ifCOO"] != null && Model.PRCustId != 2) || (Session["ifCFO"] != null && Model.PRCustId == 2)))
+                                @if (((Model.NewPRForm.StatusId == "PR17" && w) || (Model.NewPRForm.StatusId == "PR18" && v)) && (Session["ifAdmin"] != null || (Session["ifCOO"] != null && w) || (Session["ifCFO"] != null && v)))
                                 {
-
                                     <a href="#RejectModal" class=" btn btn-md u-btn-white g-mr-5 g-mb-15" data-modal-target="#RejectModal" data-modal-effect="fadein">REJECT</a>
                                     <a id="ApprovePreparedJointRecommendedII" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">JOINTLY RECOMMENDED</a>
                                 }
 
-                                @if ((Model.NewPRForm.StatusId == "PR18" && Model.PRCustId != 2) && (Session["ifAdmin"] != null || (Session["ifCFO"] != null && Model.PRCustId != 2)))
+                                @if ((Model.NewPRForm.StatusId == "PR18" && w) && (Session["ifAdmin"] != null || (Session["ifCFO"] != null && w)))
                                 {
 
                                     <a href="#RejectModal" class=" btn btn-md u-btn-white g-mr-5 g-mb-15" data-modal-target="#RejectModal" data-modal-effect="fadein">REJECT</a>
@@ -1013,6 +1016,7 @@
                                 }
 
                                 @if ((Model.NewPRForm.StatusId == "PR05" && Session["ifHOC"] != null && Model.CustId != 2 && Model.NewPRForm.Scenario == 1) ||
+                                    (Model.NewPRForm.StatusId == "PR05" && Session["ifFinance"] != null && ((Model.CustId == 3 && Model.NewPRForm.ChildCustId == 16) || Model.CustId == 4) && Model.NewPRForm.Scenario == 1) ||
                                     (Model.NewPRForm.StatusId == "PR05" && ((Session["ifHOD"] != null && Session["ifFinance"] == null) || Session["ifCOO"] != null || Session["ifGMD"] != null) && Model.CustId == 2 && Model.ChildCustId == 0 && Model.NewPRForm.Scenario == 1) || (Model.NewPRForm.StatusId == "PR05" && Session["ifHOC"] != null && Model.CustId != 2 && Model.NewPRForm.Scenario == 2) ||
                                     (Model.NewPRForm.StatusId == "PR05" && ((Session["ifHOD"] != null && Session["ifFinance"] == null) || Session["ifCOO"] != null || Session["ifGMD"] != null) && Model.CustId == 2 && Model.ChildCustId == 0 &&  Model.NewPRForm.Scenario == 2) || (Model.NewPRForm.StatusId == "PR05" && (Session["ifGMD"] != null && Model.CustId == 2) && Model.NewPRForm.Scenario == 3) || (Model.NewPRForm.StatusId == "PR05" && Model.FinalApproverId != 0 && (Session["ifHOC"] != null || Session["ifCOO"] != null || Session["ifCFO"] != null || Session["ifGMD"] != null)))
                                 {
@@ -1029,7 +1033,7 @@
                                         REJECT
                                     </a>
                                 }
-                                @if (Model.NewPRForm.StatusId == "PR09" && (Session["ifHOD"] != null && Session["ifFinance"] == null))
+                                @if (Model.NewPRForm.StatusId == "PR09" && (Session["ifHOD"] != null || (Session["ifPMO"] != null && Model.CustId == 2)))
                                 {
                                     <a id="ApprovePR" class="approveRejectDetail btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">APPROVE</a>
                                     <a class="btn btn-md text-white u-btn-blue g-mr-5 g-mb-15" href="#RejectModal" data-modal-target="#RejectModal" data-modal-effect="fadein">

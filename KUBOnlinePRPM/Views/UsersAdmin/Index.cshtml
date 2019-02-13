@@ -40,7 +40,6 @@
             <th>
                 Role
             </th>
-            <th></th>
         </tr>
     <thead>
     </thead>
@@ -92,7 +91,7 @@
 @section scripts{
     <script>
         $(document).ready(function () {
-            UserListTable = $('#userListTable').DataTable({
+            var UserListTable = $('#userListTable').DataTable({
                 serverSide: false,
                 //dom: 'frtiS',
                 processing: true,
@@ -113,7 +112,6 @@
                     ]
                 }
             });
-
         });
     </script>
 }

@@ -21,10 +21,10 @@ $(document).ready(function () {
         window.location = UrlPRCard;
     });
     $(document).on("click", ".viewGantt", function () {
-        if ($(this)[0].id == "ABC") {
+        if ($(this)[0].id === "ABC") {
             $("#project1").removeClass("hide");
             $("#project2").addClass("hide");
-        } else if ($(this)[0].id == "MorlotHighway") {
+        } else if ($(this)[0].id === "MorlotHighway") {
             $("#project2").removeClass("hide");
             $("#project1").addClass("hide");
         }
