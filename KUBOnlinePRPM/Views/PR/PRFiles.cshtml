@@ -28,6 +28,11 @@
                     </th>
                     <th class="desktop">
                         <div class="media">
+                            <div class="d-flex align-self-center">Description</div>
+                        </div>
+                    </th>
+                    <th class="desktop">
+                        <div class="media">
                             <div class="d-flex align-self-center">Upload By</div>
                         </div>
                     </th>
@@ -45,11 +50,12 @@
             </thead>
             <tbody>
                 @{
-                    int i = 1;
-                    foreach (var item in Model.PRDocListObject)
-                    {
-                        string filename = item.FileName.Replace("\\", ",");
-                        string filename1 = filename.Split(',')[filename.Split(',').Length - 1].ToString();
+                            int i = 1;
+                            int FileEntryId = 0;
+                            foreach (var item in Model.PRDocListObject)
+                            {
+                                string filename = item.FileName.Replace("\\", ",");
+                                string filename1 = filename.Split(',')[filename.Split(',').Length - 1].ToString();
                         <tr>
                             <td class="d-none">@Html.DisplayFor(modelItem => item.fileEntryId)</td>
                             <td>
@@ -58,6 +64,9 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.Extension)
                             </td>
+                             <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.uploadUserName)
                             </td>
@@ -65,17 +74,21 @@
                                 @Html.DisplayFor(modelItem => item.uploadDate)
                             </td>
                             <td>
-                                @Html.ActionLink("Download", "Filedownload", new { @id = item.fileEntryId, @class = "btn btn-md u-btn-blue g-mr-5" })
-                                @*<a id="@item.fileEntryId" class="DownloadPR btn btn-md u-btn-blue g-mr-5">DOWNLOAD</a>*@
+                                <a id="DownloadFile" class="btn btn-md text-white u-btn-blue g-mb-5" href="@Url.Action("FileDownload", "PR", new { id = item.fileEntryId })">Download</a>
+                                @*@Html.ActionLink("Download", "FileDownload", "PR", null, null, "anchor-point", new { id = item.fileEntryId }, null)*@
+                                @{
+                                    FileEntryId = item.fileEntryId;
+                                }
+                                <a id="@FileEntryId" class="DeleteFile btn btn-md text-white u-btn-blue g-mb-5">Delete</a>
                             </td>
                         </tr>
                         i++;
-                    }
+                }
                 }
             </tbody>
         </table>
     </div>
-
+    <div class="d-none" id="FileEntryId"></div>
     <div class="col-md-12 col-sm-12">
         <div class="row g-mb-20">
             <div class="col-md-2 col-sm-2 formfield">

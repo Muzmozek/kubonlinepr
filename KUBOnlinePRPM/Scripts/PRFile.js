@@ -1,30 +1,4 @@
 ﻿$(document).ready(function () {
-    var PRFileTable;
-    function generatePRFileTable() {
-        PRFileTable = $('#PRFileTable').DataTable({
-            serverSide: false,
-            //dom: 'frtiS',
-            processing: true,
-            deferRender: true,
-            ordering: false,
-            paging: false,
-            searching: false,
-            bAutoWidth: false,
-            columnDefs: [
-                { visible: false, targets: [0] }
-            ],
-            destroy: true,
-            //aaSorting: [12, "desc"],
-            responsive: {
-                breakpoints: [
-                    { name: 'desktop', width: 1024 },
-                    { name: 'tablet', width: 768 },
-                    { name: 'phone', width: 480 }
-                ]
-            }
-        });
-    }
-
     generatePRFileTable();
 
     var modal = new Custombox.modal({
@@ -64,9 +38,11 @@
             },
             success: function (resp) {
                 if (resp.success === true) {
-                    Custombox.modal.close();
-                    generatePRFileTable();
-                    $("#nav-4-1-primary-hor-center--Files").load(UrlPRTabs + ' #AttachmentTab');
+                    Custombox.modal.close();                   
+                    $("#nav-4-1-primary-hor-center--Files").load(UrlPRTabs + ' #AttachmentTab', function () {
+                        generatePRFileTable();
+                        $("body").removeClass("loading");
+                    });
                     $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
                     alert(resp.message);
                 } else {
@@ -78,5 +54,38 @@
             contentType: false,
             processData: false
         });
+    });
+    $(document).one("click", ".DeleteFile", function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: UrlFileDelete,
+            type: 'POST',
+            data: { id: $(this)[0].id },
+            beforeSend: function () {
+                $("body").addClass("loading");
+            },
+            cache: false,
+            dataType: "json",
+            success: function (resp) {
+                if (resp.success === true) {
+                    alert(resp.message);
+                    $("#nav-4-1-primary-hor-center--Files").load(UrlPRTabs + ' #AttachmentTab', function () {
+                        generatePRFileTable();
+                        $("body").removeClass("loading");
+                    });
+                    $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
+                }
+                else if (resp.success === false && resp.exception === false) {
+                    alert("Validation error");
+                    $.each(resp.data, function (key, input) {
+                        //$('input[name="' + input.name + '"]').val(input.value);
+                        $('span[data-valmsg-for="' + input.key + '"]').text(input.errors[0]);
+                    });
+                    $("body").removeClass("loading");
+                } else {
+                    window.location = resp.url;
+                }
+            }
+        });     
     });
 });

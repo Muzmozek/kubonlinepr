@@ -16,6 +16,7 @@ namespace KUBOnlinePRPM.Models
         public string StatusId { get; set; }
         public NewPOModel NewPOForm { get; set; }
         public List<POListTable> POListObject { get; set; }
+        public List<POItemsTable> POItemList { get; set; }
         public List<POHeaderTable> POHeaderList { get; set; }
         public List<POLineTable> POLineList { get; set; }
         public decimal OutstandingQty { get; set; }
@@ -27,6 +28,7 @@ namespace KUBOnlinePRPM.Models
     {
         public string CompanyName { get; set; }
         public int POId { get; set; }
+        public DateTime PODate { get; set; }
         public string PONo { get; set; }
         public int ProjectId { get; set; }
         public string ProjectName { get; set; }
@@ -40,7 +42,7 @@ namespace KUBOnlinePRPM.Models
         public string VendorContactName { get; set; }
         public string VendorContactNo { get; set; }
         public string VendorQuoteNo { get; set; }
-        public DateTime PreparedDate { get; set; }
+        public DateTime DeliveryDate { get; set; }
         public decimal AmountPOBalance { get; set; }
         public int PreparedById { get; set; }
         //public bool Reviewed { get; set; }

@@ -17,6 +17,7 @@
                     alert(resp.message);
                     Custombox.modal.close();
                     $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab');
+                    $("body").removeClass("loading");
                 } else {
                     windows.location = resp.url;
                 }                

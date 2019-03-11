@@ -5592,6 +5592,9 @@
     <Content Include="Scripts\PRDetails.js" />
     <Content Include="Scripts\PRFile.js" />
     <Content Include="Scripts\PRList.js" />
+    <Content Include="Views\Shared\HTMLWriter_files\filelist.xml" />
+    <Content Include="Views\Shared\HTMLWriter_files\HTMLWriter_31607_image001.png" />
+    <Content Include="Views\Shared\HTMLWriter_files\HTMLWriter_31607_image002.png" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -5646,6 +5649,7 @@
     <Content Include="Views\Shared\POEmailTemplate.cshtml" />
     <Content Include="Scripts\ExcelGenerator.js" />
     <Content Include="Views\Shared\MessageEmailTemplate.cshtml" />
+    <Content Include="Views\PO\POForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

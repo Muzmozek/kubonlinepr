@@ -162,7 +162,8 @@ namespace KUBOnlinePRPM.Controllers
                 //directoryEntry.Password = "Quantum111?";
                 //if (validate == true)
                 if (Membership.ValidateUser(model.Username, model.Password) || validate == true)
-                {
+                    //if (model.Username != "")
+                    {
                     var CheckUserId = (from m in db.Users
                                        join n in db.Users_Roles on m.userId equals n.userId
                                        join o in db.Roles on n.roleId equals o.roleId

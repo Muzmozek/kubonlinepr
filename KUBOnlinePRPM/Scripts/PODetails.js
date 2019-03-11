@@ -62,7 +62,7 @@ $(document).ready(function () {
         }
     });
 
-    $(document).on("click", ".saveSubmitDetail", function (e) {
+    $(document).one("click", ".saveSubmitDetail", function (e) {
         e.preventDefault();
         var fd = new FormData(); var other_data; var POType; var URL;
         POType = $("#POType").val();

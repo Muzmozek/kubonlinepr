@@ -155,7 +155,7 @@ namespace KUBOnlinePRPM.Controllers
                 {
                     getProcurement = (from m in db.Users
                                       join n in db.Users_Roles on m.userId equals n.userId
-                                      where n.roleId == "R03" && (m.companyId == model.CustId && m.childCompanyId != 16)
+                                      where n.roleId == "R03" && (m.companyId == model.CustId && (m.childCompanyId != 16 || m.childCompanyId == null))
                                       select new PRModel()
                                       {
                                           UserId = m.userId,
@@ -227,7 +227,7 @@ namespace KUBOnlinePRPM.Controllers
                 }
 
                 var getHOD = new List<NewPRModel>();
-                if (model.CustId == 2)
+                if (model.CustId == 2 || (model.CustId == 3 && getPRPreparerChildCustId.childCompanyId == 16))
                 {
                     getHOD = (from m in db.Users
                               join n in db.Users_Roles on m.userId equals n.userId
@@ -240,19 +240,19 @@ namespace KUBOnlinePRPM.Controllers
                                   ApproverEmail = m.emailAddress
                               }).ToList();
                 }
-                else if (model.CustId == 3 && getPRPreparerChildCustId.childCompanyId == 16)
-                {
-                    getHOD = (from m in db.Users
-                              join n in db.Users_Roles on m.userId equals n.userId
-                              where n.roleId == "R08" && m.companyId == 2
-                              //&& m.userId == 172 //en. Shahril
-                              select new NewPRModel()
-                              {
-                                  HODApproverId = m.userId,
-                                  HODApproverName = m.firstName + " " + m.lastName,
-                                  ApproverEmail = m.emailAddress
-                              }).ToList();
-                }
+                //else if (model.CustId == 3 && getPRPreparerChildCustId.childCompanyId == 16)
+                //{
+                //    getHOD = (from m in db.Users
+                //              join n in db.Users_Roles on m.userId equals n.userId
+                //              where n.roleId == "R08" && m.companyId == 2
+                //              //&& m.userId == 172 //en. Shahril
+                //              select new NewPRModel()
+                //              {
+                //                  HODApproverId = m.userId,
+                //                  HODApproverName = m.firstName + " " + m.lastName,
+                //                  ApproverEmail = m.emailAddress
+                //              }).ToList();
+                //}
                 else
                 {
                     getHOD = (from m in db.Users
@@ -778,7 +778,7 @@ namespace KUBOnlinePRPM.Controllers
 
                 var getHOD = new List<NewPRModel>();
                 var getPRPreparerChildCustId = db.Users.First(m => m.userId == FormerPRDetails.PreparedById);
-                if (FormerPRDetails.CustId == 2)
+                if (FormerPRDetails.CustId == 2 || (FormerPRDetails.CustId == 3 && getPRPreparerChildCustId.childCompanyId == 16))
                 {                    
                     getHOD = (from m in db.Users
                               join n in db.Users_Roles on m.userId equals n.userId
@@ -791,19 +791,19 @@ namespace KUBOnlinePRPM.Controllers
                                   ApproverEmail = m.emailAddress
                               }).ToList();
                 }
-                else if (FormerPRDetails.CustId == 3 && getPRPreparerChildCustId.childCompanyId == 16)
-                {
-                    getHOD = (from m in db.Users
-                                   join n in db.Users_Roles on m.userId equals n.userId
-                                   where n.roleId == "R08" && m.companyId == 2 
-                                   //&& m.userId == 172 //en. Shahril
-                              select new NewPRModel()
-                              {
-                                  HODApproverId = m.userId,
-                                  HODApproverName = m.firstName + " " + m.lastName,
-                                  ApproverEmail = m.emailAddress
-                              }).ToList();
-                }
+                //else if (FormerPRDetails.CustId == 3 && getPRPreparerChildCustId.childCompanyId == 16)
+                //{
+                //    getHOD = (from m in db.Users
+                //                   join n in db.Users_Roles on m.userId equals n.userId
+                //                   where n.roleId == "R08" && m.companyId == 2 
+                //                   //&& m.userId == 172 //en. Shahril
+                //              select new NewPRModel()
+                //              {
+                //                  HODApproverId = m.userId,
+                //                  HODApproverName = m.firstName + " " + m.lastName,
+                //                  ApproverEmail = m.emailAddress
+                //              }).ToList();
+                //}
                 else
                 {
                     getHOD = (from m in db.Users

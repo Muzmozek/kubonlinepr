@@ -1,0 +1,1176 @@
+﻿@model KUBOnlinePRPM.Models.POModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+    @*<meta http-equiv="Content-Type" content="text/html;charset=utf-8">*@
+    <meta name="viewport" content="width=device-width" />
+    <style type='text/css'>
+        body {
+            font-family: arial;
+            font-size: 11pt;
+            padding: 0;
+            margin: 0;
+        }
+
+        .td5 {
+            font-family: Calibri;
+            font-size: 10px;
+            padding: 4px 7px 2px 4px;
+            text-align: left;
+            width: 40%;
+            padding-left: 20px;
+            padding-top: -20px;
+        }
+
+        .td6 {
+            padding-top: -20px;
+        }
+
+        a {
+            color: #0000FF
+        }
+
+            a:hover {
+                text-decoration: underline
+            }
+
+        table {
+            border-collapse: collapse;
+            table-layout: fixed
+        }
+
+        .lastupdate {
+            color: gray;
+            font-size: 8pt;
+            padding-top: 5px
+        }
+
+        .updatefreq {
+            color: gray;
+            font-size: 8pt;
+            padding-top: 5px
+        }
+
+        .t {
+            font-family: Arial;
+            font-size: 8pt;
+            text-align: left;
+            vertical-align: bottom
+        }
+
+        .c1_6 {
+            vertical-align: middle
+        }
+
+        .c6_6 {
+            color: #0000FF;
+            text-decoration: underline
+        }
+
+        .c8_14 {
+            font-weight: bold;
+            text-align: center
+        }
+
+        .c9_1 {
+            font-weight: bold;
+            vertical-align: middle;
+            border-top: 2px solid #000000;
+            border-left: 2px solid #000000
+        }
+
+        .c9_4 {
+            /*font-weight: bold;*/
+            border-top: 2px solid #000000
+        }
+
+        .c9_5 {
+            border-top: 2px solid #000000
+        }
+
+        .c9_6 {
+            border-left: 2px solid #000000
+        }
+
+        .c9_7 {
+            border-top: 2px solid #000000;
+            border-left: 2px solid #000000
+        }
+
+        .c10_1 {
+            font-weight: bold;
+            vertical-align: middle;
+            border-left: 2px solid #000000
+        }
+
+        .c10_4 {
+            font-weight: bold
+        }
+
+        .r11 {
+            font-weight: bold;
+            vertical-align: middle
+        }
+
+        .c11_4 {
+            vertical-align: bottom
+        }
+
+        .c11_5 {
+            font-weight: normal;
+            vertical-align: middle
+        }
+
+        .c11_6 {
+            font-weight: normal;
+            vertical-align: bottom;
+            border-left: 2px solid #000000
+        }
+
+        .c11_10 {
+            text-align: left;
+            font-weight: normal;
+        }
+
+        .c11_12 {
+            text-align: center;
+            border-left: 2px solid #000000
+        }
+
+        .c11_14 {
+            font-weight: normal
+        }
+
+        .c15_1 {
+            vertical-align: middle;
+            border-left: 2px solid #000000
+        }
+
+        .c15_6 {
+            font-weight: normal;
+            border-left: 2px solid #000000
+        }
+
+        .c15_14 {
+            font-weight: normal;
+            vertical-align: middle
+        }
+
+        .r21 {
+            font-weight: bold;
+            text-align: center;
+            vertical-align: middle
+        }
+
+        .c22_11 {
+            text-align: center;
+            border-top: 2px solid #000000
+        }
+
+        .c23_11 {
+            text-align: left
+        }
+
+        .c29_10 {
+            font-family: Calibri;
+            font-size: 11pt
+        }
+
+        .c30_1 {
+            font-weight: bold;
+            border-top: 1px solid #000000
+        }
+
+        .c30_6 {
+            font-weight: bold;
+            text-align: center;
+            border-top: 1px solid #000000
+        }
+
+        .c31_1 {
+            text-align: center;
+            border-top: 1px solid #000000
+        }
+
+        .c34_1 {
+            border-top: 1px solid #000000
+        }
+
+        .c34_4 {
+            vertical-align: bottom;
+            border-top: 1px solid #000000
+        }
+
+        .c35_4 {
+            vertical-align: bottom;
+            border-top: 2px solid #000000
+        }
+
+        .c52_1 {
+            vertical-align: middle;
+            border-top: 1px solid #000000
+        }
+
+        .c53_4 {
+            text-align: center;
+            vertical-align: middle
+        }
+
+        .c56_1 {
+            font-style: italic;
+            vertical-align: middle
+        }
+    </style>
+</head>
+<body>
+    <table style="margin-top:-20px;">
+        <tr>
+            @*<td width="25%"></td>*@
+            <td class="td6">
+                <img src="@Context.Server.MapPath("~/Images/logo/Logo KUB Malaysia Bhd.png")" width="180" height="55" />
+            </td>
+            <td class="td5">
+                <b>KUB MALAYSIA BERHAD (6022-D)</b> <br />
+                Level 8-11, Unit 1, Capital 3, Oasis Square, Ara Damansara, <br />
+                Jalan PJU 1A/7A, 47301 Petaling Jaya, Selangor <br />
+                Tel: 603-76809600 Fax: 603-76809610 <br />
+                <font color="red">Website: http://www.kub.com</font>
+            </td>
+
+        </tr>
+    </table>
+    <table class='t'>
+        <tr style='height:13px'>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:14px'></td>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td style='width:82px'></td>
+            <td style='width:59px'></td>
+            <td style='width:59px'></td>
+        </tr>
+        <tr style='height:13px'>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:14px'></td>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td colspan='3' class='c8_14'>
+                PURCHASE ORDER
+            </td>
+        </tr>
+        <tr style='height:12px'>
+            <td colspan='3' class='c9_1'>
+                &nbsp;Vendor No
+            </td>
+            <td style='width:9px' class='c9_4'>: </td>
+            <td class='c9_4'>
+                @Model.NewPOForm.VendorId
+            </td>
+            @*<td class='c9_5' style='width:106px'></td>*@
+            <td class='c9_6' style='width:14px'></td>
+            <td class='c9_7' style='width:30px'></td>
+            <td class='c9_5' style='width:9px'></td>
+            <td class='c9_5' style='width:59px'></td>
+            <td class='c9_5' style='width:9px'></td>
+            <td class='c9_5' style='width:106px'></td>
+            <td class='c9_6' style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td class='c1_6' style='width:82px'>
+                Our SST ID No
+            </td>
+            <td colspan="2">
+                : @*&nbsp;@@Model.NewPOForm.SSTIDNo*@
+            </td>
+        </tr>
+        <tr style='height:13px'>
+            <td colspan='3' class='c10_1'>
+                &nbsp;Vendor SST ID No
+            </td>
+            <td style='width:9px; font:bold'>: </td>
+            <td class='c11_5'>
+                @*@@Model.NewPOForm.VendorSSTIDNo*@
+            </td>
+            @*<td style='width:106px'></td>*@
+            <td class='c9_6' style='width:14px'></td>
+            <td class='c9_6' style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td class='c9_6' style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td class='c1_6' style='width:82px'>
+                Order No.
+            </td>
+            <td colspan="2">
+                : &nbsp;@Model.NewPOForm.PONo
+            </td>
+            @*<td style='width:59px'></td>*@
+        </tr>
+        <tr style='height:13px' class='r11'>
+            <td colspan='3' class='c9_6'>
+                &nbsp;Purchase From
+            </td>
+            <td style='width:9px'>
+                :
+            </td>
+            <td class='c11_5' style='width:106px'><div class="gdfCellWrap">@Model.NewPOForm.VendorName</div></td>
+            <td class='c11_6' style='width:14px'></td>
+            <td colspan='3' class='c9_6'>
+                Delivery To
+            </td>
+            <td class='c11_10' style='width:9px'>
+                :
+            </td>
+            <td class='c11_10' style='width:106px'>@Model.NewPOForm.PayToVendorName</td>
+            <td class='c11_12' style='width:15px'></td>
+            <td class='c11_10' style='width:16px'></td>
+            <td class='c11_14' style='width:82px'>
+                Order Date
+            </td>
+            <td class='c11_5' colspan="2">
+                : &nbsp;@Model.NewPOForm.PODate.ToShortDateString()
+            </td>
+            @*<td class='c11_5' style='width:59px'></td>*@
+        </tr>
+        <tr style='height:13px'>
+            <td class='c9_6' style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td class='c9_6' style='width:14px'></td>
+            <td class='c9_6' style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td class='c9_6' style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td class='c1_6' style='width:82px'>
+                Your Reference
+            </td>
+            <td colspan="2">
+                : @*&nbsp;@Model.NewPOForm.VendorQuoteNo*@
+            </td>
+            @*<td style='width:59px'></td>*@
+        </tr>
+        <tr style='height:13px'>
+            <td class='c9_6' style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td class='c9_6' style='width:14px'></td>
+            <td class='c9_6' style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td class='c9_6' style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td class='c1_6' style='width:82px'>
+                Payment Terms
+            </td>
+            <td colspan="2">
+                : &nbsp;@Model.NewPOForm.PaymentTermsCode
+            </td>
+            @*<td style='width:59px'></td>*@
+        </tr>
+        <tr style='height:13px'>
+            <td class='c9_6' style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td class='c9_6' style='width:14px'></td>
+            <td class='c9_6' style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td class='c9_6' style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td class='c1_6' style='width:82px'>
+                Purchaser
+            </td>
+            <td colspan="2">
+                : &nbsp;@*@@Model.NewPOForm.Purchaser*@
+            </td>
+            @*<td style='width:59px'></td>*@
+        </tr>
+        <tr style='height:13px' class='c10_4'>
+            <td class='c15_1' style='width:30px'>
+                Attn
+            </td>
+            <td style='width:9px'>
+                :
+            </td>
+            <td class='c11_14' style='width:59px'></td>
+            <td class='c11_14' style='width:9px'></td>
+            <td class='c11_14' style='width:106px'></td>
+            <td class='c15_6' style='width:14px'></td>
+            <td class='c15_1' style='width:30px'>
+                Attn:
+            </td>
+            <td style='width:9px'>
+                :
+            </td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td class='c9_6' style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td class='c15_14' style='width:82px'>
+                Document No
+            </td>
+            <td class='c11_14' colspan="2">
+                : &nbsp;@Model.NewPOForm.VendorQuoteNo
+            </td>
+            @*<td class='c11_14' style='width:59px'></td>*@
+        </tr>
+        <tr style='height:13px' class='c10_4'>
+            <td class='c15_1' style='width:30px'>
+                Tel
+            </td>
+            <td style='width:9px'>
+                :
+            </td>
+            <td class='c11_14' style='width:59px'></td>
+            <td class='c11_14' style='width:9px'></td>
+            <td class='c11_14' style='width:106px'></td>
+            <td class='c15_6' style='width:14px'></td>
+            <td class='c15_1' style='width:30px'>
+                Tel:
+            </td>
+            <td style='width:9px'>
+                :
+            </td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td class='c9_6' style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td class='c15_14' style='width:82px'>
+                Delivery Date
+            </td>
+            <td class='c11_14' colspan="2">
+                : &nbsp;@Model.NewPOForm.DeliveryDate.ToShortDateString()
+            </td>
+            @*<td class='c11_14' style='width:59px'></td>*@
+        </tr>
+        <tr style='height:13px' class='c10_4'>
+            <td class='c9_6' style='width:30px'>
+                Fax
+            </td>
+            <td style='width:9px'>
+                :
+            </td>
+            <td class='c11_14' style='width:59px'></td>
+            <td class='c11_14' style='width:9px'></td>
+            <td class='c11_14' style='width:106px'></td>
+            <td class='c15_6' style='width:14px'></td>
+            <td class='c9_6' style='width:30px'>
+                Fax:
+            </td>
+            <td style='width:9px'>
+                :
+            </td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td class='c9_6' style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td class='c15_14' style='width:82px'>
+                Project No/Name
+            </td>
+            <td class='c11_14' colspan="2">
+                : &nbsp;@Model.NewPOForm.ProjectName
+            </td>
+            @*<td class='c11_14' style='width:59px'></td>*@
+        </tr>
+        <tr style='height:12px'>
+            <td class='c9_4' style='width:30px'></td>
+            <td class='c9_5' style='width:9px'></td>
+            <td class='c9_5' style='width:59px'></td>
+            <td class='c9_5' style='width:9px'></td>
+            <td class='c9_5' style='width:106px'></td>
+            <td style='width:14px'></td>
+            <td class='c9_5' style='width:30px'></td>
+            <td class='c9_5' style='width:9px'></td>
+            <td class='c9_5' style='width:59px'></td>
+            <td class='c9_5' style='width:9px'></td>
+            <td class='c9_5' style='width:106px'></td>
+            <td style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td style='width:82px'>
+                Page
+            </td>
+            <td style='width:59px'>
+                : 1 of 1
+            </td>
+            <td style='width:59px'></td>
+        </tr>
+        <tr style='height:13px'>
+            <td class='c10_4' style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:14px'></td>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td style='width:82px'></td>
+            <td style='width:59px'></td>
+            <td style='width:59px'></td>
+        </tr>
+        <tr style='height:13px'>
+            <td class='c10_4' style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:14px'></td>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td style='width:82px'></td>
+            <td style='width:59px'></td>
+            <td style='width:59px'></td>
+        </tr>
+        <!--Start PO Item !-->
+        <tr style='height:38px' class='r21'>
+            <td colspan='2' class='c9_5'>
+                Code
+            </td>
+            <td colspan='6' class='c9_5'>
+                Description
+            </td>
+            <td colspan='2' class='c9_5'>
+                Tax Code
+            </td>
+            <td class='c9_5' style='width:106px'>
+                Quantity
+            </td>
+            <td colspan='2' class='c9_5'>
+                UOM
+            </td>
+            <td class='c9_5' style='width:82px'>
+                Unit Price Excl SST (MYR)
+            </td>
+            <td class='c9_5' style='width:59px'>
+                Gross Amount (MYR)
+            </td>
+            <td class='c9_5' style='width:59px'>
+                Gross Amt @@ 1 (MYR)
+            </td>
+        </tr>
+        @foreach (var item in Model.POItemList)
+        {
+            <tr style='height:16px' class='c11_10'>
+                <td colspan='2' class='c9_5'>@item.CodeId</td>
+                <td colspan='6' class='c9_5'>@item.Description</td>
+                <td colspan='2' class='c9_5'>@*@@item.TaxCode*@</td>
+                <td class='c22_11' style='width:106px'>@item.Quantity</td>
+                <td colspan='2' class='c9_5'>@item.UOM</td>
+                <td class='c22_11' style='width:82px'>@item.UnitPrice</td>
+                <td class='c22_11' style='width:59px'>@item.TotalPrice</td>
+                <td class='c22_11' style='width:59px'>@*@@item.GrossAmt*@</td>
+            </tr>
+        }
+        <tr style='height:13px' class='c11_10'>
+            <td colspan='2'></td>
+            <td colspan='6'></td>
+            <td colspan='2'></td>
+            <td class='c23_11' style='width:106px'></td>
+            <td colspan='2'></td>
+            <td class='c23_11' style='width:82px'></td>
+            <td class='c23_11' style='width:59px'></td>
+            <td class='c23_11' style='width:59px'></td>
+        </tr>
+        <tr style='height:12px'>
+            <td class='c9_5' style='width:30px'></td>
+            <td class='c9_5' style='width:9px'></td>
+            <td class='c9_5' style='width:59px'></td>
+            <td class='c9_5' style='width:9px'></td>
+            <td class='c9_5' style='width:106px'></td>
+            <td class='c9_5' style='width:14px'></td>
+            <td class='c9_5' style='width:30px'></td>
+            <td class='c9_5' style='width:9px'></td>
+            <td class='c9_5' style='width:59px'></td>
+            <td class='c9_5' style='width:9px'></td>
+            <td class='c9_5' style='width:106px'></td>
+            <td class='c9_5' style='width:15px'></td>
+            <td class='c9_5' style='width:16px'></td>
+            <td class='c9_5' style='width:82px'></td>
+            <td class='c9_5' style='width:59px'></td>
+            <td class='c9_5' style='width:59px'></td>
+        </tr>
+        <!--End PO Item !-->
+        <tr style='height:13px'>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:14px'></td>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td style='width:82px'></td>
+            <td style='width:59px'></td>
+            <td style='width:59px'></td>
+        </tr>
+        <tr style='height:18px'>
+            <td colspan='9' class='r11'>
+                SST SUMMARY
+            </td>
+            <td class='c29_10' style='width:9px'></td>
+            <td class='c29_10' style='width:106px'></td>
+            <td class='c29_10' style='width:15px'></td>
+            <td class='c29_10' style='width:16px'></td>
+            <td style='width:82px'></td>
+            <td style='width:59px'></td>
+            <td style='width:59px'></td>
+        </tr>
+        <tr style='height:12px' class='c1_6'>
+            <td colspan='3' class='c30_1'>
+                TAX CODE
+            </td>
+            <td colspan='2' class='c30_1'>
+                Chargeable Amt.
+            </td>
+            <td colspan='4' class='c30_6'>
+                SST Chargeable
+            </td>
+            <td class='c10_4' style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td class='c11_4' style='width:82px'></td>
+            <td class='c11_4' style='width:59px'></td>
+            <td class='c11_4' style='width:59px'></td>
+        </tr>
+        <tr style='height:13px' class='c1_6'>
+            <td colspan='2' class='c31_1'>
+                SST % :
+            </td>
+            <td colspan='7' class='c31_1'>@*@@Model.ChargeAbleAmount @@Model.SSTChargeable*@</td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td class='c11_4' style='width:82px'></td>
+            <td class='c11_4' style='width:59px'></td>
+            <td class='c11_4' style='width:59px'></td>
+        </tr>
+        <tr style='height:18px' class='c1_6'>
+            <td colspan='3' class='c11_10'></td>
+            <td colspan='2' class='c11_10'></td>
+            <td colspan='4' class='c11_10'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td class='c11_4' style='width:82px'></td>
+            <td class='c11_4' style='width:59px'></td>
+            <td class='c11_4' style='width:59px'></td>
+        </tr>
+        <tr style='height:13px' class='c1_6'>
+            <td colspan='3' class='c31_1'>
+                Total
+            </td>
+            <td colspan='2' class='c31_1'>@*@@Model.TotalSST*@</td>
+            <td colspan='4' class='c31_1'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td class='c11_4' style='width:82px'></td>
+            <td class='c11_4' style='width:59px'></td>
+            <td class='c11_4' style='width:59px'></td>
+        </tr>
+        <tr style='height:11px' class='c1_6'>
+            <td class='c34_1' style='width:30px'></td>
+            <td class='c34_1' style='width:9px'></td>
+            <td class='c34_1' style='width:59px'></td>
+            <td class='c34_4' style='width:9px'></td>
+            <td class='c34_4' style='width:106px'></td>
+            <td class='c34_4' style='width:14px'></td>
+            <td class='c34_4' style='width:30px'></td>
+            <td class='c30_1' style='width:9px'></td>
+            <td class='c30_1' style='width:59px'></td>
+            <td class='c10_4' style='width:9px'></td>
+            <td colspan='6' class='c10_4'>
+                PURCHASE ORDER SUMMARY
+            </td>
+        </tr>
+        <tr style='height:12px' class='c1_6'>
+            <td colspan='3' class='c9_4'>
+                *** MYR – XXXX ONLY
+            </td>
+            <td class='c35_4' style='width:9px'></td>
+            <td class='c9_5' style='width:106px'></td>
+            <td class='c9_5' style='width:14px'></td>
+            <td class='c9_5' style='width:30px'></td>
+            <td class='c9_5' style='width:9px'></td>
+            <td class='c9_5' style='width:59px'></td>
+            <td class='c9_5' style='width:9px'></td>
+            <td class='c9_4' style='width:106px'>
+                Total Amount
+            </td>
+            <td class='c9_5' colspan="4">@Model.NewPOForm.AmountRequired</td>
+            @*<td class='c9_5' style='width:16px'></td>
+            <td class='c35_4' style='width:82px'></td>
+            <td class='c35_4' style='width:59px'></td>*@
+            <td class='c35_4' style='width:59px'></td>
+        </tr>
+        <tr style='height:28px' class='c1_6'>
+            <td style='width:30px'></td>
+            <td class='c10_4' style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td class='c11_4' style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:14px'></td>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td class='c10_4' style='width:106px'>
+                Less Total Discount
+            </td>
+            <td colspan="4">@*@@Model.NewPOForm.LessTotalDiscount*@</td>
+            @*<td style='width:16px'></td>
+            <td class='c11_4' style='width:82px'></td>
+            <td class='c11_4' style='width:59px'></td>*@
+            <td class='c11_4' style='width:59px'></td>
+        </tr>
+        <tr style='height:12px' class='c1_6'>
+            <td style='width:30px'></td>
+            <td class='c10_4' style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td class='c11_4' style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:14px'></td>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td class='c9_4' style='width:106px'>
+                Total Before SST
+            </td>
+            <td class='c9_5' colspan="4">@*@@Model.NewPOForm.TotalBefSST*@</td>
+            @*<td class='c9_5' style='width:16px'></td>
+            <td class='c35_4' style='width:82px'></td>
+            <td class='c35_4' style='width:59px'></td>*@
+            <td class='c35_4' style='width:59px'></td>
+        </tr>
+        <tr style='height:13px' class='c1_6'>
+            <td style='width:30px'></td>
+            <td class='c10_4' style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td class='c11_4' style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:14px'></td>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td class='c10_4' style='width:106px'>
+                Add Total SST
+            </td>
+            <td colspan="4">@*@@Model.NewPOForm.AddTotalSST*@</td>
+            @*<td style='width:16px'></td>
+            <td class='c11_4' style='width:82px'></td>
+            <td class='c11_4' style='width:59px'></td>*@
+            <td class='c11_4' style='width:59px'></td>
+        </tr>
+        <tr style='height:12px' class='c1_6'>
+            <td style='width:30px'></td>
+            <td class='c10_4' style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td class='c11_4' style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:14px'></td>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td class='c9_4' style='width:106px'>
+                Net Amount
+            </td>
+            <td class='c9_5' colspan="4">@*@@Model.NewPOForm.NetAmount*@</td>
+            @*<td class='c9_5' style='width:16px'></td>
+            <td class='c35_4' style='width:82px'></td>
+            <td class='c35_4' style='width:59px'></td>*@
+            <td class='c35_4' style='width:59px'></td>
+        </tr>
+        <tr style='height:13px'>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:14px'></td>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td style='width:82px'></td>
+            <td style='width:59px'></td>
+            <td style='width:59px'></td>
+        </tr>
+        <tr style='height:13px'>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:14px'></td>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td style='width:82px'></td>
+            <td style='width:59px'></td>
+            <td style='width:59px'></td>
+        </tr>
+        <tr style='height:13px'>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:14px'></td>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td style='width:82px'></td>
+            <td style='width:59px'></td>
+            <td style='width:59px'></td>
+        </tr>
+        <tr style='height:13px'>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:14px'></td>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td style='width:82px'></td>
+            <td style='width:59px'></td>
+            <td style='width:59px'></td>
+        </tr>
+        <tr style='height:13px'>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:14px'></td>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td style='width:82px'></td>
+            <td style='width:59px'></td>
+            <td style='width:59px'></td>
+        </tr>
+        <tr style='height:13px'>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:14px'></td>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td style='width:82px'></td>
+            <td style='width:59px'></td>
+            <td style='width:59px'></td>
+        </tr>
+        <tr style='height:13px'>
+            <td colspan='5' class='c1_6'>
+                For and on behalf of the VENDOR
+            </td>
+            <td style='width:14px'></td>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td style='width:82px'></td>
+            <td style='width:59px'></td>
+            <td style='width:59px'></td>
+        </tr>
+        <tr style='height:13px'>
+            <td class='c1_6' style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:14px'></td>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td style='width:82px'></td>
+            <td style='width:59px'></td>
+            <td style='width:59px'></td>
+        </tr>
+        <tr style='height:13px'>
+            <td class='c1_6' style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:14px'></td>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td style='width:82px'></td>
+            <td style='width:59px'></td>
+            <td style='width:59px'></td>
+        </tr>
+        <tr style='height:13px'>
+            <td class='c1_6' style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:14px'></td>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td style='width:82px'></td>
+            <td style='width:59px'></td>
+            <td style='width:59px'></td>
+        </tr>
+        <tr style='height:13px'>
+            <td class='c1_6' style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:14px'></td>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td style='width:82px'></td>
+            <td style='width:59px'></td>
+            <td style='width:59px'></td>
+        </tr>
+        <tr style='height:13px'>
+            <td class='c1_6' style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:14px'></td>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td style='width:82px'></td>
+            <td style='width:59px'></td>
+            <td style='width:59px'></td>
+        </tr>
+        <tr style='height:13px'>
+            <td colspan='5' class='c52_1'>
+                Authorised Signatory & Company Chop
+            </td>
+            <td style='width:14px'></td>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td style='width:82px'></td>
+            <td style='width:59px'></td>
+            <td style='width:59px'></td>
+        </tr>
+        <tr style='height:13px'>
+            <td colspan='3' class='c1_6'>
+                Name
+            </td>
+            <td class='c53_4' style='width:9px'>
+                :
+            </td>
+            <td style='width:106px'></td>
+            <td style='width:14px'></td>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td style='width:82px'></td>
+            <td style='width:59px'></td>
+            <td style='width:59px'></td>
+        </tr>
+        <tr style='height:13px'>
+            <td colspan='3' class='c1_6'>
+                Designation
+            </td>
+            <td class='c53_4' style='width:9px'>
+                :
+            </td>
+            <td style='width:106px'></td>
+            <td style='width:14px'></td>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td style='width:82px'></td>
+            <td style='width:59px'></td>
+            <td style='width:59px'></td>
+        </tr>
+        <tr style='height:13px'>
+            <td colspan='3' class='c1_6'>
+                Date
+            </td>
+            <td class='c53_4' style='width:9px'>
+                :
+            </td>
+            <td style='width:106px'></td>
+            <td style='width:14px'></td>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td style='width:82px'></td>
+            <td style='width:59px'></td>
+            <td style='width:59px'></td>
+        </tr>
+        <tr style='height:26px'>
+            <td colspan='5' class='c56_1'>
+                *by signing and accepting this PO, VENDOR agrees to the Term & Conditions attached hereto
+            </td>
+            <td style='width:14px'></td>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td style='width:82px'></td>
+            <td style='width:59px'></td>
+            <td style='width:59px'></td>
+        </tr>
+        <tr style='height:22px'>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:14px'></td>
+            <td style='width:30px'></td>
+            <td style='width:9px'></td>
+            <td style='width:59px'></td>
+            <td style='width:9px'></td>
+            <td style='width:106px'></td>
+            <td style='width:15px'></td>
+            <td style='width:16px'></td>
+            <td style='width:82px'></td>
+            <td style='width:59px'></td>
+            <td style='width:59px'></td>
+        </tr>
+        <tr style='height:22px' class='c11_10'>
+            <td colspan='16'>
+                This is auto generated Purchase Order. No signature required.
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
+
+

@@ -139,6 +139,7 @@ namespace KUBOnlinePRPM.Models
         public string FileName { get; set; }
         public byte[] File { get; set; }
         public string Extension { get; set; }
+        public string Description { get; set; }
     }
     public class PRListTable
     {

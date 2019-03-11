@@ -200,20 +200,12 @@ namespace KUBOnlinePRPM.Tests.Controllers
         [TestMethod]
         public void testRolesforAllforKUBM()
         {
-            var getFinance = (from m in db.Users
-                              join n in db.Users_Roles on m.userId equals n.userId
-                              where n.roleId == "R13" && m.companyId == 3
-                              select new NewPRModel()
-                              {
-                                  ReviewerId = m.userId,
-                                  ReviewerName = m.firstName + " " + m.lastName,
-                                  ReviewerEmail = m.emailAddress
-                              }).ToList();
-
+            var getReqName = db.Users.First(m => m.userId == 278).userName;
             var getLeader = (from m in db.Users
                              join n in db.Users_Roles on m.userId equals n.userId
                              join o in db.ChildCustomers on m.childCompanyId equals o.childCustId
-                             where (n.roleId == "R02" || n.roleId == "R10") && m.companyId == 3 && m.childCompanyId == 16
+                             where (n.roleId == "R02" || n.roleId == "R10") && m.companyId == 3
+                             && m.childCompanyId == 17
                              select new NewPRModel()
                              {
                                  HODApproverId = m.userId,
@@ -225,7 +217,7 @@ namespace KUBOnlinePRPM.Tests.Controllers
             {
                 if (LeaderUserId != item.HODApproverId)
                 {
-                    getLeaderName += item.HODApproverName;
+                    getLeaderName += item.HODApproverName + ", ";
                 }
                 LeaderUserId = item.HODApproverId;
             }
@@ -233,7 +225,7 @@ namespace KUBOnlinePRPM.Tests.Controllers
             var getHOD = (from m in db.Users
                           join o in db.Users on m.superiorId equals o.userId
                           join n in db.Users_Roles on o.userId equals n.userId
-                          where (n.roleId == "R02" || n.roleId == "R11" || n.roleId == "R14") && m.companyId == 3 && m.userId == 203
+                          where (n.roleId == "R02" || n.roleId == "R11" || n.roleId == "R14") && m.companyId == 4 && m.userId == 278
                           select new PRModel()
                           {
                               UserId = o.userId,
@@ -250,6 +242,25 @@ namespace KUBOnlinePRPM.Tests.Controllers
                 HODUserId = item.UserId;
             }
 
+            var getFinance = (from m in db.Users
+                              join n in db.Users_Roles on m.userId equals n.userId
+                              where n.roleId == "R13" && m.companyId == 3
+                              select new NewPRModel()
+                              {
+                                  ReviewerId = m.userId,
+                                  ReviewerName = m.firstName + " " + m.lastName,
+                                  ReviewerEmail = m.emailAddress
+                              }).ToList();
+            int FinanceUserId = 0; string getFinanceName = "";
+            foreach (var item in getFinance)
+            {
+                if (FinanceUserId != item.ReviewerId)
+                {
+                    getFinanceName += item.ReviewerName + ", ";
+                }
+                FinanceUserId = item.ReviewerId.Value;
+            }
+
             var getProcList = (from m in db.Users
                                join n in db.Users_Roles on m.userId equals n.userId
                                where n.roleId == "R03" && m.companyId == 3
@@ -258,6 +269,16 @@ namespace KUBOnlinePRPM.Tests.Controllers
                                    AdminId = m.userId,
                                    AdminName = m.firstName + " " + m.lastName
                                }).ToList();
+
+            int ProcUserId = 0; string getProcName = "";
+            foreach (var item in getProcList)
+            {
+                if (ProcUserId != item.AdminId)
+                {
+                    getProcName += item.AdminName + ", ";
+                }
+                ProcUserId = item.AdminId;
+            }
             //var getHODDetails = (from m in db.PR_HOD
             //                     join n in db.Users on m.HODId equals n.userId
             //                     join o in db.ChildCustomers on n.childCompanyId equals o.childCustId
@@ -275,6 +296,13 @@ namespace KUBOnlinePRPM.Tests.Controllers
         {
             int POId = 44;
             var PONo = "PO-" + DateTime.Now.Year + "-" + string.Format("{0}{1}", 0, POId.ToString("D4"));
+        }
+
+        [TestMethod]
+        public void testPOnumbering()
+        {
+            string PONumber = "PO-19-00022";
+            var getListPONo = Int32.Parse(PONumber.Split('-')[2]);
         }
 
         [TestMethod]

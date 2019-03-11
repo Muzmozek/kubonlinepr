@@ -353,7 +353,7 @@
 
     });
 
-    $(document).on("click", ".approveRejectDetail", function (e) {
+    $(document).one("click", ".approveRejectDetail", function (e) {
         e.preventDefault();
         var fd = new FormData(); var Approver = "";
         //if (ifIT !== "" || ifPMO !== "" || ifHSE !== "")
@@ -523,8 +523,8 @@
 
     $(document).on("change", ".UnitPrice", function () {
         var UnitPrice = parseFloat($(this).val());
-        var Quantity = $("#Quantity" + $(this)[0].id.substring(9, 10)).val();
-        var SST = $("#SST" + $(this)[0].id.substring(9, 10)).val();
+        var Quantity = $("#Quantity" + $(this)[0].id.substring(9, $(this)[0].id.length)).val();
+        var SST = $("#SST" + $(this)[0].id.substring(9, $(this)[0].id.length)).val();
         if (SST === "") {
             SST = 0;
         }
@@ -540,8 +540,8 @@
     });
 
     $(document).on("change", ".SST", function () {
-        var UnitPrice = $("#UnitPrice" + $(this)[0].id.substring(3, 4)).val();
-        var Quantity = $("#Quantity" + $(this)[0].id.substring(3, 4)).val();
+        var UnitPrice = $("#UnitPrice" + $(this)[0].id.substring(3, $(this)[0].id.length)).val();
+        var Quantity = $("#Quantity" + $(this)[0].id.substring(3, $(this)[0].id.length)).val();
         var SST = parseFloat($(this).val());
         if (UnitPrice === "") {
             UnitPrice = 0;

@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-    $(document).on("click", "#SubmitLogin", function (e) {
+    $(document).one("click", "#SubmitLogin", function (e) {
         e.preventDefault();
         var fd = new FormData();
         //fd.append("file", $("#" + partialForm).find('[name="file"]')[0].files[0]);
@@ -39,5 +39,5 @@
                 }
             }
         });
-    })
+    });
 });

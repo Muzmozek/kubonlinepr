@@ -4,12 +4,15 @@
     <div class="media-body align-self-center text-left">
         <h3 class="g-font-weight-600 g-font-size-30 g-color-black">Summary</h3>
     </div>
-    <div class="media-body align-self-center text-right">
-        <a class="btn btn-xl u-btn-lightblue-v3 g-font-size-default g-ml-10" href="~/PR/NewPR?type=Generic">
-            NEW +
-        </a>
+    @if (Session["ifRequestor"] != null)
+    {
+        <div class="media-body align-self-center text-right">
+            <a class="btn btn-xl u-btn-lightblue-v3 g-font-size-default g-ml-10" href="~/PR/NewPR?type=Generic">
+                NEW +
+            </a>
+        </div>
+    }
     </div>
-</div>
 <div class="row">
     <div class="col-sm-4 col-lg-4 col-xl-4 g-mb-30">
         <!-- Panel -->
