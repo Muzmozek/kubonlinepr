@@ -48,16 +48,19 @@ namespace KUBOnlinePRPM.Controllers
                 Rejected = model.NewPRForm.Rejected,
                 PRType = model.Type,
                 Scenario = model.NewPRForm.Scenario,
+                budgetedAmount = model.NewPRForm.BudgetedAmount,
+                utilizedToDate = model.NewPRForm.UtilizedToDate,
+                budgetBalance = model.NewPRForm.BudgetBalance,
                 StatusId = "PR01"
             };
             db.PurchaseRequisitions.Add(_objNewPR);
             db.SaveChanges();
 
-            Project _updateProject = db.Projects.First(m => m.projectId == model.NewPRForm.ProjectId);
-            _updateProject.budgetedAmount = model.NewPRForm.BudgetedAmount;
-            _updateProject.utilizedToDate = model.NewPRForm.UtilizedToDate;
-            _updateProject.budgetBalance = model.NewPRForm.BudgetBalance;
-            db.SaveChanges();
+            //Project _updateProject = db.Projects.First(m => m.projectId == model.NewPRForm.ProjectId);
+            //_updateProject.budgetedAmount = model.NewPRForm.BudgetedAmount;
+            //_updateProject.utilizedToDate = model.NewPRForm.UtilizedToDate;
+            //_updateProject.budgetBalance = model.NewPRForm.BudgetBalance;
+            //db.SaveChanges();
 
             PurchaseRequisition generatePRNo = db.PurchaseRequisitions.First(m => m.PRId == _objNewPR.PRId);
             generatePRNo.PRNo = "PR-" + DateTime.Now.Year + "-" + string.Format("{0}{1}", 0, _objNewPR.PRId.ToString("D4"));
@@ -79,8 +82,8 @@ namespace KUBOnlinePRPM.Controllers
                     codeId = value.CodeId,
                     custPONo = value.CustPONo,
                     quantity = value.Quantity,
-                    outStandingQuantity = value.Quantity
-                    //UOM = value.UOM
+                    outStandingQuantity = value.Quantity,
+                    UoMId = value.UoMId
                 };
                 _objNewPR.AmountPOBalance = _objNewPR.AmountPOBalance + _objNewPRItem.outStandingQuantity;
                 db.PR_Items.Add(_objNewPRItem);
@@ -92,7 +95,6 @@ namespace KUBOnlinePRPM.Controllers
                 generateMsg.fromUserId = model.NewPRForm.PreparedById;
                 generateMsg.msgType = "Trail";
                 db.NotificationMsgs.Add(generateMsg);
-
                 db.SaveChanges();
             }
 
@@ -396,7 +398,7 @@ namespace KUBOnlinePRPM.Controllers
                 db.NotificationMsgs.Add(_objDetails_BudgetDescription);
                 FormerPRDetails.BudgetDescription = x.NewPRForm.BudgetDescription;
             }
-            if (updateProject.budgetedAmount != x.NewPRForm.BudgetedAmount)
+            if (FormerPRDetails.budgetedAmount != x.NewPRForm.BudgetedAmount)
             {
                 NotificationMsg _objDetails_BudgetedAmount = new NotificationMsg
                 {
@@ -405,10 +407,10 @@ namespace KUBOnlinePRPM.Controllers
                     msgDate = DateTime.Now,
                     fromUserId = x.UserId,
                     msgType = "Trail",
-                    message = x.FullName + " change Budget Amount from " + updateProject.budgetedAmount + " to " + x.NewPRForm.BudgetedAmount + " for project: " + updateProject.projectName
+                    message = x.FullName + " change Budget Amount from " + FormerPRDetails.budgetedAmount + " to " + x.NewPRForm.BudgetedAmount + " for project: " + updateProject.projectName
                 };
                 db.NotificationMsgs.Add(_objDetails_BudgetedAmount);
-                updateProject.budgetedAmount = x.NewPRForm.BudgetedAmount;
+                FormerPRDetails.budgetedAmount = x.NewPRForm.BudgetedAmount;
             }
             if (FormerPRDetails.AmountRequired != x.NewPRForm.AmountRequired)
             {
@@ -438,7 +440,7 @@ namespace KUBOnlinePRPM.Controllers
                 db.NotificationMsgs.Add(_objDetails_Justification);
                 FormerPRDetails.Justification = x.NewPRForm.Justification;
             }
-            if (updateProject.utilizedToDate != x.NewPRForm.UtilizedToDate)
+            if (FormerPRDetails.utilizedToDate != x.NewPRForm.UtilizedToDate)
             {
                 NotificationMsg _objDetails_UtilizedToDate = new NotificationMsg
                 {
@@ -447,12 +449,12 @@ namespace KUBOnlinePRPM.Controllers
                     msgDate = DateTime.Now,
                     fromUserId = x.UserId,
                     msgType = "Trail",
-                    message = x.FullName + " change Utilized To Date from " + updateProject.utilizedToDate + " to " + x.NewPRForm.UtilizedToDate + " for project: " + updateProject.projectName
+                    message = x.FullName + " change Utilized To Date from " + FormerPRDetails.utilizedToDate + " to " + x.NewPRForm.UtilizedToDate + " for project: " + updateProject.projectName
                 };
                 db.NotificationMsgs.Add(_objDetails_UtilizedToDate);
-                updateProject.utilizedToDate = x.NewPRForm.UtilizedToDate;
+                FormerPRDetails.utilizedToDate = x.NewPRForm.UtilizedToDate;
             }
-            if (updateProject.budgetBalance != x.NewPRForm.BudgetBalance)
+            if (FormerPRDetails.budgetBalance != x.NewPRForm.BudgetBalance)
             {
                 NotificationMsg _objDetails_BudgetBalance = new NotificationMsg
                 {
@@ -461,10 +463,10 @@ namespace KUBOnlinePRPM.Controllers
                     msgDate = DateTime.Now,
                     fromUserId = x.UserId,
                     msgType = "Trail",
-                    message = x.FullName + " change Budget Balance from " + updateProject.budgetBalance + " to " + x.NewPRForm.BudgetBalance + " for project: " + updateProject.projectName
+                    message = x.FullName + " change Budget Balance from " + FormerPRDetails.budgetBalance + " to " + x.NewPRForm.BudgetBalance + " for project: " + updateProject.projectName
                 };
                 db.NotificationMsgs.Add(_objDetails_BudgetBalance);
-                updateProject.budgetBalance = x.NewPRForm.BudgetBalance;
+                FormerPRDetails.budgetBalance = x.NewPRForm.BudgetBalance;
             }
             if (FormerPRDetails.VendorId != x.NewPRForm.VendorId)
             {
@@ -521,19 +523,16 @@ namespace KUBOnlinePRPM.Controllers
                         uuid = Guid.NewGuid(),
                         PRId = x.PRId,
                         dateRequired = value.DateRequired,
-                        description = value.Description,
                         itemTypeId = value.ItemTypeId,
                         codeId = value.CodeId,
+                        description = value.Description,                       
                         custPONo = value.CustPONo,
                         quantity = value.Quantity,
                         outStandingQuantity = value.Quantity,
-                        unitPrice = value.UnitPrice,
-                        totalPrice = value.TotalPrice
+                        UoMId = value.UoMId
+                        //unitPrice = value.UnitPrice,
+                        //totalPrice = value.TotalPrice,                        
                     };
-                    if (x.NewPRForm.StatusId == "PR02")
-                    {
-                        FormerPRDetails.AmountPOBalance = FormerPRDetails.AmountPOBalance + _objNewPRItem.outStandingQuantity;
-                    }
                     db.PR_Items.Add(_objNewPRItem);
 
                     NotificationMsg newPRItem = new NotificationMsg()
@@ -659,28 +658,28 @@ namespace KUBOnlinePRPM.Controllers
                         db.NotificationMsgs.Add(_objDetails_Quantity);
                         objPRItemDetails.quantity = value.Quantity;
                         objPRItemDetails.outStandingQuantity = value.Quantity;
-                        objPRItemDetails.totalPrice = (value.Quantity * value.UnitPrice) + value.SST;
+                        //objPRItemDetails.totalPrice = (value.Quantity * value.UnitPrice) + value.SST;
                     }
-                    if (objPRItemDetails.unitPrice != value.UnitPrice)
+                    if (objPRItemDetails.UoMId != value.UoMId)
                     {
-                        PR_Items FormerUnitPrice = db.PR_Items.FirstOrDefault(m => m.unitPrice == objPRItemDetails.unitPrice);
+                        UOM formerUOMs = db.UOMs.FirstOrDefault(m => m.UoMId == objPRItemDetails.UoMId);
+                        UOM UOMsChanges = db.UOMs.FirstOrDefault(m => m.UoMId == value.UoMId);
                         NotificationMsg _objDetails_NotificationMsg = new NotificationMsg();
                         _objDetails_NotificationMsg.uuid = Guid.NewGuid();
                         _objDetails_NotificationMsg.PRId = x.PRId;
                         _objDetails_NotificationMsg.msgDate = DateTime.Now;
                         _objDetails_NotificationMsg.fromUserId = x.UserId;
                         _objDetails_NotificationMsg.msgType = "Trail";
-                        if (FormerUnitPrice.unitPrice == null)
+                        if (formerUOMs == null)
                         {
-                            _objDetails_NotificationMsg.message = x.FullName + " set Unit Price to " + value.UnitPrice + " in PRNo : " + FormerPRDetails.PRNo;
+                            _objDetails_NotificationMsg.message = x.FullName + " set UOM to " + UOMsChanges.UoMCode + " in PRNo : " + FormerPRDetails.PRNo;
                         }
                         else
                         {
-                            _objDetails_NotificationMsg.message = x.FullName + " change Unit Price in PRNo : " + FormerPRDetails.PRNo + " items from " + objPRItemDetails.unitPrice + " to " + value.UnitPrice;
+                            _objDetails_NotificationMsg.message = x.FullName + " change UOM in PRNo : " + FormerPRDetails.PRNo + " items from " + formerUOMs.UoMCode + " to " + UOMsChanges.UoMCode;
                         }
                         db.NotificationMsgs.Add(_objDetails_NotificationMsg);
-                        objPRItemDetails.unitPrice = value.UnitPrice;
-                        objPRItemDetails.totalPrice = (value.Quantity * value.UnitPrice) + value.SST;
+                        objPRItemDetails.UoMId = value.UoMId;
                     }
                     //if (objPRItemDetails.totalPrice != value.TotalPrice)
                     //{
@@ -703,10 +702,10 @@ namespace KUBOnlinePRPM.Controllers
                     //    db.NotificationMsgs.Add(_objDetails_NotificationMsg);
                     //    objPRItemDetails.totalPrice = value.TotalPrice;
                     //}
-                    if (x.NewPRForm.StatusId == "PR02")
-                    {
-                        FormerPRDetails.AmountPOBalance = FormerPRDetails.AmountPOBalance + objPRItemDetails.outStandingQuantity;
-                    }
+                    //if (x.NewPRForm.StatusId == "PR02")
+                    //{
+                    //    FormerPRDetails.AmountPOBalance = FormerPRDetails.AmountPOBalance + objPRItemDetails.outStandingQuantity;
+                    //}
                     db.SaveChanges();
                 }
             }
@@ -863,7 +862,6 @@ namespace KUBOnlinePRPM.Controllers
                     }
                     HODApproverId = item.HODApproverId;
                 }
-
                 
                 var getProcurement = new List<PRModel>();
                 if (x.CustId == 3 && getPRPreparerChildCustId.childCompanyId == 16)

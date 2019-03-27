@@ -36,10 +36,18 @@ namespace KUBOnlinePRPM.Models
         public Nullable<int> jobNoId { get; set; }
         public Nullable<int> jobTaskNoId { get; set; }
         public Nullable<System.DateTime> plannedReceiptDate { get; set; }
+        public Nullable<int> taxCodeId { get; set; }
+        public Nullable<int> dimProjectId { get; set; }
+        public Nullable<int> dimDeptId { get; set; }
         public Nullable<decimal> sst { get; set; }
+        public Nullable<int> UoMId { get; set; }
+        public Nullable<decimal> unitPriceIncSST { get; set; }
+        public Nullable<decimal> totalPriceIncSST { get; set; }
     
         public virtual ItemType ItemType { get; set; }
         public virtual PurchaseRequisition PurchaseRequisition { get; set; }
+        public virtual UOM UOM { get; set; }
+        public virtual TaxCode TaxCode { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PO_Item> PO_Item { get; set; }
     }

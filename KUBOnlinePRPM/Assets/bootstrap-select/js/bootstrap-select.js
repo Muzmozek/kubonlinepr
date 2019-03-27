@@ -41,11 +41,11 @@
       }());
       var indexOf = ''.indexOf;
       var includes = function (search) {
-        if (this == null) {
+        if (this === null) {
           throw new TypeError();
         }
         var string = String(this);
-        if (search && toString.call(search) == '[object RegExp]') {
+        if (search && toString.call(search) === '[object RegExp]') {
           throw new TypeError();
         }
         var stringLength = string.length;

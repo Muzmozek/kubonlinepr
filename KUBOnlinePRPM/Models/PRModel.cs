@@ -130,6 +130,12 @@ namespace KUBOnlinePRPM.Models
         public int? AmountPOBalance { get; set; }
         public List<PRItemsTable> PRItemListObject { get; set; }
         public int Scenario { get; set; }
+        public decimal? DiscountAmount { get; set; }
+        public int? DiscountPerc { get; set; }
+        public decimal? TotalExclSST { get; set; }
+        public decimal? TotalSST { get; set; }
+        public decimal? TotalIncSST { get; set; }
+
     }
     public class PRDocListTable
     {
@@ -177,15 +183,22 @@ namespace KUBOnlinePRPM.Models
         [Range(0, int.MaxValue, ErrorMessage = "Please enter valid integer Number")]
         public int Quantity { get; set; }
         public int? OutstandingQuantity { get; set; }
+        public int? UoMId { get; set; }
         public string UOM { get; set; }
         public decimal? UnitPrice { get; set; }
         public decimal? TotalPrice { get; set; }
+        public decimal? UnitPriceIncSST { get; set; }
+        public decimal? TotalPriceIncSST { get; set; }
         public string location { get; set; }
         public string JobNo { get; set; }
         public int? JobNoId { get; set; }
         public string JobTaskNo { get; set; }
         public int? JobTaskNoId { get; set; }
         public decimal? SST { get; set; }
+        public int? TaxCodeId { get; set; }
+        public string Code { get; set; }
+        public int? DimProjectId { get; set; }
+        public int? DimDeptId { get; set; }
     }
     public class RoleList
     {

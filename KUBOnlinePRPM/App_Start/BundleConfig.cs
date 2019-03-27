@@ -27,6 +27,8 @@ namespace KUBOnlinePRPM
                         "~/Assets/jquery-ui/ui/safe-active-element.js",
                         "~/Assets/jquery-ui/ui/widgets/menu.js",
                         "~/Assets/jquery-ui/ui/widgets/mouse.js",
+                        //"~/Assets/jautocomplete.js",
+                        "~/Assets/bootstrap-combo-box/bootstrap-combobox.js",
                         "~/Assets/jquery-ui/ui/widgets/datepicker.js"
                         ));
 
@@ -124,6 +126,7 @@ namespace KUBOnlinePRPM
                       //"~/Assets/icon-line-pro/style.css",
                       //"~/Assets/icon-hs/style.css",
                       //"~/Assets/hs-admin-icons/hs-admin-icons.css",
+                      "~/Assets/bootstrap-combo-box/bootstrap-combobox.css",
                       "~/Assets/animate.css",
                       "~/Assets/slick.css",
                       "~/Assets/malihu-scrollbar/jquery.mCustomScrollbar.min.css",

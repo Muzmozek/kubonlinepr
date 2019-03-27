@@ -1,29 +1,155 @@
 ﻿var j = parseInt($("#counter").text()) + 1; var k = parseInt($("#counter").text()); var l = 0;
 
 function generatePRItemTable() {
-    PRItemTable = $('#PRItemTable').DataTable({
-        serverSide: false,
-        //dom: 'frtiS',
-        processing: true,
-        deferRender: true,
-        ordering: false,
-        paging: false,
-        searching: false,
-        bAutoWidth: false,
-        stateSave: true,
-        columnDefs: [
-            { visible: false, targets: [0] }
-        ],
-        destroy: true,
-        //aaSorting: [12, "desc"],
-        responsive: {
-            breakpoints: [
-                { name: 'desktop', width: 1024 },
-                { name: 'tablet', width: 768 },
-                { name: 'phone', width: 480 }
-            ]
-        }
-    });
+    if (POType !== null && Phase1Completed === "True") {
+        PRItemTable = $('#PRItemTable').DataTable({
+            serverSide: false,
+            //dom: 'frtiS',
+            processing: true,
+            deferRender: true,
+            ordering: false,
+            paging: false,
+            searching: false,
+            bAutoWidth: false,
+            stateSave: true,
+            columnDefs: [
+                { visible: false, targets: [0] }
+                , {
+                    targets: [4, 5, 8, 9, 10, 11, 12, 13, 14],
+                    render: function (data, type, row, meta) {
+                        if (type === 'display') {
+                            var api = new $.fn.dataTable.Api(meta.settings);
+
+                            var $el = $('input, select, textarea', api.cell({ row: meta.row, column: meta.col }).node());
+
+                            var $html = $(data).wrap('<div/>').parent();
+
+                            if ($el.prop('tagName') === 'INPUT') {
+                                $('input', $html).attr('value', $el.val());
+                                if ($el.prop('checked')) {
+                                    $('input', $html).attr('checked', 'checked');
+                                }
+                            } else if ($el.prop('tagName') === 'TEXTAREA') {
+                                $('textarea', $html).html($el.val());
+
+                            } else if ($el.prop('tagName') === 'SELECT') {
+                                $('option:selected', $html).removeAttr('selected');
+                                $('option', $html).filter(function () {
+                                    return ($(this).attr('value') === $el.val());
+                                }).attr('selected', 'selected');
+                            }
+
+                            data = $html.html();
+                        }
+
+                        return data;
+                    }
+                }
+                //,{ visible: false, targets: [1] }
+                //,{ visible: false, targets: [2] }
+            ],
+            destroy: true,
+            //aaSorting: [12, "desc"],
+            responsive: {
+                breakpoints: [
+                    { name: 'desktop', width: 1024 },
+                    { name: 'tablet', width: 768 },
+                    { name: 'phone', width: 480 }
+                ]
+                , details: {
+                    //display: $.fn.dataTable.Responsive.display.childRowImmediate,
+                    //type: '',
+                    renderer: function (api, rowIdx, columns) {
+                        var data = $.map(columns, function (col, i) {
+                            return col.hidden ?
+                                '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+                                '<td>' + col.title + '</td> ' +
+                                '<td>' + col.data + '</td>' +
+                                '</tr>' :
+                                '';
+                        }).join('');
+
+                        return data ?
+                            $('<table width="100%" />').append(data) :
+                            false;
+                    }
+                }
+            }
+        });
+    } else {
+        PRItemTable = $('#PRItemTable').DataTable({
+            serverSide: false,
+            //dom: 'frtiS',
+            processing: true,
+            deferRender: true,
+            ordering: false,
+            paging: false,
+            searching: false,
+            bAutoWidth: false,
+            stateSave: true,
+            columnDefs: [
+                { visible: false, targets: [0] }
+                , {
+                    targets: [4, 5],
+                    render: function (data, type, row, meta) {
+                        if (type === 'display') {
+                            var api = new $.fn.dataTable.Api(meta.settings);
+
+                            var $el = $('input, select, textarea', api.cell({ row: meta.row, column: meta.col }).node());
+
+                            var $html = $(data).wrap('<div/>').parent();
+
+                            if ($el.prop('tagName') === 'INPUT') {
+                                $('input', $html).attr('value', $el.val());
+                                if ($el.prop('checked')) {
+                                    $('input', $html).attr('checked', 'checked');
+                                }
+                            } else if ($el.prop('tagName') === 'TEXTAREA') {
+                                $('textarea', $html).html($el.val());
+
+                            } else if ($el.prop('tagName') === 'SELECT') {
+                                $('option:selected', $html).removeAttr('selected');
+                                $('option', $html).filter(function () {
+                                    return ($(this).attr('value') === $el.val());
+                                }).attr('selected', 'selected');
+                            }
+
+                            data = $html.html();
+                        }
+
+                        return data;
+                    }
+                }
+            ],
+            destroy: true,
+            //aaSorting: [12, "desc"],
+            responsive: {
+                breakpoints: [
+                    { name: 'desktop', width: 1024 },
+                    { name: 'tablet', width: 768 },
+                    { name: 'phone', width: 480 }
+                ]
+                , details: {
+                    //display: $.fn.dataTable.Responsive.display.childRowImmediate,
+                    //type: '',
+                    renderer: function (api, rowIdx, columns) {
+                        var data = $.map(columns, function (col, i) {
+                            return col.hidden ?
+                                '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+                                '<td>' + col.title + '</td> ' +
+                                '<td>' + col.data + '</td>' +
+                                '</tr>' :
+                                '';
+                        }).join('');
+
+                        return data ?
+                            $('<table width="100%" />').append(data) :
+                            false;
+                    }
+                }
+            }
+        });
+    }
 }
 
 function generatePRFileTable() {
@@ -56,6 +182,19 @@ $(document).on('ready', function () {
     $.HSCore.helpers.HSFocusState.init();
     generatePRItemTable();
 
+    $('#PRItemTable tbody').on('keyup change', '.child input, .child select, .child textarea', function (e) {
+        var $el = $(this);
+        var rowIdx = $el.closest('tr').data().dtRow;
+        var colIdx = $el.closest('tr').data().dtColumn;
+        var cell = PRItemTable.cell({ row: rowIdx, column: colIdx }).node();
+        $('input, select, textarea', cell).val($el.val());
+        if ($el.is(':checked')) {
+            $('input', cell).prop('checked', true);
+        } else {
+            $('input', cell).removeProp('checked');
+        }
+    });
+
     $(window).keydown(function (event) {
         if (event.keyCode === 13 && $(event.target)[0] !== $("textarea")[0]) {
             event.preventDefault();
@@ -64,22 +203,36 @@ $(document).on('ready', function () {
     });
 
     if (POType !== null) {
+        j = parseInt($("#counter").text());
         k = parseInt($("#counter").text()) - 1;
     }
 
     $(document).on("click", ".AddPRItem", function (e) {
         e.preventDefault();
-            PRItemTable.row.add([
-                '<td class="d-none"><input id="ItemsId' + j + '" class="Id form-control custom-filter desktop" type="text" name="ItemsId" value="" /></td>',
-                '<div class="has-danger"><input id="DateRequired' + j + '" class="form-control rounded-0 form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus" name="NewPRForm.PRItemListObject[' + k + '].DateRequired" type="date"><span class="field-validation-error form-control-feedback" data-valmsg-for="NewPRForm.PRItemListObject[' + k + '].DateRequired" data-valmsg-replace="true"></span></div>',
-                '<div class="has-danger"><select class="TypeId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" data-val="true" data-val-number="The field ItemTypeId must be a number." id="ItemTypeId' + j + '" name="item.ItemTypeId"><option value="">Select item type here</option><option value = "2" > FA</option ><option value="1">GL</option><option value="3">Item</option></select><span class="field-validation-valid form-control-feedback" data-valmsg-for="item.ItemTypeId" data-valmsg-replace="true"></span></div>',
-                '<div class="has-danger"><select class="CodeId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" data-val="true" data-val-number="The field CodeId must be a number." disabled="disabled" id="CodeId' + j + '" name="item.CodeId"><option value="">Select item code here</option></select><span class= "field-validation-valid form-control-feedback" data-valmsg-for= "item.CodeId" data-valmsg-replace= "true" ></span ></div>',
-                '<div class="has-danger"><input id="Description' + j + '" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="NewPRForm.PRItemListObject[' + k + '].Description" type="text"><span class="field-validation-error form-control-feedback" data-valmsg-for="NewPRForm.PRItemListObject[' + k + '].Description" data-valmsg-replace="true"></span></div>',
+        $.ajax({
+            url: UrlGetUoM,
+            method: 'GET',
+            data: {
+                Selectlistid: j
+            },
+            success: function (resp) {
+                //$(".child #JobTaskNoId" + selectlistid).html(resp.html);
+                PRItemTable.row.add([
+                    '<td class="d-none"><input id="ItemsId' + j + '" class="Id form-control custom-filter desktop" type="text" name="ItemsId" value="" /></td>',
+                    '<div class="has-danger"><input id="DateRequired' + j + '" class="form-control rounded-0 form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus" name="NewPRForm.PRItemListObject[' + k + '].DateRequired" type="date"><span class="field-validation-error form-control-feedback" data-valmsg-for="NewPRForm.PRItemListObject[' + k + '].DateRequired" data-valmsg-replace="true"></span></div>',
+                    '<div class="has-danger"><select class="TypeId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" data-val="true" data-val-number="The field ItemTypeId must be a number." id="ItemTypeId' + j + '" name="item.ItemTypeId"><option value="">Select item type here</option><option value = "2" > FA</option ><option value="1">GL</option><option value="3">Item</option></select><span class="field-validation-valid form-control-feedback" data-valmsg-for="item.ItemTypeId" data-valmsg-replace="true"></span></div>',
+                    '<div class="has-danger"><select class="CodeId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" data-val="true" data-val-number="The field CodeId must be a number." disabled="disabled" id="CodeId' + j + '" name="item.CodeId"><option value="">Select item code here</option></select><span class= "field-validation-valid form-control-feedback" data-valmsg-for= "item.CodeId" data-valmsg-replace= "true" ></span ></div>',
+                    '<div class="has-danger"><input id="Description' + j + '" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="NewPRForm.PRItemListObject[' + k + '].Description" type="text"><span class="field-validation-error form-control-feedback" data-valmsg-for="NewPRForm.PRItemListObject[' + k + '].Description" data-valmsg-replace="true"></span></div>',
                     '<div class="has-danger"><input id="CustPONo' + j + '" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="CustPONo" type="text"></div>',
-                '<div class="has-danger"><input id="Quantity' + j + '" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="NewPRForm.PRItemListObject[' + k + '].Quantity" type="text"><span class="field-validation-error form-control-feedback" data-valmsg-for="NewPRForm.PRItemListObject[' + k + '].Quantity" data-valmsg-replace="true"></span></div>',
+                    '<div class="has-danger"><input id="Quantity' + j + '" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="NewPRForm.PRItemListObject[' + k + '].Quantity" type="text"><span class="field-validation-error form-control-feedback" data-valmsg-for="NewPRForm.PRItemListObject[' + k + '].Quantity" data-valmsg-replace="true"></span></div>',
+                    '<div class="has-danger">' + resp.html + '<span class="field-validation-valid form-control-feedback" data-valmsg-for="NewPRForm.PRItemListObject[' + k + '].UoMId" data-valmsg-replace="true"></span></div>',
                     '<div class="g-width-70 row"><a class="g-color-gray-dark-v5 g-text-underline--none--hover g-pa-5 AddPRItem" data-toggle="tooltip" data-placement="top" data-original-title="Add"><i class="icon-plus g-font-size-18 g-mr-7"></i></a><a class="g-color-gray-dark-v5 g-text-underline--none--hover g-pa-5 RemovePRItem" data-toggle="tooltip" data-placement="top" data-original-title="Delete"><i class="icon-trash g-font-size-18 g-mr-7"></i></a></div>'
-            ]).draw(false);
-        j++; k++;
+                ]).draw(false);
+
+                $("body").removeClass("loading");
+                j++; k++;
+            }
+        });        
     });
 
     $(document).on("change", "#ProjectName", function () {
@@ -100,12 +253,12 @@ $(document).on('ready', function () {
                     $("#BidWaiverRefNo").prop("readonly", true);
                     $(".attachment").addClass("d-none");
                 }
-                var BudgetedAmount = resp.projectInfo.BudgetedAmount;
-                var UtilizedToDate = resp.projectInfo.UtilizedToDate;
-                var BudgetBalance = resp.projectInfo.BudgetBalance;
-                $("#BudgetedAmount").val(BudgetedAmount);
-                $("#UtilizedToDate").val(UtilizedToDate);
-                $("#BudgetBalance").val(BudgetBalance);
+                //var BudgetedAmount = resp.projectInfo.BudgetedAmount;
+                //var UtilizedToDate = resp.projectInfo.UtilizedToDate;
+                //var BudgetBalance = resp.projectInfo.BudgetBalance;
+                //$("#BudgetedAmount").val(BudgetedAmount);
+                //$("#UtilizedToDate").val(UtilizedToDate);
+                //$("#BudgetBalance").val(BudgetBalance);
                 $("body").removeClass("loading");
                 //to do - generate itemcode when select projectId
                 //$(".CodeId").select(resp.ItemCodeList);
@@ -165,15 +318,15 @@ $(document).on('ready', function () {
             }
             var unitPrice = $(input).find("input[name='UnitPrice']").val(); var totalPrice = $(input).find("input[name='TotalPrice']").val();
             var ItemTypeId = $(input).find(".TypeId option:selected").val(); var CustPONo = $(input).siblings("tr.child").find("#CustPONo" + l).val();
-            var UoM = $(input).find("input[name='UoM']").val(); var CodeId = $(input).find(".CodeId option:selected").val();
-            var JobNoId = $(input).find(".JobNoId option:selected").val();
+            var UoMId = $(input).find(".UOM option:selected").val(); var CodeId = $(input).find(".CodeId option:selected").val();
+            var JobNoId = $(input).find(".JobNoId option:selected").val(); var Description = $(input).siblings("tr.child").find("#Description" + l).val();
             var JobTaskNoId = $(input).find(".JobTaskNoId option:selected").val();
             if (unitPrice === undefined)
                 unitPrice = "";
             if (totalPrice === undefined)
                 totalPrice = "";
-            if (UoM === undefined)
-                UoM = "";
+            if (UoMId === undefined)
+                UoMId = "";
             if (ItemTypeId === undefined)
                 ItemTypeId = "";
             if (CodeId === undefined)
@@ -189,10 +342,10 @@ $(document).on('ready', function () {
             fd.append("NewPRForm.PRItemListObject[" + i + "].DateRequired", $(input).find("input[name='NewPRForm.PRItemListObject[" + i + "].DateRequired']").val());
             fd.append("NewPRForm.PRItemListObject[" + i + "].ItemTypeId", ItemTypeId);
             fd.append("NewPRForm.PRItemListObject[" + i + "].CodeId", CodeId);           
-            fd.append("NewPRForm.PRItemListObject[" + i + "].Description", $(input).find("input[name='NewPRForm.PRItemListObject[" + i + "].Description']").val());
+            fd.append("NewPRForm.PRItemListObject[" + i + "].Description", Description);
             fd.append("NewPRForm.PRItemListObject[" + i + "].CustPONo", CustPONo);
             fd.append("NewPRForm.PRItemListObject[" + i + "].Quantity", $(input).find("input[name='NewPRForm.PRItemListObject[" + i + "].Quantity']").val());
-            fd.append("NewPRForm.PRItemListObject[" + i + "].UOM", UoM);
+            fd.append("NewPRForm.PRItemListObject[" + i + "].UoMId", UoMId);
             fd.append("NewPRForm.PRItemListObject[" + i + "].JobNoId", JobNoId);
             fd.append("NewPRForm.PRItemListObject[" + i + "].JobTaskNoId", JobTaskNoId);
             fd.append("NewPRForm.PRItemListObject[" + i + "].UnitPrice", unitPrice);
@@ -214,6 +367,7 @@ $(document).on('ready', function () {
             cache: false,
             beforeSend: function () {
                 PRItemTable.state.save();
+                $("body").addClass("loading");
             },
             dataType: "json",
             success: function (resp) {
@@ -293,15 +447,15 @@ $(document).on('ready', function () {
             }
             var unitPrice = $(input).find("input[name='UnitPrice']").val(); var totalPrice = $(input).find("input[name='TotalPrice']").val();
             var ItemTypeId = $(input).find(".TypeId option:selected").val(); var CustPONo = $(input).siblings("tr.child").find("#CustPONo" + l).val();
-            var UoM = $(input).find("input[name='UoM']").val(); var CodeId = $(input).find(".CodeId option:selected").val();
-            var JobNoId = $(input).find(".JobNoId option:selected").val();
+            var UoMId = $(input).find(".UOM option:selected").val(); var CodeId = $(input).find(".CodeId option:selected").val();
+            var JobNoId = $(input).find(".JobNoId option:selected").val(); var Description = $(input).siblings("tr.child").find("#Description" + l).val();
             var JobTaskNoId = $(input).find(".JobTaskNoId option:selected").val();
             if (unitPrice === undefined)
                 unitPrice = "";
             if (totalPrice === undefined)
                 totalPrice = "";
-            if (UoM === undefined)
-                UoM = "";
+            if (UoMId === undefined)
+                UoMId = "";
             if (ItemTypeId === undefined)
                 ItemTypeId = "";
             if (CodeId === undefined)
@@ -317,10 +471,10 @@ $(document).on('ready', function () {
             fd.append("NewPRForm.PRItemListObject[" + i + "].DateRequired", $(input).find("input[name='NewPRForm.PRItemListObject[" + i + "].DateRequired']").val());
             fd.append("NewPRForm.PRItemListObject[" + i + "].ItemTypeId", ItemTypeId);
             fd.append("NewPRForm.PRItemListObject[" + i + "].CodeId", CodeId);
-            fd.append("NewPRForm.PRItemListObject[" + i + "].Description", $(input).find("input[name='NewPRForm.PRItemListObject[" + i + "].Description']").val());
+            fd.append("NewPRForm.PRItemListObject[" + i + "].Description", Description);
             fd.append("NewPRForm.PRItemListObject[" + i + "].CustPONo", CustPONo);
             fd.append("NewPRForm.PRItemListObject[" + i + "].Quantity", $(input).find("input[name='NewPRForm.PRItemListObject[" + i + "].Quantity']").val());
-            fd.append("NewPRForm.PRItemListObject[" + i + "].UOM", UoM);
+            fd.append("NewPRForm.PRItemListObject[" + i + "].UoMId", UoMId);
             fd.append("NewPRForm.PRItemListObject[" + i + "].JobNoId", JobNoId);
             fd.append("NewPRForm.PRItemListObject[" + i + "].JobTaskNoId", JobTaskNoId);
             fd.append("NewPRForm.PRItemListObject[" + i + "].UnitPrice", unitPrice);
@@ -343,6 +497,7 @@ $(document).on('ready', function () {
             cache: false,
             beforeSend: function () {
                 PRItemTable.state.save();
+                $("body").addClass("loading");
             },
             dataType: "json",
             success: function (resp) {

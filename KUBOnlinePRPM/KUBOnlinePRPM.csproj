@@ -211,20 +211,27 @@
     <Compile Include="Models\JobTask.cs">
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\KUBOnlinePR.Context.cs">
+    <Compile Include="Models\KUBOnlinePR.Context1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
       <DependentUpon>KUBOnlinePR.Context.tt</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="Models\KUBOnlinePR.cs">
-      <DependentUpon>KUBOnlinePR.tt</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
+    <Compile Include="Models\KUBOnlinePR.cs" />
     <Compile Include="Models\KUBOnlinePR.Designer.cs">
-      <DependentUpon>KUBOnlinePR.edmx</DependentUpon>
-      <DesignTime>True</DesignTime>
+      <DependentUpon>KUBOnlinePR.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\KUBOnlinePR1.cs">
       <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>KUBOnlinePR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\KUBOnlinePR1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>KUBOnlinePR.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Location.cs">
+      <DependentUpon>KUBOnlinePR.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\MailModel.cs" />
@@ -297,6 +304,9 @@
     <Compile Include="Models\PurchaseOrder.cs">
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Purchaser.cs">
+      <DependentUpon>KUBOnlinePR.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PurchaseRequisition.cs">
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
     </Compile>
@@ -304,6 +314,12 @@
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Role.cs">
+      <DependentUpon>KUBOnlinePR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TaxCode.cs">
+      <DependentUpon>KUBOnlinePR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UOM.cs">
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\User.cs">
@@ -329,12 +345,15 @@
   <ItemGroup>
     <Content Include="Assets\animate.css" />
     <Content Include="Assets\appear.js" />
+    <Content Include="Assets\autocomplete.js" />
     <Content Include="Assets\blog-masonry.js" />
     <Content Include="Assets\blog_masonry_3col.css" />
     <Content Include="Assets\bloodhound-js\bloodhound.js" />
     <Content Include="Assets\bloodhound-js\bloodhound.min.js" />
     <Content Include="Assets\bloodhound-js\typeahead.jquery.js" />
     <Content Include="Assets\bloodhound-js\typeahead.jquery.min.js" />
+    <Content Include="Assets\bootstrap-combo-box\bootstrap-combobox.css" />
+    <Content Include="Assets\bootstrap-combo-box\bootstrap-combobox.js" />
     <Content Include="Assets\bootstrap-select\css\bootstrap-select.css" />
     <Content Include="Assets\bootstrap-select\css\bootstrap-select.min.css" />
     <Content Include="Assets\bootstrap-select\js\bootstrap-select.js" />
@@ -5086,10 +5105,6 @@
     <Content Include="Assets\jquery-ui\ui\widgets\tooltip.js" />
     <Content Include="Assets\canvasjs2.2.js" />
     <Content Include="Assets\datatables\js\responsive.bootstrap.js" />
-    <EntityDeploy Include="Models\KUBOnlinePR.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>KUBOnlinePR.Designer.cs</LastGenOutput>
-    </EntityDeploy>
     <None Include="Assets\jquery-validate\jquery.validate-vsdoc.js" />
     <Content Include="Assets\jquery-validate\jquery.validate.js" />
     <Content Include="Assets\jquery-validate\jquery.validate.min.js" />
@@ -5140,17 +5155,12 @@
     <Content Include="Images\ajax_loader.gif" />
     <Content Include="Images\signature.png" />
     <Content Include="Models\KUBOnlinePR.Context.tt">
-      <DependentUpon>KUBOnlinePR.edmx</DependentUpon>
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>KUBOnlinePR.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\KUBOnlinePR.edmx.diagram">
-      <DependentUpon>KUBOnlinePR.edmx</DependentUpon>
+      <LastGenOutput>KUBOnlinePR.Context1.cs</LastGenOutput>
     </Content>
     <Content Include="Models\KUBOnlinePR.tt">
-      <DependentUpon>KUBOnlinePR.edmx</DependentUpon>
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>KUBOnlinePR.cs</LastGenOutput>
+      <LastGenOutput>KUBOnlinePR1.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\AuditTrail.js" />
     <Content Include="Scripts\BPRPOList.js" />
@@ -5614,6 +5624,13 @@
     <Content Include="Assets\robicch-jQueryGantt\res\icons.eot" />
     <Content Include="Assets\robicch-jQueryGantt\res\icons.ttf" />
     <Content Include="Assets\robicch-jQueryGantt\res\icons.woff" />
+    <EntityDeploy Include="Models\KUBOnlinePR.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>KUBOnlinePR1.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\KUBOnlinePR.edmx.diagram">
+      <DependentUpon>KUBOnlinePR.edmx</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\PR\PRDetails.cshtml" />

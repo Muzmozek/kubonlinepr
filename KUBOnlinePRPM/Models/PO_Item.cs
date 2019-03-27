@@ -23,8 +23,16 @@ namespace KUBOnlinePRPM.Models
         public int codeId { get; set; }
         public string custPONo { get; set; }
         public int quantity { get; set; }
+        public Nullable<int> UoMId { get; set; }
         public decimal unitPrice { get; set; }
         public decimal totalPrice { get; set; }
+        public Nullable<int> jobNoId { get; set; }
+        public Nullable<int> jobTaskNoId { get; set; }
+        public Nullable<int> taxCodeId { get; set; }
+        public Nullable<decimal> unitPriceIncSST { get; set; }
+        public Nullable<decimal> totalPriceIncSST { get; set; }
+        public Nullable<int> dimProjectId { get; set; }
+        public Nullable<int> dimDeptId { get; set; }
     
         public virtual PR_Items PR_Items { get; set; }
         public virtual PurchaseOrder PurchaseOrder { get; set; }

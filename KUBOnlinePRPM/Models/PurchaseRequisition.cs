@@ -26,10 +26,10 @@ namespace KUBOnlinePRPM.Models
             this.PR_RecommenderHOC = new HashSet<PR_RecommenderHOC>();
             this.PR_Reviewer = new HashSet<PR_Reviewer>();
             this.PRs_FileUpload = new HashSet<PRs_FileUpload>();
-            this.PurchaseOrders = new HashSet<PurchaseOrder>();
             this.PR_Finance = new HashSet<PR_Finance>();
-            this.PR_Items = new HashSet<PR_Items>();
             this.PR_PaperApprover = new HashSet<PR_PaperApprover>();
+            this.PR_Items = new HashSet<PR_Items>();
+            this.PurchaseOrders = new HashSet<PurchaseOrder>();
         }
     
         public System.Guid uuid { get; set; }
@@ -69,6 +69,14 @@ namespace KUBOnlinePRPM.Models
         public int Scenario { get; set; }
         public Nullable<int> PRAging { get; set; }
         public string StatusId { get; set; }
+        public Nullable<decimal> DiscountAmount { get; set; }
+        public Nullable<int> Discount_ { get; set; }
+        public Nullable<decimal> TotalExclSST { get; set; }
+        public Nullable<decimal> TotalSST { get; set; }
+        public Nullable<decimal> TotalIncSST { get; set; }
+        public decimal budgetedAmount { get; set; }
+        public decimal utilizedToDate { get; set; }
+        public decimal budgetBalance { get; set; }
     
         public virtual Customer Customer { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -91,8 +99,6 @@ namespace KUBOnlinePRPM.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PRs_FileUpload> PRs_FileUpload { get; set; }
         public virtual PRStatu PRStatu { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; }
         public virtual PurchaseType PurchaseType { get; set; }
         public virtual User User { get; set; }
         public virtual Vendor Vendor { get; set; }
@@ -100,8 +106,10 @@ namespace KUBOnlinePRPM.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_Finance> PR_Finance { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PR_PaperApprover> PR_PaperApprover { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_Items> PR_Items { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PR_PaperApprover> PR_PaperApprover { get; set; }
+        public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; }
     }
 }

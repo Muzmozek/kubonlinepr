@@ -353,14 +353,16 @@ namespace KUBOnlinePRPM.Controllers
 
                 int UserId = Int32.Parse(Session["UserId"].ToString());
                 int PRId = db.PurchaseOrders.First(m => m.POId == PODetail.POId).PRId.Value;
-                var getPRCustId = db.PurchaseRequisitions.First(m => m.PRId == PRId); int PRCustId = 0;
+                var getPRCustId = db.PurchaseRequisitions.First(m => m.PRId == PRId);
                 var getPRPreparerChildCustId = db.Users.First(m => m.userId == getPRCustId.PreparedById);
-                if (getPRPreparerChildCustId.childCompanyId == 16)
+                switch (getPRPreparerChildCustId.childCompanyId)
                 {
-                    PRCustId = 6;
-                } else
-                {
-                    PRCustId = getPRCustId.CustId;
+                    case 16:
+                        getPRCustId.CustId = 6; break;
+                    case 17:
+                        getPRCustId.CustId = 7; break;
+                    case 18:
+                        getPRCustId.CustId = 8; break;
                 }
                 var getRole = (from m in db.Users
                                join n in db.Users_Roles on m.userId equals n.userId
@@ -371,7 +373,7 @@ namespace KUBOnlinePRPM.Controllers
                                    RoleName = n.Role.name
                                }).ToList();
                 var PayToVendorQuery = (from m in db.Vendors
-                                        where m.custId == PRCustId
+                                        where m.custId == getPRCustId.CustId
                                         select new
                                         {
                                             VendorId = m.vendorId,
@@ -379,20 +381,22 @@ namespace KUBOnlinePRPM.Controllers
                                             VendorNo = m.vendorNo,
                                         }).OrderBy(c => c.VendorNo).ThenBy(c => c.VendorName);
                 var PaymentTermsCodeQuery = (from m in db.PaymentTerms
-                                             where m.custId == PRCustId
+                                             where m.custId == getPRCustId.CustId
                                              select new
                                              {
                                                  PaymentTermsId = m.paymentTermsId,
                                                  PaymentDescription = m.paymentCode + " - " + m.paymentDescription,
                                                  PaymentCode = m.paymentCode,
                                              }).OrderBy(c => c.PaymentCode).ThenBy(c => c.PaymentDescription);
-
+                var LocationQuery = db.Locations.Select(m => new { LocationCodeId = m.locationId, LocationCode = m.locationCode, Address = m.locationAddress + m.locationCity }).OrderBy(m => m.LocationCode);
+                var SpecReviewerQuery = db.Groups.Select(c => new GroupList { GroupId = c.groupId, GroupName = c.groupName }).OrderBy(c => c.GroupName);
+                var PurchaserCodeQuery = db.Purchasers.Select(m => new { PurchaserCodeId = m.purchaserId, PurchaserCode = m.purchaserCode }).OrderBy(m => m.PurchaserCode);
                 PODetail.UserId = Int32.Parse(Session["UserId"].ToString());
                 PODetail.NewPOForm = (from a in db.PurchaseOrders
                                       join b in db.Projects on a.projectId equals b.projectId
                                       join c in db.Vendors on a.vendorId equals c.vendorId
                                       //join d in db.VendorStaffs on a.vendorStaffId equals d.staffId
-                                      //join e in db.PO_Item on a.POId equals e.POId
+                                      //join e in db.Users on a.SpecsReviewerId equals e.userId
                                       //join f in db.PopulateItemLists on e.codeId equals f.codeId
                                       join g in db.POStatus on a.StatusId equals g.statusId
                                       join h in db.PurchaseRequisitions on a.PRId equals h.PRId
@@ -412,6 +416,11 @@ namespace KUBOnlinePRPM.Controllers
                                           //VendorContactNo = d.vendorContactNo,
                                           PayToVendorId = a.PayToVendorId,
                                           PaymentTermsId = a.PaymentTermsId,
+                                          SpecReviewerId = a.SpecsReviewerId,
+                                          LocationCodeId = a.LocationCodeId,
+                                          OrderDate = a.OrderDate,
+                                          PurchaserCodeId = a.PurchaserId,
+                                          DeliveryDate = a.DeliveryDate,
                                           StatusId = a.StatusId,
                                           Status = g.status,
                                           Submited = a.Submited
@@ -419,7 +428,7 @@ namespace KUBOnlinePRPM.Controllers
                 PODetail.NewPOForm.POItemListObject = (from m in db.PO_Item
                                                        from n in db.PopulateItemLists.Where(x => m.codeId == x.codeId && m.itemTypeId == x.itemTypeId).DefaultIfEmpty()
                                                        join p in db.PR_Items on m.itemsId equals p.itemsId
-                                                       where m.POId == PODetail.POId && n.custId == PRCustId
+                                                       where m.POId == PODetail.POId && n.custId == getPRCustId.CustId
                                                        select new POItemsTable()
                                                        {
                                                            ItemsId = m.itemsId,
@@ -437,6 +446,9 @@ namespace KUBOnlinePRPM.Controllers
 
                 ViewBag.PayToVendorList = new SelectList(PayToVendorQuery.AsEnumerable(), "VendorId", "VendorName", PODetail.NewPOForm.PayToVendorId);
                 ViewBag.PaymentTermsCodeList = new SelectList(PaymentTermsCodeQuery.AsEnumerable(), "PaymentTermsId", "PaymentDescription", PODetail.NewPOForm.PaymentTermsId);
+                ViewBag.SpecReviewerList = new SelectList(SpecReviewerQuery.AsEnumerable(), "GroupId", "GroupName", PODetail.NewPOForm.SpecReviewerId);
+                ViewBag.PurchaserCodeList = new SelectList(PurchaserCodeQuery.AsEnumerable(), "PurchaserCodeId", "PurchaserCode", PODetail.NewPOForm.PurchaserCodeId);
+                ViewBag.LocationCodeList = new SelectList(LocationQuery.AsEnumerable(), "LocationCodeId", "LocationCode", PODetail.NewPOForm.LocationCodeId);
 
                 return View(PODetail);
             }
@@ -584,7 +596,8 @@ namespace KUBOnlinePRPM.Controllers
                                 NewPOsequence = Int32.Parse(ConfigurationManager.AppSettings[CustName].ToString()) + 1;
                             } 
                             newPO.PONo = "PO-" + DateTime.Now.Year.ToString().Substring(2) + "-" + string.Format("{0}{1}", 0, NewPOsequence.ToString("D4"));
-                        } else
+                        }
+                        else
                         {
                             int NewPOsequence = 1;
                             if (ConfigurationManager.AppSettings[CustName] != null)
@@ -607,6 +620,12 @@ namespace KUBOnlinePRPM.Controllers
                         newPO.SubmitDate = DateTime.Now;
                         newPO.POAging = 0;
                         newPO.TotalPrice = updatePR.AmountRequired;
+                        newPO.DiscountAmount = updatePR.DiscountAmount;
+                        newPO.Discount_ = updatePR.Discount_;
+                        newPO.TotalExcSST = updatePR.TotalExclSST;
+                        newPO.TotalSST = updatePR.TotalSST;
+                        newPO.TotalIncSST = updatePR.TotalIncSST;
+                        newPO.SpecsReviewerId = updatePR.SpecsReviewerId;
                         newPO.StatusId = "PO01";
                         db.PurchaseOrders.Add(newPO);
                         db.SaveChanges();
@@ -627,8 +646,16 @@ namespace KUBOnlinePRPM.Controllers
                                 codeId = value.codeId.Value,
                                 custPONo = value.custPONo,
                                 quantity = value.quantity,
+                                UoMId = value.UoMId,
                                 unitPrice = value.unitPrice.Value,
-                                totalPrice = value.totalPrice.Value
+                                unitPriceIncSST = value.unitPriceIncSST,
+                                totalPrice = value.totalPrice.Value,
+                                totalPriceIncSST = value.totalPriceIncSST,
+                                jobNoId = value.jobNoId,
+                                jobTaskNoId = value.jobTaskNoId,
+                                taxCodeId = value.taxCodeId,
+                                dimProjectId = value.dimProjectId,
+                                dimDeptId = value.dimDeptId
                             };
                             db.PO_Item.Add(_objNewPOItem);
                             db.SaveChanges();
@@ -705,14 +732,32 @@ namespace KUBOnlinePRPM.Controllers
             {
                 try
                 {
-                    int? PayToVendorId = null; int? PaymentTermsId = null;
+                    int? PayToVendorId = null; int? PaymentTermsId = null; int? LocationCodeId = null; DateTime? OrderDate = null; int? PurchaserCodeId = null;
+                    DateTime? DeliveryDate = null;
+
                     if (Request["PayToVendorId"] != "")
                     {
                         PayToVendorId = Int32.Parse(Request["PayToVendorId"]);
+                    }                    
+                    if (Request["LocationCodeId"] != "")
+                    {
+                        LocationCodeId = Int32.Parse(Request["LocationCodeId"]);
+                    }
+                    if (Request["OrderDate"] != "")
+                    {
+                        OrderDate = DateTime.Parse(Request["OrderDate"]);
                     }
                     if (Request["PaymentTermsId"] != "")
                     {
                         PaymentTermsId = Int32.Parse(Request["PaymentTermsId"]);
+                    }
+                    if (Request["PurchaserCodeId"] != "")
+                    {
+                        PurchaserCodeId = Int32.Parse(Request["PurchaserCodeId"]);
+                    }
+                    if (Request["DeliveryDate"] != "")
+                    {
+                        DeliveryDate = DateTime.Parse(Request["DeliveryDate"]);
                     }
                     int POId = Int32.Parse(Request["POId"]);
                     int CustId = Int32.Parse(Session["CompanyId"].ToString());
@@ -720,38 +765,47 @@ namespace KUBOnlinePRPM.Controllers
                     PurchaseOrder updatePO = db.PurchaseOrders.First(m => m.POId == POId);
                     var getScenario = db.PurchaseRequisitions.First(m => m.PRId == updatePO.PRId);
                     updatePO.PayToVendorId = PayToVendorId;
+                    updatePO.LocationCodeId = LocationCodeId;
+                    updatePO.OrderDate = OrderDate;
                     updatePO.PaymentTermsId = PaymentTermsId;
+                    updatePO.PurchaserId = PurchaserCodeId;
+                    updatePO.DeliveryDate = DeliveryDate;
                     updatePO.StatusId = "PO03";
 
                     var getPRPreparerChildCustId = db.Users.First(m => m.userId == getScenario.PreparedById);
-                    if (getPRPreparerChildCustId.childCompanyId == 16)
+                    switch (getPRPreparerChildCustId.childCompanyId)
                     {
-                        CustId = 6;
+                        case 16:
+                            CustId = 6; break;
+                        case 17:
+                            CustId = 7; break;
+                        case 18:
+                            CustId = 8; break;
                     }
 
-                    var POItemList = (from m in db.PO_Item
-                                      from n in db.PopulateItemLists.Where(x => m.codeId == x.codeId && m.itemTypeId == x.itemTypeId).DefaultIfEmpty()
-                                      join p in db.PR_Items on m.itemsId equals p.itemsId
-                                      where m.POId == POId && n.custId == CustId
-                                      select new POItemsTable()
-                                      {
-                                          ItemsId = m.itemsId,
-                                          ItemTypeId = m.itemTypeId,
-                                          DateRequired = m.dateRequired,
-                                          ItemCode = n.ItemDescription,
-                                          Description = m.description,
-                                          CustPONo = m.custPONo,
-                                          Quantity = m.quantity,
-                                          OutStandingQuantity = p.outStandingQuantity.Value,
-                                          UnitPrice = m.unitPrice,
-                                          TotalPrice = m.totalPrice
-                                          //UOM = n.UoM
-                                      }).ToList();
+                    //var POItemList = (from m in db.PO_Item
+                    //                  from n in db.PopulateItemLists.Where(x => m.codeId == x.codeId && m.itemTypeId == x.itemTypeId).DefaultIfEmpty()
+                    //                  join p in db.PR_Items on m.itemsId equals p.itemsId
+                    //                  where m.POId == POId && n.custId == CustId
+                    //                  select new POItemsTable()
+                    //                  {
+                    //                      ItemsId = m.itemsId,
+                    //                      ItemTypeId = m.itemTypeId,
+                    //                      DateRequired = m.dateRequired,
+                    //                      ItemCode = n.ItemDescription,
+                    //                      Description = m.description,
+                    //                      CustPONo = m.custPONo,
+                    //                      Quantity = m.quantity,
+                    //                      OutStandingQuantity = p.outStandingQuantity.Value,
+                    //                      UnitPrice = m.unitPrice,
+                    //                      TotalPrice = m.totalPrice
+                    //                      UOM = n.UoM
+                    //                  }).ToList();
 
-                    var UpdateBudgetBalance = db.Projects.First(m => m.projectId == updatePO.projectId);
-                    decimal getAmountRequired = db.PurchaseRequisitions.First(m => m.PRId == updatePO.PRId).AmountRequired;
-                    UpdateBudgetBalance.utilizedToDate = UpdateBudgetBalance.utilizedToDate + getAmountRequired;
-                    UpdateBudgetBalance.budgetBalance = UpdateBudgetBalance.budgetedAmount - UpdateBudgetBalance.utilizedToDate;
+                    //Project UpdateBudgetBalance = db.Projects.First(m => m.projectId == updatePO.projectId);
+                    //decimal getAmountRequired = db.PurchaseRequisitions.First(m => m.PRId == updatePO.PRId).AmountRequired;
+                    //UpdateBudgetBalance.utilizedToDate = UpdateBudgetBalance.utilizedToDate + getAmountRequired;
+                    //UpdateBudgetBalance.budgetBalance = UpdateBudgetBalance.budgetedAmount - UpdateBudgetBalance.utilizedToDate;
 
                     NotificationMsg _objConfirmed = new NotificationMsg
                     {
@@ -913,31 +967,32 @@ namespace KUBOnlinePRPM.Controllers
                                       }).FirstOrDefault();
 
                 var getUserDetails = (from m in db.PurchaseOrders
-                                      join n in db.Users on m.PreparedById equals n.userId
+                                      join o in db.PurchaseRequisitions on m.PRId equals o.PRId
+                                      join n in db.Users on o.PreparedById equals n.userId
                                       where m.POId == PODetail.POId
                                       select new
                                       {
                                           CustId = m.CustId,
                                           ChildCustId = n.childCompanyId
                                       }).First();
-                int POCustId = getUserDetails.CustId;
+                int PRCustId = getUserDetails.CustId;
                 if (getUserDetails.ChildCustId != null)
                 {
                     switch (getUserDetails.ChildCustId)
                     {
                         case 16:
-                            POCustId = 6; break;
+                            PRCustId = 6; break;
                         case 17:
-                            POCustId = 7; break;
+                            PRCustId = 7; break;
                         case 18:
-                            POCustId = 8; break;
+                            PRCustId = 8; break;
                     }
                 }
                 
                 PODetail.POItemList = (from m in db.PO_Item
                                        from n in db.PopulateItemLists.Where(x => m.codeId == x.codeId && m.itemTypeId == x.itemTypeId)
                                            //from p in o.DefaultIfEmpty()
-                                       where m.POId == PODetail.POId && n.custId == POCustId
+                                       where m.POId == PODetail.POId && n.custId == PRCustId
                                        select new POItemsTable()
                                        {
                                            ItemsId = m.itemsId,

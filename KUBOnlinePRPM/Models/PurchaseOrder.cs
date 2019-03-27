@@ -24,12 +24,12 @@ namespace KUBOnlinePRPM.Models
         public int POId { get; set; }
         public Nullable<int> PRId { get; set; }
         public string PONo { get; set; }
+        public int CustId { get; set; }
         public System.DateTime PODate { get; set; }
         public int projectId { get; set; }
         public int vendorId { get; set; }
+        public string VendorQuoteNo { get; set; }
         public Nullable<int> vendorStaffId { get; set; }
-        public Nullable<int> PayToVendorId { get; set; }
-        public Nullable<int> PaymentTermsId { get; set; }
         public int Saved { get; set; }
         public System.DateTime PreparedDate { get; set; }
         public Nullable<int> PreparedById { get; set; }
@@ -37,18 +37,29 @@ namespace KUBOnlinePRPM.Models
         public bool Submited { get; set; }
         public Nullable<System.DateTime> SubmitDate { get; set; }
         public int POAging { get; set; }
-        public string StatusId { get; set; }
-        public int CustId { get; set; }
         public int TotalQuantity { get; set; }
         public decimal TotalPrice { get; set; }
-        public string VendorQuoteNo { get; set; }
+        public Nullable<decimal> DiscountAmount { get; set; }
+        public Nullable<int> Discount_ { get; set; }
+        public Nullable<decimal> TotalExcSST { get; set; }
+        public Nullable<decimal> TotalSST { get; set; }
+        public Nullable<decimal> TotalIncSST { get; set; }
+        public string SpecsReviewerId { get; set; }
+        public Nullable<int> PayToVendorId { get; set; }
+        public Nullable<int> PaymentTermsId { get; set; }
+        public Nullable<int> LocationCodeId { get; set; }
+        public Nullable<int> PurchaserId { get; set; }
+        public Nullable<System.DateTime> OrderDate { get; set; }
+        public Nullable<System.DateTime> DeliveryDate { get; set; }
+        public string StatusId { get; set; }
     
         public virtual PaymentTerm PaymentTerm { get; set; }
         public virtual POStatu POStatu { get; set; }
         public virtual Project Project { get; set; }
+        public virtual Purchaser Purchaser { get; set; }
+        public virtual PurchaseRequisition PurchaseRequisition { get; set; }
         public virtual Vendor Vendor { get; set; }
         public virtual VendorStaff VendorStaff { get; set; }
-        public virtual PurchaseRequisition PurchaseRequisition { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PO_Item> PO_Item { get; set; }
     }

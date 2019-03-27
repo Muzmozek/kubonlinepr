@@ -69,6 +69,8 @@
         var PRItemTable; var PRFileTable;
         var POType = "@Model.Type";
         var PRId = "@Model.PRId";
+        var Phase1Completed = "@Model.NewPRForm.Phase1Completed";
+        var PRChildCustId = "@Model.NewPRForm.ChildCustId";
         var UrlSaveSubmitDetails = "@Url.Action("PRDetails", "PR")";
         var UrlApproved = "@Url.Action("Approval", "PR")";
         var UrlRejected = "@Url.Action("Rejected", "PR")";
@@ -113,6 +115,8 @@
         var UrlFileUpload = "@Url.Action("FileUpload", "PR")";
         var UrlPRCard = "@Url.Action("PRList", "PR")";
         var UrlFileDelete = "@Url.Action("FileDelete", "PR")";
+        var UrlGetUoM = "@Url.Action("GetUoM", "PR")";
+        var UrlGetTaxCodeInfo = "@Url.Action("GetTaxCode", "PR")";
     </script>
     <script src="~/Scripts/NewPR.js"></script>
     <script src="~/Scripts/PRDetails.js"></script>

@@ -38,8 +38,7 @@ namespace KUBOnlinePRPM.Models
             this.PR_Finance = new HashSet<PR_Finance>();
             this.PR_PaperApprover = new HashSet<PR_PaperApprover>();
         }
-
-        public static object Identity { get; set; }
+    
         public System.Guid uuid { get; set; }
         public int userId { get; set; }
         public Nullable<int> companyId { get; set; }

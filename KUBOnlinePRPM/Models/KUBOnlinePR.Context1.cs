@@ -50,7 +50,6 @@ namespace KUBOnlinePRPM.Models
         public virtual DbSet<Item> Items { get; set; }
         public virtual DbSet<PopulateItemList> PopulateItemLists { get; set; }
         public virtual DbSet<PaymentTerm> PaymentTerms { get; set; }
-        public virtual DbSet<PurchaseOrder> PurchaseOrders { get; set; }
         public virtual DbSet<MessageList> MessageLists { get; set; }
         public virtual DbSet<PR_RecommenderCFO> PR_RecommenderCFO { get; set; }
         public virtual DbSet<PR_RecommenderCOO> PR_RecommenderCOO { get; set; }
@@ -60,8 +59,13 @@ namespace KUBOnlinePRPM.Models
         public virtual DbSet<JobTask> JobTasks { get; set; }
         public virtual DbSet<ChildCustomer> ChildCustomers { get; set; }
         public virtual DbSet<PR_Finance> PR_Finance { get; set; }
-        public virtual DbSet<PR_Items> PR_Items { get; set; }
         public virtual DbSet<PR_PaperApprover> PR_PaperApprover { get; set; }
+        public virtual DbSet<TaxCode> TaxCodes { get; set; }
+        public virtual DbSet<PR_Items> PR_Items { get; set; }
+        public virtual DbSet<UOM> UOMs { get; set; }
+        public virtual DbSet<Location> Locations { get; set; }
+        public virtual DbSet<Purchaser> Purchasers { get; set; }
+        public virtual DbSet<PurchaseOrder> PurchaseOrders { get; set; }
         public virtual DbSet<PO_Item> PO_Item { get; set; }
     }
 }

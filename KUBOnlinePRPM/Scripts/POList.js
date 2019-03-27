@@ -15,6 +15,7 @@
         ],
         destroy: true,
         aaSorting: [1, "desc"],
+        stateSave: true,
         responsive: {
             breakpoints: [
                 { name: 'desktop', width: 1024 },

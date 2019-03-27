@@ -14,6 +14,7 @@ buttons: [
                 { visible: false, targets: [0] }
         ],
         destroy: true,
+        stateSave: true,
         aaSorting: [1, "desc"],
         responsive: {
             breakpoints: [

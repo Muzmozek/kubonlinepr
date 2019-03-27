@@ -250,22 +250,21 @@ namespace KUBOnlinePRPM.Controllers
             var projectInfo = db.Projects.Select(m => new NewPRModel()
             {
                 ProjectId = m.projectId,
-                PaperVerified = m.paperVerified,
-                BudgetedAmount = m.budgetedAmount,
-                UtilizedToDate = m.utilizedToDate,
-                BudgetBalance = m.budgetBalance
+                PaperVerified = m.paperVerified
+                //BudgetedAmount = m.budgetedAmount,
+                //UtilizedToDate = m.utilizedToDate,
+                //BudgetBalance = m.budgetBalance
             }).Where(m => m.ProjectId == projectId).FirstOrDefault();
 
             return Json(new { projectInfo }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetItemTypeInfo(int ItemTypeId, int Selectlistid)
+        public JsonResult GetItemTypeInfo(int ItemTypeId, int Selectlistid, int? PRChildCustId)
         {
-            int CustId = Int32.Parse(Session["CompanyId"].ToString()); int ChildCustId;
-            if (Session["ChildCompanyId"] != null)
+            int CustId = Int32.Parse(Session["CompanyId"].ToString());
+            if (PRChildCustId != null)
             {
-                ChildCustId = Int32.Parse(Session["ChildCompanyId"].ToString());
-                switch (ChildCustId)
+                switch (PRChildCustId)
                 {
                     case 16:
                         CustId = 6; break;
@@ -289,13 +288,12 @@ namespace KUBOnlinePRPM.Controllers
             return Json(new { html }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetItemCodeInfo(int CodeId)
+        public JsonResult GetItemCodeInfo(int CodeId, int? PRChildCustId)
         {
-            int CustId = Int32.Parse(Session["CompanyId"].ToString()); int ChildCustId;
-            if (Session["ChildCompanyId"] != null)
+            int CustId = Int32.Parse(Session["CompanyId"].ToString());
+            if (PRChildCustId != null)
             {
-                ChildCustId = Int32.Parse(Session["ChildCompanyId"].ToString());
-                switch (ChildCustId)
+                switch (PRChildCustId)
                 {
                     case 16:
                         CustId = 6; break;
@@ -315,6 +313,36 @@ namespace KUBOnlinePRPM.Controllers
             return Json(new { ItemCodeInfo }, JsonRequestBehavior.AllowGet);
 
         }
+
+        public JsonResult GetTaxCode(int TaxCodeId, int? PRChildCustId)
+        {
+            int CustId = Int32.Parse(Session["CompanyId"].ToString());
+            if (PRChildCustId != null)
+            {
+                switch (PRChildCustId)
+                {
+                    case 16:
+                        CustId = 6; break;
+                    case 17:
+                        CustId = 7; break;
+                    case 18:
+                        CustId = 8; break;
+                }
+            }
+            if (TaxCodeId == 0)
+            {
+                TaxCodeId = CustId;
+            }
+            var TaxCodeInfo = db.TaxCodes.Select(m => new PRItemsTable()
+            {
+                TaxCodeId = m.TaxCodeId,
+                SST = m.GST,
+                CustId = m.CustId
+            }).Where(m => m.TaxCodeId == TaxCodeId && m.CustId == CustId).FirstOrDefault();
+
+            return Json(new { TaxCodeInfo }, JsonRequestBehavior.AllowGet);
+
+        }        
 
         public JsonResult GetJobNoInfo(string JobNoId, int Selectlistid)
         {
@@ -363,69 +391,25 @@ namespace KUBOnlinePRPM.Controllers
             return Json(new { VendorStaffIdInfo }, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetUoM(int Selectlistid)
+        {
+            int CustId = Int32.Parse(Session["CompanyId"].ToString());
+            var UoMCodeQuery = db.UOMs.Select(m => new { UoMId = m.UoMId, UoMCode = m.UoMCode, Description = m.Description, CustId = m.CustId }).Where(m => m.CustId == CustId).OrderBy(m => m.UoMCode).ToList();
+
+            string html = "<select class='UOM custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20' data-val-required='The UoM Code field is required.' id='UoMCodeId" + Selectlistid + "' name='item.UoMCodeId'><option value='' >Select UOM Code here</option>";
+            for (int i = 0; i < UoMCodeQuery.Count; i++)
+            {
+                html += "<option value='" + UoMCodeQuery[i].UoMId + "' >" + UoMCodeQuery[i].UoMCode + "</option>";
+            }
+            html += "</select>";
+
+            return Json(new { html }, JsonRequestBehavior.AllowGet);
+        }
+
         [CheckSessionOut]
         public ActionResult NewPR(string type)
         {
             int CustId = Int32.Parse(Session["CompanyId"].ToString()); int ChildCustId;
-            if (Session["ChildCompanyId"] != null)
-            {
-                ChildCustId = Int32.Parse(Session["ChildCompanyId"].ToString());
-                switch (ChildCustId)
-                {
-                    case 16:
-                        CustId = 6; break;
-                    case 17:
-                        CustId = 7; break;
-                    case 18:
-                        CustId = 8; break;
-                }                    
-            }
-            var ProjectNameQuery = (from m in db.Projects
-                                    where m.custId == CustId
-                                    select new
-                                    {
-                                        ProjectId = m.projectId,
-                                        Dimension = m.dimension,
-                                        Description = m.dimension + " - " + m.projectCode,
-                                        Code = m.projectCode,
-                                    }).OrderBy(c => c.Dimension).ThenBy(c => c.Code);
-            List<SelectListItem> BudgetedList = new List<SelectListItem>();
-            BudgetedList.Add(new SelectListItem
-            {
-                Text = "Yes",
-                Value = true.ToString()
-            });
-            BudgetedList.Add(new SelectListItem
-            {
-                Text = "No",
-                Value = false.ToString()
-            });
-            var PurchaseTypeQuery = db.PurchaseTypes.Select(c => new { PurchaseTypeId = c.purchaseTypeId, PurchaseType = c.purchaseType1 }).OrderBy(c => c.PurchaseType);
-            var ItemTypeListQuery = db.ItemTypes.Select(m => new { ItemTypeId = m.itemTypeId, ItemType = m.type }).OrderBy(m => m.ItemType);
-            var ItemCodeListQuery = db.PopulateItemLists.Select(c => new { CodeId = c.codeId, ItemCode = c.ItemCode, ItemDesc = c.ItemDescription, CustId = c.custId }).Where(c => c.CustId == CustId).OrderBy(c => c.ItemCode);
-            //var ReviewerNameQuery = (from m in db.Users
-            //                         join n in db.Users_Roles on m.userId equals n.userId
-            //                         where n.roleId == "R02"
-            //                         select new NewPRModel()
-            //                         {
-            //                             ReviewerId = m.userId,
-            //                             ReviewerName = m.firstName + " " + m.lastName
-            //                         }).ToList();
-            //var ApproverNameQuery = (from m in db.Users
-            //                         join n in db.Users_Roles on m.userId equals n.userId
-            //                         where n.roleId == "R04" && m.jobTitle.Trim() == "HOD" 
-            //                         select new NewPRModel()
-            //                         {
-            //                             ApproverId = m.userId,
-            //                             ApproverName = m.firstName + " " + m.lastName
-            //                         }).First();
-
-            ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "description");
-            ViewBag.BudgetedList = new SelectList(BudgetedList.AsEnumerable(), "Value", "Text");
-            ViewBag.PurchaseTypeList = new SelectList(PurchaseTypeQuery.AsEnumerable(), "purchaseTypeId", "purchaseType");
-            //ViewBag.ReviewerNameList = new SelectList(ReviewerNameQuery.AsEnumerable(), "reviewerId", "reviewerName");
-            //ViewBag.ApproverNameList = new SelectList(ApproverNameQuery.AsEnumerable(), "approverId", "approverName");
-
             int UserId = Int32.Parse(Session["UserId"].ToString());
             var getRole = (from m in db.Users
                            join n in db.Users_Roles on m.userId equals n.userId
@@ -457,12 +441,73 @@ namespace KUBOnlinePRPM.Controllers
                                                         TotalPrice = decimal.Parse("0.00")
                                                     }
                                                 };
+            
+            if (Session["ChildCompanyId"] != null)
+            {
+                ChildCustId = Int32.Parse(Session["ChildCompanyId"].ToString());
+                switch (ChildCustId)
+                {
+                    case 16:
+                        CustId = 6; break;
+                    case 17:
+                        CustId = 7; break;
+                    case 18:
+                        CustId = 8; break;
+                }
+                model.NewPRForm.ChildCustId = ChildCustId;
+            }
+            var ProjectNameQuery = (from m in db.Projects
+                                    where m.custId == CustId
+                                    select new
+                                    {
+                                        ProjectId = m.projectId,
+                                        Dimension = m.dimension,
+                                        Description = m.dimension + " - " + m.projectCode,
+                                        Code = m.projectCode,
+                                    }).OrderBy(c => c.Dimension).ThenBy(c => c.Code);
+            List<SelectListItem> BudgetedList = new List<SelectListItem>();
+            BudgetedList.Add(new SelectListItem
+            {
+                Text = "Yes",
+                Value = true.ToString()
+            });
+            BudgetedList.Add(new SelectListItem
+            {
+                Text = "No",
+                Value = false.ToString()
+            });
+            var PurchaseTypeQuery = db.PurchaseTypes.Select(c => new { PurchaseTypeId = c.purchaseTypeId, PurchaseType = c.purchaseType1 }).OrderBy(c => c.PurchaseType);
+            var ItemTypeListQuery = db.ItemTypes.Select(m => new { ItemTypeId = m.itemTypeId, ItemType = m.type }).OrderBy(m => m.ItemType);
+            var ItemCodeListQuery = db.PopulateItemLists.Select(c => new { CodeId = c.codeId, ItemCode = c.ItemCode, ItemDesc = c.ItemDescription, CustId = c.custId }).Where(c => c.CustId == CustId).OrderBy(c => c.ItemCode);
+            var UOMListQuery = db.UOMs.Select(m => new { UoMId = m.UoMId, UoMCode = m.UoMCode, Description = m.Description, CustId = m.CustId }).Where(m => m.CustId == CustId).OrderBy(m => m.UoMCode);
+            //var ReviewerNameQuery = (from m in db.Users
+            //                         join n in db.Users_Roles on m.userId equals n.userId
+            //                         where n.roleId == "R02"
+            //                         select new NewPRModel()
+            //                         {
+            //                             ReviewerId = m.userId,
+            //                             ReviewerName = m.firstName + " " + m.lastName
+            //                         }).ToList();
+            //var ApproverNameQuery = (from m in db.Users
+            //                         join n in db.Users_Roles on m.userId equals n.userId
+            //                         where n.roleId == "R04" && m.jobTitle.Trim() == "HOD" 
+            //                         select new NewPRModel()
+            //                         {
+            //                             ApproverId = m.userId,
+            //                             ApproverName = m.firstName + " " + m.lastName
+            //                         }).First();
 
+            ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "description");
+            ViewBag.BudgetedList = new SelectList(BudgetedList.AsEnumerable(), "Value", "Text");
+            ViewBag.PurchaseTypeList = new SelectList(PurchaseTypeQuery.AsEnumerable(), "purchaseTypeId", "purchaseType");
+            //ViewBag.ReviewerNameList = new SelectList(ReviewerNameQuery.AsEnumerable(), "reviewerId", "reviewerName");
+            //ViewBag.ApproverNameList = new SelectList(ApproverNameQuery.AsEnumerable(), "approverId", "approverName");
             int i = 1;
             foreach (var item in model.NewPRForm.PRItemListObject)
             {
                 ViewData["ItemCodeList" + i] = new SelectList(ItemCodeListQuery.AsEnumerable(), "codeId", "itemDesc");
                 ViewData["ItemTypeList" + i] = new SelectList(ItemTypeListQuery.AsEnumerable(), "itemTypeId", "itemType");
+                ViewData["UOMList" + i] = new SelectList(UOMListQuery.AsEnumerable(), "UoMId", "UoMCode");
                 i++;
             }
 
@@ -493,30 +538,30 @@ namespace KUBOnlinePRPM.Controllers
                         }
                     }
 
-                    var ProjectNameQuery = (from m in db.Projects
-                                            where m.custId == CustId
-                                            select new
-                                            {
-                                                ProjectId = m.projectId,
-                                                Dimension = m.dimension,
-                                                Description = m.dimension + " - " + m.projectCode,
-                                                Code = m.projectCode,
-                                            }).OrderBy(c => c.Dimension).ThenBy(c => c.Code);
-                    var PurchaseTypeQuery = db.PurchaseTypes.Select(c => new { PurchaseTypeId = c.purchaseTypeId, PurchaseType = c.purchaseType1 }).OrderBy(c => c.PurchaseType);
-                    var ItemTypeListQuery = db.ItemTypes.Select(m => new { ItemTypeId = m.itemTypeId, ItemType = m.type }).OrderBy(m => m.ItemType);
-                    var ItemCodeListQuery = db.PopulateItemLists.Select(c => new { CodeId = c.codeId, ItemCode = c.ItemCode, ItemDesc = c.ItemDescription, CustId = c.custId }).Where(c => c.CustId == CustId).OrderBy(c => c.ItemCode);
+                    //var ProjectNameQuery = (from m in db.Projects
+                    //                        where m.custId == CustId
+                    //                        select new
+                    //                        {
+                    //                            ProjectId = m.projectId,
+                    //                            Dimension = m.dimension,
+                    //                            Description = m.dimension + " - " + m.projectCode,
+                    //                            Code = m.projectCode,
+                    //                        }).OrderBy(c => c.Dimension).ThenBy(c => c.Code);
+                    //var PurchaseTypeQuery = db.PurchaseTypes.Select(c => new { PurchaseTypeId = c.purchaseTypeId, PurchaseType = c.purchaseType1 }).OrderBy(c => c.PurchaseType);
+                    //var ItemTypeListQuery = db.ItemTypes.Select(m => new { ItemTypeId = m.itemTypeId, ItemType = m.type }).OrderBy(m => m.ItemType);
+                    //var ItemCodeListQuery = db.PopulateItemLists.Select(c => new { CodeId = c.codeId, ItemCode = c.ItemCode, ItemDesc = c.ItemDescription, CustId = c.custId }).Where(c => c.CustId == CustId).OrderBy(c => c.ItemCode);
 
-                    List<SelectListItem> BudgetedList = new List<SelectListItem>();
-                    BudgetedList.Add(new SelectListItem
-                    {
-                        Text = "Yes",
-                        Value = true.ToString()
-                    });
-                    BudgetedList.Add(new SelectListItem
-                    {
-                        Text = "No",
-                        Value = false.ToString()
-                    });
+                    //List<SelectListItem> BudgetedList = new List<SelectListItem>();
+                    //BudgetedList.Add(new SelectListItem
+                    //{
+                    //    Text = "Yes",
+                    //    Value = true.ToString()
+                    //});
+                    //BudgetedList.Add(new SelectListItem
+                    //{
+                    //    Text = "No",
+                    //    Value = false.ToString()
+                    //});
 
                     //model.CustId = Int32.Parse(Session["CompanyId"].ToString());              
                     model.CustId = Int32.Parse(Session["CompanyId"].ToString());
@@ -651,9 +696,9 @@ namespace KUBOnlinePRPM.Controllers
                             throw;
                         }
                     }
-                    ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "description");
-                    ViewBag.BudgetedList = new SelectList(BudgetedList.AsEnumerable(), "Value", "Text");
-                    ViewBag.PurchaseTypeList = new SelectList(PurchaseTypeQuery.AsEnumerable(), "purchaseTypeId", "purchaseType");
+                    //ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "description");
+                    //ViewBag.BudgetedList = new SelectList(BudgetedList.AsEnumerable(), "Value", "Text");
+                    //ViewBag.PurchaseTypeList = new SelectList(PurchaseTypeQuery.AsEnumerable(), "purchaseTypeId", "purchaseType");
                     //ViewBag.ReviewerNameList = new SelectList(ReviewerNameQuery.AsEnumerable(), "reviewerId", "reviewerName");
                     //ViewBag.ApproverNameList = new SelectList(ApproverNameQuery.AsEnumerable(), "approverId", "approverName");
 
@@ -672,13 +717,13 @@ namespace KUBOnlinePRPM.Controllers
                     //                                    }
                     //                                };
 
-                    int i = 1;
-                    foreach (var item in model.NewPRForm.PRItemListObject)
-                    {
-                        ViewData["ItemCodeList" + i] = new SelectList(ItemCodeListQuery.AsEnumerable(), "codeId", "itemDesc");
-                        ViewData["ItemTypeList" + i] = new SelectList(ItemTypeListQuery.AsEnumerable(), "itemTypeId", "itemType");
-                        i++;
-                    }
+                    //int i = 1;
+                    //foreach (var item in model.NewPRForm.PRItemListObject)
+                    //{
+                    //    ViewData["ItemCodeList" + i] = new SelectList(ItemCodeListQuery.AsEnumerable(), "codeId", "itemDesc");
+                    //    ViewData["ItemTypeList" + i] = new SelectList(ItemTypeListQuery.AsEnumerable(), "itemTypeId", "itemType");
+                    //    i++;
+                    //}
 
                     return new JsonResult
                     {
@@ -1020,10 +1065,13 @@ namespace KUBOnlinePRPM.Controllers
             }
             PRTabs.UserId = Int32.Parse(Session["UserId"].ToString());
             PRTabs.NewPRForm = (from m in db.PurchaseRequisitions
+                                join n in db.Users on m.PreparedById equals n.userId
                                 where m.PRId == PRTabs.PRId
                                 select new NewPRModel()
                                 {
-                                    PRNo = m.PRNo
+                                    PRNo = m.PRNo,
+                                    ChildCustId = n.childCompanyId,
+                                    Phase1Completed = m.Phase1Completed
                                 }).FirstOrDefault();
 
             return View(PRTabs);
@@ -1033,23 +1081,50 @@ namespace KUBOnlinePRPM.Controllers
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
-                int CustId = Int32.Parse(Session["CompanyId"].ToString()); int ChildCustId = 0;
-                if (Session["ChildCompanyId"] != null)
+                int ChildCustId = 0;
+                PRModel PRDetail = new PRModel();
+                PRDetail.PRId = Int32.Parse(Session["PRId"].ToString());
+                PRDetail.Type = Session["PRType"].ToString();
+                PRDetail.UserId = Int32.Parse(Session["UserId"].ToString());
+                PRDetail.CustId = Int32.Parse(Session["CompanyId"].ToString());
+
+                if (Session["ChildCompanyId"] != null && PRDetail.CustId != 2)
                 {
                     ChildCustId = Int32.Parse(Session["ChildCompanyId"].ToString());
                     switch (ChildCustId)
                     {
                         case 16:
-                            CustId = 6; break;
+                            PRDetail.CustId = 6; break;
                         case 17:
-                            CustId = 7; break;
+                            PRDetail.CustId = 7; break;
                         case 18:
-                            CustId = 8; break;
+                            PRDetail.CustId = 8; break;
                     }
 
                 }
+                else
+                {
+                    var GetChildCustId = (from m in db.PurchaseRequisitions
+                                       join n in db.Users on m.PreparedById equals n.userId
+                                       where m.PRId == PRDetail.PRId
+                                          select new { ChildCustId = n.childCompanyId, CustId = n.companyId.Value }).FirstOrDefault();
+                    if (GetChildCustId != null)
+                    {
+                        switch (GetChildCustId.ChildCustId)
+                        {
+                            case 16:
+                                PRDetail.CustId = 6; break;
+                            case 17:
+                                PRDetail.CustId = 7; break;
+                            case 18:
+                                PRDetail.CustId = 8; break;
+                            default:
+                                PRDetail.CustId = GetChildCustId.CustId; break;
+                        }
+                    }
+                }
                 var ProjectNameQuery = (from m in db.Projects
-                                        where m.custId == CustId
+                                        where m.custId == PRDetail.CustId
                                         select new
                                         {
                                             ProjectId = m.projectId,
@@ -1069,11 +1144,10 @@ namespace KUBOnlinePRPM.Controllers
                     Text = "No",
                     Value = false.ToString()
                 });
-
-                
+               
                 var PurchaseTypeQuery = db.PurchaseTypes.Select(c => new { PurchaseTypeId = c.purchaseTypeId, PurchaseType = c.purchaseType1 }).OrderBy(c => c.PurchaseType);               
                 var VendorListQuery = (from m in db.Vendors
-                                       where m.custId == CustId
+                                       where m.custId == PRDetail.CustId
                                        select new
                                        {
                                            VendorId = m.vendorId,
@@ -1082,15 +1156,14 @@ namespace KUBOnlinePRPM.Controllers
                                        }).OrderBy(c => c.VendorNo).ThenBy(c => c.VendorName);
                 var VendorStaffQuery = db.VendorStaffs.Select(c => new { StaffId = c.staffId, VendorContactName = c.vendorContactName }).OrderBy(c => c.VendorContactName);
                 var ItemTypeListQuery = db.ItemTypes.Select(m => new { ItemTypeId = m.itemTypeId, ItemType = m.type }).OrderBy(m => m.ItemType);
-                var ItemCodeListQuery = db.PopulateItemLists.Select(c => new { CodeId = c.codeId, ItemTypeId = c.itemTypeId, ItemCode = c.ItemCode, ItemDesc = c.ItemDescription, CustId = c.custId }).Where(c => c.CustId == CustId).OrderBy(c => c.ItemCode);
-                var JobNoListQuery = db.Projects.Select(m => new { JobNoId = m.projectId, JobNo = m.projectCode, CustId = m.custId, Dimension = m.dimension }).Where(m => m.CustId == CustId).Where(m => m.Dimension == "PROJECT").OrderBy(m => m.JobNo);
-                var JobTaskListQuery = db.JobTasks.Select(m => new { JobTaskNoId = m.jobTaskNoId, JobTaskNo = m.jobTaskNo, CustId = m.custId }).Where(m => m.CustId == CustId).OrderBy(m => m.JobTaskNoId);
+                var ItemCodeListQuery = db.PopulateItemLists.Select(c => new { CodeId = c.codeId, ItemTypeId = c.itemTypeId, ItemCode = c.ItemCode, ItemDesc = c.ItemDescription, CustId = c.custId }).Where(c => c.CustId == PRDetail.CustId).OrderBy(c => c.ItemCode);
+                var JobNoListQuery = db.Projects.Select(m => new { JobNoId = m.projectId, JobNo = m.projectCode, CustId = m.custId, Dimension = m.dimension }).Where(m => m.CustId == PRDetail.CustId).Where(m => m.Dimension == "PROJECT").OrderBy(m => m.JobNo);
+                var JobTaskListQuery = db.JobTasks.Select(m => new { JobTaskNoId = m.jobTaskNoId, JobTaskNo = m.jobTaskNo, CustId = m.custId }).Where(m => m.CustId == PRDetail.CustId).OrderBy(m => m.JobTaskNoId);
+                var TaxCodeListQuery = db.TaxCodes.Select(m => new { TaxCodeId = m.TaxCodeId, Code = m.Code, CustId = m.CustId }).Where(m => m.CustId == PRDetail.CustId).OrderBy(m => m.Code);
+                var DimProjectListQuery = db.Projects.Select(m => new { ProjectId = m.projectId, Dimension = m.dimension, Description = m.dimension + " - " + m.projectCode, Code = m.projectCode, CustId = m.custId }).Where(m => m.Dimension == "PROJECT").Where(m => m.CustId == PRDetail.CustId).OrderBy(m => m.Code);
+                var DimDeptListQuery = db.Projects.Select(m => new { ProjectId = m.projectId, Dimension = m.dimension, Description = m.dimension + " - " + m.projectCode, Code = m.projectCode, CustId = m.custId }).Where(m => m.Dimension == "DEPARTMENT").Where(m => m.CustId == PRDetail.CustId).OrderBy(m => m.Code);
+                var UOMListQuery = db.UOMs.Select(m => new { UoMId = m.UoMId, UoMCode = m.UoMCode, Description = m.Description, CustId = m.CustId }).Where(m => m.CustId == PRDetail.CustId).OrderBy(m => m.UoMCode);
 
-                PRModel PRDetail = new PRModel();
-                PRDetail.PRId = Int32.Parse(Session["PRId"].ToString());
-                PRDetail.Type = Session["PRType"].ToString();
-                PRDetail.UserId = Int32.Parse(Session["UserId"].ToString());
-                PRDetail.CustId = Int32.Parse(Session["CompanyId"].ToString());
                 PRDetail.ChildCustId = ChildCustId;
                 IOrderedQueryable<GroupList> SpecReviewerQuery = null;
                 if ((PRDetail.CustId == 3 || PRDetail.CustId == 2) && ChildCustId == 16)
@@ -1104,10 +1177,9 @@ namespace KUBOnlinePRPM.Controllers
                     SpecReviewerQuery = db.Groups.Select(c => new GroupList { GroupId = c.groupId, GroupName = c.groupName }).OrderBy(c => c.GroupName);
                 }
                     
-                var getPRCustId = db.PurchaseRequisitions.First(m => m.PRId == PRDetail.PRId);
-                var getCustId = db.Users.First(m => m.userId == getPRCustId.PreparedById);
-                var HOGPSSQuery = getHOGPSSList(getPRCustId.CustId);
-                PRDetail.PRCustId = getPRCustId.CustId;
+                //var getPRCustId = db.PurchaseRequisitions.First(m => m.PRId == PRDetail.PRId);
+                //var getCustId = db.Users.First(m => m.userId == getPRCustId.PreparedById);
+                var HOGPSSQuery = getHOGPSSList(PRDetail.CustId);
 
                 PR_PaperApprover checkGMDpaper = db.PR_PaperApprover.FirstOrDefault(m => m.PRId == PRDetail.PRId);
                 if (checkGMDpaper != null && checkGMDpaper.finalApproverUserId != null)
@@ -1115,19 +1187,19 @@ namespace KUBOnlinePRPM.Controllers
                     PRDetail.FinalApproverId = checkGMDpaper.finalApproverUserId.Value;
                 }
 
-                switch (getCustId.childCompanyId)
-                {
-                    case 16:
-                        getPRCustId.CustId = 6; break;
-                    case 17:
-                        getPRCustId.CustId = 7; break;
-                    case 18:
-                        getPRCustId.CustId = 8; break;
-                }
+                //switch (getCustId.childCompanyId)
+                //{
+                //    case 16:
+                //        getPRCustId.CustId = 6; break;
+                //    case 17:
+                //        getPRCustId.CustId = 7; break;
+                //    case 18:
+                //        getPRCustId.CustId = 8; break;
+                //}
                 if (((Session["ifHOGPSS"] != null || Session["ifGMD"] != null || Session["ifCOO"] != null || Session["ifCFO"] != null || Session["ifHSE"] != null || Session["ifPMO"] != null) && PRDetail.CustId == 2) || Session["ifSuperAdmin"] != null || Session["ifFinance"] != null || Session["ifHOC"] != null || Session["ifProcurement"] != null)
                 {
                     ProjectNameQuery = (from m in db.Projects
-                                        where m.custId == getPRCustId.CustId
+                                        where m.custId == PRDetail.CustId
                                         select new
                                         {
                                             ProjectId = m.projectId,
@@ -1136,16 +1208,20 @@ namespace KUBOnlinePRPM.Controllers
                                             Code = m.projectCode,
                                         }).OrderBy(c => c.Dimension).ThenBy(c => c.Code);
                     VendorListQuery = (from m in db.Vendors
-                                       where m.custId == getPRCustId.CustId
+                                       where m.custId == PRDetail.CustId
                                        select new
                                        {
                                            VendorId = m.vendorId,
                                            VendorName = m.vendorNo + " - " + m.name,
                                            VendorNo = m.vendorNo,
                                        }).OrderBy(c => c.VendorNo).ThenBy(c => c.VendorName);
-                    ItemCodeListQuery = db.PopulateItemLists.Select(c => new { CodeId = c.codeId, ItemTypeId = c.itemTypeId, ItemCode = c.ItemCode, ItemDesc = c.ItemDescription, CustId = c.custId }).Where(c => c.CustId == getPRCustId.CustId).OrderBy(c => c.ItemCode);
-                    JobNoListQuery = db.Projects.Select(m => new { JobNoId = m.projectId, JobNo = m.projectCode, CustId = m.custId, Dimension = m.dimension }).Where(m => m.CustId == getPRCustId.CustId && m.Dimension == "PROJECT").OrderBy(m => m.JobNo);
-                    JobTaskListQuery = db.JobTasks.Select(m => new { JobTaskNoId = m.jobTaskNoId, JobTaskNo = m.jobTaskNo, CustId = m.custId }).Where(m => m.CustId == getPRCustId.CustId).OrderBy(m => m.JobTaskNoId);
+                    ItemCodeListQuery = db.PopulateItemLists.Select(c => new { CodeId = c.codeId, ItemTypeId = c.itemTypeId, ItemCode = c.ItemCode, ItemDesc = c.ItemDescription, CustId = c.custId }).Where(c => c.CustId == PRDetail.CustId).OrderBy(c => c.ItemCode);
+                    JobNoListQuery = db.Projects.Select(m => new { JobNoId = m.projectId, JobNo = m.projectCode, CustId = m.custId, Dimension = m.dimension }).Where(m => m.CustId == PRDetail.CustId && m.Dimension == "PROJECT").OrderBy(m => m.JobNo);
+                    JobTaskListQuery = db.JobTasks.Select(m => new { JobTaskNoId = m.jobTaskNoId, JobTaskNo = m.jobTaskNo, CustId = m.custId }).Where(m => m.CustId == PRDetail.CustId).OrderBy(m => m.JobTaskNoId);
+                    TaxCodeListQuery = db.TaxCodes.Select(m => new { TaxCodeId = m.TaxCodeId, Code = m.Code, CustId = m.CustId }).Where(m => m.CustId == PRDetail.CustId).OrderBy(m => m.Code);
+                    DimProjectListQuery = db.Projects.Select(m => new { ProjectId = m.projectId, Dimension = m.dimension, Description = m.dimension + " - " + m.projectCode, Code = m.projectCode, CustId = m.custId }).Where(m => m.Dimension == "PROJECT").Where(m => m.CustId == PRDetail.CustId).OrderBy(m => m.Code);
+                    DimDeptListQuery = db.Projects.Select(m => new { ProjectId = m.projectId, Dimension = m.dimension, Description = m.dimension + " - " + m.projectCode, Code = m.projectCode, CustId = m.custId }).Where(m => m.Dimension == "DEPARTMENT").Where(m => m.CustId == PRDetail.CustId).OrderBy(m => m.Code);
+                    UOMListQuery = db.UOMs.Select(m => new { UoMId = m.UoMId, UoMCode = m.UoMCode, Description = m.Description, CustId = m.CustId }).Where(m => m.CustId == PRDetail.CustId).OrderBy(m => m.UoMCode);
                 }
 
                 var getReviewer = (from m in db.Users
@@ -1199,20 +1275,21 @@ namespace KUBOnlinePRPM.Controllers
                                           VendorContactNo = w.vendorContactNo,
                                           PurchaseTypeId = a.PurchaseTypeId,
                                           BudgetDescription = a.BudgetDescription,
-                                          BudgetedAmount = d.budgetedAmount,
+                                          BudgetedAmount = a.budgetedAmount,
                                           Justification = a.Justification,
-                                          UtilizedToDate = d.utilizedToDate,
+                                          UtilizedToDate = a.utilizedToDate,
                                           AmountRequired = a.AmountRequired,
-                                          BudgetBalance = d.budgetBalance,
+                                          BudgetBalance = a.budgetBalance,
                                           PaperAttachment = a.PaperAttachment,
                                           PaperVerified = d.paperVerified,
                                           PreparedById = a.PreparedById,
                                           PreparedDate = a.PreparedDate,
                                           Phase1Completed = a.Phase1Completed,
-                                          //HODApproverId = a.HODApproverId,
-                                          //ApproverId = a.ApproverId,
-                                          //ReviewerId = a.ReviewerId,
-                                          //RecommenderId = a.RecommenderId,
+                                          DiscountAmount = a.DiscountAmount,
+                                          DiscountPerc = a.Discount_,
+                                          TotalExclSST = a.TotalExclSST,
+                                          TotalSST = a.TotalSST,
+                                          TotalIncSST = a.TotalIncSST,
                                           SpecReviewerId = a.SpecsReviewerId,
                                           Saved = a.Saved,
                                           Submited = a.Submited,
@@ -1284,6 +1361,10 @@ namespace KUBOnlinePRPM.Controllers
                             ViewData["JobNoList" + i] = new SelectList(JobNoListQuery.AsEnumerable(), "jobNoId", "jobNo");
                         }                       
                         ViewData["JobTaskList" + i] = new SelectList(QueryNull.AsEnumerable(), "jobTaskNoId", "jobTaskNo");
+                        ViewData["TaxCodeList" + i] = new SelectList(TaxCodeListQuery.AsEnumerable(), "TaxCodeId", "Code");
+                        ViewData["DimProjectList" + i] = new SelectList(DimProjectListQuery.AsEnumerable(), "ProjectId", "Description");
+                        ViewData["DimDeptList" + i] = new SelectList(DimDeptListQuery.AsEnumerable(), "ProjectId", "Description");
+                        ViewData["UOMList" + i] = new SelectList(UOMListQuery.AsEnumerable(), "UoMId", "UoMCode");
                         i++;
                     }
                     //}                                    
@@ -1304,14 +1385,20 @@ namespace KUBOnlinePRPM.Controllers
                                                                    CustPONo = m.custPONo,
                                                                    Quantity = m.quantity,
                                                                    UnitPrice = m.unitPrice,
-                                                                   TotalPrice = m.totalPrice
+                                                                   TotalPrice = m.totalPrice,
+                                                                   TaxCodeId = m.taxCodeId,
+                                                                   UnitPriceIncSST = m.unitPriceIncSST,
+                                                                   TotalPriceIncSST = m.totalPriceIncSST,
+                                                                   DimProjectId = m.dimProjectId,
+                                                                   DimDeptId = m.dimDeptId,
+                                                                   UoMId = m.UoMId
                                                                }).ToList();
                         var QueryNull = db.PopulateItemLists.Select(c => new { CodeId = c.codeId, ItemCode = c.ItemCode, ItemDesc = c.ItemDescription, CustId = c.custId }).Where(c => c.CustId == 0).OrderBy(c => c.ItemCode);
                         int i = 1;
 
                         foreach (var item in PRDetail.NewPRForm.PRItemListObject)
                         {
-                            ItemCodeListQuery = db.PopulateItemLists.Select(c => new { CodeId = c.codeId, ItemTypeId = c.itemTypeId, ItemCode = c.ItemCode, ItemDesc = c.ItemDescription, CustId = c.custId }).Where(c => c.CustId == getPRCustId.CustId && c.ItemTypeId == item.ItemTypeId).OrderBy(c => c.ItemCode);
+                            ItemCodeListQuery = db.PopulateItemLists.Select(c => new { CodeId = c.codeId, ItemTypeId = c.itemTypeId, ItemCode = c.ItemCode, ItemDesc = c.ItemDescription, CustId = c.custId }).Where(c => c.CustId == PRDetail.CustId && c.ItemTypeId == item.ItemTypeId).OrderBy(c => c.ItemCode);
                             if (PRDetail.NewPRForm.StatusId == "PR19" || PRDetail.NewPRForm.StatusId == "PR09")
                             {
                                 if (item.ItemTypeId != null)
@@ -1320,7 +1407,11 @@ namespace KUBOnlinePRPM.Controllers
                                 }
                                 if (item.CodeId != null && item.ItemTypeId != null)
                                 {
-                                    item.ItemCode = db.PopulateItemLists.Where(x => x.codeId == item.CodeId && x.itemTypeId == item.ItemTypeId && x.custId == getPRCustId.CustId).First().ItemDescription;
+                                    item.ItemCode = db.PopulateItemLists.Where(x => x.codeId == item.CodeId && x.itemTypeId == item.ItemTypeId && x.custId == PRDetail.CustId).First().ItemDescription;
+                                }
+                                if (item.UoMId != null)
+                                {
+                                    item.UOM = db.UOMs.Where(x => x.UoMId == item.UoMId).First().UoMCode;
                                 }
                             }
                             else
@@ -1329,6 +1420,10 @@ namespace KUBOnlinePRPM.Controllers
                                 ViewData["ItemTypeList" + i] = new SelectList(ItemTypeListQuery.AsEnumerable(), "itemTypeId", "itemType", item.ItemTypeId);
                                 ViewData["JobNoList" + i] = new SelectList(QueryNull.AsEnumerable(), "jobNoId", "jobNo");
                                 ViewData["JobTaskList" + i] = new SelectList(QueryNull.AsEnumerable(), "jobTaskNoId", "jobTaskNo");
+                                ViewData["TaxCodeList" + i] = new SelectList(QueryNull.AsEnumerable(), "TaxCodeId", "Code");
+                                ViewData["DimProjectList" + i] = new SelectList(QueryNull.AsEnumerable(), "ProjectId", "Description");
+                                ViewData["DimDeptList" + i] = new SelectList(QueryNull.AsEnumerable(), "ProjectId", "Description");
+                                ViewData["UOMList" + i] = new SelectList(UOMListQuery.AsEnumerable(), "UoMId", "UoMCode", item.UoMId);
                                 i++;
                             }
                         }
@@ -1340,10 +1435,12 @@ namespace KUBOnlinePRPM.Controllers
                                                                join o in db.Projects on m.jobNoId equals o.projectId into p
                                                                join r in db.ItemTypes on m.itemTypeId equals r.itemTypeId into s
                                                                join u in db.JobTasks on m.jobTaskNoId equals u.jobTaskNoId into v
+                                                               join x in db.TaxCodes on m.taxCodeId equals x.TaxCodeId into y
                                                                from q in p.DefaultIfEmpty()
                                                                from t in s.DefaultIfEmpty()
                                                                from w in v.DefaultIfEmpty()
-                                                               where m.PRId == PRDetail.PRId && n.custId == getPRCustId.CustId
+                                                               from z in y.DefaultIfEmpty()
+                                                               where m.PRId == PRDetail.PRId
                                                                select new PRItemsTable()
                                                                {
                                                                    ItemsId = m.itemsId,
@@ -1355,26 +1452,35 @@ namespace KUBOnlinePRPM.Controllers
                                                                    Description = m.description,
                                                                    CustPONo = m.custPONo,
                                                                    Quantity = m.quantity,
-                                                                   UOM = n.UoM,
+                                                                   UoMId = m.UoMId,
                                                                    JobNoId = q.projectId,
                                                                    JobNo = q.projectCode,
                                                                    JobTaskNoId = m.jobTaskNoId,
                                                                    JobTaskNo = w.jobTaskNo,
                                                                    UnitPrice = m.unitPrice,
-                                                                   SST = m.sst,
-                                                                   TotalPrice = m.totalPrice
+                                                                   TaxCodeId = m.taxCodeId,
+                                                                   Code = z.Code,
+                                                                   TotalPrice = m.totalPrice,
+                                                                   UnitPriceIncSST = m.unitPriceIncSST,
+                                                                   TotalPriceIncSST = m.totalPriceIncSST,
+                                                                   DimProjectId = m.dimProjectId,
+                                                                   DimDeptId = m.dimDeptId
                                                                }).ToList();
                         int i = 1;
                         if (PRDetail.NewPRForm.Scenario > 0 || PRDetail.NewPRForm.StatusId == "PR02" || PRDetail.NewPRForm.StatusId == "PR01")
                         {
                             foreach (var item in PRDetail.NewPRForm.PRItemListObject)
                             {
-                                ItemCodeListQuery = db.PopulateItemLists.Select(c => new { CodeId = c.codeId, ItemTypeId = c.itemTypeId, ItemCode = c.ItemCode, ItemDesc = c.ItemDescription, CustId = c.custId }).Where(c => c.CustId == CustId && c.ItemTypeId == item.ItemTypeId).OrderBy(c => c.ItemCode);
+                                ItemCodeListQuery = db.PopulateItemLists.Select(c => new { CodeId = c.codeId, ItemTypeId = c.itemTypeId, ItemCode = c.ItemCode, ItemDesc = c.ItemDescription, CustId = c.custId }).Where(c => c.CustId == PRDetail.CustId && c.ItemTypeId == item.ItemTypeId).OrderBy(c => c.ItemCode);
 
                                 ViewData["ItemCodeList" + i] = new SelectList(ItemCodeListQuery.AsEnumerable(), "codeId", "itemDesc", item.CodeId);
                                 ViewData["ItemTypeList" + i] = new SelectList(ItemTypeListQuery.AsEnumerable(), "itemTypeId", "itemType", item.ItemTypeId);
                                 ViewData["JobNoList" + i] = new SelectList(JobNoListQuery.AsEnumerable(), "jobNoId", "jobNo", item.JobNoId);
                                 ViewData["JobTaskList" + i] = new SelectList(JobTaskListQuery.AsEnumerable(), "jobTaskNoId", "jobTaskNo", item.JobTaskNoId);
+                                ViewData["TaxCodeList" + i] = new SelectList(TaxCodeListQuery.AsEnumerable(), "TaxCodeId", "Code", item.TaxCodeId);
+                                ViewData["DimProjectList" + i] = new SelectList(DimProjectListQuery.AsEnumerable(), "ProjectId", "Description", item.DimProjectId);
+                                ViewData["DimDeptList" + i] = new SelectList(DimDeptListQuery.AsEnumerable(), "ProjectId", "Description", item.DimDeptId);
+                                ViewData["UOMList" + i] = new SelectList(UOMListQuery.AsEnumerable(), "UoMId", "UoMCode",item.UoMId);
                                 i++;
                             }
                         }
@@ -1949,19 +2055,21 @@ namespace KUBOnlinePRPM.Controllers
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
-                var PR = db.PurchaseRequisitions.First(x => x.PRId == model.PRId);
-                PR.StatusId = "PR02";
+                var PR = db.PurchaseRequisitions.First(x => x.PRId == model.PRId);                
                 PR.PurchaseTypeId = model.NewPRForm.PurchaseTypeId;
                 PR.BudgetDescription = model.NewPRForm.BudgetDescription;
                 PR.Justification = model.NewPRForm.Justification;
                 PR.Phase1Completed = true;
+                PR.budgetedAmount = model.NewPRForm.BudgetedAmount;
+                PR.utilizedToDate = model.NewPRForm.UtilizedToDate;
+                PR.budgetBalance = model.NewPRForm.BudgetBalance;
                 db.SaveChanges();
 
                 var Project = db.Projects.First(x => x.projectId == model.NewPRForm.ProjectId);
-                Project.budgetedAmount = model.NewPRForm.BudgetedAmount;
-                Project.utilizedToDate = model.NewPRForm.UtilizedToDate;
-                Project.budgetBalance = model.NewPRForm.BudgetBalance;
-                db.SaveChanges();
+                //Project.budgetedAmount = model.NewPRForm.BudgetedAmount;
+                //Project.utilizedToDate = model.NewPRForm.UtilizedToDate;
+                //Project.budgetBalance = model.NewPRForm.BudgetBalance;
+                //db.SaveChanges();
 
                 int UserId = Int32.Parse(Session["UserId"].ToString());
                 PR_Finance SaveReviewerInfo = db.PR_Finance.First(m => m.PRId == PR.PRId && m.reviewerId == UserId);
@@ -1997,6 +2105,7 @@ namespace KUBOnlinePRPM.Controllers
                                                 EmailAddress = m.emailAddress
                                             }).ToList();
 
+                    PR.StatusId = "PR10";
                     NotificationMsg objTask = new NotificationMsg()
                     {
                         uuid = Guid.NewGuid(),
@@ -2066,6 +2175,7 @@ namespace KUBOnlinePRPM.Controllers
                                           }).ToList();
                     }
 
+                    PR.StatusId = "PR02";
                     NotificationMsg objTask = new NotificationMsg()
                     {
                         uuid = Guid.NewGuid(),
@@ -2474,9 +2584,14 @@ namespace KUBOnlinePRPM.Controllers
                 }                
                 int PRCustId = getScenario.CustId;
                 var getPRPreparerChildCustId = db.Users.First(m => m.userId == getScenario.PreparedById);
-                if (getPRPreparerChildCustId.childCompanyId == 16)
+                switch (getPRPreparerChildCustId.childCompanyId)
                 {
-                    PRCustId = 6;
+                    case 16:
+                        PRCustId = 6; break;
+                    case 17:
+                        PRCustId = 7; break;
+                    case 18:
+                        PRCustId = 8; break;
                 }
                 if (getScenario.Scenario == 1 || PRDetail.FinalApproverId != 0)
                 {
@@ -2519,11 +2634,11 @@ namespace KUBOnlinePRPM.Controllers
                                               PurchaseTypeId = a.PurchaseTypeId,
                                               PurchaseType = m.purchaseType1,
                                               BudgetDescription = a.BudgetDescription,
-                                              BudgetedAmount = d.budgetedAmount,
+                                              BudgetedAmount = a.budgetedAmount,
                                               Justification = a.Justification,
-                                              UtilizedToDate = d.utilizedToDate,
+                                              UtilizedToDate = a.utilizedToDate,
                                               AmountRequired = a.AmountRequired,
-                                              BudgetBalance = d.budgetBalance,
+                                              BudgetBalance = a.budgetBalance,
                                               PreparedById = a.PreparedById,
                                               PreparedDate = a.PreparedDate,
                                               HODApproverId = s.HODId,
@@ -2594,11 +2709,11 @@ namespace KUBOnlinePRPM.Controllers
                                               PurchaseTypeId = a.PurchaseTypeId,
                                               PurchaseType = m.purchaseType1,
                                               BudgetDescription = a.BudgetDescription,
-                                              BudgetedAmount = d.budgetedAmount,
+                                              BudgetedAmount = a.budgetedAmount,
                                               Justification = a.Justification,
-                                              UtilizedToDate = d.utilizedToDate,
+                                              UtilizedToDate = a.utilizedToDate,
                                               AmountRequired = a.AmountRequired,
-                                              BudgetBalance = d.budgetBalance,
+                                              BudgetBalance = a.budgetBalance,
                                               PreparedById = a.PreparedById,
                                               PreparedDate = a.PreparedDate,
                                               HODApproverId = s.HODId,
@@ -2680,11 +2795,11 @@ namespace KUBOnlinePRPM.Controllers
                                               PurchaseTypeId = a.PurchaseTypeId,
                                               PurchaseType = m.purchaseType1,
                                               BudgetDescription = a.BudgetDescription,
-                                              BudgetedAmount = d.budgetedAmount,
+                                              BudgetedAmount = a.budgetedAmount,
                                               Justification = a.Justification,
-                                              UtilizedToDate = d.utilizedToDate,
+                                              UtilizedToDate = a.utilizedToDate,
                                               AmountRequired = a.AmountRequired,
-                                              BudgetBalance = d.budgetBalance,
+                                              BudgetBalance = a.budgetBalance,
                                               PreparedById = a.PreparedById,
                                               PreparedDate = a.PreparedDate,
                                               HODApproverId = s.HODId,
@@ -2743,7 +2858,7 @@ namespace KUBOnlinePRPM.Controllers
                                                            CustPONo = m.custPONo,
                                                            Quantity = m.quantity,
                                                            UnitPrice = m.unitPrice,
-                                                           SST = m.sst,
+                                                           TaxCodeId = m.taxCodeId,
                                                            TotalPrice = m.totalPrice,
                                                            UOM = n.UoM
                                                        }).ToList();
@@ -2769,16 +2884,24 @@ namespace KUBOnlinePRPM.Controllers
                     if (FormerPRDetails.SpecsReviewerId != null)
                     {
                         var FormerGroupName = db.Groups.Select(m => new { GroupName = m.groupName, GroupId = m.groupId }).First(m => m.GroupId == FormerPRDetails.SpecsReviewerId);
-                        var NewGroupName = db.Groups.Select(m => new { GroupName = m.groupName, GroupId = m.groupId }).First(m => m.GroupId == PR.NewPRForm.SpecReviewerId);
-                        NotificationMsg _objDetails_SpecsReviewer = new NotificationMsg
+                        GroupList NewGroupName = new GroupList();
+                        if (PR.NewPRForm.SpecReviewerId != null)
                         {
-                            uuid = Guid.NewGuid(),
-                            PRId = PR.PRId,
-                            msgDate = DateTime.Now,
-                            fromUserId = PR.UserId,
-                            msgType = "Trail",
-                            message = PR.FullName + " change Specs Reviewer value from " + FormerGroupName.GroupName + " to " + NewGroupName.GroupName + " for PR No: " + FormerPRDetails.PRNo
-                        };
+                            NewGroupName = db.Groups.Select(m => new GroupList { GroupName = m.groupName, GroupId = m.groupId }).First(m => m.GroupId == PR.NewPRForm.SpecReviewerId);
+                        } else
+                        {
+                            NewGroupName.GroupName = "null";
+                        }
+                            NotificationMsg _objDetails_SpecsReviewer = new NotificationMsg
+                            {
+                                uuid = Guid.NewGuid(),
+                                PRId = PR.PRId,
+                                msgDate = DateTime.Now,
+                                fromUserId = PR.UserId,
+                                msgType = "Trail",
+                                message = PR.FullName + " change Specs Reviewer value from " + FormerGroupName.GroupName + " to " + NewGroupName.GroupName + " for PR No: " + FormerPRDetails.PRNo
+                            };                     
+                        
                         db.NotificationMsgs.Add(_objDetails_SpecsReviewer);
                     }
                     FormerPRDetails.SpecsReviewerId = PR.NewPRForm.SpecReviewerId;
@@ -2853,6 +2976,91 @@ namespace KUBOnlinePRPM.Controllers
                     }
                     FormerPRDetails.VendorQuoteNo = PR.NewPRForm.VendorQuoteNo;
                 }
+                if (FormerPRDetails.DiscountAmount != PR.NewPRForm.DiscountAmount)
+                {
+                    if (FormerPRDetails.DiscountAmount != 0)
+                    {
+                        NotificationMsg _objDetails_DiscountAmount = new NotificationMsg
+                        {
+                            uuid = Guid.NewGuid(),
+                            PRId = PR.PRId,
+                            msgDate = DateTime.Now,
+                            fromUserId = PR.UserId,
+                            msgType = "Trail",
+                            message = PR.FullName + " change Discount Amount from " + FormerPRDetails.DiscountAmount + " to " + PR.NewPRForm.DiscountAmount + " for PR No: " + FormerPRDetails.PRNo
+                        };
+                        db.NotificationMsgs.Add(_objDetails_DiscountAmount);
+                    }
+                    FormerPRDetails.DiscountAmount = PR.NewPRForm.DiscountAmount;
+                }
+                if (FormerPRDetails.Discount_ != PR.NewPRForm.DiscountPerc)
+                {
+                    if (FormerPRDetails.Discount_ != 0)
+                    {
+                        NotificationMsg _objDetails_DiscountPerc = new NotificationMsg
+                        {
+                            uuid = Guid.NewGuid(),
+                            PRId = PR.PRId,
+                            msgDate = DateTime.Now,
+                            fromUserId = PR.UserId,
+                            msgType = "Trail",
+                            message = PR.FullName + " change Discount Percentage from " + FormerPRDetails.Discount_ + " to " + PR.NewPRForm.DiscountPerc + " for PR No: " + FormerPRDetails.PRNo
+                        };
+                        db.NotificationMsgs.Add(_objDetails_DiscountPerc);
+                    }
+                    FormerPRDetails.Discount_ = PR.NewPRForm.DiscountPerc;
+                }
+                if (FormerPRDetails.TotalExclSST != PR.NewPRForm.TotalExclSST)
+                {
+                    if (FormerPRDetails.TotalExclSST != 0)
+                    {
+                        NotificationMsg _objDetails_TotalExclSST = new NotificationMsg
+                        {
+                            uuid = Guid.NewGuid(),
+                            PRId = PR.PRId,
+                            msgDate = DateTime.Now,
+                            fromUserId = PR.UserId,
+                            msgType = "Trail",
+                            message = PR.FullName + " change Total Excluded SST from " + FormerPRDetails.TotalExclSST + " to " + PR.NewPRForm.TotalExclSST + " for PR No: " + FormerPRDetails.PRNo
+                        };
+                        db.NotificationMsgs.Add(_objDetails_TotalExclSST);
+                    }
+                    FormerPRDetails.TotalExclSST = PR.NewPRForm.TotalExclSST;
+                }
+                if (FormerPRDetails.TotalSST != PR.NewPRForm.TotalSST)
+                {
+                    if (FormerPRDetails.TotalSST != 0)
+                    {
+                        NotificationMsg _objDetails_TotalSST = new NotificationMsg
+                        {
+                            uuid = Guid.NewGuid(),
+                            PRId = PR.PRId,
+                            msgDate = DateTime.Now,
+                            fromUserId = PR.UserId,
+                            msgType = "Trail",
+                            message = PR.FullName + " change Total SST from " + FormerPRDetails.TotalSST + " to " + PR.NewPRForm.TotalSST + " for PR No: " + FormerPRDetails.PRNo
+                        };
+                        db.NotificationMsgs.Add(_objDetails_TotalSST);
+                    }
+                    FormerPRDetails.TotalSST = PR.NewPRForm.TotalSST;
+                }
+                if (FormerPRDetails.TotalIncSST != PR.NewPRForm.TotalIncSST)
+                {
+                    if (FormerPRDetails.TotalIncSST != 0)
+                    {
+                        NotificationMsg _objDetails_TotalIncSST = new NotificationMsg
+                        {
+                            uuid = Guid.NewGuid(),
+                            PRId = PR.PRId,
+                            msgDate = DateTime.Now,
+                            fromUserId = PR.UserId,
+                            msgType = "Trail",
+                            message = PR.FullName + " change Total Included SST from " + FormerPRDetails.TotalIncSST + " to " + PR.NewPRForm.TotalIncSST + " for PR No: " + FormerPRDetails.PRNo
+                        };
+                        db.NotificationMsgs.Add(_objDetails_TotalIncSST);
+                    }
+                    FormerPRDetails.TotalIncSST = PR.NewPRForm.TotalIncSST;
+                }
                 db.SaveChanges();
 
                 foreach (var value in PR.NewPRForm.PRItemListObject)
@@ -2883,9 +3091,24 @@ namespace KUBOnlinePRPM.Controllers
                         {
                             if (FormerPRItem.codeId != null)
                             {
-                                var formerCodeId = db.PR_Items.First(m => m.PRId == PR.PRId);
-                                var FormerItemCode = db.PopulateItemLists.Select(m => new { ItemDescription = m.ItemDescription, CodeId = m.codeId, CustId = m.custId }).Where(m => m.CustId == FormerPRDetails.CustId).Where(m => m.CodeId == formerCodeId.codeId).First();
-                                var NewItemCode = db.PopulateItemLists.Select(m => new { ItemDescription = m.ItemDescription, CodeId = m.codeId, CustId = m.custId }).Where(m => m.CustId == FormerPRDetails.CustId).Where(m => m.CodeId == value.CodeId).First();
+                                var formerCodeId = db.PR_Items.First(m => m.PRId == PR.PRId); int CustId = 0;
+                                var getPRPreparerChildCustId = db.Users.FirstOrDefault(m => m.userId == FormerPRDetails.PreparedById);
+                                if (getPRPreparerChildCustId.childCompanyId != null)
+                                {
+                                    switch (getPRPreparerChildCustId.childCompanyId)
+                                    {
+                                        case 16:
+                                            CustId = 6; break;
+                                        case 17:
+                                            CustId = 7; break;
+                                        case 18:
+                                            CustId = 8; break;
+                                        default:
+                                            CustId = FormerPRDetails.CustId; break;
+                                    }
+                                }
+                                var FormerItemCode = db.PopulateItemLists.Select(m => new { ItemDescription = m.ItemDescription, CodeId = m.codeId, CustId = m.custId }).Where(m => m.CustId == CustId).Where(m => m.CodeId == formerCodeId.codeId).First();
+                                var NewItemCode = db.PopulateItemLists.Select(m => new { ItemDescription = m.ItemDescription, CodeId = m.codeId, CustId = m.custId }).Where(m => m.CustId == CustId).Where(m => m.CodeId == value.CodeId).First();
                                 NotificationMsg _objDetails_CodeId = new NotificationMsg
                                 {
                                     uuid = Guid.NewGuid(),
@@ -2899,6 +3122,42 @@ namespace KUBOnlinePRPM.Controllers
                             }
                             FormerPRItem.codeId = value.CodeId.Value;
                         }
+                    }
+                    if (FormerPRItem.quantity != value.Quantity)
+                    {
+                        NotificationMsg _objDetails_Quantity = new NotificationMsg
+                        {
+                            uuid = Guid.NewGuid(),
+                            PRId = PR.PRId,
+                            msgDate = DateTime.Now,
+                            fromUserId = PR.UserId,
+                            msgType = "Trail",
+                            message = PR.FullName + " change Quantity in PRNo : " + FormerPRDetails.PRNo + " items from " + FormerPRItem.quantity + " to " + value.Quantity
+                        };
+                        db.NotificationMsgs.Add(_objDetails_Quantity);
+                        FormerPRItem.quantity = value.Quantity;
+                        FormerPRItem.outStandingQuantity = value.Quantity;
+                    }
+                    if (FormerPRItem.UoMId != value.UoMId)
+                    {
+                        UOM formerUOMs = db.UOMs.FirstOrDefault(m => m.UoMId == FormerPRItem.UoMId);
+                        UOM UOMsChanges = db.UOMs.FirstOrDefault(m => m.UoMId == value.UoMId);
+                        NotificationMsg _objDetails_NotificationMsg = new NotificationMsg();
+                        _objDetails_NotificationMsg.uuid = Guid.NewGuid();
+                        _objDetails_NotificationMsg.PRId = PR.PRId;
+                        _objDetails_NotificationMsg.msgDate = DateTime.Now;
+                        _objDetails_NotificationMsg.fromUserId = PR.UserId;
+                        _objDetails_NotificationMsg.msgType = "Trail";
+                        if (formerUOMs == null)
+                        {
+                            _objDetails_NotificationMsg.message = PR.FullName + " set UOM to " + UOMsChanges.UoMCode + " in PRNo : " + FormerPRDetails.PRNo;
+                        }
+                        else
+                        {
+                            _objDetails_NotificationMsg.message = PR.FullName + " change UOM in PRNo : " + FormerPRDetails.PRNo + " items from " + formerUOMs.UoMCode + " to " + UOMsChanges.UoMCode;
+                        }
+                        db.NotificationMsgs.Add(_objDetails_NotificationMsg);
+                        FormerPRItem.UoMId = value.UoMId;
                     }
                     if (FormerPRItem.jobNoId != value.JobNoId)
                     {
@@ -2938,6 +3197,26 @@ namespace KUBOnlinePRPM.Controllers
                         }
                         FormerPRItem.jobTaskNoId = value.JobTaskNoId;
                     }
+                    if (value.TaxCodeId != null)
+                    {
+                        if (FormerPRItem.taxCodeId != value.TaxCodeId)
+                        {
+                            if (FormerPRItem.taxCodeId != null)
+                            {
+                                NotificationMsg _objDetails_TotalPrice = new NotificationMsg
+                                {
+                                    uuid = Guid.NewGuid(),
+                                    PRId = PR.PRId,
+                                    msgDate = DateTime.Now,
+                                    fromUserId = PR.UserId,
+                                    msgType = "Trail",
+                                    message = PR.FullName + " change SST value from " + FormerPRItem.totalPrice + " to " + value.TotalPrice.Value + " for PR No: " + FormerPRDetails.PRNo
+                                };
+                                db.NotificationMsgs.Add(_objDetails_TotalPrice);
+                            }
+                            FormerPRItem.taxCodeId = value.TaxCodeId;
+                        }
+                    }
                     if (value.UnitPrice != null)
                     {
                         if (FormerPRItem.unitPrice != value.UnitPrice.Value)
@@ -2956,6 +3235,11 @@ namespace KUBOnlinePRPM.Controllers
                                 db.NotificationMsgs.Add(_objDetails_UnitPrice);
                             }
                             FormerPRItem.unitPrice = value.UnitPrice.Value;
+                            if (value.TaxCodeId != null)
+                            {
+                                TaxCode getPerc = db.TaxCodes.First(m => m.TaxCodeId == value.TaxCodeId);
+                                FormerPRItem.unitPriceIncSST = FormerPRItem.unitPrice + (getPerc.GST / 100 * FormerPRItem.unitPrice);
+                            }
                         }
                     }
                     if (value.TotalPrice != null)
@@ -2976,27 +3260,94 @@ namespace KUBOnlinePRPM.Controllers
                                 db.NotificationMsgs.Add(_objDetails_TotalPrice);
                             }
                             FormerPRItem.totalPrice = value.TotalPrice.Value;
+                            if (value.TaxCodeId != null)
+                            {
+                                TaxCode getPerc = db.TaxCodes.First(m => m.TaxCodeId == value.TaxCodeId);
+                                FormerPRItem.totalPriceIncSST = FormerPRItem.totalPrice + (getPerc.GST / 100 * FormerPRItem.totalPrice);
+                            }
                         }
                     }
-                    if (value.SST != null)
+                    if (value.UnitPriceIncSST != null)
                     {
-                        if (FormerPRItem.sst != value.SST.Value)
+                        if (FormerPRItem.unitPriceIncSST != value.UnitPriceIncSST.Value)
                         {
-                            if (FormerPRItem.sst != null)
+                            if (FormerPRItem.unitPriceIncSST != null)
                             {
-                                NotificationMsg _objDetails_TotalPrice = new NotificationMsg
+                                NotificationMsg _objDetails_UnitPriceIncSST = new NotificationMsg
                                 {
                                     uuid = Guid.NewGuid(),
                                     PRId = PR.PRId,
                                     msgDate = DateTime.Now,
                                     fromUserId = PR.UserId,
                                     msgType = "Trail",
-                                    message = PR.FullName + " change SST value from " + FormerPRItem.totalPrice + " to " + value.TotalPrice.Value + " for PR No: " + FormerPRDetails.PRNo
+                                    message = PR.FullName + " change Unit Price Included SST from " + FormerPRItem.unitPriceIncSST + " to " + value.UnitPriceIncSST.Value + " for PR No: " + FormerPRDetails.PRNo
                                 };
-                                db.NotificationMsgs.Add(_objDetails_TotalPrice);
+                                db.NotificationMsgs.Add(_objDetails_UnitPriceIncSST);
                             }
-                            FormerPRItem.sst = value.SST.Value;
+                            FormerPRItem.unitPriceIncSST = value.UnitPriceIncSST.Value;
                         }
+                    }
+                    if (value.TotalPriceIncSST != null)
+                    {
+                        if (FormerPRItem.totalPriceIncSST != value.TotalPriceIncSST.Value)
+                        {
+                            if (FormerPRItem.totalPriceIncSST != null)
+                            {
+                                NotificationMsg _objDetails_TotalPriceIncSST = new NotificationMsg
+                                {
+                                    uuid = Guid.NewGuid(),
+                                    PRId = PR.PRId,
+                                    msgDate = DateTime.Now,
+                                    fromUserId = PR.UserId,
+                                    msgType = "Trail",
+                                    message = PR.FullName + " change Total Price Included SST from " + FormerPRItem.totalPriceIncSST + " to " + value.TotalPriceIncSST.Value + " for PR No: " + FormerPRDetails.PRNo
+                                };
+                                db.NotificationMsgs.Add(_objDetails_TotalPriceIncSST);
+                            }
+                            FormerPRItem.totalPriceIncSST = value.TotalPriceIncSST.Value;
+                        }
+                    }
+                    if (FormerPRItem.dimProjectId != value.DimProjectId)
+                    {
+                        Project formerDimProject = db.Projects.FirstOrDefault(m => m.projectId == FormerPRItem.dimProjectId);
+                        Project DimProjectChanges = db.Projects.FirstOrDefault(m => m.projectId == value.DimProjectId);
+                        NotificationMsg _objDetails_NotificationMsg = new NotificationMsg();
+                        _objDetails_NotificationMsg.uuid = Guid.NewGuid();
+                        _objDetails_NotificationMsg.PRId = PR.PRId;
+                        _objDetails_NotificationMsg.msgDate = DateTime.Now;
+                        _objDetails_NotificationMsg.fromUserId = PR.UserId;
+                        _objDetails_NotificationMsg.msgType = "Trail";
+                        if (formerDimProject == null)
+                        {
+                            _objDetails_NotificationMsg.message = PR.FullName + " set Dim Project to " + DimProjectChanges.projectName + " in PRNo : " + FormerPRDetails.PRNo;
+                        }
+                        else
+                        {
+                            _objDetails_NotificationMsg.message = PR.FullName + " change Dim Project in PRNo : " + FormerPRDetails.PRNo + " items from " + formerDimProject.projectName + " to " + DimProjectChanges.projectName;
+                        }
+                        db.NotificationMsgs.Add(_objDetails_NotificationMsg);
+                        FormerPRItem.dimProjectId = value.DimProjectId;
+                    }
+                    if (FormerPRItem.dimDeptId != value.DimDeptId)
+                    {
+                        Project formerDimDept = db.Projects.FirstOrDefault(m => m.projectId == FormerPRItem.dimProjectId);
+                        Project DimDeptChanges = db.Projects.FirstOrDefault(m => m.projectId == value.DimProjectId);
+                        NotificationMsg _objDetails_NotificationMsg = new NotificationMsg();
+                        _objDetails_NotificationMsg.uuid = Guid.NewGuid();
+                        _objDetails_NotificationMsg.PRId = PR.PRId;
+                        _objDetails_NotificationMsg.msgDate = DateTime.Now;
+                        _objDetails_NotificationMsg.fromUserId = PR.UserId;
+                        _objDetails_NotificationMsg.msgType = "Trail";
+                        if (formerDimDept == null)
+                        {
+                            _objDetails_NotificationMsg.message = PR.FullName + " set Dim Dept to " + DimDeptChanges.projectName + " in PRNo : " + FormerPRDetails.PRNo;
+                        }
+                        else
+                        {
+                            _objDetails_NotificationMsg.message = PR.FullName + " change Dim Dept in PRNo : " + FormerPRDetails.PRNo + " items from " + formerDimDept.projectName + " to " + DimDeptChanges.projectName;
+                        }
+                        db.NotificationMsgs.Add(_objDetails_NotificationMsg);
+                        FormerPRItem.UoMId = value.UoMId;
                     }
                     db.SaveChanges();
                 }
@@ -3045,6 +3396,11 @@ namespace KUBOnlinePRPM.Controllers
                 PR.VendorCompanyId = PRModel.NewPRForm.VendorCompanyId;
                 PR.VendorQuoteNo = PRModel.NewPRForm.VendorQuoteNo;
                 PR.PRAging = PRModel.NewPRForm.PRAging;
+                PR.DiscountAmount = PRModel.NewPRForm.DiscountAmount;
+                PR.Discount_ = PRModel.NewPRForm.DiscountPerc;
+                PR.TotalExclSST = PRModel.NewPRForm.TotalExclSST;
+                PR.TotalSST = PRModel.NewPRForm.TotalSST;
+                PR.TotalIncSST = PRModel.NewPRForm.TotalIncSST;
                 db.SaveChanges();
 
                 foreach (var value in PRModel.NewPRForm.PRItemListObject)
@@ -3052,14 +3408,17 @@ namespace KUBOnlinePRPM.Controllers
                     PR_Items _objNewPRItem = db.PR_Items.FirstOrDefault(m => m.itemsId == value.ItemsId);
                     _objNewPRItem.itemTypeId = value.ItemTypeId;
                     _objNewPRItem.codeId = value.CodeId.Value;
+                    _objNewPRItem.quantity = value.Quantity;
+                    _objNewPRItem.UoMId = value.UoMId;
                     _objNewPRItem.jobNoId = value.JobNoId;
                     _objNewPRItem.jobTaskNoId = value.JobTaskNoId;
+                    _objNewPRItem.taxCodeId = value.TaxCodeId;
                     _objNewPRItem.unitPrice = value.UnitPrice.Value;
                     _objNewPRItem.totalPrice = value.TotalPrice.Value;
-                    if (value.SST != null)
-                    {
-                        _objNewPRItem.sst = value.SST.Value;
-                    }
+                    _objNewPRItem.unitPriceIncSST = value.UnitPriceIncSST.Value;
+                    _objNewPRItem.totalPriceIncSST = value.TotalPriceIncSST.Value;
+                    _objNewPRItem.dimProjectId = value.DimProjectId;
+                    _objNewPRItem.dimDeptId = value.DimDeptId;
                     db.SaveChanges();
                 }
 
@@ -3928,16 +4287,16 @@ namespace KUBOnlinePRPM.Controllers
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
                 int PrId = Int32.Parse(Request["PrId"]);
+                int UserId = Int32.Parse(Session["UserId"].ToString());
                 var PR = db.PurchaseRequisitions.First(x => x.PRId == PrId);
                 PR.StatusId = "PR05";
                 db.SaveChanges();
 
-                PR_Reviewer SaveReviewerInfo = db.PR_Reviewer.First(m => m.PRId == PR.PRId);
+                PR_Reviewer SaveReviewerInfo = db.PR_Reviewer.First(m => m.PRId == PR.PRId && m.reviewerId == UserId);
                 SaveReviewerInfo.reviewedDate = DateTime.Now;
                 SaveReviewerInfo.reviewed = 1;
                 db.SaveChanges();
 
-                int UserId = Int32.Parse(Session["UserId"].ToString());
                 var requestorDone = (from m in db.NotificationMsgs
                                      join n in db.NotiGroups on m.msgId equals n.msgId
                                      where n.toUserId == UserId && m.PRId == PrId && m.msgType == "Task"
@@ -4922,12 +5281,13 @@ namespace KUBOnlinePRPM.Controllers
 
                         if (requestorDone != null)
                         {
+                            UpdatePRStatus.StatusId = "PR07";
                             NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == requestorDone.MsgId);
                             getDone.done = true;
                             db.SaveChanges();
                         }
                         
-                        return Json(new { success = true, flow = "phase1", message = "Successfully cancel the PR." });
+                        return Json(new { success = true, flow = "phase1", message = "Successfully reject the PR." });
                     }
                     else
                     {

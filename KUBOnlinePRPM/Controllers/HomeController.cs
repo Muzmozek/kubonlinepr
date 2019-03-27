@@ -9,6 +9,7 @@ using System.Web.Security;
 using System.DirectoryServices;
 using KUBOnlinePRPM.Service;
 using System.Data.Entity.Validation;
+using System.Configuration;
 
 namespace KUBOnlinePRPM.Controllers
 {
@@ -70,7 +71,7 @@ namespace KUBOnlinePRPM.Controllers
                 var CheckUserId = (from m in db.Users
                                    join n in db.Users_Roles on m.userId equals n.userId
                                    join o in db.Roles on n.roleId equals o.roleId
-                                   join p in db.ChildCustomers on m.companyId equals p.custId into q
+                                   join p in db.ChildCustomers on m.childCompanyId equals p.childCustId into q
                                    from r in q.DefaultIfEmpty()
                                    where m.userName == UserName
                                    select new UserModel()
@@ -145,25 +146,25 @@ namespace KUBOnlinePRPM.Controllers
             //bool matches = BCrypt.CheckPassword(model.Password, hashed);   
             try
             {
-                var CheckUserPassword = (from m in db.Users
-                                         where m.userName == model.Username
-                                         select new UserModel()
-                                         {
-                                             Password = m.password
-                                         }).FirstOrDefault();
-                bool validate = false;
-                if (CheckUserPassword != null && CheckUserPassword.Password != null)
-                {
-                    validate = BCrypt.CheckPassword(model.Password, CheckUserPassword.Password);
-                }
+                //var CheckUserPassword = (from m in db.Users
+                //                         where m.userName == model.Username
+                //                         select new UserModel()
+                //                         {
+                //                             Password = m.password
+                //                         }).FirstOrDefault();
+                //bool validate = false;
+                //if (CheckUserPassword != null && CheckUserPassword.Password != null)
+                //{
+                //    validate = BCrypt.CheckPassword(model.Password, CheckUserPassword.Password);
+                //}
 
                 //var directoryEntry = new DirectoryEntry("LDAP://172.16.0.2/DC=kub,DC=local");
                 //directoryEntry.Username = "win2k8";
                 //directoryEntry.Password = "Quantum111?";
                 //if (validate == true)
-                if (Membership.ValidateUser(model.Username, model.Password) || validate == true)
-                    //if (model.Username != "")
-                    {
+                //if (model.Username != "" || validate == true)
+                if (ConfigurationManager.AppSettings["TestUser"] == "false" && Membership.ValidateUser(model.Username, model.Password))
+                {
                     var CheckUserId = (from m in db.Users
                                        join n in db.Users_Roles on m.userId equals n.userId
                                        join o in db.Roles on n.roleId equals o.roleId
@@ -223,7 +224,67 @@ namespace KUBOnlinePRPM.Controllers
 
                     return Json(new { success = true, url = redirectUrl });
                 }
-                else
+                else if (ConfigurationManager.AppSettings["TestUser"] == "true" && model.Username != "")
+                {
+                    var CheckUserId = (from m in db.Users
+                                       join n in db.Users_Roles on m.userId equals n.userId
+                                       join o in db.Roles on n.roleId equals o.roleId
+                                       join p in db.ChildCustomers on m.childCompanyId equals p.childCustId into q
+                                       from r in q.DefaultIfEmpty()
+                                       where m.userName == model.Username
+                                       select new UserModel()
+                                       {
+                                           UserId = m.userId,
+                                           CompanyId = m.companyId,
+                                           ChildCompanyId = r.childCustId,
+                                           JobTitle = m.jobTitle,
+                                           FullName = m.firstName + " " + m.lastName
+                                       }).FirstOrDefault();
+
+                    var getRole = db.Users_Roles.Select(x => new { x.userId, x.roleId }).Where(x => x.userId == CheckUserId.UserId).ToList();
+
+                    Session["UserId"] = CheckUserId.UserId;
+                    Session["Username"] = model.Username;
+                    Session["ifRequestor"] = getRole.FirstOrDefault(x => x.roleId.Contains("R01"));
+                    Session["ifHOD"] = getRole.FirstOrDefault(x => x.roleId.Contains("R02"));
+                    Session["ifProcurement"] = getRole.FirstOrDefault(x => x.roleId.Contains("R03"));
+                    Session["ifHOC"] = getRole.FirstOrDefault(x => x.roleId.Contains("R04"));
+                    Session["ifAdmin"] = getRole.FirstOrDefault(x => x.roleId.Contains("R05"));
+                    Session["ifSuperAdmin"] = getRole.FirstOrDefault(x => x.roleId.Contains("R06"));
+                    Session["ifIT"] = getRole.FirstOrDefault(x => x.roleId.Contains("R07"));
+                    Session["ifPMO"] = getRole.FirstOrDefault(x => x.roleId.Contains("R08"));
+                    Session["ifHSE"] = getRole.FirstOrDefault(x => x.roleId.Contains("R09"));
+                    Session["ifHOGPSS"] = getRole.FirstOrDefault(x => x.roleId.Contains("R10"));
+                    Session["ifCOO"] = getRole.FirstOrDefault(x => x.roleId.Contains("R11"));
+                    Session["ifCFO"] = getRole.FirstOrDefault(x => x.roleId.Contains("R12"));
+                    Session["ifFinance"] = getRole.FirstOrDefault(x => x.roleId.Contains("R13"));
+                    Session["ifGMD"] = getRole.FirstOrDefault(x => x.roleId.Contains("R14"));
+                    Session["roles"] = db.Users_Roles.Where(x => x.userId == CheckUserId.UserId).ToList();
+                    Session["FullName"] = CheckUserId.FullName;
+                    Session["CompanyId"] = CheckUserId.CompanyId;
+                    if (CheckUserId.ChildCompanyId != null)
+                    {
+                        Session["ChildCompanyId"] = CheckUserId.ChildCompanyId;
+                    }
+                    Session["JobTitle"] = CheckUserId.JobTitle;
+                    FormsAuthentication.SetAuthCookie(model.Username, true);
+
+                    User saveLoginNoti = db.Users.First(m => m.userId == CheckUserId.UserId);
+                    saveLoginNoti.lastLoginDate = DateTime.Now;
+                    NotificationMsg userAuditTrail = new NotificationMsg()
+                    {
+                        uuid = Guid.NewGuid(),
+                        message = CheckUserId.FullName + " has login to the Online PR system",
+                        msgDate = DateTime.Now,
+                        fromUserId = CheckUserId.UserId,
+                        msgType = "Trail"
+                    };
+                    db.NotificationMsgs.Add(userAuditTrail);
+                    db.SaveChanges();
+                    var redirectUrl = new UrlHelper(Request.RequestContext).Action("Index", "PR");
+
+                    return Json(new { success = true, url = redirectUrl });
+                } else
                 {
                     User saveLoginNoti = db.Users.FirstOrDefault(m => m.userName == model.Username.Trim());
                     if (saveLoginNoti != null)
@@ -250,7 +311,7 @@ namespace KUBOnlinePRPM.Controllers
                         JsonRequestBehavior = JsonRequestBehavior.AllowGet
                     };
                 }
-            }
+            } 
             catch (DbEntityValidationException e)
             {
                 StringWriter ExMessage = new StringWriter();

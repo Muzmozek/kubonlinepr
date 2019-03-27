@@ -12,31 +12,20 @@ namespace KUBOnlinePRPM.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class VendorStaff
+    public partial class Purchaser
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public VendorStaff()
+        public Purchaser()
         {
-            this.PurchaseRequisitions = new HashSet<PurchaseRequisition>();
             this.PurchaseOrders = new HashSet<PurchaseOrder>();
         }
     
         public System.Guid uuid { get; set; }
-        public int staffId { get; set; }
-        public int vendorId { get; set; }
-        public string vendorContactName { get; set; }
-        public string vendorEmail { get; set; }
-        public string vendorContactNo { get; set; }
-        public Nullable<int> createByUserId { get; set; }
-        public Nullable<int> lastModifyByUserId { get; set; }
-        public Nullable<System.DateTime> createDate { get; set; }
-        public Nullable<System.DateTime> lastModifyDate { get; set; }
+        public int purchaserId { get; set; }
+        public string purchaserCode { get; set; }
+        public string purchaserName { get; set; }
+        public int custId { get; set; }
     
-        public virtual User User { get; set; }
-        public virtual User User1 { get; set; }
-        public virtual Vendor Vendor { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PurchaseRequisition> PurchaseRequisitions { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; }
     }

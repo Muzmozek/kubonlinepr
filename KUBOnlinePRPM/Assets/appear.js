@@ -5,7 +5,7 @@ appear = (function(){
 
   function track(){
     var newPos = window.scrollY || window.pageYOffset;  // pageYOffset for IE9
-    if ( scrollLastPos != null ){
+    if ( scrollLastPos !== null ){
       scroll.velocity = newPos - scrollLastPos;
       scroll.delta = (scroll.velocity >= 0) ? scroll.velocity : (-1 * scroll.velocity);
       
