@@ -123,8 +123,11 @@ $(document).ready(function () {
         $.post(UrlComfirmPO, {
             POId: POId,
             PayToVendorId: $("#PayToVendor").find("option:selected").val(),
-            PaymentTermsId: $("#PaymentTermsCode").find("option:selected").val()
-
+            PaymentTermsId: $("#PaymentTermsCode").find("option:selected").val(),
+            LocationCodeId: $("#LocationCode").find("option:selected").val(),
+            OrderDate: $("#OrderDate").val(),
+            PurchaserCodeId: $("#PurchaserCode").find("option:selected").val(),
+            DeliveryDate: $("#DeliveryDate").val()
         }, function (resp) {
             if (resp.success === true) {
                 alert(resp.message);

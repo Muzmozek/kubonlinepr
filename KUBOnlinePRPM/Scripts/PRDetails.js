@@ -89,7 +89,7 @@
             }
         });
         var data = PRItemTable.$("tr");
-        var ItemsId;
+        var ItemsId; openHiddenPRItemTable();
         $.each(data, function (i, input) {
             if ($(PRItemTable.row(i).data()[0]).val() === "") {
                 ItemsId = 0;
@@ -597,15 +597,21 @@
             },
             success: function (resp) {
                 var DiscountAmount = parseFloat(0); var UnitPrice = parseFloat(0); var TotalPrice = parseFloat(0);
-                
+                openHiddenPRItemTable();
                 if ($(".child #UnitPrice" + selectlistid).val() !== "") {
                     UnitPrice = parseFloat($(".child #UnitPrice" + selectlistid).val());
                 }
                 if ($(".child #TotalPrice" + selectlistid).val() !== "") {
                     TotalPrice = parseFloat($(".child #TotalPrice" + selectlistid).val());
-                }               
+                }      
+                var cell = PRItemTable.cell({ row: selectlistid - 1, column: 12 }).node();
+                var cell1 = PRItemTable.cell({ row: selectlistid - 1, column: 13 }).node();
+                $("input", cell).val(TotalPrice);                
                 var UnitPriceIncSST = (UnitPrice + (resp.TaxCodeInfo.SST / 100 * UnitPrice)).toFixed(2);
-                var TotalPriceIncSST = (TotalPrice + (resp.TaxCodeInfo.SST / 100 * TotalPrice)).toFixed(2);
+                //$(".child #UnitPriceIncSST" + selectlistid, cell).val(UnitPriceIncSST);
+                var TotalPriceIncSST = TotalPrice + (resp.TaxCodeInfo.SST / 100 * TotalPrice);
+                $("input", cell1).val(TotalPriceIncSST);
+
                 var TotalIncSST = parseFloat(0); var TotalSST = parseFloat(0); var AmountRequired = parseFloat(0);
 
                 //$(".child #TaxCodeId + " + selectlistid + " select").val(TaxCodeId);
@@ -634,11 +640,13 @@
                 }
                 var DiscountPerc = parseFloat(DiscountAmount / AmountRequired * 100).toFixed(2);
                 var TotalExcSST = parseFloat(AmountRequired - DiscountAmount).toFixed(2);
+                var TotalIncSST1 = parseFloat(TotalIncSST - DiscountAmount).toFixed(2);
                 $("#AmountRequired").val(AmountRequired);
                 $("#DiscountPerc").val(parseInt(DiscountPerc));
                 $("#TotalExclSST").val(TotalExcSST);
                 $("#TotalSST").val(TotalSST);
-                $("#TotalIncSST").val(TotalIncSST);
+                $("#TotalIncSST").val(TotalIncSST1);
+                generatePRItemTable();
                 $("body").removeClass("loading");
             }
         });
@@ -662,12 +670,15 @@
             success: function (resp) {
                 var AmountRequired = parseFloat(0); var TotalIncSST = parseFloat(0); var TotalSST = parseFloat(0);
                 var UnitPriceIncSST = (UnitPrice + (resp.TaxCodeInfo.SST / 100 * UnitPrice)).toFixed(2);
-                var TotalPriceIncSST = (TotalPrice + (resp.TaxCodeInfo.SST / 100 * TotalPrice)).toFixed(2);                
+                var TotalPriceIncSST = (TotalPrice + (resp.TaxCodeInfo.SST / 100 * TotalPrice)).toFixed(2);  
+                openHiddenPRItemTable();
                 $(".child #UnitPriceIncSST" + selectlistid).val(UnitPriceIncSST);
                 $(".child #TotalPriceIncSST" + selectlistid).val(TotalPriceIncSST);
-                $(".child #TotalPrice" + selectlistid).val(TotalPrice);
-                var rowIdx = 0; var colIdx = 12;               
-                var cell = PRItemTable.cell({ row: rowIdx, column: colIdx }).node();
+                $(".child #TotalPrice" + selectlistid).val(TotalPrice);       
+                var cell = PRItemTable.cell({ row: selectlistid - 1, column: 12 }).node();
+                var cell1 = PRItemTable.cell({ row: selectlistid - 1, column: 13 }).node();
+                //$(".child #UnitPriceIncSST" + selectlistid, cell).val(UnitPriceIncSST);
+                $("input", cell1).val(TotalPriceIncSST);
                 $('input', cell).val(TotalPrice);
                 for (var i = 1; i <= $(".CodeId").length; i++) {
                     if ($(".child #TotalPrice" + i).val() !== "" && $(".child #TotalPrice" + i).val() !== undefined ) {
@@ -692,11 +703,13 @@
                 }
                 var DiscountPerc = parseFloat(DiscountAmount / AmountRequired * 100).toFixed(2);
                 var TotalExcSST = parseFloat(AmountRequired - DiscountAmount).toFixed(2);
+                var TotalIncSST1 = parseFloat(TotalIncSST - DiscountAmount).toFixed(2);
                 $("#AmountRequired").val(AmountRequired);
                 $("#DiscountPerc").val(parseInt(DiscountPerc));
                 $("#TotalExclSST").val(TotalExcSST);
                 $("#TotalSST").val(TotalSST);
-                $("#TotalIncSST").val(TotalIncSST);
+                $("#TotalIncSST").val(TotalIncSST1);
+                generatePRItemTable();
                 $("body").removeClass("loading");
             }
         });        
@@ -704,6 +717,7 @@
 
     $(document).on("change", "#DiscountAmount", function () {
         var DiscountAmount = parseFloat($(this).val());
+        openHiddenPRItemTable();
         //var Quantity = $("#Quantity" + $(this)[0].id.substring(9, $(this)[0].id.length)).val();
         //var SST = $(".child #SST" + $(this)[0].id.substring(9, $(this)[0].id.length)).val();
         //if (SST === "") {
@@ -725,12 +739,13 @@
         }
         var DiscountPerc = parseFloat(DiscountAmount / AmountRequired * 100).toFixed(2);
         var TotalExcSST = parseFloat(AmountRequired - DiscountAmount);
-        var TotalIncSST = parseFloat(TotalExcSST + TotalSST).toFixed(2);
+        var TotalIncSST = parseFloat(TotalExcSST + TotalSST - DiscountAmount).toFixed(2);
         $("#AmountRequired").val(AmountRequired);
         $("#DiscountPerc").val(parseInt(DiscountPerc));
         $("#TotalExclSST").val(TotalExcSST.toFixed(2));
         $("#TotalSST").val(TotalSST.toFixed(2));
         $("#TotalIncSST").val(TotalIncSST);
+        generatePRItemTable();
     });
 
     //$(document).on("change", ".child .SST", function () {

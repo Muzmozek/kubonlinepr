@@ -414,6 +414,11 @@ namespace KUBOnlinePRPM.Controllers
                                           //VendorEmail = d.vendorEmail,
                                           //VendorStaffId = d.staffId,
                                           //VendorContactNo = d.vendorContactNo,
+                                          DiscountAmount = a.DiscountAmount,
+                                          DiscountPerc = a.Discount_,
+                                          TotalExclSST = a.TotalExcSST,
+                                          TotalSST = a.TotalSST,
+                                          TotalIncSST = a.TotalIncSST,
                                           PayToVendorId = a.PayToVendorId,
                                           PaymentTermsId = a.PaymentTermsId,
                                           SpecReviewerId = a.SpecsReviewerId,
@@ -428,6 +433,13 @@ namespace KUBOnlinePRPM.Controllers
                 PODetail.NewPOForm.POItemListObject = (from m in db.PO_Item
                                                        from n in db.PopulateItemLists.Where(x => m.codeId == x.codeId && m.itemTypeId == x.itemTypeId).DefaultIfEmpty()
                                                        join p in db.PR_Items on m.itemsId equals p.itemsId
+                                                       join o in db.Projects on m.jobNoId equals o.projectId into s
+                                                       join r in db.ItemTypes on m.itemTypeId equals r.itemTypeId
+                                                       join u in db.JobTasks on m.jobTaskNoId equals u.jobTaskNoId into v
+                                                       join x in db.TaxCodes on m.taxCodeId equals x.TaxCodeId
+                                                       join a in db.UOMs on m.UoMId equals a.UoMId
+                                                       from t in s.DefaultIfEmpty()
+                                                       from w in v.DefaultIfEmpty()
                                                        where m.POId == PODetail.POId && n.custId == getPRCustId.CustId
                                                        select new POItemsTable()
                                                        {
@@ -438,10 +450,21 @@ namespace KUBOnlinePRPM.Controllers
                                                            Description = m.description,
                                                            CustPONo = m.custPONo,
                                                            Quantity = m.quantity,
-                                                           OutStandingQuantity = p.outStandingQuantity.Value,
+                                                           OutStandingQuantity = p.outStandingQuantity.Value,                                                           
+                                                           UoMId = m.UoMId,
+                                                           UOM = a.UoMCode,
+                                                           JobNoId = t.projectId,
+                                                           JobNo = t.projectCode,
+                                                           JobTaskNoId = m.jobTaskNoId,
+                                                           JobTaskNo = w.jobTaskNo,
                                                            UnitPrice = m.unitPrice,
-                                                           TotalPrice = m.totalPrice
-                                                           //UOM = n.UoM
+                                                           TaxCodeId = m.taxCodeId,
+                                                           Code = x.Code,
+                                                           TotalPrice = m.totalPrice,
+                                                           UnitPriceIncSST = m.unitPriceIncSST,
+                                                           TotalPriceIncSST = m.totalPriceIncSST,
+                                                           DimProjectId = m.dimProjectId,
+                                                           DimDeptId = m.dimDeptId
                                                        }).ToList();
 
                 ViewBag.PayToVendorList = new SelectList(PayToVendorQuery.AsEnumerable(), "VendorId", "VendorName", PODetail.NewPOForm.PayToVendorId);

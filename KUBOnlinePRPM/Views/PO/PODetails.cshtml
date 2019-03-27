@@ -30,13 +30,13 @@
         </div>*@
             @if (Model.NewPOForm.StatusId == "PO03")
             {
-                <div class="media-body align-self-center text-right">
+                @*<div class="media-body align-self-center text-right">
                     <a href="~/PO/POForm">
                         <span class="u-icon-v1 g-color-blue">
                             <i class="icon-printer"></i>
                         </span>
                     </a>
-                </div>
+                </div>*@
             }
             
             @using (Html.BeginForm("PODetails", "PO", FormMethod.Post, new { @id = "PODetails", @class = "container-fluid g-mb-40" }))
@@ -289,7 +289,7 @@
                                             <span>Discount Amount</span>
                                         </div>
                                         <div class="d-flex col-md-8 col-sm-8">
-                                                @Html.TextBoxFor(m => m.NewPOForm.DiscountAmount, new { @id = "DiscountAmount", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
+                                            @Html.TextBoxFor(m => m.NewPOForm.DiscountAmount, new { @id = "DiscountAmount", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
                                         </div>
                                     </div>
                                 </section>
@@ -306,6 +306,30 @@
                                     </div>
                                 </section>
                             </div>
+                            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
+                                <section>
+                                    <div class="row">
+                                        <div class="col-md-4 col-sm-4 formfield">
+                                            <span>Specs Reviewer</span>
+                                        </div>
+                                        <div class="d-flex col-md-8 col-sm-8">
+                                            @if (Model.NewPOForm.SpecReviewerId != null)
+                                            {
+                                                @Html.DropDownListFor(m => m.NewPOForm.SpecReviewerId, (IEnumerable<SelectListItem>
+                                        )ViewBag.SpecReviewerList, "", new { @id = "SpecReviewer", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
+                                                @Html.HiddenFor(m => m.NewPOForm.SpecReviewerId)
+                                            }
+                                            else
+                                            {
+                                                @Html.DropDownListFor(m => m.NewPOForm.SpecReviewerId, (IEnumerable<SelectListItem>
+                                    )ViewBag.SpecReviewerList, "", new { @id = "SpecReviewer", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
+                                            }
+
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+
                         </div>
                         <div class="col-md-6 col-sm-6">
                             <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
@@ -344,32 +368,6 @@
                                     </div>
                                 </section>
                             </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6">
-                            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
-                                <section>
-                                    <div class="row">
-                                        <div class="col-md-4 col-sm-4 formfield">
-                                            <span>Specs Reviewer</span>
-                                        </div>
-                                        <div class="d-flex col-md-8 col-sm-8">
-                                            @if (Model.NewPOForm.SpecReviewerId != null)
-                                            {
-                                                @Html.DropDownListFor(m => m.NewPOForm.SpecReviewerId, (IEnumerable<SelectListItem>
-                                        )ViewBag.SpecReviewerList, "", new { @id = "SpecReviewer", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
-                                                @Html.HiddenFor(m => m.NewPOForm.SpecReviewerId)
-                                            }
-                                            else
-                                            {
-                                                @Html.DropDownListFor(m => m.NewPOForm.SpecReviewerId, (IEnumerable<SelectListItem>
-                                    )ViewBag.SpecReviewerList, "", new { @id = "SpecReviewer", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
-                                            }
-
-                                        </div>
-                                    </div>
-                                </section>
-                            </div>
-
                         </div>
                         <div class="col-md-6">
                             <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
@@ -413,7 +411,15 @@
                                             <span>Order Date</span>
                                         </div>
                                         <div class="d-flex col-md-8 col-sm-8">
-                                            @Html.TextBoxFor(m => m.NewPOForm.OrderDate, new { @id = "OrderDate", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "", @type = "date" })
+                                            @if (Model.NewPOForm.StatusId == "PO01")
+                                            {
+                                                @Html.TextBoxFor(m => m.NewPOForm.OrderDate, new { @id = "OrderDate", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "", @type = "date" })
+                                            }
+                                            else
+                                            {
+                                                @Html.TextBoxFor(m => m.NewPOForm.OrderDate, new { @id = "OrderDate", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "", @type = "text", @readonly = true })
+                                            }
+
                                         </div>
                                     </div>
                                     <div class="row has-danger">
@@ -466,7 +472,15 @@
                                             <span>Delivery Date</span>
                                         </div>
                                         <div class="d-flex col-md-8 col-sm-8">
-                                            @Html.TextBoxFor(m => m.NewPOForm.DeliveryDate, new { @id = "OrderDate", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "", @type = "date" })
+                                            @if (Model.NewPOForm.StatusId == "PO01")
+                                            {
+                                                @Html.TextBoxFor(m => m.NewPOForm.DeliveryDate, new { @id = "DeliveryDate", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "", @type = "date" })
+                                            }
+                                            else
+                                            {
+                                                @Html.TextBoxFor(m => m.NewPOForm.DeliveryDate, new { @id = "DeliveryDate", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "", @type = "text", @readonly = true })
+                                            }
+
                                         </div>
                                     </div>
                                     <div class="row has-danger">

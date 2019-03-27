@@ -669,6 +669,11 @@
                             </th>
                             <th class="tablet">
                                 <div class="media">
+                                    <div class="d-flex align-self-center">Total price incl SST (RM)</div>
+                                </div>
+                            </th>
+                            <th class="tablet">
+                                <div class="media">
                                     <div class="d-flex align-self-center">DIM-Project</div>
                                 </div>
                             </th>
@@ -693,7 +698,7 @@
                             var ItemsId = "ItemsId" + i; var DateRequired = "DateRequired" + i; var Description = "Description" + i; var CustPONo = "CustPONo" + i; var ItemTypeId = "ItemTypeId" + i; var JobNoId = "JobNoId" + i; var JobTaskNoId = "JobTaskNoId" + i; var DimDeptId = "DimDeptId" + i; var DimProjectId = "DimProjectId" + i; var TotalPriceIncSST = "TotalPriceIncSST" + i;
                             var Quantity = "Quantity" + i; var CodeId = "CodeId" + i; var UoM = "UoM" + i; var UnitPrice = "UnitPrice" + i; var TotalPrice = "TotalPrice" + i; var UnitPriceIncSST = "UnitPriceIncSST" + i; var TaxCodeId = "TaxCodeId" + i;
                     <tr>
-                        <td class="d-none"><input id="@ItemsId" class="Id form-control custom-filter desktop" type="text" name="@ItemsId" value="@item.ItemsId" /></td>                        
+                        <td class="d-none"><input id="@ItemsId" class="Id form-control custom-filter desktop" type="text" name="@ItemsId" value="@item.ItemsId" /></td>
                         @if (Model.NewPRForm.Phase1Completed == true && Model.NewPRForm.StatusId != "PR09" && Model.NewPRForm.StatusId != "PR10" && Model.NewPRForm.StatusId != "PR19" && (Model.NewPRForm.PRItemListObject[0].CodeId != null || Model.NewPRForm.StatusId == "PR02"))
                         {
                             <td>
@@ -765,7 +770,7 @@
                                     <div class="has-danger">
                                         <input id="@UnitPrice" class="UnitPrice form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="UnitPrice" value="@item.UnitPrice" type="text">
                                         @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[i].UnitPrice, null, new { @class = "form-control-feedback" })
-                                        <input id="@UnitPriceIncSST" class="UnitPriceIncSST d-none form-control custom-filter desktop" type="text" name="@UnitPriceIncSST" value="@item.UnitPriceIncSST" />
+                                        <input id="@UnitPriceIncSST" class="UnitPriceIncSST d-none form-control" type="text" name="@UnitPriceIncSST" value="@item.UnitPriceIncSST" />
                                     </div>
                                 </td>
                             }
@@ -778,12 +783,16 @@
                                     @Html.TextBoxFor(m => item.UnitPrice, new { @id = UnitPrice, @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
                                 </td>
                             }
-                                <td>
-                                    <div class="has-danger">
-                                        <input id="@TotalPrice" class="TotalPrice form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="TotalPrice" value="@item.TotalPrice" type="text" readonly>
-                                        <input id="@TotalPriceIncSST" class="TotalPriceIncSST d-none form-control custom-filter desktop" type="text" name="TotalPriceIncSST" value="@item.TotalPriceIncSST" />
-                                    </div>
-                                </td>
+                            <td>
+                                <div class="has-danger">
+                                    <input id="@TotalPrice" class="TotalPrice form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="TotalPrice" value="@item.TotalPrice" type="text" readonly>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="has-danger">
+                                    <input id="@TotalPriceIncSST" class="TotalPriceIncSST form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="TotalPriceIncSST" value="@item.TotalPriceIncSST" type="text" readonly>
+                                </div>
+                            </td>
                             <td>
                                 @Html.DropDownListFor(m => item.DimProjectId, (IEnumerable<SelectListItem>)ViewData["DimProjectList" + i], "Select DimProject here", new { @id = DimProjectId, @class = "DimProjectId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
                                 @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[i].DimProjectId, null, new { @class = "form-control-feedback" })
@@ -1106,8 +1115,8 @@
                                     <a id="RecommendedPreparedRecommended" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">RECOMMENDED</a>
                                 }
                                 @{
-                                    bool v = (Model.PRCustId == 2 || (Model.PRCustId == 3 && Model.NewPRForm.ChildCustId == 16) || Model.PRCustId == 4);
-                                    bool w = (Model.PRCustId == 1 || (Model.PRCustId == 3 && Model.NewPRForm.ChildCustId != 16) || Model.PRCustId == 5);
+                                    bool v = (Model.CustId == 2 || (Model.CustId == 3 && Model.NewPRForm.ChildCustId == 16) || Model.CustId == 4);
+                                    bool w = (Model.CustId == 1 || (Model.CustId == 3 && Model.NewPRForm.ChildCustId != 16) || Model.CustId == 5);
                                 }
                                 @if (((Model.NewPRForm.StatusId == "PR11" && w) || (Model.NewPRForm.StatusId == "PR17" && v)) && ((Session["ifHOC"] != null && w) || (Session["ifCOO"] != null && v)))
                                 {

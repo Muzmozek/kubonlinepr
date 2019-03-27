@@ -1336,6 +1336,8 @@ namespace KUBOnlinePRPM.Controllers
                 if (checkCodeId.CodeId == null)
                 {
                     PRDetail.NewPRForm.PRItemListObject = (from m in db.PR_Items
+                                                           join n in db.UOMs on m.UoMId equals n.UoMId into o
+                                                           from p in o.DefaultIfEmpty()
                                                            where m.PRId == PRDetail.PRId
                                                            select new PRItemsTable()
                                                            {
@@ -1345,7 +1347,9 @@ namespace KUBOnlinePRPM.Controllers
                                                                CustPONo = m.custPONo,
                                                                Quantity = m.quantity,
                                                                UnitPrice = m.unitPrice,
-                                                               TotalPrice = m.totalPrice
+                                                               TotalPrice = m.totalPrice,
+                                                               UoMId = m.UoMId,
+                                                               UOM = p.UoMCode
                                                            }).ToList();
                     var QueryNull = db.PopulateItemLists.Select(c => new { CodeId = c.codeId, ItemCode = c.ItemCode, ItemDesc = c.ItemDescription, CustId = c.custId }).Where(c => c.CustId == 0).OrderBy(c => c.ItemCode);
                     int i = 1;
@@ -1364,7 +1368,7 @@ namespace KUBOnlinePRPM.Controllers
                         ViewData["TaxCodeList" + i] = new SelectList(TaxCodeListQuery.AsEnumerable(), "TaxCodeId", "Code");
                         ViewData["DimProjectList" + i] = new SelectList(DimProjectListQuery.AsEnumerable(), "ProjectId", "Description");
                         ViewData["DimDeptList" + i] = new SelectList(DimDeptListQuery.AsEnumerable(), "ProjectId", "Description");
-                        ViewData["UOMList" + i] = new SelectList(UOMListQuery.AsEnumerable(), "UoMId", "UoMCode");
+                        ViewData["UOMList" + i] = new SelectList(UOMListQuery.AsEnumerable(), "UoMId", "UoMCode", item.UoMId);
                         i++;
                     }
                     //}                                    
@@ -1374,6 +1378,8 @@ namespace KUBOnlinePRPM.Controllers
                     if (PRDetail.NewPRForm.Submited == 0 || PRDetail.NewPRForm.StatusId == "PR19" || PRDetail.NewPRForm.StatusId == "PR09")
                     {
                         PRDetail.NewPRForm.PRItemListObject = (from m in db.PR_Items
+                                                               join n in db.UOMs on m.UoMId equals n.UoMId into o
+                                                               from p in o.DefaultIfEmpty()
                                                                where m.PRId == PRDetail.PRId
                                                                select new PRItemsTable()
                                                                {
@@ -1391,7 +1397,8 @@ namespace KUBOnlinePRPM.Controllers
                                                                    TotalPriceIncSST = m.totalPriceIncSST,
                                                                    DimProjectId = m.dimProjectId,
                                                                    DimDeptId = m.dimDeptId,
-                                                                   UoMId = m.UoMId
+                                                                   UoMId = m.UoMId,
+                                                                   UOM = p.UoMCode
                                                                }).ToList();
                         var QueryNull = db.PopulateItemLists.Select(c => new { CodeId = c.codeId, ItemCode = c.ItemCode, ItemDesc = c.ItemDescription, CustId = c.custId }).Where(c => c.CustId == 0).OrderBy(c => c.ItemCode);
                         int i = 1;
@@ -1436,10 +1443,12 @@ namespace KUBOnlinePRPM.Controllers
                                                                join r in db.ItemTypes on m.itemTypeId equals r.itemTypeId into s
                                                                join u in db.JobTasks on m.jobTaskNoId equals u.jobTaskNoId into v
                                                                join x in db.TaxCodes on m.taxCodeId equals x.TaxCodeId into y
+                                                               join a in db.UOMs on m.UoMId equals a.UoMId into b
                                                                from q in p.DefaultIfEmpty()
                                                                from t in s.DefaultIfEmpty()
                                                                from w in v.DefaultIfEmpty()
                                                                from z in y.DefaultIfEmpty()
+                                                               from c in b.DefaultIfEmpty()
                                                                where m.PRId == PRDetail.PRId
                                                                select new PRItemsTable()
                                                                {
@@ -1453,6 +1462,7 @@ namespace KUBOnlinePRPM.Controllers
                                                                    CustPONo = m.custPONo,
                                                                    Quantity = m.quantity,
                                                                    UoMId = m.UoMId,
+                                                                   UOM = c.UoMCode,
                                                                    JobNoId = q.projectId,
                                                                    JobNo = q.projectCode,
                                                                    JobTaskNoId = m.jobTaskNoId,
@@ -3645,7 +3655,7 @@ namespace KUBOnlinePRPM.Controllers
                                 {
                                     //get En. Faiz
                                     getApprover = (from m in db.Users                                                   
-                                                   where m.userId == 355 && m.companyId == PR.CustId
+                                                   where m.userId == 60 && m.companyId == PR.CustId
                                                    select new PRModel()
                                                    {
                                                        UserId = m.userId,
@@ -4375,8 +4385,7 @@ namespace KUBOnlinePRPM.Controllers
                                 var getRecommenderII = new List<PRModel>();
                                 if (PR.CustId == 2 || (PR.CustId == 3 && getReqChildCustId.childCompanyId == 16) || (PR.CustId == 4 && PR.AmountRequired > 500000))
                                 {
-                                    PR.StatusId = "PR18";
-                                    //PR.StatusId = "PR17";
+                                    PR.StatusId = "PR17";
                                     getRecommenderII = (from m in db.Users
                                                         join n in db.Users_Roles on m.userId equals n.userId
                                                         //join o in db.Roles on n.roleId equals o.roleId

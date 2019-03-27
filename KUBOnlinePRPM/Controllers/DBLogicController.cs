@@ -674,7 +674,10 @@ namespace KUBOnlinePRPM.Controllers
                         {
                             _objDetails_NotificationMsg.message = x.FullName + " set UOM to " + UOMsChanges.UoMCode + " in PRNo : " + FormerPRDetails.PRNo;
                         }
-                        else
+                        else if (value.UoMId == null)
+                        {
+                            _objDetails_NotificationMsg.message = x.FullName + " change UOM in PRNo : " + FormerPRDetails.PRNo + " items from " + formerUOMs.UoMCode + " to null";
+                        } else
                         {
                             _objDetails_NotificationMsg.message = x.FullName + " change UOM in PRNo : " + FormerPRDetails.PRNo + " items from " + formerUOMs.UoMCode + " to " + UOMsChanges.UoMCode;
                         }

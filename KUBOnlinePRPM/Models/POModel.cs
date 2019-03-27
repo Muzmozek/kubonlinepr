@@ -101,8 +101,20 @@ namespace KUBOnlinePRPM.Models
         public int Quantity { get; set; }
         public int OutStandingQuantity { get; set; }
         public string UOM { get; set; }
+        public int? UoMId { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal TotalPrice { get; set; }
+        public decimal? UnitPriceIncSST { get; set; }
+        public decimal? TotalPriceIncSST { get; set; }
+        public string JobNo { get; set; }
+        public int? JobNoId { get; set; }
+        public string JobTaskNo { get; set; }
+        public int? JobTaskNoId { get; set; }
+        public decimal? SST { get; set; }
+        public int? TaxCodeId { get; set; }
+        public string Code { get; set; }
+        public int? DimProjectId { get; set; }
+        public int? DimDeptId { get; set; }
     }
 
     public class POHeaderTable
