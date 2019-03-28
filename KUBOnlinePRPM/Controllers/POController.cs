@@ -246,29 +246,82 @@ namespace KUBOnlinePRPM.Controllers
                 POModel POList = new POModel();
                 if (Type == "All")
                 {
+                    int UserId = Int32.Parse(Session["UserId"].ToString());
                     int CustId = Int32.Parse(Session["CompanyId"].ToString());
-                    POList.POListObject = (from m in db.PurchaseOrders
-                                           join n in db.Vendors on m.vendorId equals n.vendorId
-                                           join o in db.PurchaseRequisitions on m.PRId equals o.PRId
-                                           join p in db.Users on m.PreparedById equals p.userId
-                                           join q in db.POStatus on m.StatusId equals q.statusId
-                                           join r in db.Customers on m.CustId equals r.custId
-                                           //where m.CustId == CustId
-                                           select new POListTable()
-                                           {
-                                               POId = m.POId,
-                                               PONo = m.PONo,
-                                               PODate = m.PODate,
-                                               PRNo = o.PRNo,
-                                               Company = r.name,
-                                               RequestedName = p.userName,
-                                               VendorId = n.vendorNo,
-                                               VendorCompany = n.name,
-                                               TotalPrice = m.TotalPrice,
-                                               POAging = m.POAging,
-                                               Status = q.status,
-                                               POType = o.PRType
-                                           }).ToList();
+                    if (Session["ifSuperAdmin"] != null || Session["ifHOGPSS"] != null || Session["ifCOO"] != null || Session["ifCFO"] != null || Session["ifGMD"] != null)
+                    {
+                        POList.POListObject = (from m in db.PurchaseOrders
+                                               join n in db.Vendors on m.vendorId equals n.vendorId
+                                               join o in db.PurchaseRequisitions on m.PRId equals o.PRId
+                                               join p in db.Users on m.PreparedById equals p.userId
+                                               join q in db.POStatus on m.StatusId equals q.statusId
+                                               join r in db.Customers on m.CustId equals r.custId
+                                               select new POListTable()
+                                               {
+                                                   POId = m.POId,
+                                                   PONo = m.PONo,
+                                                   PODate = m.PODate,
+                                                   PRNo = o.PRNo,
+                                                   Company = r.name,
+                                                   RequestedName = p.userName,
+                                                   VendorId = n.vendorNo,
+                                                   VendorCompany = n.name,
+                                                   TotalPrice = m.TotalPrice,
+                                                   POAging = m.POAging,
+                                                   Status = q.status,
+                                                   POType = o.PRType
+                                               }).ToList();
+                    }
+                    else if (UserId == 89)
+                    {
+                        POList.POListObject = (from m in db.PurchaseOrders
+                                               join n in db.Vendors on m.vendorId equals n.vendorId
+                                               join o in db.PurchaseRequisitions on m.PRId equals o.PRId
+                                               join p in db.Users on m.PreparedById equals p.userId
+                                               join q in db.POStatus on m.StatusId equals q.statusId
+                                               join r in db.Customers on m.CustId equals r.custId
+                                               where m.CustId == 3 &&  p.childCompanyId == 16
+                                               select new POListTable()
+                                               {
+                                                   POId = m.POId,
+                                                   PONo = m.PONo,
+                                                   PODate = m.PODate,
+                                                   PRNo = o.PRNo,
+                                                   Company = r.name,
+                                                   RequestedName = p.userName,
+                                                   VendorId = n.vendorNo,
+                                                   VendorCompany = n.name,
+                                                   TotalPrice = m.TotalPrice,
+                                                   POAging = m.POAging,
+                                                   Status = q.status,
+                                                   POType = o.PRType
+                                               }).ToList();
+                    } else
+                    {
+                        POList.POListObject = (from m in db.PurchaseOrders
+                                               join n in db.Vendors on m.vendorId equals n.vendorId
+                                               join o in db.PurchaseRequisitions on m.PRId equals o.PRId
+                                               join p in db.Users on m.PreparedById equals p.userId
+                                               join q in db.POStatus on m.StatusId equals q.statusId
+                                               join r in db.Customers on m.CustId equals r.custId
+                                               where m.CustId == CustId
+                                               select new POListTable()
+                                               {
+                                                   POId = m.POId,
+                                                   PONo = m.PONo,
+                                                   PODate = m.PODate,
+                                                   PRNo = o.PRNo,
+                                                   Company = r.name,
+                                                   RequestedName = p.userName,
+                                                   VendorId = n.vendorNo,
+                                                   VendorCompany = n.name,
+                                                   TotalPrice = m.TotalPrice,
+                                                   POAging = m.POAging,
+                                                   Status = q.status,
+                                                   POType = o.PRType
+                                               }).ToList();
+                    }
+                    
                     POList.Type = Type;
 
                     return View("POList", POList);
@@ -436,10 +489,12 @@ namespace KUBOnlinePRPM.Controllers
                                                        join o in db.Projects on m.jobNoId equals o.projectId into s
                                                        join r in db.ItemTypes on m.itemTypeId equals r.itemTypeId
                                                        join u in db.JobTasks on m.jobTaskNoId equals u.jobTaskNoId into v
-                                                       join x in db.TaxCodes on m.taxCodeId equals x.TaxCodeId
-                                                       join a in db.UOMs on m.UoMId equals a.UoMId
+                                                       join x in db.TaxCodes on m.taxCodeId equals x.TaxCodeId into b
+                                                       join a in db.UOMs on m.UoMId equals a.UoMId into d
                                                        from t in s.DefaultIfEmpty()
                                                        from w in v.DefaultIfEmpty()
+                                                       from c in b.DefaultIfEmpty()
+                                                       from e in d.DefaultIfEmpty()
                                                        where m.POId == PODetail.POId && n.custId == getPRCustId.CustId
                                                        select new POItemsTable()
                                                        {
@@ -452,14 +507,14 @@ namespace KUBOnlinePRPM.Controllers
                                                            Quantity = m.quantity,
                                                            OutStandingQuantity = p.outStandingQuantity.Value,                                                           
                                                            UoMId = m.UoMId,
-                                                           UOM = a.UoMCode,
+                                                           UOM = e.UoMCode,
                                                            JobNoId = t.projectId,
                                                            JobNo = t.projectCode,
                                                            JobTaskNoId = m.jobTaskNoId,
                                                            JobTaskNo = w.jobTaskNo,
                                                            UnitPrice = m.unitPrice,
                                                            TaxCodeId = m.taxCodeId,
-                                                           Code = x.Code,
+                                                           TaxCode = c.Code,
                                                            TotalPrice = m.totalPrice,
                                                            UnitPriceIncSST = m.unitPriceIncSST,
                                                            TotalPriceIncSST = m.totalPriceIncSST,
@@ -959,9 +1014,11 @@ namespace KUBOnlinePRPM.Controllers
                                       join h in db.PO_Item on a.POId equals h.POId
                                       join i in db.PopulateItemLists on h.codeId equals i.codeId into j
                                       join k in db.PaymentTerms on a.PaymentTermsId equals k.paymentTermsId
-                                      //from x in l.DefaultIfEmpty()
-                                      //from v in r.DefaultIfEmpty()
-                                      //from w in p.DefaultIfEmpty()
+                                      join l in db.Purchasers on a.PurchaserId equals l.purchaserId into m
+                                      join o in db.Locations on a.LocationCodeId equals o.locationId into p
+                                      from n in m.DefaultIfEmpty()
+                                          //from v in r.DefaultIfEmpty()
+                                      from q in p.DefaultIfEmpty()
                                       from y in f.DefaultIfEmpty()
                                       from z in j.DefaultIfEmpty()
                                       where a.POId == PODetail.POId
@@ -969,9 +1026,11 @@ namespace KUBOnlinePRPM.Controllers
                                       {
                                           PONo = a.PONo,
                                           PODate = a.PreparedDate,
+                                          OrderDate = a.OrderDate,
                                           ProjectId = a.projectId,
                                           ProjectName = g.projectName,
                                           VendorId = a.vendorId,
+                                          VendorCode = y.vendorNo,
                                           VendorName = y.name,
                                           PayToVendorId = a.PayToVendorId,
                                           PayToVendorName = y.name,
@@ -982,7 +1041,15 @@ namespace KUBOnlinePRPM.Controllers
                                           //VendorStaffId = x.staffId,
                                           //VendorContactName = x.vendorContactName,
                                           //VendorContactNo = x.vendorContactNo,
+                                          DeliveryDate = a.DeliveryDate,
+                                          DiscountAmount = a.DiscountAmount,
+                                          PurchaserCode = n.purchaserCode,
+                                          DeliveryTo = q.locationAddress + " " + q.locationCity + " " + q.PostCode + " " + q.State + " " + q.CountryRegionCode,
                                           AmountRequired = a.TotalPrice,
+                                          TotalBeforeDisc = a.TotalExcSST + a.DiscountAmount,
+                                          TotalExclSST = a.TotalExcSST,
+                                          TotalSST = a.TotalSST,
+                                          TotalIncSST = a.TotalIncSST,
                                           PreparedById = a.PreparedById.Value,
                                           Saved = a.Saved,
                                           Submited = a.Submited,
@@ -1014,23 +1081,29 @@ namespace KUBOnlinePRPM.Controllers
                 
                 PODetail.POItemList = (from m in db.PO_Item
                                        from n in db.PopulateItemLists.Where(x => m.codeId == x.codeId && m.itemTypeId == x.itemTypeId)
-                                           //from p in o.DefaultIfEmpty()
+                                       join o in db.TaxCodes on m.taxCodeId equals o.TaxCodeId into p
+                                       join r in db.UOMs on m.UoMId equals r.UoMId into s
+                                       from q in p.DefaultIfEmpty()
+                                       from t in s.DefaultIfEmpty()
                                        where m.POId == PODetail.POId && n.custId == PRCustId
                                        select new POItemsTable()
                                        {
                                            ItemsId = m.itemsId,
                                            DateRequired = m.dateRequired,
                                            Description = n.Description,
-                                           CodeId = n.codeId,
                                            ItemCode = n.ItemCode,
                                            CustPONo = m.custPONo,
                                            Quantity = m.quantity,
                                            UnitPrice = m.unitPrice,
                                            //SST = m.sst,
                                            TotalPrice = m.totalPrice,
-                                           UOM = n.UoM
+                                           DimDeptId = m.dimDeptId,
+                                           DimProjectId = m.dimProjectId,
+                                           TotalPriceIncSST = m.totalPriceIncSST,
+                                           TaxCode = q.Code,
+                                           TaxPerc = q.GST,
+                                           UOM = t.UoMCode
                                        }).ToList();
-                PODetail.NewPOForm.DeliveryDate = PODetail.POItemList[0].DateRequired;
 
                 return new RazorPDF.PdfActionResult("POForm", PODetail);
             }

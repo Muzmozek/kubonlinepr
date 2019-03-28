@@ -732,10 +732,18 @@
                             </td>
                             <td>
                                 <input id="@Quantity" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="Quantity" value="@item.Quantity" type="text" readonly>
-                            </td>
+                            </td>                            
                             <td>
                                 @*<input id="@UoM" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="UoM" value="@item.UOM" type="text" readonly>*@
-                                @Html.DropDownListFor(m => item.UoMId, (IEnumerable<SelectListItem>)ViewData["UOMList" + i], "Select item type here", new { @id = UoM, @class = "UOM custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                                @if (Model.NewPRForm.StatusId == "PR02" && Session["ifProcurement"] != null)
+                                {
+                                    @Html.DropDownListFor(m => item.UoMId, (IEnumerable<SelectListItem>)ViewData["UOMList" + i], "Select item type here", new { @id = UoM, @class = "UOM custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(m => item.UoMId, (IEnumerable<SelectListItem>)ViewData["UOMList" + i], "Select item type here", new { @id = UoM, @class = "UOM custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
+                                }
+
                                 @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[i].UoMId, null, new { @class = "form-control-feedback" })
                             </td>
                             //if ((Session["ifAdmin"] != null || Session["ifSuperAdmin"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null || Session["ifCOO"] != null || Session["ifCFO"] != null || Session["ifGMD"] != null || Session["ifFinance"] != null || Session["ifProcurement"] != null && Model.NewPRForm.Submited == 1) || Model.NewPRForm.Scenario > 0)
@@ -794,11 +802,27 @@
                                 </div>
                             </td>
                             <td>
-                                @Html.DropDownListFor(m => item.DimProjectId, (IEnumerable<SelectListItem>)ViewData["DimProjectList" + i], "Select DimProject here", new { @id = DimProjectId, @class = "DimProjectId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                                @if (Model.NewPRForm.StatusId == "PR02" && Session["ifProcurement"] != null)
+                                {
+                                    @Html.DropDownListFor(m => item.DimProjectId, (IEnumerable<SelectListItem>)ViewData["DimProjectList" + i], "Select DimProject here", new { @id = DimProjectId, @class = "DimProjectId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(m => item.DimProjectId, (IEnumerable<SelectListItem>)ViewData["DimProjectList" + i], "Select DimProject here", new { @id = DimProjectId, @class = "DimProjectId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
+                                }
+
                                 @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[i].DimProjectId, null, new { @class = "form-control-feedback" })
                             </td>
                             <td>
-                                @Html.DropDownListFor(m => item.DimDeptId, (IEnumerable<SelectListItem>)ViewData["DimDeptList" + i], "Select DimDept here", new { @id = DimDeptId, @class = "DimDeptId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                                @if (Model.NewPRForm.StatusId == "PR02" && Session["ifProcurement"] != null)
+                                {
+                                    @Html.DropDownListFor(m => item.DimDeptId, (IEnumerable<SelectListItem>)ViewData["DimDeptList" + i], "Select DimDept here", new { @id = DimDeptId, @class = "DimDeptId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(m => item.DimDeptId, (IEnumerable<SelectListItem>)ViewData["DimDeptList" + i], "Select DimDept here", new { @id = DimDeptId, @class = "DimDeptId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
+                                }
+
                                 @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[i].DimDeptId, null, new { @class = "form-control-feedback" })
                             </td>
                         }

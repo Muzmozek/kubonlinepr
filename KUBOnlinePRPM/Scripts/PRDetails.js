@@ -717,6 +717,7 @@
 
     $(document).on("change", "#DiscountAmount", function () {
         var DiscountAmount = parseFloat($(this).val());
+        //$("body").addClass("loading");
         openHiddenPRItemTable();
         //var Quantity = $("#Quantity" + $(this)[0].id.substring(9, $(this)[0].id.length)).val();
         //var SST = $(".child #SST" + $(this)[0].id.substring(9, $(this)[0].id.length)).val();
@@ -739,13 +740,14 @@
         }
         var DiscountPerc = parseFloat(DiscountAmount / AmountRequired * 100).toFixed(2);
         var TotalExcSST = parseFloat(AmountRequired - DiscountAmount);
-        var TotalIncSST = parseFloat(TotalExcSST + TotalSST - DiscountAmount).toFixed(2);
+        var TotalIncSST = parseFloat(TotalExcSST + TotalSST).toFixed(2);
         $("#AmountRequired").val(AmountRequired);
         $("#DiscountPerc").val(parseInt(DiscountPerc));
         $("#TotalExclSST").val(TotalExcSST.toFixed(2));
         $("#TotalSST").val(TotalSST.toFixed(2));
         $("#TotalIncSST").val(TotalIncSST);
         generatePRItemTable();
+        //$("body").removeClass("loading");
     });
 
     //$(document).on("change", ".child .SST", function () {

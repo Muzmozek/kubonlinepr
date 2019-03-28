@@ -60,13 +60,16 @@ namespace KUBOnlinePRPM.Models
         public List<POItemsTable> POItemListObject { get; set; }
         public decimal? DiscountAmount { get; set; }
         public int? DiscountPerc { get; set; }
+        public decimal? TotalBeforeDisc { get; set; }
         public decimal? TotalExclSST { get; set; }
         public decimal? TotalSST { get; set; }
         public decimal? TotalIncSST { get; set; }
         public string SpecReviewerId { get; set; }
         public int? LocationCodeId { get; set; }
+        public string DeliveryTo { get; set; }
         public DateTime? OrderDate { get; set; }
         public int? PurchaserCodeId { get; set; }
+        public string PurchaserCode { get; set; }
     }
 
     public class POListTable
@@ -112,7 +115,8 @@ namespace KUBOnlinePRPM.Models
         public int? JobTaskNoId { get; set; }
         public decimal? SST { get; set; }
         public int? TaxCodeId { get; set; }
-        public string Code { get; set; }
+        public string TaxCode { get; set; }
+        public int? TaxPerc { get; set; }
         public int? DimProjectId { get; set; }
         public int? DimDeptId { get; set; }
     }
