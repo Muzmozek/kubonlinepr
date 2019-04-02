@@ -441,7 +441,7 @@ namespace KUBOnlinePRPM.Controllers
                                                         TotalPrice = decimal.Parse("0.00")
                                                     }
                                                 };
-
+            
             if (Session["ChildCompanyId"] != null)
             {
                 ChildCustId = Int32.Parse(Session["ChildCompanyId"].ToString());
@@ -456,6 +456,7 @@ namespace KUBOnlinePRPM.Controllers
                 }
                 model.NewPRForm.ChildCustId = ChildCustId;
             }
+
             IOrderedQueryable<dynamic> ProjectNameQuery = null;
             if (UserId == 258)
             {
@@ -465,7 +466,7 @@ namespace KUBOnlinePRPM.Controllers
                                     {
                                         ProjectId = m.projectId,
                                         Dimension = m.dimension,
-                                        Description = m.dimension + " - " + m.projectCode + " - " + m.projectName,
+                                        Description = m.dimension + " - " + m.projectCode,
                                         Code = m.projectCode,
                                     }).OrderBy(c => c.Dimension).ThenBy(c => c.Code);
             } else
@@ -1102,43 +1103,49 @@ namespace KUBOnlinePRPM.Controllers
                 PRDetail.PRId = Int32.Parse(Session["PRId"].ToString());
                 PRDetail.Type = Session["PRType"].ToString();
                 PRDetail.UserId = Int32.Parse(Session["UserId"].ToString());
-                PRDetail.CustId = Int32.Parse(Session["CompanyId"].ToString());
+                //PRDetail.CustId = Int32.Parse(Session["CompanyId"].ToString());
+                PRDetail.CustId = (from m in db.PurchaseRequisitions
+                                   join n in db.Projects on m.ProjectId equals n.projectId
+                                   where m.PRId == PRDetail.PRId
+                                   select new PRModel()
+                                   {
+                                       CustId = n.custId
+                                   }).First().CustId;
+                //if (Session["ChildCompanyId"] != null && PRDetail.CustId != 2)
+                //{
+                //    ChildCustId = Int32.Parse(Session["ChildCompanyId"].ToString());
+                //    switch (ChildCustId)
+                //    {
+                //        case 16:
+                //            PRDetail.CustId = 6; break;
+                //        case 17:
+                //            PRDetail.CustId = 7; break;
+                //        case 18:
+                //            PRDetail.CustId = 8; break;
+                //    }
 
-                if (Session["ChildCompanyId"] != null && PRDetail.CustId != 2)
-                {
-                    ChildCustId = Int32.Parse(Session["ChildCompanyId"].ToString());
-                    switch (ChildCustId)
-                    {
-                        case 16:
-                            PRDetail.CustId = 6; break;
-                        case 17:
-                            PRDetail.CustId = 7; break;
-                        case 18:
-                            PRDetail.CustId = 8; break;
-                    }
-
-                }
-                else
-                {
-                    var GetChildCustId = (from m in db.PurchaseRequisitions
-                                       join n in db.Users on m.PreparedById equals n.userId
-                                       where m.PRId == PRDetail.PRId
-                                          select new { ChildCustId = n.childCompanyId, CustId = n.companyId.Value }).FirstOrDefault();
-                    if (GetChildCustId != null)
-                    {
-                        switch (GetChildCustId.ChildCustId)
-                        {
-                            case 16:
-                                PRDetail.CustId = 6; break;
-                            case 17:
-                                PRDetail.CustId = 7; break;
-                            case 18:
-                                PRDetail.CustId = 8; break;
-                            default:
-                                PRDetail.CustId = GetChildCustId.CustId; break;
-                        }
-                    }
-                }
+                //}
+                //else
+                //{
+                //    var GetChildCustId = (from m in db.PurchaseRequisitions
+                //                       join n in db.Users on m.PreparedById equals n.userId
+                //                       where m.PRId == PRDetail.PRId
+                //                          select new { ChildCustId = n.childCompanyId, CustId = n.companyId.Value }).FirstOrDefault();
+                //    if (GetChildCustId != null)
+                //    {
+                //        switch (GetChildCustId.ChildCustId)
+                //        {
+                //            case 16:
+                //                PRDetail.CustId = 6; break;
+                //            case 17:
+                //                PRDetail.CustId = 7; break;
+                //            case 18:
+                //                PRDetail.CustId = 8; break;
+                //            default:
+                //                PRDetail.CustId = GetChildCustId.CustId; break;
+                //        }
+                //    }
+                //}
 
                 IOrderedQueryable<dynamic> ProjectNameQuery = null;
                 if (PRDetail.UserId == 258)
@@ -1149,7 +1156,7 @@ namespace KUBOnlinePRPM.Controllers
                                         {
                                             ProjectId = m.projectId,
                                             Dimension = m.dimension,
-                                            Description = m.dimension + " - " + m.projectCode + " - " + m.projectName,
+                                            Description = m.dimension + " - " + m.projectCode,
                                             Code = m.projectCode,
                                         }).OrderBy(c => c.Dimension).ThenBy(c => c.Code);
                 }
@@ -1166,7 +1173,8 @@ namespace KUBOnlinePRPM.Controllers
                                         }).OrderBy(c => c.Dimension).ThenBy(c => c.Code);
                 }
 
-                List<SelectListItem> BudgetedList = new List<SelectListItem>();
+                
+                List < SelectListItem > BudgetedList = new List<SelectListItem>();
                 BudgetedList.Add(new SelectListItem
                 {
                     Text = "Yes",
@@ -3480,7 +3488,7 @@ namespace KUBOnlinePRPM.Controllers
                 getDone.done = true;
                 db.SaveChanges();
 
-                decimal amountBudget = PRModel.NewPRForm.AmountRequired;
+                decimal amountBudget = PRModel.NewPRForm.TotalIncSST.Value;
 
                 PR_Admin SaveAdminInfo = db.PR_Admin.First(m => m.PRId == PR.PRId);
                 SaveAdminInfo.adminSubmited = SaveAdminInfo.adminSubmited + 1;
@@ -3674,22 +3682,36 @@ namespace KUBOnlinePRPM.Controllers
                         switch (PR.CustId)
                         {
                             case 2:
-                                getApprover = (from m in db.Users
-                                               join o in db.Users on m.superiorId equals o.userId
-                                               join n in db.Users_Roles on o.userId equals n.userId
-                                               where (n.roleId == "R02" || n.roleId == "R11" || n.roleId == "R14") && m.companyId == PR.CustId && m.userId == PR.PreparedById
-                                               select new PRModel()
-                                               {
-                                                   UserId = n.userId,
-                                                   FullName = o.firstName + " " + o.lastName,
-                                                   EmailAddress = o.emailAddress
-                                               }).ToList();
+                                if (amountBudget < 10000 && getReqChildCustId.childCompanyId == 7)
+                                {
+                                    //get En. Shahril
+                                    getApprover = (from m in db.Users
+                                                   where m.userId == 172 && m.companyId == PR.CustId
+                                                   select new PRModel()
+                                                   {
+                                                       UserId = m.userId,
+                                                       FullName = m.firstName + " " + m.lastName,
+                                                       EmailAddress = m.emailAddress
+                                                   }).ToList();
+                                } else
+                                {
+                                    getApprover = (from m in db.Users
+                                                   join o in db.Users on m.superiorId equals o.userId
+                                                   join n in db.Users_Roles on o.userId equals n.userId
+                                                   where n.roleId == "R02" && m.companyId == PR.CustId && m.userId == PR.PreparedById
+                                                   select new PRModel()
+                                                   {
+                                                       UserId = n.userId,
+                                                       FullName = o.firstName + " " + o.lastName,
+                                                       EmailAddress = o.emailAddress
+                                                   }).ToList();
+                                }                                    
                                 break;
                             case 3:
                             case 4:
                                 if (amountBudget < 5000 && PR.CustId == 4)
                                 {
-                                    //get En. Faiz
+                                    //get Pn. Liz
                                     getApprover = (from m in db.Users                                                   
                                                    where m.userId == 60 && m.companyId == PR.CustId
                                                    select new PRModel()
@@ -4518,7 +4540,7 @@ namespace KUBOnlinePRPM.Controllers
                                     getApprover = (from m in db.Users
                                                    join o in db.Users on m.superiorId equals o.userId
                                                    join n in db.Users_Roles on o.userId equals n.userId
-                                                   where (n.roleId == "R02" || n.roleId == "R11" || n.roleId == "R14") && m.companyId == PR.CustId && m.userId == PR.PreparedById
+                                                   where n.roleId == "R02" && m.companyId == PR.CustId && m.userId == PR.PreparedById
                                                    select new PRModel()
                                                    {
                                                        UserId = n.userId,
@@ -4608,7 +4630,7 @@ namespace KUBOnlinePRPM.Controllers
                                         getApprover = (from m in db.Users
                                                        join o in db.Users on m.superiorId equals o.userId
                                                        join n in db.Users_Roles on o.userId equals n.userId
-                                                       where (n.roleId == "R02" || n.roleId == "R11" || n.roleId == "R14") && m.companyId == PR.CustId && m.userId == PR.PreparedById
+                                                       where n.roleId == "R02" && m.companyId == PR.CustId && m.userId == PR.PreparedById
                                                        select new PRModel()
                                                        {
                                                            UserId = o.userId,
