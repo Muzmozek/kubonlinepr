@@ -3488,7 +3488,7 @@ namespace KUBOnlinePRPM.Controllers
                 getDone.done = true;
                 db.SaveChanges();
 
-                decimal amountBudget = PRModel.NewPRForm.AmountRequired;
+                decimal amountBudget = PRModel.NewPRForm.TotalIncSST.Value;
 
                 PR_Admin SaveAdminInfo = db.PR_Admin.First(m => m.PRId == PR.PRId);
                 SaveAdminInfo.adminSubmited = SaveAdminInfo.adminSubmited + 1;
@@ -3682,22 +3682,36 @@ namespace KUBOnlinePRPM.Controllers
                         switch (PR.CustId)
                         {
                             case 2:
-                                getApprover = (from m in db.Users
-                                               join o in db.Users on m.superiorId equals o.userId
-                                               join n in db.Users_Roles on o.userId equals n.userId
-                                               where (n.roleId == "R02" || n.roleId == "R11" || n.roleId == "R14") && m.companyId == PR.CustId && m.userId == PR.PreparedById
-                                               select new PRModel()
-                                               {
-                                                   UserId = n.userId,
-                                                   FullName = o.firstName + " " + o.lastName,
-                                                   EmailAddress = o.emailAddress
-                                               }).ToList();
+                                if (amountBudget < 10000 && getReqChildCustId.childCompanyId == 7)
+                                {
+                                    //get En. Shahril
+                                    getApprover = (from m in db.Users
+                                                   where m.userId == 172 && m.companyId == PR.CustId
+                                                   select new PRModel()
+                                                   {
+                                                       UserId = m.userId,
+                                                       FullName = m.firstName + " " + m.lastName,
+                                                       EmailAddress = m.emailAddress
+                                                   }).ToList();
+                                } else
+                                {
+                                    getApprover = (from m in db.Users
+                                                   join o in db.Users on m.superiorId equals o.userId
+                                                   join n in db.Users_Roles on o.userId equals n.userId
+                                                   where n.roleId == "R02" && m.companyId == PR.CustId && m.userId == PR.PreparedById
+                                                   select new PRModel()
+                                                   {
+                                                       UserId = n.userId,
+                                                       FullName = o.firstName + " " + o.lastName,
+                                                       EmailAddress = o.emailAddress
+                                                   }).ToList();
+                                }                                    
                                 break;
                             case 3:
                             case 4:
                                 if (amountBudget < 5000 && PR.CustId == 4)
                                 {
-                                    //get En. Faiz
+                                    //get Pn. Liz
                                     getApprover = (from m in db.Users                                                   
                                                    where m.userId == 60 && m.companyId == PR.CustId
                                                    select new PRModel()
@@ -4526,7 +4540,7 @@ namespace KUBOnlinePRPM.Controllers
                                     getApprover = (from m in db.Users
                                                    join o in db.Users on m.superiorId equals o.userId
                                                    join n in db.Users_Roles on o.userId equals n.userId
-                                                   where (n.roleId == "R02" || n.roleId == "R11" || n.roleId == "R14") && m.companyId == PR.CustId && m.userId == PR.PreparedById
+                                                   where n.roleId == "R02" && m.companyId == PR.CustId && m.userId == PR.PreparedById
                                                    select new PRModel()
                                                    {
                                                        UserId = n.userId,
@@ -4616,7 +4630,7 @@ namespace KUBOnlinePRPM.Controllers
                                         getApprover = (from m in db.Users
                                                        join o in db.Users on m.superiorId equals o.userId
                                                        join n in db.Users_Roles on o.userId equals n.userId
-                                                       where (n.roleId == "R02" || n.roleId == "R11" || n.roleId == "R14") && m.companyId == PR.CustId && m.userId == PR.PreparedById
+                                                       where n.roleId == "R02" && m.companyId == PR.CustId && m.userId == PR.PreparedById
                                                        select new PRModel()
                                                        {
                                                            UserId = o.userId,
