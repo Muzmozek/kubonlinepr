@@ -441,7 +441,7 @@ namespace KUBOnlinePRPM.Controllers
                                                         TotalPrice = decimal.Parse("0.00")
                                                     }
                                                 };
-            
+
             if (Session["ChildCompanyId"] != null)
             {
                 ChildCustId = Int32.Parse(Session["ChildCompanyId"].ToString());
@@ -456,7 +456,21 @@ namespace KUBOnlinePRPM.Controllers
                 }
                 model.NewPRForm.ChildCustId = ChildCustId;
             }
-            var ProjectNameQuery = (from m in db.Projects
+            IOrderedQueryable<dynamic> ProjectNameQuery = null;
+            if (UserId == 258)
+            {
+                ProjectNameQuery = (from m in db.Projects
+                                    where m.projectCode == "HQ"
+                                    select new
+                                    {
+                                        ProjectId = m.projectId,
+                                        Dimension = m.dimension,
+                                        Description = m.dimension + " - " + m.projectCode + " - " + m.projectName,
+                                        Code = m.projectCode,
+                                    }).OrderBy(c => c.Dimension).ThenBy(c => c.Code);
+            } else
+            {
+                ProjectNameQuery = (from m in db.Projects
                                     where m.custId == CustId
                                     select new
                                     {
@@ -465,6 +479,8 @@ namespace KUBOnlinePRPM.Controllers
                                         Description = m.dimension + " - " + m.projectCode,
                                         Code = m.projectCode,
                                     }).OrderBy(c => c.Dimension).ThenBy(c => c.Code);
+            }
+            
             List<SelectListItem> BudgetedList = new List<SelectListItem>();
             BudgetedList.Add(new SelectListItem
             {
@@ -1123,7 +1139,23 @@ namespace KUBOnlinePRPM.Controllers
                         }
                     }
                 }
-                var ProjectNameQuery = (from m in db.Projects
+
+                IOrderedQueryable<dynamic> ProjectNameQuery = null;
+                if (PRDetail.UserId == 258)
+                {
+                    ProjectNameQuery = (from m in db.Projects
+                                        where m.projectCode == "HQ"
+                                        select new
+                                        {
+                                            ProjectId = m.projectId,
+                                            Dimension = m.dimension,
+                                            Description = m.dimension + " - " + m.projectCode + " - " + m.projectName,
+                                            Code = m.projectCode,
+                                        }).OrderBy(c => c.Dimension).ThenBy(c => c.Code);
+                }
+                else
+                {
+                    ProjectNameQuery = (from m in db.Projects
                                         where m.custId == PRDetail.CustId
                                         select new
                                         {
@@ -1132,6 +1164,7 @@ namespace KUBOnlinePRPM.Controllers
                                             Description = m.dimension + " - " + m.projectCode,
                                             Code = m.projectCode,
                                         }).OrderBy(c => c.Dimension).ThenBy(c => c.Code);
+                }
 
                 List<SelectListItem> BudgetedList = new List<SelectListItem>();
                 BudgetedList.Add(new SelectListItem
