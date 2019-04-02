@@ -190,7 +190,6 @@
         {
             decimal? UnitPrice = Model.NewPRForm.PRItemListObject[i].UnitPrice;
             decimal Quantity = Model.NewPRForm.PRItemListObject[i].Quantity;
-            decimal Total = UnitPrice.Value * Quantity;
 <tr class="c1_2">
                 <td class="c4_1" style="width:98px">@Model.NewPRForm.PRItemListObject[i].DateRequired.ToShortDateString()</td>
                 <td colspan="4" class="c11_3">@Model.NewPRForm.PRItemListObject[i].Description<br /><br />@*@Html.Raw(Html.Encode(item.Remarks).Replace("\r\n", "<br /><br />").Replace("\n", "<br />"))*@</td>
@@ -200,14 +199,14 @@
                 <td class="c11_2" style="width:75px">@Model.NewPRForm.PRItemListObject[i].Quantity</td>
                 <td class="c11_2" style="width:44px">@Model.NewPRForm.PRItemListObject[i].UOM</td>
                 <td class="c11_2" style="width:88px">@Convert.ToDecimal(Model.NewPRForm.PRItemListObject[i].UnitPrice).ToString("#,##0.00")</td>
-                <td class="c11_2" style="width:97px">@Total</td>
+                <td class="c11_2" style="width:97px">@Convert.ToDecimal(Model.NewPRForm.PRItemListObject[i].TotalPrice).ToString("#,##0.00")</td>
                 <td class="c11_2" style="width:70px">@Convert.ToDecimal(Model.NewPRForm.PRItemListObject[i].SST).ToString("#,##0.00")</td>
-                <td class="c11_15" style="width:103px">@Convert.ToDecimal(Model.NewPRForm.PRItemListObject[i].TotalPrice).ToString("#,##0.00")</td>
+                <td class="c11_15" style="width:103px">@Convert.ToDecimal(Model.NewPRForm.PRItemListObject[i].TotalPriceIncSST).ToString("#,##0.00")</td>
             </tr>
         }
-        @if (Model.NewPRForm.PRItemListObject.Count < 20)
+        @if (Model.NewPRForm.PRItemListObject.Count < 10)
         {
-            for (int i = 0; i < 20 - Model.NewPRForm.PRItemListObject.Count; i++)
+            for (int i = 0; i < 10 - Model.NewPRForm.PRItemListObject.Count; i++)
             {
                 <tr class="c1_2">
                     <td class="c4_1" style="width:98px"></td>
@@ -245,7 +244,7 @@
             <td class="c33_13" style="width:70px">
                 TOTAL
             </td>
-            <td class="c33_15" style="width:103px">@Convert.ToDecimal(Model.NewPRForm.AmountRequired).ToString("#,##0.00")</td>
+            <td class="c33_15" style="width:103px">@Convert.ToDecimal(Model.NewPRForm.TotalIncSST).ToString("#,##0.00")</td>
         </tr>
         <tr style="height:20px">
             <td style="width:98px"></td>

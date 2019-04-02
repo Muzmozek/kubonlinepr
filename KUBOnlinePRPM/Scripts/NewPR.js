@@ -15,7 +15,7 @@ function generatePRItemTable() {
             columnDefs: [
                 { visible: false, targets: [0] }
                 , {
-                    targets: [4, 5, 8, 9, 10, 11, 12, 13, 14],
+                    targets: [4, 5, 8, 9, 10, 11, 12, 13, 14, 15],
                     render: function (data, type, row, meta) {
                         if (type === 'display') {
                             var api = new $.fn.dataTable.Api(meta.settings);
@@ -132,6 +132,154 @@ function generatePRItemTable() {
                 , details: {
                     //display: $.fn.dataTable.Responsive.display.childRowImmediate,
                     //type: '',
+                    renderer: function (api, rowIdx, columns) {
+                        var data = $.map(columns, function (col, i) {
+                            return col.hidden ?
+                                '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+                                '<td>' + col.title + '</td> ' +
+                                '<td>' + col.data + '</td>' +
+                                '</tr>' :
+                                '';
+                        }).join('');
+
+                        return data ?
+                            $('<table width="100%" />').append(data) :
+                            false;
+                    }
+                }
+            }
+        });
+    }
+}
+
+function openHiddenPRItemTable() {
+    if (POType !== null && Phase1Completed === "True") {
+        PRItemTable = $('#PRItemTable').DataTable({
+            serverSide: false,
+            //dom: 'frtiS',
+            processing: true,
+            deferRender: true,
+            ordering: false,
+            paging: false,
+            searching: false,
+            bAutoWidth: false,
+            stateSave: true,
+            columnDefs: [
+                { visible: false, targets: [0] }
+                , {
+                    targets: [4, 5, 8, 9, 10, 11, 12, 13, 14,15],
+                    render: function (data, type, row, meta) {
+                        if (type === 'display') {
+                            var api = new $.fn.dataTable.Api(meta.settings);
+
+                            var $el = $('input, select, textarea', api.cell({ row: meta.row, column: meta.col }).node());
+
+                            var $html = $(data).wrap('<div/>').parent();
+
+                            if ($el.prop('tagName') === 'INPUT') {
+                                $('input', $html).attr('value', $el.val());
+                                if ($el.prop('checked')) {
+                                    $('input', $html).attr('checked', 'checked');
+                                }
+                            } else if ($el.prop('tagName') === 'TEXTAREA') {
+                                $('textarea', $html).html($el.val());
+
+                            } else if ($el.prop('tagName') === 'SELECT') {
+                                $('option:selected', $html).removeAttr('selected');
+                                $('option', $html).filter(function () {
+                                    return ($(this).attr('value') === $el.val());
+                                }).attr('selected', 'selected');
+                            }
+
+                            data = $html.html();
+                        }
+
+                        return data;
+                    }
+                }
+            ],
+            destroy: true,
+            responsive: {
+                breakpoints: [
+                    { name: 'desktop', width: 1024 },
+                    { name: 'tablet', width: 768 },
+                    { name: 'phone', width: 480 }
+                ]
+                , details: {
+                    display: $.fn.dataTable.Responsive.display.childRowImmediate,
+                    type: '',
+                    renderer: function (api, rowIdx, columns) {
+                        var data = $.map(columns, function (col, i) {
+                            return col.hidden ?
+                                '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+                                '<td>' + col.title + '</td> ' +
+                                '<td>' + col.data + '</td>' +
+                                '</tr>' :
+                                '';
+                        }).join('');
+
+                        return data ?
+                            $('<table width="100%" />').append(data) :
+                            false;
+                    }
+                }
+            }
+        });
+    } else {
+        PRItemTable = $('#PRItemTable').DataTable({
+            serverSide: false,
+            //dom: 'frtiS',
+            processing: true,
+            deferRender: true,
+            ordering: false,
+            paging: false,
+            searching: false,
+            bAutoWidth: false,
+            stateSave: true,
+            columnDefs: [
+                { visible: false, targets: [0] }
+                , {
+                    targets: [4, 5],
+                    render: function (data, type, row, meta) {
+                        if (type === 'display') {
+                            var api = new $.fn.dataTable.Api(meta.settings);
+
+                            var $el = $('input, select, textarea', api.cell({ row: meta.row, column: meta.col }).node());
+
+                            var $html = $(data).wrap('<div/>').parent();
+
+                            if ($el.prop('tagName') === 'INPUT') {
+                                $('input', $html).attr('value', $el.val());
+                                if ($el.prop('checked')) {
+                                    $('input', $html).attr('checked', 'checked');
+                                }
+                            } else if ($el.prop('tagName') === 'TEXTAREA') {
+                                $('textarea', $html).html($el.val());
+
+                            } else if ($el.prop('tagName') === 'SELECT') {
+                                $('option:selected', $html).removeAttr('selected');
+                                $('option', $html).filter(function () {
+                                    return ($(this).attr('value') === $el.val());
+                                }).attr('selected', 'selected');
+                            }
+
+                            data = $html.html();
+                        }
+
+                        return data;
+                    }
+                }
+            ],
+            destroy: true,
+            responsive: {
+                breakpoints: [
+                    { name: 'desktop', width: 1024 },
+                    { name: 'tablet', width: 768 },
+                    { name: 'phone', width: 480 }
+                ]
+                , details: {
+                    display: $.fn.dataTable.Responsive.display.childRowImmediate,
+                    type: '',
                     renderer: function (api, rowIdx, columns) {
                         var data = $.map(columns, function (col, i) {
                             return col.hidden ?
@@ -309,6 +457,7 @@ $(document).on('ready', function () {
         });              
         var data = PRItemTable.$("tbody tr");
         var ItemsId;
+        openHiddenPRItemTable();
         $.each(data, function (i, input) {
             l = i + 1;
             if ($(PRItemTable.row(i).data()[0]).val() === "") {
@@ -437,7 +586,7 @@ $(document).on('ready', function () {
             }
         });
         var data = PRItemTable.$("tbody tr");
-        var ItemsId;
+        var ItemsId; openHiddenPRItemTable();
         $.each(data, function (i, input) {
             l = i + 1;
             if ($(PRItemTable.row(i).data()[0]).val() === "") {
