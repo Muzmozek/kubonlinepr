@@ -456,7 +456,22 @@ namespace KUBOnlinePRPM.Controllers
                 }
                 model.NewPRForm.ChildCustId = ChildCustId;
             }
-            var ProjectNameQuery = (from m in db.Projects
+
+            IOrderedQueryable<dynamic> ProjectNameQuery = null;
+            if (UserId == 258)
+            {
+                ProjectNameQuery = (from m in db.Projects
+                                    where m.projectCode == "HQ"
+                                    select new
+                                    {
+                                        ProjectId = m.projectId,
+                                        Dimension = m.dimension,
+                                        Description = m.dimension + " - " + m.projectCode,
+                                        Code = m.projectCode,
+                                    }).OrderBy(c => c.Dimension).ThenBy(c => c.Code);
+            } else
+            {
+                ProjectNameQuery = (from m in db.Projects
                                     where m.custId == CustId
                                     select new
                                     {
@@ -465,6 +480,8 @@ namespace KUBOnlinePRPM.Controllers
                                         Description = m.dimension + " - " + m.projectCode,
                                         Code = m.projectCode,
                                     }).OrderBy(c => c.Dimension).ThenBy(c => c.Code);
+            }
+            
             List<SelectListItem> BudgetedList = new List<SelectListItem>();
             BudgetedList.Add(new SelectListItem
             {
@@ -1086,44 +1103,66 @@ namespace KUBOnlinePRPM.Controllers
                 PRDetail.PRId = Int32.Parse(Session["PRId"].ToString());
                 PRDetail.Type = Session["PRType"].ToString();
                 PRDetail.UserId = Int32.Parse(Session["UserId"].ToString());
-                PRDetail.CustId = Int32.Parse(Session["CompanyId"].ToString());
+                //PRDetail.CustId = Int32.Parse(Session["CompanyId"].ToString());
+                PRDetail.CustId = (from m in db.PurchaseRequisitions
+                                   join n in db.Projects on m.ProjectId equals n.projectId
+                                   where m.PRId == PRDetail.PRId
+                                   select new PRModel()
+                                   {
+                                       CustId = n.custId
+                                   }).First().CustId;
+                //if (Session["ChildCompanyId"] != null && PRDetail.CustId != 2)
+                //{
+                //    ChildCustId = Int32.Parse(Session["ChildCompanyId"].ToString());
+                //    switch (ChildCustId)
+                //    {
+                //        case 16:
+                //            PRDetail.CustId = 6; break;
+                //        case 17:
+                //            PRDetail.CustId = 7; break;
+                //        case 18:
+                //            PRDetail.CustId = 8; break;
+                //    }
 
-                if (Session["ChildCompanyId"] != null && PRDetail.CustId != 2)
+                //}
+                //else
+                //{
+                //    var GetChildCustId = (from m in db.PurchaseRequisitions
+                //                       join n in db.Users on m.PreparedById equals n.userId
+                //                       where m.PRId == PRDetail.PRId
+                //                          select new { ChildCustId = n.childCompanyId, CustId = n.companyId.Value }).FirstOrDefault();
+                //    if (GetChildCustId != null)
+                //    {
+                //        switch (GetChildCustId.ChildCustId)
+                //        {
+                //            case 16:
+                //                PRDetail.CustId = 6; break;
+                //            case 17:
+                //                PRDetail.CustId = 7; break;
+                //            case 18:
+                //                PRDetail.CustId = 8; break;
+                //            default:
+                //                PRDetail.CustId = GetChildCustId.CustId; break;
+                //        }
+                //    }
+                //}
+
+                IOrderedQueryable<dynamic> ProjectNameQuery = null;
+                if (PRDetail.UserId == 258)
                 {
-                    ChildCustId = Int32.Parse(Session["ChildCompanyId"].ToString());
-                    switch (ChildCustId)
-                    {
-                        case 16:
-                            PRDetail.CustId = 6; break;
-                        case 17:
-                            PRDetail.CustId = 7; break;
-                        case 18:
-                            PRDetail.CustId = 8; break;
-                    }
-
+                    ProjectNameQuery = (from m in db.Projects
+                                        where m.projectCode == "HQ"
+                                        select new
+                                        {
+                                            ProjectId = m.projectId,
+                                            Dimension = m.dimension,
+                                            Description = m.dimension + " - " + m.projectCode,
+                                            Code = m.projectCode,
+                                        }).OrderBy(c => c.Dimension).ThenBy(c => c.Code);
                 }
                 else
                 {
-                    var GetChildCustId = (from m in db.PurchaseRequisitions
-                                       join n in db.Users on m.PreparedById equals n.userId
-                                       where m.PRId == PRDetail.PRId
-                                          select new { ChildCustId = n.childCompanyId, CustId = n.companyId.Value }).FirstOrDefault();
-                    if (GetChildCustId != null)
-                    {
-                        switch (GetChildCustId.ChildCustId)
-                        {
-                            case 16:
-                                PRDetail.CustId = 6; break;
-                            case 17:
-                                PRDetail.CustId = 7; break;
-                            case 18:
-                                PRDetail.CustId = 8; break;
-                            default:
-                                PRDetail.CustId = GetChildCustId.CustId; break;
-                        }
-                    }
-                }
-                var ProjectNameQuery = (from m in db.Projects
+                    ProjectNameQuery = (from m in db.Projects
                                         where m.custId == PRDetail.CustId
                                         select new
                                         {
@@ -1132,8 +1171,10 @@ namespace KUBOnlinePRPM.Controllers
                                             Description = m.dimension + " - " + m.projectCode,
                                             Code = m.projectCode,
                                         }).OrderBy(c => c.Dimension).ThenBy(c => c.Code);
+                }
 
-                List<SelectListItem> BudgetedList = new List<SelectListItem>();
+                
+                List < SelectListItem > BudgetedList = new List<SelectListItem>();
                 BudgetedList.Add(new SelectListItem
                 {
                     Text = "Yes",
