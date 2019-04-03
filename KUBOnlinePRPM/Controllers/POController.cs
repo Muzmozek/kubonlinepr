@@ -248,14 +248,15 @@ namespace KUBOnlinePRPM.Controllers
                 {
                     int UserId = Int32.Parse(Session["UserId"].ToString());
                     int CustId = Int32.Parse(Session["CompanyId"].ToString());
-                    if (Session["ifSuperAdmin"] != null || Session["ifHOGPSS"] != null || Session["ifCOO"] != null || Session["ifCFO"] != null || Session["ifGMD"] != null)
+                    if (Session["ifSuperAdmin"] != null || Session["ifHOGPSS"] != null || Session["ifCFO"] != null || Session["ifGMD"] != null)
                     {
                         POList.POListObject = (from m in db.PurchaseOrders
                                                join n in db.Vendors on m.vendorId equals n.vendorId
                                                join o in db.PurchaseRequisitions on m.PRId equals o.PRId
                                                join p in db.Users on m.PreparedById equals p.userId
                                                join q in db.POStatus on m.StatusId equals q.statusId
-                                               join r in db.Customers on m.CustId equals r.custId
+                                               join t in db.Projects on m.projectId equals t.projectId
+                                               join r in db.Customers on t.custId equals r.custId
                                                select new POListTable()
                                                {
                                                    POId = m.POId,
@@ -279,7 +280,8 @@ namespace KUBOnlinePRPM.Controllers
                                                join o in db.PurchaseRequisitions on m.PRId equals o.PRId
                                                join p in db.Users on m.PreparedById equals p.userId
                                                join q in db.POStatus on m.StatusId equals q.statusId
-                                               join r in db.Customers on m.CustId equals r.custId
+                                               join t in db.Projects on m.projectId equals t.projectId
+                                               join r in db.Customers on t.custId equals r.custId
                                                where m.CustId == 3 &&  p.childCompanyId == 16
                                                select new POListTable()
                                                {
@@ -303,7 +305,8 @@ namespace KUBOnlinePRPM.Controllers
                                                join o in db.PurchaseRequisitions on m.PRId equals o.PRId
                                                join p in db.Users on m.PreparedById equals p.userId
                                                join q in db.POStatus on m.StatusId equals q.statusId
-                                               join r in db.Customers on m.CustId equals r.custId
+                                               join t in db.Projects on m.projectId equals t.projectId
+                                               join r in db.Customers on t.custId equals r.custId
                                                where m.CustId == CustId
                                                select new POListTable()
                                                {
@@ -1029,6 +1032,7 @@ namespace KUBOnlinePRPM.Controllers
                                           OrderDate = a.OrderDate,
                                           ProjectId = a.projectId,
                                           ProjectName = g.projectName,
+                                          CustId = d.custId,
                                           VendorId = a.vendorId,
                                           VendorCode = y.vendorNo,
                                           VendorName = y.name,

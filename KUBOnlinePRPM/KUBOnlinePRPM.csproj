@@ -5153,6 +5153,13 @@
     <Content Include="Assets\multiselect\img\switch.png" />
     <Content Include="Assets\multiselect\js\jquery.multi-select.js" />
     <Content Include="Images\ajax_loader.gif" />
+    <Content Include="Images\logo\KUB-Agro-logo.jpg" />
+    <Content Include="Images\logo\KUB-MajuMill-logo.png" />
+    <Content Include="Images\logo\kub-malua.jpg" />
+    <Content Include="Images\logo\KUB-Sepadu-logo.png" />
+    <Content Include="Images\logo\kubgaz.png" />
+    <Content Include="Images\logo\kubpower.jpg" />
+    <Content Include="Images\logo\KUBtel.png" />
     <Content Include="Images\signature.png" />
     <Content Include="Models\KUBOnlinePR.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
