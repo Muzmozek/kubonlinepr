@@ -2059,6 +2059,8 @@ namespace KUBOnlinePRPM.Controllers
                 return Json(new { success = false, url = redirectUrl });
             }
         }
+
+        [HttpPost]
         public JsonResult FileUpload(PRModel fd)
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
