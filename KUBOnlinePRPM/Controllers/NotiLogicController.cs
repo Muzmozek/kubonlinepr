@@ -301,8 +301,8 @@ namespace KUBOnlinePRPM.Controllers
                     sentEmailList.Add(getRecommenderIIDetails);
                 } 
 
-                var getRecommenderIIIDetails = (from m in db.PR_RecommenderCOO
-                                               join n in db.Users on m.recommenderId equals n.userId
+                var getRecommenderIIIDetails = (from m in db.PR_RecommenderCFO
+                                                join n in db.Users on m.recommenderId equals n.userId
                                                where m.PRId == PR.PRId
                                                select new UserModel()
                                                {
@@ -311,47 +311,37 @@ namespace KUBOnlinePRPM.Controllers
                                                    EmailAddress = n.emailAddress
                                                }).FirstOrDefault();
 
-                var getRecommenderIVDetails = (from m in db.PR_RecommenderCFO
-                                               join n in db.Users on m.recommenderId equals n.userId
-                                               where m.PRId == PR.PRId
-                                               select new UserModel()
-                                               {
-                                                   UserId = n.userId,
-                                                   FullName = n.firstName + " " + n.lastName,
-                                                   EmailAddress = n.emailAddress
-                                               }).FirstOrDefault();
                 if (getRecommenderDetails != null)
                 {
                     sentEmailList.Add(getRecommenderDetails);
                 }
                 sentEmailList.Add(getRecommenderIIIDetails);
-                sentEmailList.Add(getRecommenderIVDetails);
 
                 if (PR.CustId == 1 || (PR.CustId == 3 && getRequestorDetails.ChildCompanyId != 16) || PR.CustId == 5)
                 {
                     if (getRecommenderDetails != null && getReviewerDetails != null)
                     {
-                        NotiMessage = PR.FullName + " has send email notification for " + POMessage + " for PRNo : " + PR.NewPRForm.PRNo + " to " + getRequestorDetails.FullName + " (Requestor), " + getHODDetails.FullName + " , " + getRecommenderDetails.FullName + " (Recommender), " + getRecommenderIIDetails.FullName + " , " + getRecommenderIIIDetails.FullName + " (COO), " + getRecommenderIVDetails.FullName + " (CFO), " + getReviewerDetails.FullName + " (Reviewer), " + getHOCDetails.FullName + " (Approver).";
+                        NotiMessage = PR.FullName + " has send email notification for " + POMessage + " for PRNo : " + PR.NewPRForm.PRNo + " to " + getRequestorDetails.FullName + " (Requestor), " + getHODDetails.FullName + " , " + getRecommenderDetails.FullName + " (Recommender), " + getRecommenderIIDetails.FullName + " , " + getRecommenderIIIDetails.FullName + " (CFO), " + getReviewerDetails.FullName + " (Reviewer), " + getHOCDetails.FullName + " (Approver).";
                     }
                     else if (getReviewerDetails != null)
                     {
-                        NotiMessage = PR.FullName + " has send email notification for " + POMessage + " for PRNo : " + PR.NewPRForm.PRNo + " to " + getRequestorDetails.FullName + " (Requestor), " + getHODDetails.FullName + " , " + getRecommenderIIDetails.FullName + " , " + getRecommenderIIIDetails.FullName + " (COO), " + getRecommenderIVDetails.FullName + " (CFO), " + getReviewerDetails.FullName + " (Reviewer), " + getHOCDetails.FullName + " (Approver).";
+                        NotiMessage = PR.FullName + " has send email notification for " + POMessage + " for PRNo : " + PR.NewPRForm.PRNo + " to " + getRequestorDetails.FullName + " (Requestor), " + getHODDetails.FullName + " , " + getRecommenderIIDetails.FullName + " , " + getRecommenderIIIDetails.FullName + " (CFO), " + getReviewerDetails.FullName + " (Reviewer), " + getHOCDetails.FullName + " (Approver).";
                     } else
                     {
-                        NotiMessage = PR.FullName + " has send email notification for " + POMessage + " for PRNo : " + PR.NewPRForm.PRNo + " to " + getRequestorDetails.FullName + " (Requestor), " + getHODDetails.FullName + " , " + getRecommenderIIDetails.FullName + " , " + getRecommenderIIIDetails.FullName + " (COO), " + getRecommenderIVDetails.FullName + " (CFO), " + getHOCDetails.FullName + " (Approver).";
+                        NotiMessage = PR.FullName + " has send email notification for " + POMessage + " for PRNo : " + PR.NewPRForm.PRNo + " to " + getRequestorDetails.FullName + " (Requestor), " + getHODDetails.FullName + " , " + getRecommenderIIDetails.FullName + " , " + getRecommenderIIIDetails.FullName + " (CFO), " + getHOCDetails.FullName + " (Approver).";
                     }
                         
                 } else {
                     if (getRecommenderDetails != null && getReviewerDetails != null)
                     {
-                        NotiMessage = PR.FullName + " has send email notification for " + POMessage + " for PRNo : " + PR.NewPRForm.PRNo + " to " + getRequestorDetails.FullName + " (Requestor), " + getHODDetails.FullName + " , " + getRecommenderDetails.FullName + " (Recommender), " + getRecommenderIIIDetails.FullName + " (COO), " + getRecommenderIVDetails.FullName + " (CFO), " + getReviewerDetails.FullName + " (Reviewer), " + getHOCDetails.FullName + " (Approver).";
+                        NotiMessage = PR.FullName + " has send email notification for " + POMessage + " for PRNo : " + PR.NewPRForm.PRNo + " to " + getRequestorDetails.FullName + " (Requestor), " + getHODDetails.FullName + " , " + getRecommenderDetails.FullName + " (Recommender), " + getRecommenderIIIDetails.FullName + " (CFO), " + getReviewerDetails.FullName + " (Reviewer), " + getHOCDetails.FullName + " (Approver).";
                     }
                     else if (getReviewerDetails != null)
                     {
-                        NotiMessage = PR.FullName + " has send email notification for " + POMessage + " for PRNo : " + PR.NewPRForm.PRNo + " to " + getRequestorDetails.FullName + " (Requestor), " + getHODDetails.FullName + " , " + getRecommenderIIIDetails.FullName + " (COO), " + getRecommenderIVDetails.FullName + " (CFO), " + getReviewerDetails.FullName + " (Reviewer), " + getHOCDetails.FullName + " (Approver).";
+                        NotiMessage = PR.FullName + " has send email notification for " + POMessage + " for PRNo : " + PR.NewPRForm.PRNo + " to " + getRequestorDetails.FullName + " (Requestor), " + getHODDetails.FullName + " , " + getRecommenderIIIDetails.FullName + " (CFO), " + getReviewerDetails.FullName + " (Reviewer), " + getHOCDetails.FullName + " (Approver).";
                     } else
                     {
-                        NotiMessage = PR.FullName + " has send email notification for " + POMessage + " for PRNo : " + PR.NewPRForm.PRNo + " to " + getRequestorDetails.FullName + " (Requestor), " + getHODDetails.FullName + " , " + getRecommenderIIIDetails.FullName + " (COO), " + getRecommenderIVDetails.FullName + " (CFO), " + getHOCDetails.FullName + " (Approver).";
+                        NotiMessage = PR.FullName + " has send email notification for " + POMessage + " for PRNo : " + PR.NewPRForm.PRNo + " to " + getRequestorDetails.FullName + " (Requestor), " + getHODDetails.FullName + " , " + getRecommenderIIIDetails.FullName + " (CFO), " + getHOCDetails.FullName + " (Approver).";
                     }                     
                 }               
             }

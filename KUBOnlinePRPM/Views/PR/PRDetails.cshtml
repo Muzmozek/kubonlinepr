@@ -746,9 +746,6 @@
 
                                 @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[i].UoMId, null, new { @class = "form-control-feedback" })
                             </td>
-                            //if ((Session["ifAdmin"] != null || Session["ifSuperAdmin"] != null || Session["ifIT"] != null || Session["ifPMO"] != null || Session["ifHSE"] != null || Session["ifHOD"] != null || Session["ifHOGPSS"] != null || Session["ifHOC"] != null || Session["ifCOO"] != null || Session["ifCFO"] != null || Session["ifGMD"] != null || Session["ifFinance"] != null || Session["ifProcurement"] != null && Model.NewPRForm.Submited == 1) || Model.NewPRForm.Scenario > 0)
-                            //{
-
                             if ((Model.NewPRForm.Phase1Completed == true && Session["ifProcurement"] == null) || Model.NewPRForm.Scenario > 0 || Model.NewPRForm.StatusId == "PR08" || Model.NewPRForm.StatusId == "PR15" || Model.NewPRForm.StatusId == "PR16")
                             {
                                 <td>
@@ -1052,7 +1049,6 @@
                             <div class="d-flex col-md-8 col-sm-8">
                                 @*<select class="custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" id="HOGPSSList">
                                         <option value="R04">HOC</option>
-                                        <option value="R11">COO</option>
                                         <option value="R12">CFO</option>
                                         <option value="R14">GMD</option>
                                     </select>*@
@@ -1142,24 +1138,17 @@
                                     bool v = (Model.CustId == 2 || (Model.CustId == 3 && Model.NewPRForm.ChildCustId == 16) || Model.CustId == 4);
                                     bool w = (Model.CustId == 1 || (Model.CustId == 3 && Model.NewPRForm.ChildCustId != 16) || Model.CustId == 5);
                                 }
-                                @if (((Model.NewPRForm.StatusId == "PR11" && w) || (Model.NewPRForm.StatusId == "PR17" && v)) && ((Session["ifHOC"] != null && w) || (Session["ifCOO"] != null && v)))
+                                @if (((Model.NewPRForm.StatusId == "PR11" && w) || (Model.NewPRForm.StatusId == "PR18" && v)) && ((Session["ifHOC"] != null && w) || (Session["ifCFO"] != null && v)))
                                 {
 
                                     <a href="#RejectModal" class=" btn btn-md u-btn-white g-mr-5 g-mb-15" data-modal-target="#RejectModal" data-modal-effect="fadein">REJECT</a>
                                     <a id="ApprovePreparedJointRecommended" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">JOINTLY RECOMMENDED</a>
                                 }
 
-                                @if (((Model.NewPRForm.StatusId == "PR17" && w) || (Model.NewPRForm.StatusId == "PR18" && v)) && (Session["ifCOO"] != null && w || (Session["ifCFO"] != null && v)))
+                                @if ((Model.NewPRForm.StatusId == "PR18" && w) && (Session["ifCFO"] != null && w))
                                 {
                                     <a href="#RejectModal" class=" btn btn-md u-btn-white g-mr-5 g-mb-15" data-modal-target="#RejectModal" data-modal-effect="fadein">REJECT</a>
                                     <a id="ApprovePreparedJointRecommendedII" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">JOINTLY RECOMMENDED</a>
-                                }
-
-                                @if ((Model.NewPRForm.StatusId == "PR18" && w) && (Session["ifCFO"] != null && w))
-                                {
-
-                                    <a href="#RejectModal" class=" btn btn-md u-btn-white g-mr-5 g-mb-15" data-modal-target="#RejectModal" data-modal-effect="fadein">REJECT</a>
-                                    <a id="ApprovePreparedJointRecommendedIII" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">JOINTLY RECOMMENDED</a>
                                 }
 
                                 @if ((Model.NewPRForm.StatusId == "PR05" && Model.NewPRForm.ApproverId != 0) || (Model.NewPRForm.StatusId == "PR05" && Model.UserId == Model.FinalApproverId))

@@ -245,16 +245,102 @@
     <table style="margin-top:-20px;">
         <tr>
             @*<td width="25%"></td>*@
-            <td class="td6">
-                <img src="@Context.Server.MapPath("~/Images/logo/Logo KUB Malaysia Bhd.png")" width="180" height="55" />
-            </td>
-            <td class="td5">
-                <b>KUB MALAYSIA BERHAD (6022-D)</b> <br />
-                Level 8-11, Unit 1, Capital 3, Oasis Square, Ara Damansara, <br />
-                Jalan PJU 1A/7A, 47301 Petaling Jaya, Selangor <br />
-                Tel: 603-76809600 Fax: 603-76809610 <br />
-                <font color="red">Website: http://www.kub.com</font>
-            </td>
+            @switch (Model.NewPOForm.CustId)
+            {
+                case 1:
+                    <td class="td6">
+                        <img src="@Context.Server.MapPath("~/Images/logo/KUBtel.png")" width="180" height="55" />
+                    </td>
+                    <td class="td5">
+                        <b>KUB TELEKOMUNIKASI SDN BHD (6022-D)</b> <br />
+                        Unit G 30, Level G-430, Level 4, Block 4, Laman Seri Business Park, <br />
+                        Pesiaran Sukan Section 13, 40100 Shah Alam, Selangor <br />
+                        Tel: 603-55143800 Fax: - <br />
+                        <font color="red">Website: http://www.kubtel.com</font>
+                    </td>
+                    break;
+                case 2:
+                    <td class="td6">
+                        <img src="@Context.Server.MapPath("~/Images/logo/Logo KUB Malaysia Bhd.png")" width="180" height="55" />
+                    </td>
+                    <td class="td5">
+                        <b>KUB MALAYSIA BERHAD (6022-D)</b> <br />
+                        Level 8-11, Unit 1, Capital 3, Oasis Square, Ara Damansara, <br />
+                        Jalan PJU 1A/7A, 47301 Petaling Jaya, Selangor <br />
+                        Tel: 603-76809600 Fax: 603-76809610 <br />
+                        <font color="red">Website: http://www.kub.com</font>
+                    </td>
+                    break;
+                case 3:
+                    <td class="td6">
+                        <img src="@Context.Server.MapPath("~/Images/logo/KUB-Agro-logo.jpg")" width="180" height="55" />
+                    </td>
+                    <td class="td5">
+                        <b>KUB AGRO HOLDINGS SDN BHD</b> <br />
+                        Level 3, Unit 1, Capital 3, Oasis Square, Ara Damansara, <br />
+                        Jalan PJU 1A/7A, 47301 Petaling Jaya, Selangor <br />
+                        Tel: 603-76109490 Fax: 603-76109496 <br />
+                        @*<font color="red">Website: http://www.kub.com</font>*@
+                    </td>
+                    break;
+                case 4:
+                    <td class="td6">
+                        <img src="@Context.Server.MapPath("~/Images/logo/kubgaz.png")" width="180" height="55" />
+                    </td>
+                    <td class="td5">
+                        <b>KUB GAZ SDN BHD</b> <br />
+                        Level 3, Unit 1, Capital 3, Oasis Square, Ara Damansara, <br />
+                        Jalan PJU 1A/7A, 47301 Petaling Jaya, Selangor <br />
+                        Tel: 603-76109488 Fax: 603-76109489 <br />
+                        <font color="red">Website: http://www.kubgaz.com</font>
+                    </td>
+                    break;
+                case 5:
+                    <td class="td6">
+                        <img src="@Context.Server.MapPath("~/Images/logo/kubpower.jpg")" width="180" height="55" />
+                    </td>
+                    <td class="td5">
+                        <b>KUB POWER SDN BHD</b> <br />
+                        Level 3, Unit 1, Capital 3, Oasis Square, Ara Damansara, <br />
+                        Jalan PJU 1A/7A, 47301 Petaling Jaya, Selangor <br />
+                        Tel: 603-76100018 Fax: 603-76100017 <br />
+                        <font color="red">Website: http://www.kub-power.com</font>
+                    </td>
+                    break;
+                case 6:
+                    <td class="td6">
+                        <img src="@Context.Server.MapPath("~/Images/logo/KUB-MajuMill-logo.png")" width="180" height="55" />
+                    </td>
+                    <td class="td5">
+                        <b>KUB MAJU MILL SDN BHD</b> <br />
+                        Level 3, Unit 1, Capital 3, Oasis Square, Ara Damansara, <br />
+                        Jalan PJU 1A/7A, 47301 Petaling Jaya, Selangor <br />
+                        Tel: 603-76109490 Fax: 603-76109496 <br />
+                    </td>
+                    break;
+                case 7:
+                    <td class="td6">
+                        <img src="@Context.Server.MapPath("~/Images/logo/kub-malua.jpg")" width="180" height="55" />
+                    </td>
+                    <td class="td5">
+                        <b>KUB MALUA PLANTATION SDN BHD</b> <br />
+                        Level 8-11, Unit 1, Capital 3, Oasis Square, Ara Damansara, <br />
+                        Jalan PJU 1A/7A, 47301 Petaling Jaya, Selangor <br />
+                        Tel: 603-76809600 Fax: 603-76809610 <br />
+                    </td>
+                    break;
+                case 8:
+                    <td class="td6">
+                        <img src="@Context.Server.MapPath("~/Images/logo/KUB-Sepadu-logo.png")" width="180" height="55" />
+                    </td>
+                    <td class="td5">
+                        <b>KUB SEPADU SDN BHD</b> <br />
+                        Level 3, Unit 1, Capital 3, Oasis Square, Ara Damansara, <br />
+                        Jalan PJU 1A/7A, 47301 Petaling Jaya, Selangor <br />
+                        Tel: 603-76109490 Fax: 603-76109496 <br />
+                    </td>
+                    break;
+            }
 
         </tr>
     </table>

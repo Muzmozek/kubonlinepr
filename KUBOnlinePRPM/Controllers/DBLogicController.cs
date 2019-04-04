@@ -1542,8 +1542,7 @@ namespace KUBOnlinePRPM.Controllers
                                       "ON ( m.userid = n.userid ) " +
                                "LEFT JOIN role o " +
                                       "ON ( n.roleid = o.roleid ) " +
-                        "WHERE  n.roleid = 'R11' " +
-                                "OR n.roleid = 'R12' " +
+                        "WHERE  n.roleid = 'R12' " +
                                 "OR n.roleid = 'R14' ";
 
                 SqlCommand SQLcmd = new SqlCommand(sql, conn)

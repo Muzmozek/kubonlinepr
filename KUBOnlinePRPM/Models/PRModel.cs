@@ -153,6 +153,7 @@ namespace KUBOnlinePRPM.Models
         public string PRNo { get; set; }
         public DateTime PRDate { get; set; }
         public string RequestorName { get; set; }
+        public string DeptName { get; set; }
         public string CompanyName { get; set; }
         public string VendorCompany { get; set; }
         public decimal? AmountRequired { get; set; }

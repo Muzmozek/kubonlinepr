@@ -97,7 +97,6 @@ namespace KUBOnlinePRPM.Controllers
                 Session["ifPMO"] = getRole.FirstOrDefault(x => x.roleId.Contains("R08"));
                 Session["ifHSE"] = getRole.FirstOrDefault(x => x.roleId.Contains("R09"));
                 Session["ifHOGPSS"] = getRole.FirstOrDefault(x => x.roleId.Contains("R10"));
-                Session["ifCOO"] = getRole.FirstOrDefault(x => x.roleId.Contains("R11"));
                 Session["ifCFO"] = getRole.FirstOrDefault(x => x.roleId.Contains("R12"));
                 Session["ifFinance"] = getRole.FirstOrDefault(x => x.roleId.Contains("R13"));
                 Session["ifGMD"] = getRole.FirstOrDefault(x => x.roleId.Contains("R14"));
@@ -255,7 +254,6 @@ namespace KUBOnlinePRPM.Controllers
                     Session["ifPMO"] = getRole.FirstOrDefault(x => x.roleId.Contains("R08"));
                     Session["ifHSE"] = getRole.FirstOrDefault(x => x.roleId.Contains("R09"));
                     Session["ifHOGPSS"] = getRole.FirstOrDefault(x => x.roleId.Contains("R10"));
-                    Session["ifCOO"] = getRole.FirstOrDefault(x => x.roleId.Contains("R11"));
                     Session["ifCFO"] = getRole.FirstOrDefault(x => x.roleId.Contains("R12"));
                     Session["ifFinance"] = getRole.FirstOrDefault(x => x.roleId.Contains("R13"));
                     Session["ifGMD"] = getRole.FirstOrDefault(x => x.roleId.Contains("R14"));
