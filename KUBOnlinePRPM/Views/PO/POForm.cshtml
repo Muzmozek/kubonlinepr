@@ -63,7 +63,7 @@
         }
 
         .c1_6 {
-            vertical-align: middle
+            vertical-align: middle;
         }
 
         .c6_6 {
@@ -73,7 +73,8 @@
 
         .c8_14 {
             font-weight: bold;
-            text-align: center
+            text-align: center;
+            font-size: 12px;
         }
 
         .c9_1 {
@@ -357,9 +358,11 @@
             <td style='width:59px'></td>
             <td style='width:9px'></td>
             <td style='width:106px'></td>
-            <td style='width:15px'></td>
+            <td style='width:5px'></td>
+            <td style='width:26px'></td>
+            <td style='width:66px'></td>
             <td style='width:16px'></td>
-            <td style='width:82px'></td>
+            <td style='width:59px'></td>
             <td style='width:59px'></td>
             <td style='width:59px'></td>
         </tr>
@@ -376,8 +379,8 @@
             <td style='width:9px'></td>
             <td style='width:106px'></td>
             <td style='width:15px'></td>
-            <td style='width:16px'></td>
-            <td colspan='3' class='c8_14'>
+            @*<td style='width:16px'></td>*@
+            <td colspan='4' class='c8_14'>
                 PURCHASE ORDER
             </td>
         </tr>
@@ -437,7 +440,7 @@
             <td style='width:9px'>
                 :
             </td>
-            <td class='c11_5' style='width:106px'><div class="gdfCellWrap">@Model.NewPOForm.VendorName</div></td>
+            <td class='c11_5' style='width:106px'></td>
             <td class='c11_6' style='width:14px'></td>
             <td colspan='3' class='c9_6'>
                 Delivery To
@@ -445,7 +448,7 @@
             <td class='c11_10' style='width:9px'>
                 :
             </td>
-            <td class='c11_10' style='width:106px'>@Model.NewPOForm.DeliveryTo</td>
+            <td class='c11_10' style='width:106px'></td>
             <td class='c11_12' style='width:15px'></td>
             @*<td class='c11_10' style='width:16px'></td>*@
             <td class='c11_14' colspan="2">
@@ -457,18 +460,18 @@
             @*<td class='c11_5' style='width:59px'></td>*@
         </tr>
         <tr style='height:13px'>
-            <td class='c9_6' style='width:30px'></td>
-            <td style='width:9px'></td>
-            <td style='width:59px'></td>
-            <td style='width:9px'></td>
-            <td style='width:106px'></td>
+            @*<td class='c9_6' style='width:30px'></td>*@
+            <td class='c9_6' colspan="5" style="padding-left:5px;" rowspan="3">@Model.NewPOForm.VendorName</td>
+            @*<td style='width:59px'></td>
+        <td style='width:9px'></td>
+        <td style='width:106px'></td>*@
             <td class='c9_6' style='width:14px'></td>
-            <td class='c9_6' style='width:30px'></td>
-            <td style='width:9px'></td>
-            <td style='width:59px'></td>
-            <td style='width:9px'></td>
-            <td style='width:106px'></td>
-            <td class='c9_6' style='width:15px'></td>
+            @*<td class='c9_6' style='width:30px'></td>*@
+            <td class='c9_6' colspan="5" style="padding-left:5px;" rowspan="3">@Model.NewPOForm.DeliveryTo</td>
+            @*<td style='width:59px'></td>
+        <td style='width:9px'></td>
+        <td style='width:106px'></td>*@
+            <td class='c9_6' style='width:14px'></td>
             @*<td style='width:16px'></td>*@
             <td class='c1_6' colspan="2">
                 Your Reference
@@ -479,17 +482,17 @@
             @*<td style='width:59px'></td>*@
         </tr>
         <tr style='height:13px'>
-            <td class='c9_6' style='width:30px'></td>
+            @*<td class='c9_6' style='width:30px'></td>
             <td style='width:9px'></td>
             <td style='width:59px'></td>
             <td style='width:9px'></td>
-            <td style='width:106px'></td>
+            <td style='width:106px'></td>*@
             <td class='c9_6' style='width:14px'></td>
-            <td class='c9_6' style='width:30px'></td>
+            @*<td class='c9_6' style='width:30px'></td>
             <td style='width:9px'></td>
             <td style='width:59px'></td>
             <td style='width:9px'></td>
-            <td style='width:106px'></td>
+            <td style='width:106px'></td>*@
             <td class='c9_6' style='width:15px'></td>
             @*<td style='width:16px'></td>*@
             <td class='c1_6' colspan="2">
@@ -501,23 +504,23 @@
             @*<td style='width:59px'></td>*@
         </tr>
         <tr style='height:13px'>
-            <td class='c9_6' style='width:30px'></td>
+            @*<td class='c9_6' style='width:30px'></td>
             <td style='width:9px'></td>
             <td style='width:59px'></td>
             <td style='width:9px'></td>
-            <td style='width:106px'></td>
+            <td style='width:106px'></td>*@
             <td class='c9_6' style='width:14px'></td>
-            <td class='c9_6' style='width:30px'></td>
+            @*<td class='c9_6' style='width:30px'></td>
             <td style='width:9px'></td>
             <td style='width:59px'></td>
             <td style='width:9px'></td>
-            <td style='width:106px'></td>
+            <td style='width:106px'></td>*@
             <td class='c9_6' style='width:15px'></td>
             @*<td style='width:16px'></td>*@
             <td class='c1_6' colspan="2">
                 Purchaser
             </td>
-            <td colspan="2">
+            <td colspan="3">
                 : &nbsp;@Model.NewPOForm.PurchaserCode
             </td>
             @*<td style='width:59px'></td>*@
@@ -547,7 +550,7 @@
             <td class='c15_14' colspan="2">
                 Document No
             </td>
-            <td class='c11_14' colspan="2">
+            <td class='c11_14' colspan="3">
                 : &nbsp;@Model.NewPOForm.VendorQuoteNo
             </td>
             @*<td class='c11_14' style='width:59px'></td>*@
@@ -577,7 +580,7 @@
             <td class='c15_14' colspan="2">
                 Delivery Date
             </td>
-            <td class='c11_14' colspan="2">
+            <td class='c11_14' colspan="3">
                 : &nbsp;@if (Model.NewPOForm.DeliveryDate.HasValue)
                 { @Model.NewPOForm.DeliveryDate.Value.ToShortDateString();
                 }
@@ -609,7 +612,7 @@
             <td class='c15_14' colspan="2">
                 Project No/Name
             </td>
-            <td class='c11_14' colspan="2">
+            <td class='c11_14' colspan="4">
                 : &nbsp;@Model.NewPOForm.ProjectName
             </td>
             @*<td class='c11_14' style='width:59px'></td>*@
@@ -631,7 +634,7 @@
             <td colspan="2">
                 Page
             </td>
-            <td style='width:59px'>
+            <td colspan="2">
                 : 1 of 1
             </td>
             <td style='width:59px'></td>
@@ -689,7 +692,7 @@
             <td colspan='2' class='c9_5'>
                 UOM
             </td>
-            <td class='c9_5' style='width:82px'>
+            <td class='c9_5' colspan="2">
                 Unit Price Excl SST (MYR)
             </td>
             <td class='c9_5' style='width:59px'>
@@ -707,9 +710,9 @@
                 <td colspan='2' class='c9_5'>@item.TaxCode</td>
                 <td class='c22_11' style='width:106px'>@item.Quantity</td>
                 <td colspan='2' class='c9_5'>@item.UOM</td>
-                <td class='c22_11' style='width:82px'>@item.UnitPrice</td>
+                <td class='c22_11' colspan="2">@item.UnitPrice</td>
                 <td class='c22_11' style='width:59px'>@item.TotalPrice</td>
-                <td class='c22_11' style='width:59px'>@item.TotalPrice</td>
+                <td class='c22_11' colspan="1">@item.TotalPrice</td>
             </tr>
         }
         <tr style='height:13px' class='c11_10'>
@@ -718,7 +721,7 @@
             <td colspan='2'></td>
             <td class='c23_11' style='width:106px'></td>
             <td colspan='2'></td>
-            <td class='c23_11' style='width:82px'></td>
+            <td class='c23_11' colspan="2"></td>
             <td class='c23_11' style='width:59px'></td>
             <td class='c23_11' style='width:59px'></td>
         </tr>
@@ -736,7 +739,7 @@
             <td class='c9_5' style='width:106px'></td>
             <td class='c9_5' style='width:15px'></td>
             <td class='c9_5' style='width:16px'></td>
-            <td class='c9_5' style='width:82px'></td>
+            <td class='c9_5' colspan="2"></td>
             <td class='c9_5' style='width:59px'></td>
             <td class='c9_5' style='width:59px'></td>
         </tr>
@@ -858,7 +861,7 @@
                 Total Amount
             </td>
             <td class='c9_5' style='width:16px'></td>
-            <td class='c35_4' style='width:82px'></td>
+            <td class='c35_4' colspan="2"></td>
             <td class='c35_4' style='width:59px'></td>
             <td class='c10_5' colspan="1">@Model.NewPOForm.TotalBeforeDisc</td>
             <td class='c10_5' colspan="1">@Model.NewPOForm.TotalBeforeDisc</td>
@@ -882,7 +885,7 @@
                 Less Total Discount
             </td>
             <td style='width:16px'></td>
-            <td style='width:82px'></td>
+            <td colspan="2"></td>
             <td style='width:59px'></td>
             <td class='c10_6' colspan="1">@Model.NewPOForm.DiscountAmount</td>
             <td class='c10_6' colspan="1">@Model.NewPOForm.DiscountAmount</td>
@@ -905,7 +908,7 @@
             <td class='c9_4' style='width:106px'>
                 Total Before SST
             </td>
-            <td class='c10_5' colspan="4">@if (Model.NewPOForm.TotalExclSST.HasValue) { @Model.NewPOForm.TotalExclSST.Value }</td>
+            <td class='c10_5' colspan="5">@if (Model.NewPOForm.TotalExclSST.HasValue) { @Model.NewPOForm.TotalExclSST.Value }</td>
             <td class='c10_5' colspan="1">@if (Model.NewPOForm.TotalExclSST.HasValue)
             { @Model.NewPOForm.TotalExclSST.Value }</td>
             @*<td class='c9_5' style='width:16px'></td>
@@ -928,7 +931,7 @@
                 Add Total SST
             </td>
             <td style='width:16px'></td>
-            <td style='width:82px'></td>
+            <td colspan="2"></td>
             <td style='width:59px'></td>
             <td class='c10_6' colspan="1">@Model.NewPOForm.TotalSST</td>
             <td class='c10_6' colspan="1">@Model.NewPOForm.TotalSST</td>
@@ -951,7 +954,7 @@
             <td class='c9_4' style='width:106px'>
                 Net Amount
             </td>
-            <td class='c10_5' colspan="4">@Model.NewPOForm.TotalIncSST</td>
+            <td class='c10_5' colspan="5">@Model.NewPOForm.TotalIncSST</td>
             <td class='c10_5' colspan="1">@Model.NewPOForm.TotalIncSST</td>
             @*<td class='c9_5' style='width:16px'></td>
         <td class='c35_4' style='width:82px'></td>
@@ -969,12 +972,12 @@
             <td style='width:9px'></td>
             <td style='width:59px'></td>
             <td style='width:9px'></td>
-            <td style='width:106px'></td>
-            <td style='width:15px'></td>
+            <td class="c9_4" colspan="6"></td>
+            @*<td style='width:15px'></td>
             <td style='width:16px'></td>
             <td style='width:82px'></td>
-            <td style='width:59px'></td>
-            <td style='width:59px'></td>
+            <td style='width:59px'></td>*@
+            <td class="c9_4"></td>
         </tr>
         <tr style='height:13px'>
             <td style='width:30px'></td>
@@ -1067,7 +1070,7 @@
             <td style='width:59px'></td>
         </tr>*@
         <tr style='height:13px'>
-            <td colspan='5' class='c1_6'>
+            <td colspan='5' class='c1_6' style="font-weight: bold;">
                 For and on behalf of the VENDOR
             </td>
             <td style='width:14px'></td>
@@ -1249,7 +1252,7 @@
             <td style='width:59px'></td>
         </tr>
         <tr style='height:26px'>
-            <td colspan='5' class='c56_1'>
+            <td colspan='5' class='c56_1' style="font-weight: bold;">
                 *by signing and accepting this PO, VENDOR agrees to the Term & Conditions attached hereto
             </td>
             <td style='width:14px'></td>
@@ -1283,7 +1286,7 @@
             <td style='width:59px'></td>
         </tr>
         <tr style='height:22px' class='c11_10'>
-            <td colspan='16'>
+            <td colspan='16' style="font-weight: bold; font-style:italic; font-size:12px; text-align: center;">
                 This is auto generated Purchase Order. No signature required.
             </td>
         </tr>
