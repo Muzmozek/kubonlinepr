@@ -1094,7 +1094,7 @@ namespace KUBOnlinePRPM.Controllers
                                        {
                                            ItemsId = m.itemsId,
                                            DateRequired = m.dateRequired,
-                                           Description = n.Description,
+                                           Description = m.description,
                                            ItemCode = n.ItemCode,
                                            CustPONo = m.custPONo,
                                            Quantity = m.quantity,

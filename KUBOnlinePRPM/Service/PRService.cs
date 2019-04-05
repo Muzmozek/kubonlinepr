@@ -27,8 +27,8 @@ namespace KUBOnlinePRPM.Service
 
         public bool CheckAmountScenarioTwo(decimal amount, int custId)
         {
-            //if (custId == 4 && amount >= decimal.Parse("20000.01") && amount <= 500000)
-            //    return true;
+            if (custId == 4 && amount >= decimal.Parse("20000.01") && amount <= 500000)
+                return true;
 
 
             if (amount >= decimal.Parse("20000.01") && amount <= 50000)
@@ -39,8 +39,8 @@ namespace KUBOnlinePRPM.Service
 
         public bool CheckAmountScenarioThree(decimal amount, int custId)
         {
-            //if (custId == 4 && amount >= decimal.Parse("500000.01"))
-            //    return true;
+            if (custId == 4 && amount >= decimal.Parse("500000.01"))
+                return true;
 
             if (amount >= decimal.Parse("50000.01"))
                 return true;
