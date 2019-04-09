@@ -361,7 +361,8 @@ $(document).on('ready', function () {
             url: UrlGetUoM,
             method: 'GET',
             data: {
-                Selectlistid: j
+                Selectlistid: j,
+                PRCustId: $("#CustId").val()
             },
             success: function (resp) {
                 //$(".child #JobTaskNoId" + selectlistid).html(resp.html);
@@ -383,10 +384,8 @@ $(document).on('ready', function () {
         });        
     });
 
-    $(document).on("change", "#ProjectName", function () {
-        //e.preventDefault();
-        var projectId = $(this).val();
-        var html = "";
+    $(document).on("change", "#ProjectName", function (e) {
+        e.preventDefault();
         $.ajax({
             url: UrlGetProjectInfo,
             method: 'GET',
@@ -404,10 +403,22 @@ $(document).on('ready', function () {
                 //var BudgetedAmount = resp.projectInfo.BudgetedAmount;
                 //var UtilizedToDate = resp.projectInfo.UtilizedToDate;
                 //var BudgetBalance = resp.projectInfo.BudgetBalance;
-                //$("#BudgetedAmount").val(BudgetedAmount);
+                $("#CustId").val(resp.projectInfo.ChildCustId);
                 //$("#UtilizedToDate").val(UtilizedToDate);
                 //$("#BudgetBalance").val(BudgetBalance);
-                $("body").removeClass("loading");
+                $.ajax({
+                    url: UrlGetUoM,
+                    method: 'GET',
+                    data: {
+                        Selectlistid: j,
+                        PRCustId: $("#CustId").val()
+                    },
+                    success: function (resp) {
+                        $("#UoMId" + j).html(resp.html);
+                        $("body").removeClass("loading");
+                    }
+                });
+                //$("body").removeClass("loading");
                 //to do - generate itemcode when select projectId
                 //$(".CodeId").select(resp.ItemCodeList);
             }

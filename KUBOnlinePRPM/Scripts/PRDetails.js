@@ -24,48 +24,6 @@
     //    }
     //});
 
-    //$('#PRItemTable tbody').on('click', 'tr', function (e) {
-    //    e.preventDefault();
-    //    if (touchtime === 0) {
-    //        // set first click
-    //        touchtime = new Date().getTime();
-    //    } else {
-    //        // compare first click to this click and see if they occurred within double click threshold
-    //        if (((new Date().getTime()) - touchtime) < 800) {
-    //            // double click occurred
-    //            //var ItemsId = PRItemTable.row(this).data()[0];
-    //            //$.ajax({
-    //            //    url: UrlGetPRItems,
-    //            //    type: 'GET',
-    //            //    cache: false,
-    //            //    beforeSend: function () {
-    //            //        PRItemsModal.open();
-    //            //    },
-    //            //    data: {
-    //            //        PRId: PRId,
-    //            //        ItemsId: ItemsId
-    //            //    },
-    //            //    success: function (resp) {
-    //            //        if (resp.success === true) {
-    //            //            //update modal textbox;
-    //            //        } else {
-    //            //            alert("Server returns error. Please contact admin.");
-    //            //            Custombox.modal.close();
-    //            //        }
-    //            //    },
-    //            //    contentType: false,
-    //            //    processData: false
-    //            //});
-    //            PRItemsModal.open();
-    //            touchtime = 0;
-    //        } else {
-    //            // not a double click so set as a new first click
-    //            touchtime = new Date().getTime();
-    //        }
-    //    }
-    //    return false;
-    //});
-
     $(document).on("click", ".saveSubmitProcDetail", function (e) {
         e.preventDefault();
         var fd = new FormData(); var other_data; var PRType; var URL;
@@ -528,7 +486,7 @@
             data: {
                 ItemTypeId: ItemTypeId,
                 Selectlistid: selectlistid,
-                PRChildCustId: PRChildCustId
+                PRCustId: $("#CustId").val()
             },
             success: function (resp) {
                 $("#CodeId" + selectlistid).html(resp.html);
@@ -593,7 +551,7 @@
             method: 'GET',
             data: {
                 TaxCodeId: TaxCodeId,
-                PRChildCustId: PRChildCustId
+                PRCustId: $("#CustId").val()
             },
             success: function (resp) {
                 var DiscountAmount = parseFloat(0); var UnitPrice = parseFloat(0); var TotalPrice = parseFloat(0);
@@ -665,7 +623,7 @@
             method: 'GET',
             data: {
                 TaxCodeId: TaxCodeId,
-                PRChildCustId: PRChildCustId
+                PRCustId: $("#CustId").val()
             },
             success: function (resp) {
                 var AmountRequired = parseFloat(0); var TotalIncSST = parseFloat(0); var TotalSST = parseFloat(0);

@@ -250,7 +250,8 @@ namespace KUBOnlinePRPM.Controllers
             var projectInfo = db.Projects.Select(m => new NewPRModel()
             {
                 ProjectId = m.projectId,
-                PaperVerified = m.paperVerified
+                PaperVerified = m.paperVerified,
+                ChildCustId = m.custId
                 //BudgetedAmount = m.budgetedAmount,
                 //UtilizedToDate = m.utilizedToDate,
                 //BudgetBalance = m.budgetBalance
@@ -259,25 +260,12 @@ namespace KUBOnlinePRPM.Controllers
             return Json(new { projectInfo }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetItemTypeInfo(int ItemTypeId, int Selectlistid, int? PRChildCustId)
+        public JsonResult GetItemTypeInfo(int ItemTypeId, int Selectlistid, int PRCustId)
         {
-            int CustId = Int32.Parse(Session["CompanyId"].ToString());
-            if (PRChildCustId != null)
-            {
-                switch (PRChildCustId)
-                {
-                    case 16:
-                        CustId = 6; break;
-                    case 17:
-                        CustId = 7; break;
-                    case 18:
-                        CustId = 8; break;
-                }
-            }
             string html = "<select class='CodeId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20' data-val-required='The CodeId field is required.' id='CodeId" + Selectlistid + "'><option value='' >Select item code here</option>";
             if (ItemTypeId != 0)
             {
-                var ItemCodeQuery = db.PopulateItemLists.Select(m => new { CodeId = m.codeId, ItemCode = m.ItemCode, ItemDescription = m.ItemDescription, ItemTypeId = m.itemTypeId, CustId = m.custId }).Where(m => m.ItemTypeId == ItemTypeId && m.CustId == CustId).OrderBy(m => m.ItemCode).ToList();
+                var ItemCodeQuery = db.PopulateItemLists.Select(m => new { CodeId = m.codeId, ItemCode = m.ItemCode, ItemDescription = m.ItemDescription, ItemTypeId = m.itemTypeId, CustId = m.custId }).Where(m => m.ItemTypeId == ItemTypeId && m.CustId == PRCustId).OrderBy(m => m.ItemCode).ToList();
                 foreach (var item in ItemCodeQuery)
                 {
                     html += "<option value='" + item.CodeId + "' >" + item.ItemDescription + "</option>";
@@ -288,57 +276,31 @@ namespace KUBOnlinePRPM.Controllers
             return Json(new { html }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetItemCodeInfo(int CodeId, int? PRChildCustId)
+        public JsonResult GetItemCodeInfo(int CodeId, int PRCustId)
         {
-            int CustId = Int32.Parse(Session["CompanyId"].ToString());
-            if (PRChildCustId != null)
-            {
-                switch (PRChildCustId)
-                {
-                    case 16:
-                        CustId = 6; break;
-                    case 17:
-                        CustId = 7; break;
-                    case 18:
-                        CustId = 8; break;
-                }
-            }
             var ItemCodeInfo = db.PopulateItemLists.Select(m => new PRItemsTable()
             {
                 UOM = m.UoM,
                 CodeId = m.codeId,
                 CustId = m.custId
-            }).Where(m => m.CodeId == CodeId && m.CustId == CustId).FirstOrDefault();
+            }).Where(m => m.CodeId == CodeId && m.CustId == PRCustId).FirstOrDefault();
 
             return Json(new { ItemCodeInfo }, JsonRequestBehavior.AllowGet);
 
         }
 
-        public JsonResult GetTaxCode(int TaxCodeId, int? PRChildCustId)
+        public JsonResult GetTaxCode(int TaxCodeId, int PRCustId)
         {
-            int CustId = Int32.Parse(Session["CompanyId"].ToString());
-            if (PRChildCustId != null)
-            {
-                switch (PRChildCustId)
-                {
-                    case 16:
-                        CustId = 6; break;
-                    case 17:
-                        CustId = 7; break;
-                    case 18:
-                        CustId = 8; break;
-                }
-            }
             if (TaxCodeId == 0)
             {
-                TaxCodeId = CustId;
+                TaxCodeId = PRCustId;
             }
             var TaxCodeInfo = db.TaxCodes.Select(m => new PRItemsTable()
             {
                 TaxCodeId = m.TaxCodeId,
                 SST = m.GST,
                 CustId = m.CustId
-            }).Where(m => m.TaxCodeId == TaxCodeId && m.CustId == CustId).FirstOrDefault();
+            }).Where(m => m.TaxCodeId == TaxCodeId && m.CustId == PRCustId).FirstOrDefault();
 
             return Json(new { TaxCodeInfo }, JsonRequestBehavior.AllowGet);
 
@@ -391,10 +353,9 @@ namespace KUBOnlinePRPM.Controllers
             return Json(new { VendorStaffIdInfo }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetUoM(int Selectlistid)
+        public JsonResult GetUoM(int Selectlistid, int PRCustId)
         {
-            int CustId = Int32.Parse(Session["CompanyId"].ToString());
-            var UoMCodeQuery = db.UOMs.Select(m => new { UoMId = m.UoMId, UoMCode = m.UoMCode, Description = m.Description, CustId = m.CustId }).Where(m => m.CustId == CustId).OrderBy(m => m.UoMCode).ToList();
+            var UoMCodeQuery = db.UOMs.Select(m => new { UoMId = m.UoMId, UoMCode = m.UoMCode, Description = m.Description, CustId = m.CustId }).Where(m => m.CustId == PRCustId).OrderBy(m => m.UoMCode).ToList();
 
             string html = "<select class='UOM custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20' data-val-required='The UoM Code field is required.' id='UoMCodeId" + Selectlistid + "' name='item.UoMCodeId'><option value='' >Select UOM Code here</option>";
             for (int i = 0; i < UoMCodeQuery.Count; i++)
@@ -461,12 +422,13 @@ namespace KUBOnlinePRPM.Controllers
             if (UserId == 258)
             {
                 ProjectNameQuery = (from m in db.Projects
+                                    join n in db.Customers on m.custId equals n.custId
                                     where m.projectCode == "HQ"
                                     select new
                                     {
                                         ProjectId = m.projectId,
                                         Dimension = m.dimension,
-                                        Description = m.dimension + " - " + m.projectCode,
+                                        Description = m.dimension + " - " + m.projectCode + " (" + n.name + ")",
                                         Code = m.projectCode,
                                     }).OrderBy(c => c.Dimension).ThenBy(c => c.Code);
             } else
@@ -1168,12 +1130,13 @@ namespace KUBOnlinePRPM.Controllers
                 if (PRDetail.UserId == 258)
                 {
                     ProjectNameQuery = (from m in db.Projects
+                                        join n in db.Customers on m.custId equals n.custId
                                         where m.projectCode == "HQ"
                                         select new
                                         {
                                             ProjectId = m.projectId,
                                             Dimension = m.dimension,
-                                            Description = m.dimension + " - " + m.projectCode,
+                                            Description = m.dimension + " - " + m.projectCode + " (" + n.name + ")",
                                             Code = m.projectCode,
                                         }).OrderBy(c => c.Dimension).ThenBy(c => c.Code);
                 }
