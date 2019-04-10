@@ -410,11 +410,12 @@ $(document).on('ready', function () {
                     url: UrlGetUoM,
                     method: 'GET',
                     data: {
-                        Selectlistid: j,
+                        Selectlistid: k,
                         PRCustId: $("#CustId").val()
                     },
                     success: function (resp) {
-                        $("#UoMId" + j).html(resp.html);
+                        $("#UoM" + k).html("");
+                        $("#UoM" + k).html(resp.html);
                         $("body").removeClass("loading");
                     }
                 });
