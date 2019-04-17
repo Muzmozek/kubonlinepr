@@ -39,8 +39,8 @@ namespace KUBOnlinePRPM.Models
         public int POAging { get; set; }
         public int TotalQuantity { get; set; }
         public decimal TotalPrice { get; set; }
-        public Nullable<decimal> DiscountAmount { get; set; }
-        public Nullable<int> Discount_ { get; set; }
+        public decimal DiscountAmount { get; set; }
+        public int Discount_ { get; set; }
         public Nullable<decimal> TotalExcSST { get; set; }
         public Nullable<decimal> TotalSST { get; set; }
         public Nullable<decimal> TotalIncSST { get; set; }
@@ -54,13 +54,13 @@ namespace KUBOnlinePRPM.Models
         public string StatusId { get; set; }
     
         public virtual PaymentTerm PaymentTerm { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PO_Item> PO_Item { get; set; }
         public virtual POStatu POStatu { get; set; }
         public virtual Project Project { get; set; }
         public virtual Purchaser Purchaser { get; set; }
         public virtual PurchaseRequisition PurchaseRequisition { get; set; }
         public virtual Vendor Vendor { get; set; }
         public virtual VendorStaff VendorStaff { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PO_Item> PO_Item { get; set; }
     }
 }

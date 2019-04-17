@@ -451,11 +451,14 @@ namespace KUBOnlinePRPM.Controllers
                 PODetail.NewPOForm = (from a in db.PurchaseOrders
                                       join b in db.Projects on a.projectId equals b.projectId
                                       join c in db.Vendors on a.vendorId equals c.vendorId
-                                      //join d in db.VendorStaffs on a.vendorStaffId equals d.staffId
-                                      //join e in db.Users on a.SpecsReviewerId equals e.userId
-                                      //join f in db.PopulateItemLists on e.codeId equals f.codeId
+                                      join d in db.Locations on a.LocationCodeId equals d.locationId into i
+                                      join e in db.PaymentTerms on a.PaymentTermsId equals e.paymentTermsId into k
+                                      join f in db.Purchasers on a.PurchaserId equals f.purchaserId into m
                                       join g in db.POStatus on a.StatusId equals g.statusId
                                       join h in db.PurchaseRequisitions on a.PRId equals h.PRId
+                                      from j in i.DefaultIfEmpty()
+                                      from l in k.DefaultIfEmpty()
+                                      from n in m.DefaultIfEmpty()
                                       where a.POId == PODetail.POId /*&& a.CustId == CustId*/
                                       select new NewPOModel()
                                       {
@@ -476,11 +479,15 @@ namespace KUBOnlinePRPM.Controllers
                                           TotalSST = a.TotalSST,
                                           TotalIncSST = a.TotalIncSST,
                                           PayToVendorId = a.PayToVendorId,
+                                          PayToVendorName = c.name,
                                           PaymentTermsId = a.PaymentTermsId,
+                                          PaymentTermsCode = l.paymentCode,
                                           SpecReviewerId = a.SpecsReviewerId,
                                           LocationCodeId = a.LocationCodeId,
+                                          LocationCode = j.locationCode,
                                           OrderDate = a.OrderDate,
                                           PurchaserCodeId = a.PurchaserId,
+                                          PurchaserCode = n.purchaserCode,
                                           DeliveryDate = a.DeliveryDate,
                                           StatusId = a.StatusId,
                                           Status = g.status,
@@ -1036,6 +1043,7 @@ namespace KUBOnlinePRPM.Controllers
                                           VendorId = a.vendorId,
                                           VendorCode = y.vendorNo,
                                           VendorName = y.name,
+                                          VendorAddress = y.address,
                                           PayToVendorId = a.PayToVendorId,
                                           PayToVendorName = y.name,
                                           PaymentTermsId = a.PaymentTermsId,

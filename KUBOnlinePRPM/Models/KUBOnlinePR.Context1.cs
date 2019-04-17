@@ -55,7 +55,6 @@ namespace KUBOnlinePRPM.Models
         public virtual DbSet<PR_RecommenderCOO> PR_RecommenderCOO { get; set; }
         public virtual DbSet<PR_RecommenderHOC> PR_RecommenderHOC { get; set; }
         public virtual DbSet<Group> Groups { get; set; }
-        public virtual DbSet<PurchaseRequisition> PurchaseRequisitions { get; set; }
         public virtual DbSet<JobTask> JobTasks { get; set; }
         public virtual DbSet<ChildCustomer> ChildCustomers { get; set; }
         public virtual DbSet<PR_Finance> PR_Finance { get; set; }
@@ -65,7 +64,8 @@ namespace KUBOnlinePRPM.Models
         public virtual DbSet<UOM> UOMs { get; set; }
         public virtual DbSet<Location> Locations { get; set; }
         public virtual DbSet<Purchaser> Purchasers { get; set; }
-        public virtual DbSet<PurchaseOrder> PurchaseOrders { get; set; }
         public virtual DbSet<PO_Item> PO_Item { get; set; }
+        public virtual DbSet<PurchaseRequisition> PurchaseRequisitions { get; set; }
+        public virtual DbSet<PurchaseOrder> PurchaseOrders { get; set; }
     }
 }

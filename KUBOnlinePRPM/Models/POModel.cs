@@ -36,6 +36,7 @@ namespace KUBOnlinePRPM.Models
         public string PRNo { get; set; }
         public int? VendorId { get; set; }
         public string VendorCode { get; set; }
+        public string VendorAddress { get; set; }
         public int? VendorStaffId { get; set; }
         public decimal AmountRequired { get; set; }
         public string VendorName { get; set; }
@@ -59,14 +60,15 @@ namespace KUBOnlinePRPM.Models
         public int? PaymentTermsId { get; set; }
         public string PaymentTermsCode { get; set; }
         public List<POItemsTable> POItemListObject { get; set; }
-        public decimal? DiscountAmount { get; set; }
-        public int? DiscountPerc { get; set; }
+        public decimal DiscountAmount { get; set; }
+        public int DiscountPerc { get; set; }
         public decimal? TotalBeforeDisc { get; set; }
         public decimal? TotalExclSST { get; set; }
         public decimal? TotalSST { get; set; }
         public decimal? TotalIncSST { get; set; }
         public string SpecReviewerId { get; set; }
         public int? LocationCodeId { get; set; }
+        public string LocationCode { get; set; }
         public string DeliveryTo { get; set; }
         public DateTime? OrderDate { get; set; }
         public int? PurchaserCodeId { get; set; }

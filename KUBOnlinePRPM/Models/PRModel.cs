@@ -130,8 +130,8 @@ namespace KUBOnlinePRPM.Models
         public int? AmountPOBalance { get; set; }
         public List<PRItemsTable> PRItemListObject { get; set; }
         public int Scenario { get; set; }
-        public decimal? DiscountAmount { get; set; }
-        public int? DiscountPerc { get; set; }
+        public decimal DiscountAmount { get; set; }
+        public int DiscountPerc { get; set; }
         public decimal? TotalExclSST { get; set; }
         public decimal? TotalSST { get; set; }
         public decimal? TotalIncSST { get; set; }

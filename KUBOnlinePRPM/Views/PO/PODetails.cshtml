@@ -377,7 +377,14 @@
                                             <span>Pay To Vendor</span>
                                         </div>
                                         <div class="d-flex col-md-8 col-sm-8">
-                                            @Html.DropDownListFor(m => m.NewPOForm.PayToVendorId, (IEnumerable<SelectListItem>)ViewBag.PayToVendorList, "Select Vendor here", new { @id = "PayToVendor", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                                            @if (Model.NewPOForm.StatusId == "PO01")
+                                            {
+                                                @Html.DropDownListFor(m => m.NewPOForm.PayToVendorId, (IEnumerable<SelectListItem>)ViewBag.PayToVendorList, "Select Vendor here", new { @id = "PayToVendor", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                                            }
+                                            else
+                                            {
+                                                @Html.TextBoxFor(m => m.NewPOForm.PayToVendorName, new { @id = "PayToVendor", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "", @type = "text", @readonly = true })
+                                            }
                                         </div>
                                     </div>
                                     <div class="row has-danger">
@@ -394,7 +401,14 @@
                                             <span>Location Code</span>
                                         </div>
                                         <div class="d-flex col-md-8 col-sm-8">
-                                            @Html.DropDownListFor(m => m.NewPOForm.LocationCodeId, (IEnumerable<SelectListItem>)ViewBag.LocationCodeList, "Select Location here", new { @id = "LocationCode", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                                            @if (Model.NewPOForm.StatusId == "PO01")
+                                            {
+                                                @Html.DropDownListFor(m => m.NewPOForm.LocationCodeId, (IEnumerable<SelectListItem>)ViewBag.LocationCodeList, "Select Location here", new { @id = "LocationCode", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                                            }
+                                            else
+                                            {
+                                                @Html.TextBoxFor(m => m.NewPOForm.LocationCode, new { @id = "LocationCode", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "", @type = "text", @readonly = true })
+                                            }
                                         </div>
                                     </div>
                                     <div class="row has-danger">
@@ -438,7 +452,14 @@
                                             <span>Payment Terms Code</span>
                                         </div>
                                         <div class="d-flex col-md-8 col-sm-8">
-                                            @Html.DropDownListFor(m => m.NewPOForm.PaymentTermsId, (IEnumerable<SelectListItem>)ViewBag.PaymentTermsCodeList, "Select Payment Terms Code here", new { @id = "PaymentTermsCode", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                                            @if (Model.NewPOForm.StatusId == "PO01")
+                                            {
+                                                @Html.DropDownListFor(m => m.NewPOForm.PaymentTermsId, (IEnumerable<SelectListItem>)ViewBag.PaymentTermsCodeList, "Select Payment Terms Code here", new { @id = "PaymentTermsCode", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                                            }
+                                            else
+                                            {
+                                                @Html.TextBoxFor(m => m.NewPOForm.PaymentTermsCode, new { @id = "PaymentTermsCode", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "", @type = "text", @readonly = true })
+                                            }
                                         </div>
                                     </div>
                                     <div class="row has-danger">
@@ -455,7 +476,14 @@
                                             <span>Purchaser Code</span>
                                         </div>
                                         <div class="d-flex col-md-8 col-sm-8">
-                                            @Html.DropDownListFor(m => m.NewPOForm.PurchaserCodeId, (IEnumerable<SelectListItem>)ViewBag.PurchaserCodeList, "Select Purchaser Code here", new { @id = "PurchaserCode", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                                            @if (Model.NewPOForm.StatusId == "PO01")
+                                            {
+                                                @Html.DropDownListFor(m => m.NewPOForm.PurchaserCodeId, (IEnumerable<SelectListItem>)ViewBag.PurchaserCodeList, "Select Purchaser Code here", new { @id = "PurchaserCode", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                                            }
+                                            else
+                                            {
+                                                @Html.TextBoxFor(m => m.NewPOForm.PurchaserCode, new { @id = "PurchaserCode", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "", @type = "text", @readonly = true })
+                                            }
                                         </div>
                                     </div>
                                     <div class="row has-danger">

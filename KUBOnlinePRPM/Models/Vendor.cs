@@ -35,6 +35,7 @@ namespace KUBOnlinePRPM.Models
         public string contactName { get; set; }
         public string telephoneNo { get; set; }
         public string email { get; set; }
+        public string address { get; set; }
     
         public virtual User User { get; set; }
         public virtual User User1 { get; set; }
