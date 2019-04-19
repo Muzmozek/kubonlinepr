@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -44,7 +45,6 @@ namespace KUBOnlinePRPM.Models
         public string VendorContactName { get; set; }
         public string VendorContactNo { get; set; }
         public string VendorQuoteNo { get; set; }
-        public DateTime? DeliveryDate { get; set; }
         public decimal AmountPOBalance { get; set; }
         public int PreparedById { get; set; }
         //public bool Reviewed { get; set; }
@@ -55,8 +55,12 @@ namespace KUBOnlinePRPM.Models
         public int POAging { get; set; }
         public string StatusId { get; set; }
         public string Status { get; set; }
+
+        [Required]
         public int? PayToVendorId { get; set; }
         public string PayToVendorName { get; set; }
+
+        [Required]
         public int? PaymentTermsId { get; set; }
         public string PaymentTermsCode { get; set; }
         public List<POItemsTable> POItemListObject { get; set; }
@@ -67,12 +71,21 @@ namespace KUBOnlinePRPM.Models
         public decimal? TotalSST { get; set; }
         public decimal? TotalIncSST { get; set; }
         public string SpecReviewerId { get; set; }
+
+        [Required]
         public int? LocationCodeId { get; set; }
         public string LocationCode { get; set; }
         public string DeliveryTo { get; set; }
+
+        [Required]
         public DateTime? OrderDate { get; set; }
+
+        [Required]
         public int? PurchaserCodeId { get; set; }
         public string PurchaserCode { get; set; }
+
+        [Required]
+        public DateTime? DeliveryDate { get; set; }
     }
 
     public class POListTable

@@ -119,26 +119,40 @@ $(document).ready(function () {
     });
     //$(document).on("click", "#ConfirmPO", function (e) {
     $("#ConfirmPO").click(function (e) {
-        e.preventDefault();
-        $.post(UrlComfirmPO, {
-            POId: POId,
-            PayToVendorId: $("#PayToVendor").find("option:selected").val(),
-            PaymentTermsId: $("#PaymentTermsCode").find("option:selected").val(),
-            LocationCodeId: $("#LocationCode").find("option:selected").val(),
-            OrderDate: $("#OrderDate").val(),
-            PurchaserCodeId: $("#PurchaserCode").find("option:selected").val(),
-            DeliveryDate: $("#DeliveryDate").val()
-        }, function (resp) {
-            if (resp.success === true) {
-                alert(resp.message);
-                $("#nav-4-1-primary-hor-center--PODetails").load(UrlSaveSubmitDetails + ' #PODetailsTab', function () {
+        e.preventDefault(); var fd = new FormData();
+        fd.append("NewPOForm.PayToVendorId", $("#PayToVendor").find("option:selected").val());
+        fd.append("NewPOForm.PaymentTermsId", $("#PaymentTermsCode").find("option:selected").val());
+        fd.append("NewPOForm.LocationCodeId", $("#LocationCode").find("option:selected").val());
+        fd.append("NewPOForm.DeliveryDate", $("#DeliveryDate").val());
+        fd.append("NewPOForm.PurchaserCodeId", $("#PurchaserCode").find("option:selected").val());
+        fd.append("NewPOForm.OrderDate", $("#OrderDate").val());
+        fd.append("NewPOForm.POId", $("#POId").val());
+        $.ajax({
+            url: UrlComfirmPO,
+            type: 'POST',
+            data: fd,
+            contentType: false,
+            processData: false,
+            cache: false,
+            dataType: "json",
+            success: function (resp) {
+                if (resp.success === true) {
+                    alert(resp.message);
+                    $("#nav-4-1-primary-hor-center--PODetails").load(UrlSaveSubmitDetails + ' #PODetailsTab', function () {
+                        $("body").removeClass("loading");
+                        generatePOItemTable();
+                    });
+                }
+                else if (resp.success === false && resp.exception === false) {
+                    alert("Validation error");
+                    $.each(resp.data, function (key, input) {
+                        //$('input[name="' + input.name + '"]').val(input.value);
+                        $('span[data-valmsg-for="' + input.key + '"]').text(input.errors[0]);
+                    });
                     $("body").removeClass("loading");
-                    generatePOItemTable();
-                });
-            } else if (resp.success === false && resp.exception === true) {
-                alert(resp.message);
-            } else {
-                window.location = resp.url;
+                } else {
+                    window.location = resp.url;
+                }
             }
         });
     });

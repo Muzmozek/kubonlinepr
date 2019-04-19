@@ -88,47 +88,60 @@ namespace KUBOnlinePRPM.Controllers
                 return;
 
             var modelState = filterContext.Controller.ViewData.ModelState;
-            var model = filterContext.ActionParameters.Values.FirstOrDefault() as PRModel;
-           
-            if (model != null)
+            var PRModel = filterContext.ActionParameters.Values.FirstOrDefault() as PRModel;
+            var POModel = filterContext.ActionParameters.Values.FirstOrDefault() as POModel;
+            if (PRModel != null)
             {
-                if (model.NewPRForm.StatusId == "PR02") {
-                    if (model.NewPRForm.VendorId == null)
+                if (PRModel.NewPRForm.StatusId == "PR02") {
+                    if (PRModel.NewPRForm.VendorId == null)
                     {
                         modelState.AddModelError("NewPRForm.VendorId", "Please select vendor company name.");
                     }
+                    for (int i = 0; i < PRModel.NewPRForm.PRItemListObject.Count; i++)
+                    {
+                        if (PRModel.NewPRForm.PRItemListObject[i].UnitPrice == null)
+                        {
+                            modelState.AddModelError("NewPRForm.PRItemListObject[" + (i+1) + "].UnitPrice", "Please insert unit price (RM)");
+                        }
+                        if (PRModel.NewPRForm.PRItemListObject[i].TaxCodeId == null)
+                        {
+                            modelState.AddModelError("NewPRForm.PRItemListObject[" + (i+1) + "].TaxCodeId", "Please select SST code");
+                        }
+                    }
                     //todo: add other field validation
                 }
-                if (model.NewPRForm.StatusId == "PR10" && model.FinalApproverId == 0)
+                if (PRModel.NewPRForm.StatusId == "PR10" && PRModel.FinalApproverId == 0)
                 {
                     modelState.AddModelError("FinalApproverId", "Please select final approver name.");
                 }
-                if (model.NewPRForm.PaperRefNo != null && model.PaperRefNoFile == null)
+                if (PRModel.NewPRForm.PaperRefNo != null && PRModel.PaperRefNoFile == null)
                 {
                     modelState.AddModelError("PaperRefNoFileName", "GMD paper attachment needed.");
                 }
-                if (model.NewPRForm.BidWaiverRefNo != null && model.BidWaiverRefNoFile == null)
+                if (PRModel.NewPRForm.BidWaiverRefNo != null && PRModel.BidWaiverRefNoFile == null)
                 {
                     modelState.AddModelError("BidWaiverRefNoFileName", "Bid Waiver attachment needed");
                 }
-                if (model.NewPRForm.PaperRefNo == null && model.PaperRefNoFile != null)
+                if (PRModel.NewPRForm.PaperRefNo == null && PRModel.PaperRefNoFile != null)
                 {
                     modelState.AddModelError("NewPRForm.PaperRefNo", "GMD paper ref no needed.");
                 }
-                if (model.NewPRForm.BidWaiverRefNo == null && model.BidWaiverRefNoFile != null)
+                if (PRModel.NewPRForm.BidWaiverRefNo == null && PRModel.BidWaiverRefNoFile != null)
                 {
                     modelState.AddModelError("NewPRForm.BidWaiverRefNo", "Bid Waiver ref no needed");
                 }
-                if (model.PaperRefNoFile != null && Path.GetExtension(model.PaperRefNoFile.FileName) != ".pdf")
+                if (PRModel.PaperRefNoFile != null && Path.GetExtension(PRModel.PaperRefNoFile.FileName) != ".pdf")
                 {
                     modelState.AddModelError("PaperRefNoFileName", "Only pdf file accepted.");
                 }
-                if (model.BidWaiverRefNoFile != null && Path.GetExtension(model.BidWaiverRefNoFile.FileName) != ".pdf")
+                if (PRModel.BidWaiverRefNoFile != null && Path.GetExtension(PRModel.BidWaiverRefNoFile.FileName) != ".pdf")
                 {
                     modelState.AddModelError("BidWaiverRefNoFileName", "Only pdf file accepted.");
-                }
+                }                
             }
-
+            if (POModel != null)
+            {               
+            }
             if (!modelState.IsValid)
             {
                 var errorModel =

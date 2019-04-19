@@ -768,8 +768,11 @@
                             {
                                 <td>
                                     @*<input id="@SST" class="SST form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="SST" value="@item.SST" type="text">*@
-                                    @Html.DropDownListFor(m => item.TaxCodeId, (IEnumerable<SelectListItem>)ViewData["TaxCodeList" + i], "Select tax code here", new { @id = TaxCodeId, @class = "TaxCodeId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
-                                    @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[i].TaxCodeId, null, new { @class = "form-control-feedback" })
+                                    <div class="has-danger">
+                                        @Html.DropDownListFor(m => item.TaxCodeId, (IEnumerable<SelectListItem>)ViewData["TaxCodeList" + i], "Select tax code here", new { @id = TaxCodeId, @class = "TaxCodeId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+
+                                        @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[i].TaxCodeId, null, new { @class = "form-control-feedback" })
+                                    </div>
                                 </td>
                                 <td>
                                     <div class="has-danger">
@@ -777,6 +780,7 @@
                                         @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[i].UnitPrice, null, new { @class = "form-control-feedback" })
                                         <input id="@UnitPriceIncSST" class="UnitPriceIncSST d-none form-control" type="text" name="@UnitPriceIncSST" value="@item.UnitPriceIncSST" />
                                     </div>
+
                                 </td>
                             }
                             else

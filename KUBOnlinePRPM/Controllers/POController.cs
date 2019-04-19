@@ -804,40 +804,20 @@ namespace KUBOnlinePRPM.Controllers
         }
 
         [HttpPost]
-        public JsonResult ComfirmPO()
+        [ValidateAjax]
+        public JsonResult ComfirmPO(POModel POModel)
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
                 try
                 {
-                    int? PayToVendorId = null; int? PaymentTermsId = null; int? LocationCodeId = null; DateTime? OrderDate = null; int? PurchaserCodeId = null;
-                    DateTime? DeliveryDate = null;
-
-                    if (Request["PayToVendorId"] != "")
-                    {
-                        PayToVendorId = Int32.Parse(Request["PayToVendorId"]);
-                    }                    
-                    if (Request["LocationCodeId"] != "")
-                    {
-                        LocationCodeId = Int32.Parse(Request["LocationCodeId"]);
-                    }
-                    if (Request["OrderDate"] != "")
-                    {
-                        OrderDate = DateTime.Parse(Request["OrderDate"]);
-                    }
-                    if (Request["PaymentTermsId"] != "")
-                    {
-                        PaymentTermsId = Int32.Parse(Request["PaymentTermsId"]);
-                    }
-                    if (Request["PurchaserCodeId"] != "")
-                    {
-                        PurchaserCodeId = Int32.Parse(Request["PurchaserCodeId"]);
-                    }
-                    if (Request["DeliveryDate"] != "")
-                    {
-                        DeliveryDate = DateTime.Parse(Request["DeliveryDate"]);
-                    }
-                    int POId = Int32.Parse(Request["POId"]);                   
+                    int PayToVendorId = POModel.NewPOForm.PayToVendorId.Value;
+                    int LocationCodeId = POModel.NewPOForm.LocationCodeId.Value;
+                    DateTime OrderDate = POModel.NewPOForm.OrderDate.Value;
+                    int PaymentTermsId = POModel.NewPOForm.PaymentTermsId.Value;
+                    int PurchaserCodeId = POModel.NewPOForm.PurchaserCodeId.Value;
+                    DateTime DeliveryDate = POModel.NewPOForm.DeliveryDate.Value;
+                    int POId = POModel.NewPOForm.POId;                   
                     int UserId = Int32.Parse(Session["UserId"].ToString());
 
                     PurchaseOrder updatePO = db.PurchaseOrders.First(m => m.POId == POId);
