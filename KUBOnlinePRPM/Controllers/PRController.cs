@@ -2681,7 +2681,7 @@ namespace KUBOnlinePRPM.Controllers
                                               BudgetedAmount = a.budgetedAmount,
                                               Justification = a.Justification,
                                               UtilizedToDate = a.utilizedToDate,
-                                              AmountRequired = a.AmountRequired,
+                                              TotalIncSST = a.TotalIncSST,
                                               BudgetBalance = a.budgetBalance,
                                               PreparedById = a.PreparedById,
                                               PreparedDate = a.PreparedDate,
@@ -2765,7 +2765,7 @@ namespace KUBOnlinePRPM.Controllers
                                               BudgetedAmount = a.budgetedAmount,
                                               Justification = a.Justification,
                                               UtilizedToDate = a.utilizedToDate,
-                                              AmountRequired = a.AmountRequired,
+                                              TotalIncSST = a.TotalIncSST,
                                               BudgetBalance = a.budgetBalance,
                                               PreparedById = a.PreparedById,
                                               PreparedDate = a.PreparedDate,
@@ -4350,13 +4350,13 @@ namespace KUBOnlinePRPM.Controllers
                 }
                 else
                 {
-                    var getReqChildCustId = db.Users.First(m => m.userId == PR.PreparedById);
+                    int CustId = db.Projects.First(m => m.custId == PR.CustId).custId;
                     switch (PR.Scenario)
                     {                       
                         case 3:
                             {
                                 var getRecommenderII = new List<PRModel>();
-                                if (PR.CustId == 2 || (PR.CustId == 3 && getReqChildCustId.childCompanyId == 16))
+                                if (CustId == 2 || CustId == 6 || CustId == 4)
                                 {
                                     PR.StatusId = "PR18";
                                     getRecommenderII = (from m in db.Users
@@ -4406,7 +4406,7 @@ namespace KUBOnlinePRPM.Controllers
                                     };
                                     db.NotiGroups.Add(Task);
 
-                                    if (PR.CustId == 2 || (PR.CustId == 3 && getReqChildCustId.childCompanyId == 16))
+                                    if (CustId == 2 || CustId == 6 || CustId == 4)
                                     {
                                         PR_RecommenderCFO saveRecommender = new PR_RecommenderCFO()
                                         {
@@ -4444,7 +4444,7 @@ namespace KUBOnlinePRPM.Controllers
 
                         case 2:
                             {
-                                if (PR.CustId == 2)
+                                if (CustId == 2)
                                 {
                                     getApprover = (from m in db.Users
                                                    join o in db.Users on m.superiorId equals o.userId
@@ -4457,7 +4457,7 @@ namespace KUBOnlinePRPM.Controllers
                                                        EmailAddress = m.emailAddress
                                                    }).ToList();
                                 }
-                                else if (PR.CustId == 3 && getReqChildCustId.childCompanyId == 16)
+                                else if (CustId == 6)
                                 {
                                     //get Datuk Rahim
                                     getApprover = (from m in db.Users                                                   
@@ -4531,7 +4531,7 @@ namespace KUBOnlinePRPM.Controllers
 
                         case 1:
                             {                                
-                                switch (PR.CustId)
+                                switch (CustId)
                                 {
                                     case 2:
                                         //actual HOD
@@ -4546,9 +4546,8 @@ namespace KUBOnlinePRPM.Controllers
                                                            EmailAddress = o.emailAddress
                                                        }).ToList();
                                         break;
-                                    case 3:
                                     case 4:
-                                        if (PR.AmountRequired < 5000 && PR.CustId == 4)
+                                        if (PR.AmountRequired < 5000)
                                         {
                                             //get Pn. Liz
                                             getApprover = (from m in db.Users
@@ -4560,18 +4559,7 @@ namespace KUBOnlinePRPM.Controllers
                                                                EmailAddress = m.emailAddress
                                                            }).ToList();
                                         }
-                                        else if (PR.CustId == 3 && getReqChildCustId.childCompanyId == 16)
-                                        {
-                                            //get Datuk Rahim
-                                            getApprover = (from m in db.Users
-                                                           where m.userId == 165
-                                                           select new PRModel()
-                                                           {
-                                                               UserId = m.userId,
-                                                               FullName = m.firstName + " " + m.lastName,
-                                                               EmailAddress = m.emailAddress
-                                                           }).ToList();
-                                        } else
+                                        else
                                         {
                                             getApprover = (from m in db.Users
                                                            join n in db.Users_Roles on m.userId equals n.userId
@@ -4585,6 +4573,17 @@ namespace KUBOnlinePRPM.Controllers
                                                            }).ToList();
                                         }
                                         break;
+                                    case 6:
+                                            //get Datuk Rahim
+                                            getApprover = (from m in db.Users
+                                                           where m.userId == 165
+                                                           select new PRModel()
+                                                           {
+                                                               UserId = m.userId,
+                                                               FullName = m.firstName + " " + m.lastName,
+                                                               EmailAddress = m.emailAddress
+                                                           }).ToList();
+                                    break;
                                     default:
                                         getApprover = (from m in db.Users
                                                        join n in db.Users_Roles on m.userId equals n.userId
@@ -4677,12 +4676,13 @@ namespace KUBOnlinePRPM.Controllers
                 getDone.done = true;
                 db.SaveChanges();
 
-                var getReqChildCustId = db.Users.First(m => m.userId == PR.PreparedById);
+                int CustId = db.Projects.First(m => m.custId == PR.CustId).custId;
                 var getRecommenderIII = new List<PRModel>();
-                switch (PR.CustId)
+                switch (CustId)
                 {
                     case 2:
-                    case 3 when getReqChildCustId.childCompanyId == 16 || (PR.CustId == 3 && getReqChildCustId.childCompanyId == 16):
+                    case 6:
+                    case 4:
                         {
                             PR.StatusId = "PR05";
                             db.SaveChanges();
@@ -4710,7 +4710,7 @@ namespace KUBOnlinePRPM.Controllers
                             PR.StatusId = "PR18";
                             db.SaveChanges();
 
-                            PR_RecommenderCFO SaveRecommenderInfo = db.PR_RecommenderCFO.First(m => m.PRId == PR.PRId);
+                            PR_RecommenderHOC SaveRecommenderInfo = db.PR_RecommenderHOC.First(m => m.PRId == PR.PRId);
                             SaveRecommenderInfo.recommendedDate = DateTime.Now;
                             SaveRecommenderInfo.recommended = 1;
                             db.SaveChanges();
@@ -4752,7 +4752,7 @@ namespace KUBOnlinePRPM.Controllers
                     };
                     db.NotiGroups.Add(RecommenderIIITask);
 
-                    if (PR.CustId == 2 || (PR.CustId == 3 && getReqChildCustId.childCompanyId == 16))
+                    if (CustId == 2 || CustId == 6 || CustId == 4)
                     {
                         PR_Approver _objSaveGMD = new PR_Approver
                         {

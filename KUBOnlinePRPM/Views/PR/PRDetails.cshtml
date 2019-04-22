@@ -1139,8 +1139,8 @@
                                     <a id="RecommendedPreparedRecommended" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">RECOMMENDED</a>
                                 }
                                 @{
-                                    bool v = (Model.CustId == 2 || (Model.CustId == 3 && Model.NewPRForm.ChildCustId == 16) || Model.CustId == 4);
-                                    bool w = (Model.CustId == 1 || (Model.CustId == 3 && Model.NewPRForm.ChildCustId != 16) || Model.CustId == 5);
+                                    bool v = (Model.CustId == 2 || (Model.CustId == 6) || Model.CustId == 4);
+                                    bool w = (Model.CustId == 1 || (Model.CustId == 7) || Model.CustId == 5 || (Model.CustId == 8));
                                 }
                                 @if (((Model.NewPRForm.StatusId == "PR11" && w) || (Model.NewPRForm.StatusId == "PR18" && v)) && ((Session["ifHOC"] != null && w) || (Session["ifCFO"] != null && v)))
                                 {

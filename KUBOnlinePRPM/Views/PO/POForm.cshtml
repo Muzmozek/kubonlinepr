@@ -455,7 +455,7 @@
                 Order Date
             </td>
             <td class='c11_5' colspan="2">
-                : &nbsp;@if (Model.NewPOForm.OrderDate.HasValue) { Model.NewPOForm.OrderDate.Value.ToShortDateString(); }
+                : &nbsp;@if (Model.NewPOForm.OrderDate.HasValue) { @Model.NewPOForm.OrderDate.Value.ToShortDateString(); }
             </td>
             @*<td class='c11_5' style='width:59px'></td>*@
         </tr>
