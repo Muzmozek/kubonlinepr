@@ -276,6 +276,7 @@ namespace KUBOnlinePRPM.Controllers
         public JsonResult GetItemTypeInfo(int ItemTypeId, int Selectlistid, int PRCustId)
         {
             string html = "<select class='CodeId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20' data-val-required='The CodeId field is required.' id='CodeId" + Selectlistid + "'><option value='' >Select item code here</option>";
+            
             if (ItemTypeId != 0)
             {
                 var ItemCodeQuery = db.PopulateItemLists.Select(m => new { CodeId = m.codeId, ItemCode = m.ItemCode, ItemDescription = m.ItemDescription, ItemTypeId = m.itemTypeId, CustId = m.custId }).Where(m => m.ItemTypeId == ItemTypeId && m.CustId == PRCustId).OrderBy(m => m.ItemCode).ToList();
@@ -285,8 +286,8 @@ namespace KUBOnlinePRPM.Controllers
                 }
             }                        
             html += "</select>";
-
-            return Json(new { html }, JsonRequestBehavior.AllowGet);
+            
+            return Json(new { html,  }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetItemCodeInfo(int CodeId, int PRCustId)
@@ -295,8 +296,23 @@ namespace KUBOnlinePRPM.Controllers
             {
                 UOM = m.UoM,
                 CodeId = m.codeId,
-                CustId = m.custId
+                CustId = m.custId,
+                ItemTypeId = m.itemTypeId
             }).Where(m => m.CodeId == CodeId && m.CustId == PRCustId).FirstOrDefault();
+
+            if (ItemCodeInfo.ItemTypeId == 1)
+            {
+                ItemCodeInfo.BudgetAmount = db.GLs.First(m => m.codeId == ItemCodeInfo.CodeId).budgetAmount;
+                ItemCodeInfo.UtilizedToDate = db.GLs.First(m => m.codeId == ItemCodeInfo.CodeId).budgetUtilized;
+                if (ItemCodeInfo.BudgetAmount == null)
+                {
+                    ItemCodeInfo.BudgetAmount = 0;
+                }
+                if (ItemCodeInfo.UtilizedToDate == null)
+                {
+                    ItemCodeInfo.UtilizedToDate = 0;
+                }
+            }
 
             return Json(new { ItemCodeInfo }, JsonRequestBehavior.AllowGet);
 

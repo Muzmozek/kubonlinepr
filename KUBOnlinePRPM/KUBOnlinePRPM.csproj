@@ -184,6 +184,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Budget.cs">
+      <DependentUpon>KUBOnlinePR.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ChildCustomer.cs">
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
     </Compile>

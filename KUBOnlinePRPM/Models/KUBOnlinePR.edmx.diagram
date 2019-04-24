@@ -85,6 +85,7 @@
         <AssociationConnector Association="KUBOnlinePRModel.FK_Location_Customer" />
         <EntityTypeShape EntityType="KUBOnlinePRModel.PO_Item" Width="1.5" PointX="24" PointY="43.25" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PO_Item_PR_Items" />
+        <EntityTypeShape EntityType="KUBOnlinePRModel.Budget" Width="1.5" PointX="0.75" PointY="7.75" />
         <EntityTypeShape EntityType="KUBOnlinePRModel.PurchaseRequisition" Width="1.5" PointX="13.5" PointY="46.125" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseRequisition_Customer" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Admin_PurchaseRequisition" />

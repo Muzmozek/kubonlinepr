@@ -492,7 +492,7 @@
                 $("#CodeId" + selectlistid).html(resp.html);
                 $("#CodeId" + selectlistid).prop("disabled", false);
                 //$(".combobox-container").html('');
-                $("#CodeId" + selectlistid).combobox('refresh');
+                $("#CodeId" + selectlistid).combobox('refresh');                
                 $("#CodeId" + selectlistid).combobox({
                     bsVersion: '4',
                     menu: '<ul class="typeahead typeahead-long dropdown-menu"></ul>',
@@ -501,29 +501,40 @@
                         return '<div class="combobox-container"> <input type="hidden" /><div class="input-group"> <input type="text" autocomplete="off" /><span class="input-group-append input-group-text dropdown-toggle" data-dropdown="dropdown"><span class="caret" /> <span class="glyphicon glyphicon-remove" /></span></div></div>';
                     },
                     clearIfNoMatch: true
-                });
+                });                
                 $(".input-group-addon").addClass("buttonselect");
                 $("body").removeClass("loading");
             }
         });
     });
 
-    //$(document).on("change", ".CodeId", function () {
+    //$(document).on("mouseup", ".CodeId", function () {
     //    //e.preventDefault();
-    //    var selectlistid = $(this)[0].id.substring(7, $(this)[0].id.length);
-    //    var codeId = $(this).val();
-    //    var html = "";
-    //    $.ajax({
-    //        url: UrlItemCodeInfo,
-    //        method: 'GET',
-    //        data: { CodeId: codeId, PRChildCustId: PRChildCustId },
-    //        success: function (resp) {                
-    //            var UoM = resp.ItemCodeInfo.UOM;              
-    //            $("#UoM" + selectlistid).val(UoM);
-    //            $("body").removeClass("loading");
-    //        }
-    //    });
+    //    $("#clickCodeId").trigger("click");
+    //    //var selectlistid = $(this)[0].id.substring(7, $(this)[0].id.length);
+        
     //});
+
+    $(".CodeId").on("change", function () {
+        if ($(this).find('option:selected').val() != "") {
+            var codeId = $(this).find('option:selected').val();
+            $.ajax({
+                url: UrlItemCodeInfo,
+                method: 'GET',
+                data: { CodeId: codeId, PRCustId: $("#CustId").val() },
+                success: function (resp) {
+                    if (resp.ItemCodeInfo.ItemTypeId === 1 && resp.ItemCodeInfo.BudgetAmount === null) {
+                        alert("Please insert budget in navision first before submit this PR");
+                    } else if (resp.ItemCodeInfo.ItemTypeId === 1 && resp.ItemCodeInfo.BudgetAmount !== null) {
+                        $("#BudgetedAmount").val(resp.ItemCodeInfo.BudgetAmount);
+                        $("#UtilizedToDate").val(resp.ItemCodeInfo.UtilizedToDate);
+                        $("#BudgetBalance").val(resp.ItemCodeInfo.BudgetAmount - resp.ItemCodeInfo.UtilizedToDate);
+                    }
+                    $("body").removeClass("loading");
+                }
+            });
+        }        
+    });
 
     $(document).on("change", ".child .JobNoId", function () {
         var selectlistid = $(this)[0].id.substring(7, $(this)[0].id.length);

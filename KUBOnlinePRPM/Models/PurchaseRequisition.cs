@@ -69,10 +69,10 @@ namespace KUBOnlinePRPM.Models
         public Nullable<decimal> TotalExclSST { get; set; }
         public Nullable<decimal> TotalSST { get; set; }
         public Nullable<decimal> TotalIncSST { get; set; }
+        public Nullable<decimal> AmountPOBalance { get; set; }
         public decimal budgetedAmount { get; set; }
         public decimal utilizedToDate { get; set; }
         public decimal budgetBalance { get; set; }
-        public Nullable<decimal> AmountPOBalance { get; set; }
         public bool Phase2Completed { get; set; }
         public int Scenario { get; set; }
         public Nullable<int> PRAging { get; set; }

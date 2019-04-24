@@ -167,6 +167,8 @@ namespace KUBOnlinePRPM.Models
         public string ItemType { get; set; }
         public int? ItemTypeId { get; set; }
         public int PRId { get; set; }
+        public decimal? BudgetAmount { get; set; }
+        public decimal? UtilizedToDate { get; set; }
 
         [Required(ErrorMessage = "Date and time cannot be empty")]
         [DataType(DataType.DateTime)]
