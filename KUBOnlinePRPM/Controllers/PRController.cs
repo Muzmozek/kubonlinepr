@@ -2056,7 +2056,7 @@ namespace KUBOnlinePRPM.Controllers
                 PR.budgetedAmount = model.NewPRForm.BudgetedAmount;
                 PR.utilizedToDate = model.NewPRForm.UtilizedToDate;
                 PR.budgetBalance = model.NewPRForm.BudgetBalance;
-                db.SaveChanges();
+                db.SaveChanges();              
 
                 var Project = db.Projects.First(x => x.projectId == model.NewPRForm.ProjectId);
                 //Project.budgetedAmount = model.NewPRForm.BudgetedAmount;
@@ -3389,6 +3389,7 @@ namespace KUBOnlinePRPM.Controllers
                 PR.TotalIncSST = PRModel.NewPRForm.TotalIncSST;
                 db.SaveChanges();
 
+                int InitCodeId = 0;
                 foreach (var value in PRModel.NewPRForm.PRItemListObject)
                 {
                     PR_Items _objNewPRItem = db.PR_Items.FirstOrDefault(m => m.itemsId == value.ItemsId);
@@ -3406,6 +3407,30 @@ namespace KUBOnlinePRPM.Controllers
                     _objNewPRItem.dimProjectId = value.DimProjectId;
                     _objNewPRItem.dimDeptId = value.DimDeptId;
                     db.SaveChanges();
+
+                    if (InitCodeId != value.CodeId.Value)
+                    {
+                        Budget createBudget = new Budget();
+                        createBudget.uuid = Guid.NewGuid();
+                        createBudget.PRId = PR.PRId;
+                        createBudget.codeId = value.CodeId.Value;
+                        createBudget.budgetAmount = PR.budgetedAmount;
+                        createBudget.initialUtilized = PR.TotalIncSST.Value;
+                        var AmountInProgress = db.Budgets.Select(m => new { CodeId = m.codeId, initialUtilized = m.initialUtilized, utilized = m.utilized }).Where(m => m.CodeId == value.CodeId.Value && m.utilized == false).GroupBy(m => m.CodeId).Select(n => new { total = n.Sum(o => o.initialUtilized) }).SingleOrDefault();
+                        if (AmountInProgress != null)
+                        {
+                            createBudget.progress = AmountInProgress.total;
+                        } else
+                        {
+                            createBudget.progress = 0;
+                        }                       
+                        createBudget.projectId = PR.ProjectId;
+                        createBudget.year = PR.PreparedDate.Year;
+                        db.Budgets.Add(createBudget);
+                        db.SaveChanges();
+
+                        InitCodeId = createBudget.codeId;
+                    }
                 }
 
                 var requestorDone = (from m in db.NotificationMsgs
