@@ -823,6 +823,7 @@ namespace KUBOnlinePRPM.Controllers
                     PurchaseOrder updatePO = db.PurchaseOrders.First(m => m.POId == POId);
                     var getScenario = db.PurchaseRequisitions.First(m => m.PRId == updatePO.PRId);
                     int CustId = db.Projects.First(m => m.projectId == getScenario.ProjectId).custId;
+                    int getCodeId = db.PR_Items.First(m => m.PRId == updatePO.PRId).codeId.Value;
 
                     updatePO.PayToVendorId = PayToVendorId;
                     updatePO.LocationCodeId = LocationCodeId;
@@ -831,6 +832,20 @@ namespace KUBOnlinePRPM.Controllers
                     updatePO.PurchaserId = PurchaserCodeId;
                     updatePO.DeliveryDate = DeliveryDate;
                     updatePO.StatusId = "PO03";
+
+                    Budget updateBudget = db.Budgets.First(m => m.PRId == updatePO.PRId);
+                    updateBudget.utilized = true;
+                    
+                    GL updateGL = db.GLs.First(m => m.codeId == getCodeId);
+                    var getUtilizedBudget = db.Budgets.Select(m => new { CodeId = m.codeId, initialUtilized = m.initialUtilized, utilized = m.utilized }).Where(m => m.CodeId == getCodeId && m.utilized == true).GroupBy(m => m.CodeId).Select(n => new { total = n.Sum(o => o.initialUtilized) }).SingleOrDefault();
+                    if (getUtilizedBudget != null)
+                    {
+                        updateGL.budgetUtilized = getUtilizedBudget.total;
+                    } else
+                    {
+                        updateGL.budgetUtilized = updatePO.TotalIncSST;
+                    }
+                    db.SaveChanges();
                     //var POItemList = (from m in db.PO_Item
                     //                  from n in db.PopulateItemLists.Where(x => m.codeId == x.codeId && m.itemTypeId == x.itemTypeId).DefaultIfEmpty()
                     //                  join p in db.PR_Items on m.itemsId equals p.itemsId
@@ -849,12 +864,6 @@ namespace KUBOnlinePRPM.Controllers
                     //                      TotalPrice = m.totalPrice
                     //                      UOM = n.UoM
                     //                  }).ToList();
-
-                    //Project UpdateBudgetBalance = db.Projects.First(m => m.projectId == updatePO.projectId);
-                    //decimal getAmountRequired = db.PurchaseRequisitions.First(m => m.PRId == updatePO.PRId).AmountRequired;
-                    //UpdateBudgetBalance.utilizedToDate = UpdateBudgetBalance.utilizedToDate + getAmountRequired;
-                    //UpdateBudgetBalance.budgetBalance = UpdateBudgetBalance.budgetedAmount - UpdateBudgetBalance.utilizedToDate;
-
                     NotificationMsg _objConfirmed = new NotificationMsg
                     {
                         uuid = Guid.NewGuid(),

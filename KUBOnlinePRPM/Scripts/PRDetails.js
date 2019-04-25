@@ -516,7 +516,7 @@
     //});
 
     $(".CodeId").on("change", function () {
-        if ($(this).find('option:selected').val() != "") {
+        if ($(this).find('option:selected').val() !== "") {
             var codeId = $(this).find('option:selected').val();
             $.ajax({
                 url: UrlItemCodeInfo,

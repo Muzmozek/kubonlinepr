@@ -169,7 +169,7 @@ namespace KUBOnlinePRPM.Models
         public int PRId { get; set; }
         public decimal? BudgetAmount { get; set; }
         public decimal? UtilizedToDate { get; set; }
-
+        public decimal? AmountInProgress { get; set; }
         [Required(ErrorMessage = "Date and time cannot be empty")]
         [DataType(DataType.DateTime)]
         [Range(typeof(DateTime), "1/1/2000", "1/1/2022")]
