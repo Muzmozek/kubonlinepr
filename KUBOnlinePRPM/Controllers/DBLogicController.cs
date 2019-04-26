@@ -38,7 +38,7 @@ namespace KUBOnlinePRPM.Controllers
                 Budgeted = model.NewPRForm.Value,
                 PurchaseTypeId = model.NewPRForm.PurchaseTypeId,
                 BudgetDescription = model.NewPRForm.BudgetDescription,
-                AmountRequired = model.NewPRForm.AmountRequired,
+                //AmountRequired = model.NewPRForm.AmountRequired,
                 Justification = model.NewPRForm.Justification,
                 //TotalGST = x.PRDetailObject.TotalGST,
                 PreparedById = model.NewPRForm.PreparedById,
@@ -87,6 +87,31 @@ namespace KUBOnlinePRPM.Controllers
                 };
                 _objNewPR.AmountPOBalance = _objNewPR.AmountPOBalance + _objNewPRItem.outStandingQuantity;
                 db.PR_Items.Add(_objNewPRItem);
+
+                int InitCodeId = 0;
+                if (InitCodeId != value.CodeId.Value)
+                {
+                    Budget createBudget = new Budget();
+                    createBudget.uuid = Guid.NewGuid();
+                    createBudget.PRId = _objNewPR.PRId;
+                    createBudget.codeId = value.CodeId.Value;
+                    createBudget.budgetAmount = _objNewPR.budgetedAmount;
+                    createBudget.initialUtilized = 0;
+                    createBudget.projectId = _objNewPR.ProjectId;
+                    createBudget.year = _objNewPR.PreparedDate.Year;
+                    db.Budgets.Add(createBudget);
+                    db.SaveChanges();
+
+                    var AmountInProgress = db.Budgets.Select(m => new { CodeId = m.codeId, initialUtilized = m.initialUtilized, utilized = m.utilized }).Where(m => m.CodeId == value.CodeId.Value && m.utilized == false).GroupBy(m => m.CodeId).Select(n => new { total = n.Sum(o => o.initialUtilized) }).SingleOrDefault();
+                    var updateProgress = db.Budgets.Where(m => m.codeId == value.CodeId.Value).ToList();
+
+                    if (AmountInProgress != null)
+                    {                       
+                        updateProgress.ForEach(m => m.progress = AmountInProgress.total);                       
+                    }
+                    db.SaveChanges();
+                    InitCodeId = createBudget.codeId;
+                }
 
                 generateMsg.uuid = Guid.NewGuid();
                 generateMsg.message = model.FullName + " has save new item for PR No. " + _objNewPR.PRNo;
@@ -412,20 +437,23 @@ namespace KUBOnlinePRPM.Controllers
                 db.NotificationMsgs.Add(_objDetails_BudgetedAmount);
                 FormerPRDetails.budgetedAmount = x.NewPRForm.BudgetedAmount;
             }
-            if (FormerPRDetails.AmountRequired != x.NewPRForm.AmountRequired)
-            {
-                NotificationMsg _objDetails_AmountRequired = new NotificationMsg
-                {
-                    uuid = Guid.NewGuid(),
-                    PRId = x.PRId,
-                    msgDate = DateTime.Now,
-                    fromUserId = x.UserId,
-                    msgType = "Trail",
-                    message = x.FullName + " change Amount Required from " + FormerPRDetails.AmountRequired + " to " + x.NewPRForm.AmountRequired + " for PR No: " + FormerPRDetails.PRNo
-                };
-                db.NotificationMsgs.Add(_objDetails_AmountRequired);
-                FormerPRDetails.AmountRequired = x.NewPRForm.AmountRequired;
-            }
+            //if (FormerPRDetails.AmountRequired != x.NewPRForm.AmountRequired)
+            //{
+            //    NotificationMsg _objDetails_AmountRequired = new NotificationMsg
+            //    {
+            //        uuid = Guid.NewGuid(),
+            //        PRId = x.PRId,
+            //        msgDate = DateTime.Now,
+            //        fromUserId = x.UserId,
+            //        msgType = "Trail",
+            //        message = x.FullName + " change Amount Required from " + FormerPRDetails.AmountRequired + " to " + x.NewPRForm.AmountRequired + " for PR No: " + FormerPRDetails.PRNo
+            //    };
+            //    db.NotificationMsgs.Add(_objDetails_AmountRequired);
+            //    FormerPRDetails.AmountRequired = x.NewPRForm.AmountRequired;
+            //}
+            Budget FormerBudget = db.Budgets.First(m => m.PRId == x.PRId);
+            FormerBudget.progress = x.NewPRForm.AmountInProgress.Value;
+
             if (FormerPRDetails.Justification != x.NewPRForm.Justification)
             {
                 NotificationMsg _objDetails_Justification = new NotificationMsg

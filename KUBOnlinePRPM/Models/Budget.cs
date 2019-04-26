@@ -21,7 +21,7 @@ namespace KUBOnlinePRPM.Models
         public decimal budgetAmount { get; set; }
         public decimal initialUtilized { get; set; }
         public bool utilized { get; set; }
-        public Nullable<decimal> progress { get; set; }
+        public decimal progress { get; set; }
         public int projectId { get; set; }
         public Nullable<int> year { get; set; }
     }

@@ -461,9 +461,9 @@ $(document).on('ready', function () {
             //    fd.append(input.name, true);
             //else if (input.name === "NewPRForm.Budgeted" && input.value === "off")
             //    fd.append(input.name, false);
-            if (POType !== null && i < 18) {
+            if (POType !== null && i < 19) {
                 fd.append(input.name, input.value);
-            } else if (PRType === $("#NewPR").find("#PRType").val() && i < 12) {
+            } else if (PRType === $("#NewPR").find("#PRType").val() && i < 13) {
                 fd.append(input.name, input.value);
             }        
         });              
@@ -591,9 +591,9 @@ $(document).on('ready', function () {
             //    fd.append(input.name, true);
             //else if (input.name === "NewPRForm.Budgeted" && input.value === "off")
             //    fd.append(input.name, false);
-            if (POType !== null && i < 18) {
+            if (POType !== null && i < 19) {
                 fd.append(input.name, input.value);
-            } else if (PRType === $("#NewPR").find("#PRType").val() && i < 12) {
+            } else if (PRType === $("#NewPR").find("#PRType").val() && i < 13) {
                 fd.append(input.name, input.value);
             }
         });

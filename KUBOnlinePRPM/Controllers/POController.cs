@@ -835,17 +835,21 @@ namespace KUBOnlinePRPM.Controllers
 
                     Budget updateBudget = db.Budgets.First(m => m.PRId == updatePO.PRId);
                     updateBudget.utilized = true;
-                    
+                    db.SaveChanges();
+
                     GL updateGL = db.GLs.First(m => m.codeId == getCodeId);
                     var getUtilizedBudget = db.Budgets.Select(m => new { CodeId = m.codeId, initialUtilized = m.initialUtilized, utilized = m.utilized }).Where(m => m.CodeId == getCodeId && m.utilized == true).GroupBy(m => m.CodeId).Select(n => new { total = n.Sum(o => o.initialUtilized) }).SingleOrDefault();
+                    var updateProgress = db.Budgets.Where(m => m.codeId == getCodeId).ToList();
+
                     if (getUtilizedBudget != null)
                     {
                         updateGL.budgetUtilized = getUtilizedBudget.total;
+                        var AmountInProgress = db.Budgets.Select(m => new { CodeId = m.codeId, initialUtilized = m.initialUtilized, utilized = m.utilized }).Where(m => m.CodeId == getCodeId && m.utilized == false).GroupBy(m => m.CodeId).Select(n => new { total = n.Sum(o => o.initialUtilized) }).SingleOrDefault();
+                        updateProgress.ForEach(m => m.progress = AmountInProgress.total);
                     } else
                     {
                         updateGL.budgetUtilized = updatePO.TotalIncSST;
                     }
-                    db.SaveChanges();
                     //var POItemList = (from m in db.PO_Item
                     //                  from n in db.PopulateItemLists.Where(x => m.codeId == x.codeId && m.itemTypeId == x.itemTypeId).DefaultIfEmpty()
                     //                  join p in db.PR_Items on m.itemsId equals p.itemsId

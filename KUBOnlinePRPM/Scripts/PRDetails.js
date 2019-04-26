@@ -39,7 +39,7 @@
             if (input.name === "NewPRForm.SpecReviewerId") {
                 fd.append(input.name, input.value);
             }
-            if (i < 24) {
+            if (i < 25) {
                 fd.append(input.name, input.value);
             }
             if (input.name === "NewPRForm.DiscountAmount" || input.name === "NewPRForm.DiscountPerc" || input.name === "NewPRForm.TotalExclSST" || input.name === "NewPRForm.TotalSST" || input.name === "NewPRForm.TotalIncSST") {
@@ -529,6 +529,7 @@
                         $("#BudgetedAmount").val(resp.ItemCodeInfo.BudgetAmount);
                         $("#UtilizedToDate").val(resp.ItemCodeInfo.UtilizedToDate);
                         $("#BudgetBalance").val(resp.ItemCodeInfo.BudgetAmount - resp.ItemCodeInfo.UtilizedToDate);
+                        $("#AmountInProgress").val(resp.ItemCodeInfo.AmountInProgress);
                     }
                     $("body").removeClass("loading");
                 }

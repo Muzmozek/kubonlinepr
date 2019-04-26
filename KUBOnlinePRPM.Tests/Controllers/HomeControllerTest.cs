@@ -45,32 +45,6 @@ namespace KUBOnlinePRPM.Tests.Controllers
         }
 
         [TestMethod]
-        public void About()
-        {
-            // Arrange
-            HomeController controller = new HomeController();
-
-            // Act
-            ViewResult result = controller.About() as ViewResult;
-
-            // Assert
-            Assert.AreEqual("Your contact page.", result.ViewBag.Message);
-        }
-
-        [TestMethod]
-        public void Contact()
-        {
-            // Arrange
-            HomeController controller = new HomeController();
-
-            // Act
-            ViewResult result = controller.Contact() as ViewResult;
-
-            // Assert
-            Assert.IsNotNull(result);
-        }
-
-        [TestMethod]
         public void testEmail()
         {
             MailMessage mail = new MailMessage
@@ -175,7 +149,7 @@ namespace KUBOnlinePRPM.Tests.Controllers
                                       BudgetedAmount = d.budgetedAmount,
                                       Justification = a.Justification,
                                       UtilizedToDate = d.utilizedToDate,
-                                      AmountRequired = a.AmountRequired,
+                                      //AmountRequired = a.AmountRequired,
                                       BudgetBalance = d.budgetBalance,
                                       PreparedById = a.PreparedById,
                                       PreparedDate = a.PreparedDate,

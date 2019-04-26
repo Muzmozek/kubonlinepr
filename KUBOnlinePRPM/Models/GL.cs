@@ -25,6 +25,7 @@ namespace KUBOnlinePRPM.Models
         public Nullable<int> createByUserId { get; set; }
         public Nullable<decimal> budgetAmount { get; set; }
         public Nullable<decimal> budgetUtilized { get; set; }
+        public Nullable<decimal> budgetInProgress { get; set; }
     
         public virtual Customer Customer { get; set; }
         public virtual ItemType ItemType { get; set; }

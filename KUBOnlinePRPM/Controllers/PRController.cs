@@ -1245,6 +1245,8 @@ namespace KUBOnlinePRPM.Controllers
                                       join g in db.VendorStaffs on a.VendorStaffId equals g.staffId into l
                                       join h in db.PR_Items on a.PRId equals h.PRId
                                       join j in db.PopulateItemLists on h.codeId equals j.codeId into k
+                                      join m in db.Budgets on a.PRId equals m.PRId into n
+                                      from o in n.DefaultIfEmpty()
                                       from w in l.DefaultIfEmpty()
                                       from x in s.DefaultIfEmpty()
                                       from y in f.DefaultIfEmpty()
@@ -1268,7 +1270,7 @@ namespace KUBOnlinePRPM.Controllers
                                           BudgetedAmount = a.budgetedAmount,
                                           Justification = a.Justification,
                                           UtilizedToDate = a.utilizedToDate,
-                                          AmountRequired = a.AmountRequired,
+                                          AmountInProgress = o.progress,
                                           BudgetBalance = a.budgetBalance,
                                           PaperAttachment = a.PaperAttachment,
                                           PaperVerified = d.paperVerified,
@@ -2900,23 +2902,23 @@ namespace KUBOnlinePRPM.Controllers
                     }
                     FormerPRDetails.SpecsReviewerId = PR.NewPRForm.SpecReviewerId;
                 }
-                if (FormerPRDetails.AmountRequired != PR.NewPRForm.AmountRequired)
-                {
-                    if (FormerPRDetails.AmountRequired != 0)
-                    {
-                        NotificationMsg _objDetails_AmountRequired = new NotificationMsg
-                        {
-                            uuid = Guid.NewGuid(),
-                            PRId = PR.PRId,
-                            msgDate = DateTime.Now,
-                            fromUserId = PR.UserId,
-                            msgType = "Trail",
-                            message = PR.FullName + " change Amount Required from " + FormerPRDetails.AmountRequired + " to " + PR.NewPRForm.AmountRequired + " for PR No: " + FormerPRDetails.PRNo
-                        };
-                        db.NotificationMsgs.Add(_objDetails_AmountRequired);
-                    }
-                    FormerPRDetails.AmountRequired = PR.NewPRForm.AmountRequired;
-                }
+                //if (FormerPRDetails.AmountRequired != PR.NewPRForm.AmountRequired)
+                //{
+                //    if (FormerPRDetails.AmountRequired != 0)
+                //    {
+                //        NotificationMsg _objDetails_AmountRequired = new NotificationMsg
+                //        {
+                //            uuid = Guid.NewGuid(),
+                //            PRId = PR.PRId,
+                //            msgDate = DateTime.Now,
+                //            fromUserId = PR.UserId,
+                //            msgType = "Trail",
+                //            message = PR.FullName + " change Amount Required from " + FormerPRDetails.AmountRequired + " to " + PR.NewPRForm.AmountRequired + " for PR No: " + FormerPRDetails.PRNo
+                //        };
+                //        db.NotificationMsgs.Add(_objDetails_AmountRequired);
+                //    }
+                //    FormerPRDetails.AmountRequired = PR.NewPRForm.AmountRequired;
+                //}
                 if (FormerPRDetails.VendorId != PR.NewPRForm.VendorId)
                 {
                     if (FormerPRDetails.VendorId != null)
@@ -3385,7 +3387,7 @@ namespace KUBOnlinePRPM.Controllers
 
                 var PR = db.PurchaseRequisitions.First(x => x.PRId == PrId);
                 PR.SpecsReviewerId = PRModel.NewPRForm.SpecReviewerId;
-                PR.AmountRequired = PRModel.NewPRForm.AmountRequired;
+                PR.AmountRequired = PRModel.NewPRForm.TotalIncSST.Value;
                 PR.VendorId = PRModel.NewPRForm.VendorId;
                 PR.VendorCompanyId = PRModel.NewPRForm.VendorCompanyId;
                 PR.VendorQuoteNo = PRModel.NewPRForm.VendorQuoteNo;
@@ -3395,6 +3397,9 @@ namespace KUBOnlinePRPM.Controllers
                 PR.TotalExclSST = PRModel.NewPRForm.TotalExclSST;
                 PR.TotalSST = PRModel.NewPRForm.TotalSST;
                 PR.TotalIncSST = PRModel.NewPRForm.TotalIncSST;
+
+                var updateBudget = db.Budgets.First(m => m.PRId == PrId);                
+                updateBudget.initialUtilized = PR.TotalIncSST.Value;                
                 db.SaveChanges();
 
                 int InitCodeId = 0;
@@ -3418,26 +3423,14 @@ namespace KUBOnlinePRPM.Controllers
 
                     if (InitCodeId != value.CodeId.Value)
                     {
-                        Budget createBudget = new Budget();
-                        createBudget.uuid = Guid.NewGuid();
-                        createBudget.PRId = PR.PRId;
-                        createBudget.codeId = value.CodeId.Value;
-                        createBudget.budgetAmount = PR.budgetedAmount;
-                        createBudget.initialUtilized = PR.TotalIncSST.Value;
                         var AmountInProgress = db.Budgets.Select(m => new { CodeId = m.codeId, initialUtilized = m.initialUtilized, utilized = m.utilized }).Where(m => m.CodeId == value.CodeId.Value && m.utilized == false).GroupBy(m => m.CodeId).Select(n => new { total = n.Sum(o => o.initialUtilized) }).SingleOrDefault();
+                        var updateProgress = db.Budgets.Where(m => m.codeId == value.CodeId.Value).ToList();
                         if (AmountInProgress != null)
                         {
-                            createBudget.progress = AmountInProgress.total;
-                        } else
-                        {
-                            createBudget.progress = 0;
-                        }                       
-                        createBudget.projectId = PR.ProjectId;
-                        createBudget.year = PR.PreparedDate.Year;
-                        db.Budgets.Add(createBudget);
+                            updateProgress.ForEach(m => m.progress = AmountInProgress.total);
+                        }
                         db.SaveChanges();
-
-                        InitCodeId = createBudget.codeId;
+                        InitCodeId = value.CodeId.Value;
                     }
                 }
 

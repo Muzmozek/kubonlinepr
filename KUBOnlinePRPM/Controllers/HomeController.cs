@@ -327,21 +327,19 @@ namespace KUBOnlinePRPM.Controllers
                 return Json(new { success = false, exception = true, message = ExMessage.ToString() });
             }
         }
+        //public ActionResult About()
+        //{
+        //    ViewBag.Message = "Your contact page.";
 
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your contact page.";
+        //    return View();
+        //}
 
-            return View();
-        }
+        //public ActionResult Contact()
+        //{
+        //    ViewBag.Message = "Your contact page.";
 
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
-
+        //    return View();
+        //}
         public ActionResult SignOut()
         {
             Session.Clear();

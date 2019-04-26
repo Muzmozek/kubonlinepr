@@ -16,7 +16,7 @@
           <Property Name="budgetAmount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="initialUtilized" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="utilized" Type="bit" Nullable="false" />
-          <Property Name="progress" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="progress" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="projectId" Type="int" Nullable="false" />
           <Property Name="year" Type="int" />
         </EntityType>
@@ -92,6 +92,7 @@
           <Property Name="budgetUtilized" Type="decimal" Precision="18" Scale="2" />
           <Property Name="createDate" Type="datetime" />
           <Property Name="createByUserId" Type="int" />
+          <Property Name="budgetInProgress" Type="decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="Group">
           <Key>
@@ -2708,6 +2709,7 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
           <NavigationProperty Name="ItemType" Relationship="KUBOnlinePRModel.FK_GLs_ItemType" FromRole="GL" ToRole="ItemType" />
           <Property Name="budgetAmount" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="budgetUtilized" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="budgetInProgress" Type="Decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="Item">
           <Key>
@@ -3652,7 +3654,7 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
           <Property Name="budgetAmount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="initialUtilized" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="utilized" Type="Boolean" Nullable="false" />
-          <Property Name="progress" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="progress" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="projectId" Type="Int32" Nullable="false" />
           <Property Name="year" Type="Int32" />
         </EntityType>
@@ -3962,6 +3964,7 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
           <EntitySetMapping Name="GLs">
             <EntityTypeMapping TypeName="KUBOnlinePRModel.GL">
               <MappingFragment StoreEntitySet="GLs">
+                <ScalarProperty Name="budgetInProgress" ColumnName="budgetInProgress" />
                 <ScalarProperty Name="budgetUtilized" ColumnName="budgetUtilized" />
                 <ScalarProperty Name="budgetAmount" ColumnName="budgetAmount" />
                 <ScalarProperty Name="createByUserId" ColumnName="createByUserId" />
