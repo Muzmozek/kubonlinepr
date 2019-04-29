@@ -21,11 +21,12 @@ namespace KUBOnlinePRPM.Models
         public int custId { get; set; }
         public string Description { get; set; }
         public string UoM { get; set; }
-        public Nullable<System.DateTime> createDate { get; set; }
-        public Nullable<int> createByUserId { get; set; }
         public Nullable<decimal> budgetAmount { get; set; }
         public Nullable<decimal> budgetUtilized { get; set; }
+        public Nullable<decimal> budgetBalance { get; set; }
         public Nullable<decimal> budgetInProgress { get; set; }
+        public Nullable<System.DateTime> createDate { get; set; }
+        public Nullable<int> createByUserId { get; set; }
     
         public virtual Customer Customer { get; set; }
         public virtual ItemType ItemType { get; set; }

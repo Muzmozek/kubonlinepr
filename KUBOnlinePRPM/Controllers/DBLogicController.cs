@@ -69,6 +69,7 @@ namespace KUBOnlinePRPM.Controllers
             model.PRId = _objNewPR.PRId;
             _objNewPR.AmountPOBalance = 0;
 
+            int InitCodeId = 0;
             foreach (var value in model.NewPRForm.PRItemListObject)
             {
                 PR_Items _objNewPRItem = new PR_Items
@@ -88,7 +89,6 @@ namespace KUBOnlinePRPM.Controllers
                 _objNewPR.AmountPOBalance = _objNewPR.AmountPOBalance + _objNewPRItem.outStandingQuantity;
                 db.PR_Items.Add(_objNewPRItem);
 
-                int InitCodeId = 0;
                 if (InitCodeId != value.CodeId.Value)
                 {
                     Budget createBudget = new Budget();
@@ -171,6 +171,17 @@ namespace KUBOnlinePRPM.Controllers
                     getProcurement = (from m in db.Users
                                       join n in db.Users_Roles on m.userId equals n.userId
                                       where n.roleId == "R03" && (m.companyId == model.CustId || m.companyId == 2) && m.childCompanyId == getPRPreparerChildCustId.childCompanyId
+                                      select new PRModel()
+                                      {
+                                          UserId = m.userId,
+                                          FullName = m.firstName + " " + m.lastName,
+                                          EmailAddress = m.emailAddress
+                                      }).ToList();
+                } else if (model.CustId == 4)
+                {
+                    //En. Bad as temporary procurement man for KUBgaz
+                    getProcurement = (from m in db.Users
+                                      where m.userId == 100
                                       select new PRModel()
                                       {
                                           UserId = m.userId,
@@ -900,6 +911,18 @@ namespace KUBOnlinePRPM.Controllers
                     getProcurement = (from m in db.Users
                                       join n in db.Users_Roles on m.userId equals n.userId
                                       where n.roleId == "R03" && (m.companyId == x.CustId || m.companyId == 2) && m.childCompanyId == getPRPreparerChildCustId.childCompanyId
+                                      select new PRModel()
+                                      {
+                                          UserId = m.userId,
+                                          FullName = m.firstName + " " + m.lastName,
+                                          EmailAddress = m.emailAddress
+                                      }).ToList();
+                }
+                else if (x.CustId == 4)
+                {
+                    //En. Bad as temporary procurement man for KUBgaz
+                    getProcurement = (from m in db.Users
+                                      where m.userId == 100
                                       select new PRModel()
                                       {
                                           UserId = m.userId,

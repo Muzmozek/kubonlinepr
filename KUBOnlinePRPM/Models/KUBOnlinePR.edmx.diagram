@@ -47,14 +47,11 @@
         <AssociationConnector Association="KUBOnlinePRModel.FK_Project_Customer" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_Vendor_Customer" />
         <EntityTypeShape EntityType="KUBOnlinePRModel.FixedAsset" Width="1.5" PointX="5.25" PointY="44.125" />
-        <EntityTypeShape EntityType="KUBOnlinePRModel.GL" Width="1.5" PointX="8.25" PointY="48.5" />
         <EntityTypeShape EntityType="KUBOnlinePRModel.Item" Width="1.5" PointX="5.25" PointY="49.375" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_GLs_Customer" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_ItemCode_Customer" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_Items_Customer" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_ItemCode_ItemType" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_ItemCodes_User1" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_GLs_ItemType" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_Items_ItemType" />
         <EntityTypeShape EntityType="KUBOnlinePRModel.PopulateItemList" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="KUBOnlinePRModel.PaymentTerm" Width="1.5" PointX="8.25" PointY="56.875" />
@@ -115,6 +112,9 @@
         <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseOrder_Vendor" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseOrder_VendorStaff" />
         <EntityTypeShape EntityType="KUBOnlinePRModel.Budget" Width="1.5" PointX="0.75" PointY="7.75" />
+        <EntityTypeShape EntityType="KUBOnlinePRModel.GL" Width="1.5" PointX="11.25" PointY="52.875" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_GLs_Customer" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_GLs_ItemType" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

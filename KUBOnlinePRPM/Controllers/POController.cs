@@ -821,7 +821,7 @@ namespace KUBOnlinePRPM.Controllers
                     int UserId = Int32.Parse(Session["UserId"].ToString());
 
                     PurchaseOrder updatePO = db.PurchaseOrders.First(m => m.POId == POId);
-                    var getScenario = db.PurchaseRequisitions.First(m => m.PRId == updatePO.PRId);
+                    PurchaseRequisition getScenario = db.PurchaseRequisitions.First(m => m.PRId == updatePO.PRId);
                     int CustId = db.Projects.First(m => m.projectId == getScenario.ProjectId).custId;
                     int getCodeId = db.PR_Items.First(m => m.PRId == updatePO.PRId).codeId.Value;
 
@@ -844,8 +844,16 @@ namespace KUBOnlinePRPM.Controllers
                     if (getUtilizedBudget != null)
                     {
                         updateGL.budgetUtilized = getUtilizedBudget.total;
+                        updateGL.budgetBalance = updateGL.budgetAmount.Value - getUtilizedBudget.total;
                         var AmountInProgress = db.Budgets.Select(m => new { CodeId = m.codeId, initialUtilized = m.initialUtilized, utilized = m.utilized }).Where(m => m.CodeId == getCodeId && m.utilized == false).GroupBy(m => m.CodeId).Select(n => new { total = n.Sum(o => o.initialUtilized) }).SingleOrDefault();
-                        updateProgress.ForEach(m => m.progress = AmountInProgress.total);
+                        if (AmountInProgress != null)
+                        {
+                            updateProgress.ForEach(m => m.progress = AmountInProgress.total);
+                        } else
+                        {
+                            updateProgress.ForEach(m => m.progress = 0);
+                        }
+                        
                     } else
                     {
                         updateGL.budgetUtilized = updatePO.TotalIncSST;

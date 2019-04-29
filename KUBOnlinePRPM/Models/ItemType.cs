@@ -18,9 +18,9 @@ namespace KUBOnlinePRPM.Models
         public ItemType()
         {
             this.FixedAssets = new HashSet<FixedAsset>();
-            this.GLs = new HashSet<GL>();
             this.Items = new HashSet<Item>();
             this.PR_Items = new HashSet<PR_Items>();
+            this.GLs = new HashSet<GL>();
         }
     
         public System.Guid uuid { get; set; }
@@ -30,10 +30,10 @@ namespace KUBOnlinePRPM.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<FixedAsset> FixedAssets { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GL> GLs { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Item> Items { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_Items> PR_Items { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GL> GLs { get; set; }
     }
 }

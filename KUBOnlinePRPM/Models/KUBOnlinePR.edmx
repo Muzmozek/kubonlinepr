@@ -90,9 +90,10 @@
           <Property Name="UoM" Type="nvarchar" MaxLength="10" />
           <Property Name="budgetAmount" Type="decimal" Precision="18" Scale="2" />
           <Property Name="budgetUtilized" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="budgetBalance" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="budgetInProgress" Type="decimal" Precision="18" Scale="2" />
           <Property Name="createDate" Type="datetime" />
           <Property Name="createByUserId" Type="int" />
-          <Property Name="budgetInProgress" Type="decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="Group">
           <Key>
@@ -1796,11 +1797,11 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
           <NavigationProperty Name="Customer2" Relationship="KUBOnlinePRModel.FK_Customer_Customer" FromRole="Customer1" ToRole="Customer" />
           <NavigationProperty Name="Projects" Relationship="KUBOnlinePRModel.FK_Project_Customer" FromRole="Customer" ToRole="Project" />
           <NavigationProperty Name="Vendors" Relationship="KUBOnlinePRModel.FK_Vendor_Customer" FromRole="Customer" ToRole="Vendor" />
-          <NavigationProperty Name="GLs" Relationship="KUBOnlinePRModel.FK_GLs_Customer" FromRole="Customer" ToRole="GL" />
           <NavigationProperty Name="FixedAssets" Relationship="KUBOnlinePRModel.FK_ItemCode_Customer" FromRole="Customer" ToRole="FixedAsset" />
           <NavigationProperty Name="Items" Relationship="KUBOnlinePRModel.FK_Items_Customer" FromRole="Customer" ToRole="Item" />
           <NavigationProperty Name="Locations" Relationship="KUBOnlinePRModel.FK_Location_Customer" FromRole="Customer" ToRole="Location" />
           <NavigationProperty Name="PurchaseRequisitions" Relationship="KUBOnlinePRModel.FK_PurchaseRequisition_Customer" FromRole="Customer" ToRole="PurchaseRequisition" />
+          <NavigationProperty Name="GLs" Relationship="KUBOnlinePRModel.FK_GLs_Customer" FromRole="Customer" ToRole="GL" />
         </EntityType>
         <EntityType Name="FileUpload">
           <Key>
@@ -2246,12 +2247,7 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
             <End Role="Vendor" EntitySet="Vendors" />
           </AssociationSet>
           <EntitySet Name="FixedAssets" EntityType="KUBOnlinePRModel.FixedAsset" />
-          <EntitySet Name="GLs" EntityType="KUBOnlinePRModel.GL" />
           <EntitySet Name="Items" EntityType="KUBOnlinePRModel.Item" />
-          <AssociationSet Name="FK_GLs_Customer" Association="KUBOnlinePRModel.FK_GLs_Customer">
-            <End Role="Customer" EntitySet="Customers" />
-            <End Role="GL" EntitySet="GLs" />
-          </AssociationSet>
           <AssociationSet Name="FK_ItemCode_Customer" Association="KUBOnlinePRModel.FK_ItemCode_Customer">
             <End Role="Customer" EntitySet="Customers" />
             <End Role="FixedAsset" EntitySet="FixedAssets" />
@@ -2267,10 +2263,6 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
           <AssociationSet Name="FK_ItemCodes_User1" Association="KUBOnlinePRModel.FK_ItemCodes_User1">
             <End Role="User" EntitySet="Users" />
             <End Role="FixedAsset" EntitySet="FixedAssets" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GLs_ItemType" Association="KUBOnlinePRModel.FK_GLs_ItemType">
-            <End Role="ItemType" EntitySet="ItemTypes" />
-            <End Role="GL" EntitySet="GLs" />
           </AssociationSet>
           <AssociationSet Name="FK_Items_ItemType" Association="KUBOnlinePRModel.FK_Items_ItemType">
             <End Role="ItemType" EntitySet="ItemTypes" />
@@ -2452,6 +2444,15 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
             <End Role="PurchaseOrder" EntitySet="PurchaseOrders" />
           </AssociationSet>
           <EntitySet Name="Budgets" EntityType="KUBOnlinePRModel.Budget" />
+          <EntitySet Name="GLs" EntityType="KUBOnlinePRModel.GL" />
+          <AssociationSet Name="FK_GLs_Customer" Association="KUBOnlinePRModel.FK_GLs_Customer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="GL" EntitySet="GLs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GLs_ItemType" Association="KUBOnlinePRModel.FK_GLs_ItemType">
+            <End Role="ItemType" EntitySet="ItemTypes" />
+            <End Role="GL" EntitySet="GLs" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ItemType">
           <Key>
@@ -2461,9 +2462,9 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
           <Property Name="itemTypeId" Type="Int32" Nullable="false" />
           <Property Name="type" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="FixedAssets" Relationship="KUBOnlinePRModel.FK_ItemCode_ItemType" FromRole="ItemType" ToRole="FixedAsset" />
-          <NavigationProperty Name="GLs" Relationship="KUBOnlinePRModel.FK_GLs_ItemType" FromRole="ItemType" ToRole="GL" />
           <NavigationProperty Name="Items" Relationship="KUBOnlinePRModel.FK_Items_ItemType" FromRole="ItemType" ToRole="Item" />
           <NavigationProperty Name="PR_Items" Relationship="KUBOnlinePRModel.FK_PR_Items_ItemType" FromRole="ItemType" ToRole="PR_Items" />
+          <NavigationProperty Name="GLs" Relationship="KUBOnlinePRModel.FK_GLs_ItemType" FromRole="ItemType" ToRole="GL" />
         </EntityType>
         <EntityType Name="NotificationMsg">
           <Key>
@@ -2692,25 +2693,6 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
           <NavigationProperty Name="ItemType" Relationship="KUBOnlinePRModel.FK_ItemCode_ItemType" FromRole="FixedAsset" ToRole="ItemType" />
           <NavigationProperty Name="User" Relationship="KUBOnlinePRModel.FK_ItemCodes_User1" FromRole="FixedAsset" ToRole="User" />
         </EntityType>
-        <EntityType Name="GL">
-          <Key>
-            <PropertyRef Name="codeId" />
-          </Key>
-          <Property Name="uuid" Type="Guid" Nullable="false" />
-          <Property Name="codeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="itemTypeId" Type="Int32" Nullable="false" />
-          <Property Name="itemCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="custId" Type="Int32" Nullable="false" />
-          <Property Name="Description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="UoM" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="createDate" Type="DateTime" Precision="3" />
-          <Property Name="createByUserId" Type="Int32" />
-          <NavigationProperty Name="Customer" Relationship="KUBOnlinePRModel.FK_GLs_Customer" FromRole="GL" ToRole="Customer" />
-          <NavigationProperty Name="ItemType" Relationship="KUBOnlinePRModel.FK_GLs_ItemType" FromRole="GL" ToRole="ItemType" />
-          <Property Name="budgetAmount" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="budgetUtilized" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="budgetInProgress" Type="Decimal" Precision="18" Scale="2" />
-        </EntityType>
         <EntityType Name="Item">
           <Key>
             <PropertyRef Name="codeId" />
@@ -2728,18 +2710,6 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
           <NavigationProperty Name="ItemType" Relationship="KUBOnlinePRModel.FK_Items_ItemType" FromRole="Item" ToRole="ItemType" />
           <Property Name="unitPrice" Type="Decimal" Precision="18" Scale="2" />
         </EntityType>
-        <Association Name="FK_GLs_Customer">
-          <End Type="KUBOnlinePRModel.Customer" Role="Customer" Multiplicity="1" />
-          <End Type="KUBOnlinePRModel.GL" Role="GL" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Customer">
-              <PropertyRef Name="custId" />
-            </Principal>
-            <Dependent Role="GL">
-              <PropertyRef Name="custId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_ItemCode_Customer">
           <End Type="KUBOnlinePRModel.Customer" Role="Customer" Multiplicity="1" />
           <End Type="KUBOnlinePRModel.FixedAsset" Role="FixedAsset" Multiplicity="*" />
@@ -2785,18 +2755,6 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
             </Principal>
             <Dependent Role="FixedAsset">
               <PropertyRef Name="createByUserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GLs_ItemType">
-          <End Type="KUBOnlinePRModel.ItemType" Role="ItemType" Multiplicity="1" />
-          <End Type="KUBOnlinePRModel.GL" Role="GL" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ItemType">
-              <PropertyRef Name="itemTypeId" />
-            </Principal>
-            <Dependent Role="GL">
-              <PropertyRef Name="itemTypeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3658,6 +3616,50 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
           <Property Name="projectId" Type="Int32" Nullable="false" />
           <Property Name="year" Type="Int32" />
         </EntityType>
+        <EntityType Name="GL">
+          <Key>
+            <PropertyRef Name="codeId" />
+          </Key>
+          <Property Name="uuid" Type="Guid" Nullable="false" />
+          <Property Name="codeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="itemTypeId" Type="Int32" Nullable="false" />
+          <Property Name="itemCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="custId" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UoM" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="budgetAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="budgetUtilized" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="budgetBalance" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="budgetInProgress" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="createDate" Type="DateTime" Precision="3" />
+          <Property Name="createByUserId" Type="Int32" />
+          <NavigationProperty Name="Customer" Relationship="KUBOnlinePRModel.FK_GLs_Customer" FromRole="GL" ToRole="Customer" />
+          <NavigationProperty Name="ItemType" Relationship="KUBOnlinePRModel.FK_GLs_ItemType" FromRole="GL" ToRole="ItemType" />
+        </EntityType>
+        <Association Name="FK_GLs_Customer">
+          <End Type="KUBOnlinePRModel.Customer" Role="Customer" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.GL" Role="GL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="custId" />
+            </Principal>
+            <Dependent Role="GL">
+              <PropertyRef Name="custId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GLs_ItemType">
+          <End Type="KUBOnlinePRModel.ItemType" Role="ItemType" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.GL" Role="GL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemType">
+              <PropertyRef Name="itemTypeId" />
+            </Principal>
+            <Dependent Role="GL">
+              <PropertyRef Name="itemTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3955,24 +3957,6 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="custId" ColumnName="custId" />
                 <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
-                <ScalarProperty Name="itemTypeId" ColumnName="itemTypeId" />
-                <ScalarProperty Name="codeId" ColumnName="codeId" />
-                <ScalarProperty Name="uuid" ColumnName="uuid" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="GLs">
-            <EntityTypeMapping TypeName="KUBOnlinePRModel.GL">
-              <MappingFragment StoreEntitySet="GLs">
-                <ScalarProperty Name="budgetInProgress" ColumnName="budgetInProgress" />
-                <ScalarProperty Name="budgetUtilized" ColumnName="budgetUtilized" />
-                <ScalarProperty Name="budgetAmount" ColumnName="budgetAmount" />
-                <ScalarProperty Name="createByUserId" ColumnName="createByUserId" />
-                <ScalarProperty Name="createDate" ColumnName="createDate" />
-                <ScalarProperty Name="UoM" ColumnName="UoM" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="custId" ColumnName="custId" />
-                <ScalarProperty Name="itemCode" ColumnName="itemCode" />
                 <ScalarProperty Name="itemTypeId" ColumnName="itemTypeId" />
                 <ScalarProperty Name="codeId" ColumnName="codeId" />
                 <ScalarProperty Name="uuid" ColumnName="uuid" />
@@ -4331,6 +4315,25 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
                 <ScalarProperty Name="codeId" ColumnName="codeId" />
                 <ScalarProperty Name="PRId" ColumnName="PRId" />
                 <ScalarProperty Name="budgetId" ColumnName="budgetId" />
+                <ScalarProperty Name="uuid" ColumnName="uuid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GLs">
+            <EntityTypeMapping TypeName="KUBOnlinePRModel.GL">
+              <MappingFragment StoreEntitySet="GLs">
+                <ScalarProperty Name="createByUserId" ColumnName="createByUserId" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="budgetInProgress" ColumnName="budgetInProgress" />
+                <ScalarProperty Name="budgetBalance" ColumnName="budgetBalance" />
+                <ScalarProperty Name="budgetUtilized" ColumnName="budgetUtilized" />
+                <ScalarProperty Name="budgetAmount" ColumnName="budgetAmount" />
+                <ScalarProperty Name="UoM" ColumnName="UoM" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="custId" ColumnName="custId" />
+                <ScalarProperty Name="itemCode" ColumnName="itemCode" />
+                <ScalarProperty Name="itemTypeId" ColumnName="itemTypeId" />
+                <ScalarProperty Name="codeId" ColumnName="codeId" />
                 <ScalarProperty Name="uuid" ColumnName="uuid" />
               </MappingFragment>
             </EntityTypeMapping>
