@@ -611,7 +611,6 @@
                 var DiscountPerc = parseFloat(DiscountAmount / AmountRequired * 100).toFixed(2);
                 var TotalExcSST = parseFloat(AmountRequired - DiscountAmount).toFixed(2);
                 var TotalIncSST1 = parseFloat(TotalIncSST - DiscountAmount).toFixed(2);
-                $("#AmountRequired").val(AmountRequired);
                 $("#DiscountPerc").val(parseInt(DiscountPerc));
                 $("#TotalExclSST").val(TotalExcSST);
                 $("#TotalSST").val(TotalSST);
@@ -674,7 +673,6 @@
                 var DiscountPerc = parseFloat(DiscountAmount / AmountRequired * 100).toFixed(2);
                 var TotalExcSST = parseFloat(AmountRequired - DiscountAmount).toFixed(2);
                 var TotalIncSST1 = parseFloat(TotalIncSST - DiscountAmount).toFixed(2);
-                $("#AmountRequired").val(AmountRequired);
                 $("#DiscountPerc").val(parseInt(DiscountPerc));
                 $("#TotalExclSST").val(TotalExcSST);
                 $("#TotalSST").val(TotalSST);

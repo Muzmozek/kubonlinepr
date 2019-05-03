@@ -417,14 +417,6 @@ namespace KUBOnlinePRPM.Controllers
                                     CustId = n.custId
                                 }).First().CustId;
 
-                var getRole = (from m in db.Users
-                               join n in db.Users_Roles on m.userId equals n.userId
-                               where m.userId == UserId
-                               select new RoleList()
-                               {
-                                   RoleId = n.roleId,
-                                   RoleName = n.Role.name
-                               }).ToList();
                 var PayToVendorQuery = (from m in db.Vendors
                                         where m.custId == PRCustId
                                         select new
@@ -489,7 +481,20 @@ namespace KUBOnlinePRPM.Controllers
                                           StatusId = a.StatusId,
                                           Status = g.status,
                                           Submited = a.Submited
-                                      }).FirstOrDefault();             
+                                      }).FirstOrDefault();
+
+                var getProcurement = (from m in db.PurchaseRequisitions
+                                      from s in db.PR_Admin.Where(x => x.PRId == m.PRId && x.adminId == UserId)
+                                      where m.PRId == PRId && s.adminId == UserId
+                                      select new
+                                      {
+                                          ProcurementId = s.adminId
+                                      }).FirstOrDefault();
+                if (getProcurement != null)
+                {
+                    PODetail.NewPOForm.AdminId = getProcurement.ProcurementId;
+                }
+
                 PODetail.NewPOForm.POItemListObject = (from m in db.PO_Item
                                                        from n in db.PopulateItemLists.Where(x => m.codeId == x.codeId && m.itemTypeId == x.itemTypeId).DefaultIfEmpty()
                                                        join p in db.PR_Items on m.itemsId equals p.itemsId
@@ -833,11 +838,13 @@ namespace KUBOnlinePRPM.Controllers
                     updatePO.DeliveryDate = DeliveryDate;
                     updatePO.StatusId = "PO03";
 
-                    Budget updateBudget = db.Budgets.First(m => m.PRId == updatePO.PRId);
-                    updateBudget.utilized = true;
-                    db.SaveChanges();
-
                     GL updateGL = db.GLs.First(m => m.codeId == getCodeId);
+                    if (updateGL.budgetAmount != null)
+                    {
+                        Budget updateBudget = db.Budgets.First(m => m.PRId == updatePO.PRId);
+                        updateBudget.utilized = true;
+                        db.SaveChanges();
+                    }
                     var getUtilizedBudget = db.Budgets.Select(m => new { CodeId = m.codeId, initialUtilized = m.initialUtilized, utilized = m.utilized }).Where(m => m.CodeId == getCodeId && m.utilized == true).GroupBy(m => m.CodeId).Select(n => new { total = n.Sum(o => o.initialUtilized) }).SingleOrDefault();
                     var updateProgress = db.Budgets.Where(m => m.codeId == getCodeId).ToList();
 

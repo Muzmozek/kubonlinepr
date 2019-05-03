@@ -984,17 +984,17 @@ namespace KUBOnlinePRPM.Controllers
                                                      Status = p.status
                                                  }).OrderByDescending(m => m.PRId).ToList()).OrderByDescending(m => m.PRId).ToList();
                 
-                int PRId = 0; int newPRId = 0;
+                int PRId = 0; int newPRId = 0; List<PRListTable> getnewPRList = new List<PRListTable>();
                 for (int i = 0; i <= getPRList.Count - 1; i++)
                 {
                     newPRId = getPRList[i].PRId;
-                    if (PRId == getPRList[i].PRId)
+                    if (PRId != getPRList[i].PRId)
                     {
-                        getPRList.RemoveAt(i);
+                        getnewPRList.Add(getPRList[i]);
                     }
                     PRId = newPRId;
                 }
-                PRList.PRListObject = getPRList;
+                PRList.PRListObject = getnewPRList;
                 PRList.Type = type;
 
                 return View("PRList", PRList);
@@ -2371,16 +2371,6 @@ namespace KUBOnlinePRPM.Controllers
 
                         foreach (var item in getFinance)
                         {
-                            PR_Finance _objReviewer = new PR_Finance
-                            {
-                                uuid = Guid.NewGuid(),
-                                reviewerId = item.ReviewerId.Value,
-                                PRId = objPRDetails.PRId,
-                                reviewed = model.NewPRForm.Reviewed
-                            };
-                            db.PR_Finance.Add(_objReviewer);
-                            db.SaveChanges();
-
                             NotificationMsg objTask = new NotificationMsg()
                             {
                                 uuid = Guid.NewGuid(),
@@ -3422,10 +3412,13 @@ namespace KUBOnlinePRPM.Controllers
                 PR.TotalSST = PRModel.NewPRForm.TotalSST;
                 PR.TotalIncSST = PRModel.NewPRForm.TotalIncSST;
 
-                var updateBudget = db.Budgets.First(m => m.PRId == PrId);                
-                updateBudget.initialUtilized = PR.TotalIncSST.Value;                
-                db.SaveChanges();
-
+                var updateBudget = db.Budgets.FirstOrDefault(m => m.PRId == PrId);    
+                if (updateBudget != null)
+                {
+                    updateBudget.initialUtilized = PR.TotalIncSST.Value;
+                    db.SaveChanges();
+                }
+                
                 int InitCodeId = 0;
                 foreach (var value in PRModel.NewPRForm.PRItemListObject)
                 {

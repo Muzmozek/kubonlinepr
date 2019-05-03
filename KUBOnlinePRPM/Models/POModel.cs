@@ -33,6 +33,7 @@ namespace KUBOnlinePRPM.Models
         public string PONo { get; set; }
         public int ProjectId { get; set; }
         public int CustId { get; set; }
+        public int AdminId { get; set; }
         public string ProjectName { get; set; }
         public string PRNo { get; set; }
         public int? VendorId { get; set; }

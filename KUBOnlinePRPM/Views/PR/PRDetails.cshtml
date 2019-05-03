@@ -226,7 +226,7 @@
                     <h3 class="g-font-weight-300 g-font-size-20 g-color-black">Vendor</h3>
                 </div>
             </div>
-            if (Session["ifProcurement"] != null && Model.NewPRForm.Submited >= 1 && Model.NewPRForm.StatusId == "PR02")
+            if (Model.NewPRForm.AdminId != 0 && Model.NewPRForm.Submited >= 1 && Model.NewPRForm.StatusId == "PR02")
             {
                 <div class="col-md-6">
                     <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
@@ -566,7 +566,7 @@
             </div>
             @*@if (Model.NewPRForm.StatusId != "PR19" && Model.NewPRForm.StatusId != "PR01" && Session["ifFinance"] == null && Session["ifRequestor"] == null)*@
             @*@if (Model.NewPRForm.Phase1Completed == true)
-            {*@
+                {*@
             <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
                 <section>
                     <div class="row">
@@ -575,7 +575,7 @@
                         </div>
                         <div class="d-flex col-md-8 col-sm-8">
                             @*<input id="inputGroup-3_1" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10" placeholder="Unit (RM)" type="text">*@
-                            @Html.TextBoxFor(m => m.NewPRForm.AmountInProgress, String.Format("{0:n}", Model.NewPRForm.AmountInProgress), new { @id = "AmountInProgress", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "shall be calculated when save", @type = "text", @readonly = true })
+                            @Html.TextBoxFor(m => m.NewPRForm.AmountInProgress, String.Format("{0:n}", Model.NewPRForm.AmountInProgress), new { @id = "AmountInProgress", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "calculation only on GL item(s)", @type = "text", @readonly = true })
                         </div>
                     </div>
                     <div class="row">
@@ -704,7 +704,7 @@
                                     <td>
                                         <input id="@DateRequired" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" value="@item.DateRequired.ToString(" yyyy-MM-dd")" name="DateRequired" type="text" readonly>
                                     </td>
-                                    if ((Model.NewPRForm.Phase1Completed == true && Session["ifProcurement"] == null) || Model.NewPRForm.Scenario > 0 || Model.NewPRForm.StatusId == "PR07" || Model.NewPRForm.StatusId == "PR08" || Model.NewPRForm.StatusId == "PR15" || Model.NewPRForm.StatusId == "PR16")
+                                    if ((Model.NewPRForm.Phase1Completed == true && Model.NewPRForm.AdminId == 0) || Model.NewPRForm.Scenario > 0 || Model.NewPRForm.StatusId == "PR07" || Model.NewPRForm.StatusId == "PR08" || Model.NewPRForm.StatusId == "PR15" || Model.NewPRForm.StatusId == "PR16")
                                     {
                                         <td>
                                             @Html.TextBoxFor(m => item.ItemType, new { @id = ItemTypeId, @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
@@ -735,7 +735,7 @@
                                     </td>
                                     <td>
                                         @*<input id="@UoM" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="UoM" value="@item.UOM" type="text" readonly>*@
-                                        @if (Model.NewPRForm.StatusId == "PR02" && Session["ifProcurement"] != null)
+                                        @if (Model.NewPRForm.StatusId == "PR02" && Model.NewPRForm.AdminId != 0)
                                         {
                                             @Html.DropDownListFor(m => item.UoMId, (IEnumerable<SelectListItem>)ViewData["UOMList" + i], "Select item type here", new { @id = UoM, @class = "UOM custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
                                         }
@@ -746,7 +746,7 @@
 
                                         @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[i].UoMId, null, new { @class = "form-control-feedback" })
                                     </td>
-                                    if ((Model.NewPRForm.Phase1Completed == true && Session["ifProcurement"] == null) || Model.NewPRForm.Scenario > 0 || Model.NewPRForm.StatusId == "PR08" || Model.NewPRForm.StatusId == "PR15" || Model.NewPRForm.StatusId == "PR16")
+                                    if ((Model.NewPRForm.Phase1Completed == true && Model.NewPRForm.AdminId == 0) || Model.NewPRForm.Scenario > 0 || Model.NewPRForm.StatusId == "PR08" || Model.NewPRForm.StatusId == "PR15" || Model.NewPRForm.StatusId == "PR16")
                                     {
                                         <td>
                                             @Html.TextBoxFor(m => item.JobNo, new { @id = JobNoId, @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
@@ -764,7 +764,7 @@
                                             @Html.DropDownListFor(m => item.JobTaskNoId, (IEnumerable<SelectListItem>)ViewData["JobTaskList" + i], "Select job task no here", new { @id = JobTaskNoId, @class = "JobTaskNoId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
                                         </td>
                                     }
-                                    if (Model.NewPRForm.StatusId == "PR02" && Session["ifProcurement"] != null)
+                                    if (Model.NewPRForm.StatusId == "PR02" && Model.NewPRForm.AdminId != 0)
                                     {
                                         <td>
                                             @*<input id="@SST" class="SST form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="SST" value="@item.SST" type="text">*@
@@ -803,7 +803,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        @if (Model.NewPRForm.StatusId == "PR02" && Session["ifProcurement"] != null)
+                                        @if (Model.NewPRForm.StatusId == "PR02" && Model.NewPRForm.AdminId != 0)
                                         {
                                             @Html.DropDownListFor(m => item.DimProjectId, (IEnumerable<SelectListItem>)ViewData["DimProjectList" + i], "Select DimProject here", new { @id = DimProjectId, @class = "DimProjectId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
                                         }
@@ -815,7 +815,7 @@
                                         @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[i].DimProjectId, null, new { @class = "form-control-feedback" })
                                     </td>
                                     <td>
-                                        @if (Model.NewPRForm.StatusId == "PR02" && Session["ifProcurement"] != null)
+                                        @if (Model.NewPRForm.StatusId == "PR02" && Model.NewPRForm.AdminId != 0)
                                         {
                                             @Html.DropDownListFor(m => item.DimDeptId, (IEnumerable<SelectListItem>)ViewData["DimDeptList" + i], "Select DimDept here", new { @id = DimDeptId, @class = "DimDeptId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
                                         }
@@ -924,7 +924,7 @@
                                 <span>Discount Amount</span>
                             </div>
                             <div class="d-flex col-md-8 col-sm-8">
-                                @if (Session["ifProcurement"] != null && Model.NewPRForm.Submited >= 1 && Model.NewPRForm.StatusId == "PR02")
+                                @if (Model.NewPRForm.AdminId != 0 && Model.NewPRForm.Submited >= 1 && Model.NewPRForm.StatusId == "PR02")
                                 {
                                     @Html.TextBoxFor(m => m.NewPRForm.DiscountAmount, new { @id = "DiscountAmount", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text" })
                                 }
@@ -1015,7 +1015,7 @@
                                 <span>Specs Reviewer</span>
                             </div>
                             <div class="d-flex col-md-8 col-sm-8">
-                                @if (Session["ifProcurement"] != null && Model.NewPRForm.Submited >= 1 && Model.NewPRForm.StatusId == "PR02")
+                                @if (Model.NewPRForm.AdminId != 0 && Model.NewPRForm.Submited >= 1 && Model.NewPRForm.StatusId == "PR02")
                                 {
                                     @Html.DropDownListFor(m => m.NewPRForm.SpecReviewerId, (IEnumerable<SelectListItem>
                                     )ViewBag.SpecReviewerList, "", new { @id = "SpecReviewer", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
@@ -1184,7 +1184,7 @@
                                         REJECT
                                     </a>
                                 }
-                                @if (Model.NewPRForm.StatusId == "PR06" && Session["ifProcurement"] != null && Model.Type != "Blanket")
+                                @if (Model.NewPRForm.StatusId == "PR06" && Model.NewPRForm.AdminId != 0 && Model.Type != "Blanket")
                                 {
                                     <a id="IssuePO" class="btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">ISSUE PO</a>
                                 }
@@ -1200,7 +1200,7 @@
                                 {
                                     <a id="RecommendCancel" class="RecommendCancel btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">RECOMMENDED</a>
                                 }
-                                @if (Model.NewPRForm.StatusId == "PR16" && Session["ifProcurement"] != null)
+                                @if (Model.NewPRForm.StatusId == "PR16" && Model.NewPRForm.AdminId != 0)
                                 {
                                     <a id="AcceptCancel" class="AcceptCancel btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">ACCEPTED</a>
                                 }

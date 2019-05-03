@@ -477,10 +477,10 @@
           <Property Name="TotalExclSST" Type="numeric" Precision="18" Scale="2" />
           <Property Name="TotalSST" Type="numeric" Precision="18" Scale="2" />
           <Property Name="TotalIncSST" Type="numeric" Precision="18" Scale="2" />
-          <Property Name="AmountPOBalance" Type="numeric" Precision="18" Scale="2" />
           <Property Name="budgetedAmount" Type="numeric" Precision="18" Scale="2" Nullable="false" />
           <Property Name="utilizedToDate" Type="numeric" Precision="18" Scale="2" Nullable="false" />
           <Property Name="budgetBalance" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="AmountPOBalance" Type="numeric" Precision="18" Scale="2" />
           <Property Name="Phase2Completed" Type="bit" Nullable="false" />
           <Property Name="Scenario" Type="int" Nullable="false" />
           <Property Name="PRAging" Type="int" />
@@ -608,7 +608,7 @@
           <Property Name="lastModifyDate" Type="datetime" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'KUBOnlinePR_Test.dbo.MessageList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'KUBOnlinePR.dbo.MessageList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="MessageList">
           <Key>
             <PropertyRef Name="msgId" />
@@ -627,7 +627,7 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.MessageList' does not have a 
           <Property Name="ToUserName" Type="nvarchar" MaxLength="151" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'KUBOnlinePR.dbo.PopulateItemList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PopulateItemList">
           <Key>
             <PropertyRef Name="codeId" />
@@ -942,18 +942,6 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
             </Principal>
             <Dependent Role="PR_Items">
               <PropertyRef Name="PRId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PR_Items_TaxCode">
-          <End Role="TaxCode" Type="Self.TaxCode" Multiplicity="0..1" />
-          <End Role="PR_Items" Type="Self.PR_Items" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="TaxCode">
-              <PropertyRef Name="TaxCodeId" />
-            </Principal>
-            <Dependent Role="PR_Items">
-              <PropertyRef Name="taxCodeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1602,10 +1590,6 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
           </AssociationSet>
           <AssociationSet Name="FK_PR_Items_PurchaseRequisition" Association="Self.FK_PR_Items_PurchaseRequisition">
             <End Role="PurchaseRequisition" EntitySet="PurchaseRequisition" />
-            <End Role="PR_Items" EntitySet="PR_Items" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PR_Items_TaxCode" Association="Self.FK_PR_Items_TaxCode">
-            <End Role="TaxCode" EntitySet="TaxCode" />
             <End Role="PR_Items" EntitySet="PR_Items" />
           </AssociationSet>
           <AssociationSet Name="FK_PR_Items_UOM" Association="Self.FK_PR_Items_UOM">

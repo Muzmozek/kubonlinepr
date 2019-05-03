@@ -540,7 +540,7 @@
                             </div>
                         </div>
                     }
-                    @if (Model.Type == "All" && (Session["ifAdmin"] != null || Session["ifProcurement"] != null) && Model.NewPOForm.StatusId == "PO01")
+                    @if (Model.Type == "All" && Model.NewPOForm.AdminId != 0 && Model.NewPOForm.StatusId == "PO01")
                     {
                         <div class="g-mt-30 col-md-12 col-sm-12">
                             <div class="row">
