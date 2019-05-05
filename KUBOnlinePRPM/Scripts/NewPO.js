@@ -9,8 +9,7 @@
         draw: true,
         deferRender: false,
         columnDefs: [
-                { visible: false, targets: [0] },
-                { width: "50%", targets: [2] }
+                { visible: false, targets: [0] }
         ],
         destroy: true,
         responsive: {

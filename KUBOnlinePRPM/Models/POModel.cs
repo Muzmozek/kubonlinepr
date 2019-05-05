@@ -29,6 +29,7 @@ namespace KUBOnlinePRPM.Models
     {
         public string CompanyName { get; set; }
         public int POId { get; set; }
+        public DateTime PRDate { get; set; }
         public DateTime PODate { get; set; }
         public string PONo { get; set; }
         public int ProjectId { get; set; }

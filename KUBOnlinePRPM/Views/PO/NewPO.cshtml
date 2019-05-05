@@ -25,262 +25,440 @@
     <a id="ViewPODetails" class="d-none" href="@Url.Action("ViewPODetails", "PO")"></a>
     <a id="UrlPOTabs" class="d-none" href="@Url.Action("POTabs", "PO")"></a>
     <a id="UrlPOList" class="d-none" href="@Url.Action("POList", "PO" )"></a>
-
-    <div class="row g-brd--black g-brd-style-solid g-bg-white g-pa-20">
-        <div class="col-md-12">
-            <div class="media-body align-self-center text-left g-mb-30">
-                <h3 class="g-font-weight-300 g-font-size-20 g-color-black">General Information</h3>
-            </div>
+    if (Model.NewPOForm.StatusId == "PO03")
+    {
+        <div class="media-body align-self-center text-right">
+            <a href="~/PO/POForm">
+                <span class="u-icon-v1 g-color-blue">
+                    <i class="icon-printer"></i>
+                </span>
+            </a>
         </div>
-        <div class="col-md-6">
-            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
-                <section>
-                    <div class="row">
-                        <div class="col-md-4 col-sm-4 formfield">
-                            <span>Project Name</span>
-                        </div>
-                        <div class="d-flex col-md-8 col-sm-8">
-                            @Html.DropDownListFor(m => m.NewPOForm.ProjectId, (IEnumerable<SelectListItem>)ViewBag.ProjectNameList, "Select project here", new { @id = "ProjectName", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
-                            @Html.HiddenFor(m => m.NewPOForm.ProjectId)
-                        </div>
-                    </div>
-                </section>
+    }
+        <div class="row g-brd--black g-brd-style-solid g-bg-white g-pa-20">
+            <div class="col-md-12">
+                <div class="media-body align-self-center text-left g-mb-20">
+                    <h3 class="g-font-weight-300 g-font-size-20 g-color-black">Purchase Requisition - Create New</h3>
+                </div>
             </div>
-        </div>
-        <div class="col-md-12">
-            <div class="media-body align-self-center text-left g-mb-30">
-                <h3 class="g-font-weight-300 g-font-size-20 g-color-black">Vendor</h3>
+            <div class="col-md-6">
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
+                    <section>
+                        <div class="row">
+                            <div class="d-flex col-md-6 col-sm-6 formfield">
+                                <span>Project/Dept/Branch/Estate Name</span>
+                            </div>
+                            <div class="d-flex col-md-6 col-sm-6">
+                                @Html.TextBoxFor(m => m.NewPOForm.ProjectName, new { @id = "ProjectName", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
+                    <section>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 formfield">
+                                <span>PR No.</span>
+                            </div>
+                            <div class="d-flex col-md-8 col-sm-8">
+                                @Html.TextBoxFor(m => m.NewPOForm.PRNo, new { @id = "PRNo", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
+                            </div>
+                        </div>
+                    </section>
+                </div>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
-                <section>
-                    <div class="row">
-                        <div class="col-md-4 col-sm-4 formfield">
-                            <span>Company</span>
+            <div class="col-md-6">
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
+                    <section>
+                        <div class="row">
+                            <div class="d-flex col-md-4 col-sm-4 formfield">
+                                <span>Status</span>
+                            </div>
+                            <div class="d-flex col-md-8 col-sm-8">
+                                <input id="Status" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10" name="Status" value="Open" type="text" readonly="readonly">
+                            </div>
                         </div>
-                        <div class="d-flex col-md-8 col-sm-8">
-                            @Html.DropDownListFor(m => m.NewPOForm.VendorId, (IEnumerable<SelectListItem>)ViewBag.VendorList, "Select vendor company here", new { @id = "VendorId", @class = "custom-select g-height-40 g- g-color-black g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
-                            @Html.HiddenFor(m => m.NewPOForm.VendorId)
+                    </section>
+                </div>
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
+                    <section>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 formfield">
+                                <span>PR Date</span>
+                            </div>
+                            <div class="d-flex col-md-8 col-sm-8">
+                                @Html.TextBoxFor(m => m.NewPOForm.PRDate, new { @id = "PRDate", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
+                            </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
+                </div>
             </div>
-            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
-                <section>
-                    <div class="row">
-                        <div class="col-md-4 col-sm-4 formfield">
-                            <span>Contact Name</span>
-                        </div>
-                        <div class="d-flex col-md-8 col-sm-8">
-                            @Html.DropDownListFor(m => m.NewPOForm.VendorStaffId, (IEnumerable<SelectListItem>)ViewBag.VendorStaffList, "Select vendor contact name here", new { @id = "VendorStaffId", @class = "custom-select g-height-40 g- g-color-gray-light-v1 g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
-                            @Html.HiddenFor(m => m.NewPOForm.VendorStaffId)
-                        </div>
-                    </div>
-                </section>
+            <div class="col-md-12">
+                <div class="media-body align-self-center text-left g-mt-30 g-mb-30">
+                    <h3 class="g-font-weight-300 g-font-size-20 g-color-black">Vendor</h3>
+                </div>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
-                <section>
-                    <div class="row">
-                        <div class="col-md-4 col-sm-4 formfield">
-                            <span>Email</span>
+            <div class="col-md-6">
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
+                    <section>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 formfield">
+                                <span>Company Name</span>
+                            </div>
+                            <div class="d-flex col-md-8 col-sm-8">
+                                @Html.TextBoxFor(m => m.NewPOForm.VendorName, new { @id = "PRDate", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
+                            </div>
                         </div>
-                        <div class="d-flex col-md-8 col-sm-8">
-                            @*<input id="inputGroup-3_1" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10" placeholder="" type="text">*@
-                            @Html.TextBoxFor(m => m.NewPOForm.VendorEmail, new { @id = "VendorEmail", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
+                    </section>
+                </div>
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
+                    <section>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 formfield">
+                                <span>Company ID</span>
+                            </div>
+                            <div class="d-flex col-md-8 col-sm-8">
+                                @Html.TextBoxFor(m => m.NewPOForm.VendorCode, new { @id = "VendorCode", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
-                            @Html.ValidationMessageFor(m => m.NewPOForm.VendorEmail, null, new { @class = "note-error color-red" })
+                    </section>
+                </div>
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
+                    <section>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 formfield">
+                                <span>Quotation No.</span>
+                            </div>
+                            <div class="d-flex col-md-8 col-sm-8">
+                                @Html.TextBoxFor(m => m.NewPOForm.VendorQuoteNo, new { @id = "VendorQuoteNo", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
+                            </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
+                </div>
             </div>
-            <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
-                <section>
-                    <div class="row">
-                        <div class="col-md-4 col-sm-4 formfield">
-                            <span>Contact No</span>
+            <div class="col-md-6">
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
+                    <section>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 formfield">
+                                <span>Contact Name</span>
+                            </div>
+                            <div class="d-flex col-md-8 col-sm-8">
+                                @Html.TextBoxFor(m => m.NewPOForm.VendorContactName, new { @id = "VendorContactName", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
+                            </div>
                         </div>
-                        <div class="d-flex col-md-8 col-sm-8">
-                            @*<input id="inputGroup-3_1" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10" placeholder="Unit (RM)" type="text">*@
-                            @Html.TextBoxFor(m => m.NewPOForm.VendorContactNo, new { @id = "VendorContactNo", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "", @type = "text", @readonly = true })
+                    </section>
+                </div>
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
+                    <section>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 formfield">
+                                <span>Contact No :</span>
+                            </div>
+                            <div class="d-flex col-md-8 col-sm-8">
+                                @Html.TextBoxFor(m => m.NewPOForm.VendorContactNo, new { @id = "VendorContactNo", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
-                            @Html.ValidationMessageFor(m => m.NewPOForm.VendorContactNo, null, new { @class = "note-error color-red" })
+                    </section>
+                </div>
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
+                    <section>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 formfield">
+                                <span>Email</span>
+                            </div>
+                            <div class="d-flex col-md-8 col-sm-8">
+                                @Html.TextBoxFor(m => m.NewPOForm.VendorEmail, new { @id = "VendorEmail", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
+                            </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
+                </div>
             </div>
-        </div>
-        <div class="col-xs-12 g-mb-30 g-mt-40">
-            <table id="POItemTable" class="table table-striped table-bordered dt-responsive table-hover" style="width:100%">
-                <thead>
-                    <tr>
-                        <th class="d-none"></th>
-                        <th class="all">
-                            <div class="media">
-                                <div class="d-flex align-self-center">Date required</div>
-                            </div>
-                        </th>
-                        <th class="desktop">
-                            <div class="media">
-                                <div class="d-flex align-self-center">Description/Spec</div>
-                            </div>
-                        </th>
-                        <th class="desktop">
-                            <div class="media">
-                                <div class="d-flex align-self-center">Item Code</div>
-                            </div>
-                        </th>
-                        <th class="desktop">
-                            <div class="media">
-                                <div class="d-flex align-self-center">Cust PO No</div>
-                            </div>
-                        </th>
-                        <th class="desktop">
-                            <div class="media">
-                                <div class="d-flex align-self-center">Quantity</div>
-                            </div>
-                        </th>
-                        <th class="d-none"></th>
-                        <th class="desktop">
-                            <div class="media">
-                                <div class="d-flex align-self-center">UoM</div>
-                            </div>
-                        </th>
-                        <th class="desktop">
-                            <div class="media">
-                                <div class="d-flex align-self-center">Unit Price (RM)</div>
-                            </div>
-                        </th>
-                        <th class="desktop">
-                            <div class="media">
-                                <div class="d-flex align-self-center">Total (RM)</div>
-                            </div>
-                        </th>
-                        <th class="all">
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @{
-                        int i = 1;
-                        foreach (var item in Model.NewPOForm.POItemListObject)
-                        {
-                            var ItemsId = "ItemsId" + i; var ItemTypeId = "ItemTypeId" + i; var DateRequired = "DateRequired" + i; var Description = "Description" + i; var CustPONo = "CustPONo" + i; var OutStandingQuantity = "OutStandingQuantity" + i;
-                            var Quantity = "Quantity" + i; var CodeId = "CodeId" + i; var ItemCode = "ItemCode" + i; var UoM = "UoM" + i; var UnitPrice = "UnitPrice" + i; var TotalPrice = "TotalPrice" + i;
-                            <tr id="dontRemove">
-                                <td class="d-none"><input id="@ItemsId" class="Id form-control custom-filter desktop" type="text" name="@ItemsId" value="@item.ItemsId" /></td>
-                                <td>
-                                    <input id="@DateRequired" class="form-control rounded-0 form-control-md" value="@item.DateRequired.ToString("yyyy-MM-dd")" name="DateRequired" type="text" readonly>
-                                </td>
-                                <td>
-                                    <input id="@Description" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="Description" value="@item.Description" type="text" readonly>
-                                </td>
-                                <td>
-                                    <input id="@ItemTypeId" class="d-none" placeholder="" name="ItemTypeId" value="@item.ItemTypeId" type="text" readonly>
-                                    <input id="@CodeId" class="d-none" placeholder="" name="CodeId" value="@item.CodeId" type="text" readonly>
-                                    <input id="@ItemCode" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="ItemCode" value="@item.ItemCode" type="text" readonly>
-                                    @*@Html.DropDownListFor(m => item.CodeId, (IEnumerable<SelectListItem>)ViewData["ItemCodeList" + i], new { @id = CodeId, @class = "CodeId custom-select g-height-50 g-color-black g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })*@
-                                    @*@Html.HiddenFor(m => item.CodeId)*@
-                                </td>
-                                <td>
-                                    <input id="@CustPONo" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="CustPONo" value="@item.CustPONo" type="text">
-                                </td>
-                                <td>
-                                    <input id="@Quantity" class="Quantity form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="Quantity" value="" type="text">
-                                </td>
-                                <td class="d-none"><input id="@OutStandingQuantity" class="OutStandingQuantity form-control custom-filter desktop" type="text" name="OutStandingQuantity" value="@item.OutStandingQuantity" /></td>
-                                <td>
-                                    <input id="@UoM" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="UoM" value="@item.UOM" type="text" readonly>
-                                </td>
-                                <td>
-                                    <input id="@UnitPrice" class="UnitPrice form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="UnitPrice" value="@item.UnitPrice" type="text" readonly>
-                                </td>
-                                <td>
-                                    <input id="@TotalPrice" class="TotalPrice form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="TotalPrice" value="@item.TotalPrice" type="text" readonly>
-                                </td>
-                                <td>
-                                    <div class="g-width-30 row">
-                                        <a class="g-color-gray-dark-v5 g-text-underline--none--hover g-pa-5 RemovePOItem" data-toggle="tooltip" data-placement="top" data-original-title="Delete">
-                                            <i class="icon-trash g-font-size-18 g-mr-7"></i>
-                                        </a>
+            <div class="col-xs-12 g-mb-30 g-mt-40">
+                <div class="row">
+                    <table id="POItemTable" class="table table-striped table-bordered dt-responsive table-hover" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th class="d-none">Item Id</th>
+                                <th class="all">
+                                    <div class="media">
+                                        <div class="d-flex align-self-center">Date required</div>
                                     </div>
-                                </td>
+                                </th>
+                                <th class="all">
+                                    <div class="media">
+                                        <div class="d-flex align-self-center">Code</div>
+                                    </div>
+                                </th>
+                                <th class="desktop">
+                                    <div class="media">
+                                        <div class="d-flex align-self-center">Description</div>
+                                    </div>
+                                </th>
+                                <th class="desktop">
+                                    <div class="media">
+                                        <div class="d-flex align-self-center">Cust PO No</div>
+                                    </div>
+                                </th>
+                                <th class="desktop">
+                                    <div class="media">
+                                        <div class="d-flex align-self-center">Quantity</div>
+                                    </div>
+                                </th>
+                                <th class="desktop">
+                                    <div class="media">
+                                        <div class="d-flex align-self-center">Unit Price (RM)</div>
+                                    </div>
+                                </th>
+                                <th class="desktop">
+                                    <div class="media">
+                                        <div class="d-flex align-self-center">Total (RM)</div>
+                                    </div>
+                                </th>
                             </tr>
-                        }
-                        i++;
-                    }
-                </tbody>
-            </table>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
-                    <section>
-                        <div class="row">
-                            <div class="d-flex col-md-4 col-sm-4 formfield">
-                                <span>Pay To Vendor</span>
-                            </div>
-                            <div class="d-flex col-md-8 col-sm-8">
-                                @Html.DropDownListFor(m => m.NewPOForm.PayToVendorId, (IEnumerable<SelectListItem>)ViewBag.PayToVendorList, "Select Vendor here", new { @id = "PayToVendor", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
-                            </div>
-                        </div>
-                        <div class="row has-danger">
-                            <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
-                                @Html.ValidationMessageFor(m => m.NewPOForm.PayToVendorId, null, new { @class = "form-control-feedback" })
-                            </div>
-                        </div>
-                    </section>
+                        </thead>
+                        <tbody>
+                            @{
+                                int i = 1; var CustPONo = "CustPONo" + i; var OutStandingQuantity = "OutStandingQuantity" + i;
+                                var Quantity = "Quantity" + i;
+                                foreach (var item in Model.NewPOForm.POItemListObject)
+                                {
+                                    <tr>
+                                        <td class="d-none">@Html.DisplayFor(modelItem => item.ItemsId)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.DateRequired)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.ItemCode)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                                        <td class="CustPONo">@Html.DisplayFor(modelItem => item.CustPONo)</td>
+                                        <td>
+                                            <input id="@Quantity" class="Quantity form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="Quantity" value="@item.Quantity" type="text">
+                                        </td>
+                                        <td class="UnitPrice">@Html.DisplayFor(modelItem => item.UnitPrice)</td>
+                                        <td class="TotalPrice">@Html.DisplayFor(modelItem => item.TotalPrice)</td>
+                                    </tr>
+                                    i++;
+                                }
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
-                    <section>
-                        <div class="row">
-                            <div class="d-flex col-md-4 col-sm-4 formfield">
-                                <span>Payment Terms Code</span>
-                            </div>
-                            <div class="d-flex col-md-8 col-sm-8">
-                                @Html.DropDownListFor(m => m.NewPOForm.PaymentTermsId, (IEnumerable<SelectListItem>)ViewBag.PaymentTermsCodeList, "Select Payment Terms Code here", new { @id = "PaymentTermsCode", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
-                            </div>
-                        </div>
-                        <div class="row has-danger">
-                            <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
-                                @Html.ValidationMessageFor(m => m.NewPOForm.PaymentTermsId, null, new { @class = "form-control-feedback" })
-                            </div>
-                        </div>
-                    </section>
-                </div>
-            </div>
-        </div>
-        <div id="counter" class="d-none">@i</div>
-        <div class="col-md-12 col-sm-12">
             <div class="row">
-                @*<div class="col-md-9 col-sm-8"></div>*@
-                <div class="col-md-3 offset-md-9 col-sm-4 offset-sm-8">
-                    <div class="media">
-                        <div class="d-flex u-main-nav--push-right text-right">
+                <div class="col-md-6 col-sm-6">
+                    <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
+                        <section>
                             <div class="row">
-                                <a id="SavePO" class="saveSubmit btn btn-md u-btn-white g-mr-5 g-mb-15">SAVE</a>
-                                @*<a id="CancelPO" class="btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">CANCEL</a>*@
-                                <a id="SubmitPO" class="saveSubmit btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">SUBMIT</a>
+                                <div class="col-md-4 col-sm-4 formfield">
+                                    <span>Discount Amount</span>
+                                </div>
+                                <div class="d-flex col-md-8 col-sm-8">
+                                    @Html.TextBoxFor(m => m.NewPOForm.DiscountAmount, new { @id = "DiscountAmount", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
+                        <section>
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4 formfield">
+                                    <span>Discount %</span>
+                                </div>
+                                <div class="d-flex col-md-8 col-sm-8">
+                                    @Html.TextBoxFor(m => m.NewPOForm.DiscountPerc, new { @id = "DiscountPerc", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
+                        <section>
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4 formfield">
+                                    <span>Specs Reviewer</span>
+                                </div>
+                                <div class="d-flex col-md-8 col-sm-8">
+                                    @if (Model.NewPOForm.SpecReviewerId != null)
+                                    {
+                                        @Html.DropDownListFor(m => m.NewPOForm.SpecReviewerId, (IEnumerable<SelectListItem>
+                                )ViewBag.SpecReviewerList, "", new { @id = "SpecReviewer", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
+                                        @Html.HiddenFor(m => m.NewPOForm.SpecReviewerId)
+                                    }
+                                    else
+                                    {
+                                        @Html.DropDownListFor(m => m.NewPOForm.SpecReviewerId, (IEnumerable<SelectListItem>
+                            )ViewBag.SpecReviewerList, "", new { @id = "SpecReviewer", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
+                                    }
+
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                </div>
+                <div class="col-md-6 col-sm-6">
+                    <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
+                        <section>
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4 formfield">
+                                    <span>Total Excl SST (RM)</span>
+                                </div>
+                                <div class="d-flex col-md-8 col-sm-8">
+                                    @Html.TextBoxFor(m => m.NewPOForm.TotalExclSST, new { @id = "TotalExclSST", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
+                        <section>
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4 formfield">
+                                    <span>Total SST (RM)</span>
+                                </div>
+                                <div class="d-flex col-md-8 col-sm-8">
+                                    @Html.TextBoxFor(m => m.NewPOForm.TotalSST, new { @id = "TotalSST", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "", @type = "text", @readonly = true })
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
+                        <section>
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4 formfield">
+                                    <span>Total Inc SST (RM)</span>
+                                </div>
+                                <div class="d-flex col-md-8 col-sm-8">
+                                    @Html.TextBoxFor(m => m.NewPOForm.TotalIncSST, new { @id = "TotalIncSST", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "", @type = "text", @readonly = true })
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
+                        <section>
+                            <div class="row">
+                                <div class="d-flex col-md-4 col-sm-4 formfield">
+                                    <span>Pay To Vendor</span>
+                                </div>
+                                <div class="d-flex col-md-8 col-sm-8">
+                                        @Html.DropDownListFor(m => m.NewPOForm.PayToVendorId, (IEnumerable<SelectListItem>)ViewBag.PayToVendorList, "Select Vendor here", new { @id = "PayToVendor", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                                </div>
+                            </div>
+                            <div class="row has-danger">
+                                <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                                    @Html.ValidationMessageFor(m => m.NewPOForm.PayToVendorId, null, new { @class = "form-control-feedback" })
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
+                        <section>
+                            <div class="row">
+                                <div class="d-flex col-md-4 col-sm-4 formfield">
+                                    <span>Location Code</span>
+                                </div>
+                                <div class="d-flex col-md-8 col-sm-8">
+                                        @Html.DropDownListFor(m => m.NewPOForm.LocationCodeId, (IEnumerable<SelectListItem>)ViewBag.LocationCodeList, "Select Location here", new { @id = "LocationCode", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                                </div>
+                            </div>
+                            <div class="row has-danger">
+                                <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                                    @Html.ValidationMessageFor(m => m.NewPOForm.LocationCodeId, null, new { @class = "form-control-feedback" })
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
+                        <section>
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4 formfield">
+                                    <span>Order Date</span>
+                                </div>
+                                <div class="d-flex col-md-8 col-sm-8">
+                                        @Html.TextBoxFor(m => m.NewPOForm.OrderDate, new { @id = "OrderDate", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "", @type = "date" })
+                                </div>
+                            </div>
+                            <div class="row has-danger">
+                                <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                                    @Html.ValidationMessageFor(m => m.NewPOForm.OrderDate, null, new { @class = "form-control-feedback" })
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
+                        <section>
+                            <div class="row">
+                                <div class="d-flex col-md-4 col-sm-4 formfield">
+                                    <span>Payment Terms Code</span>
+                                </div>
+                                <div class="d-flex col-md-8 col-sm-8">
+                                        @Html.DropDownListFor(m => m.NewPOForm.PaymentTermsId, (IEnumerable<SelectListItem>)ViewBag.PaymentTermsCodeList, "Select Payment Terms Code here", new { @id = "PaymentTermsCode", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                                </div>
+                            </div>
+                            <div class="row has-danger">
+                                <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                                    @Html.ValidationMessageFor(m => m.NewPOForm.PaymentTermsId, null, new { @class = "form-control-feedback" })
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
+                        <section>
+                            <div class="row">
+                                <div class="d-flex col-md-4 col-sm-4 formfield">
+                                    <span>Purchaser Code</span>
+                                </div>
+                                <div class="d-flex col-md-8 col-sm-8">
+                                        @Html.DropDownListFor(m => m.NewPOForm.PurchaserCodeId, (IEnumerable<SelectListItem>)ViewBag.PurchaserCodeList, "Select Purchaser Code here", new { @id = "PurchaserCode", @class = "custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                                </div>
+                            </div>
+                            <div class="row has-danger">
+                                <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                                    @Html.ValidationMessageFor(m => m.NewPOForm.PurchaserCodeId, null, new { @class = "form-control-feedback" })
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
+                        <section>
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4 formfield">
+                                    <span>Delivery Date</span>
+                                </div>
+                                <div class="d-flex col-md-8 col-sm-8">
+                                        @Html.TextBoxFor(m => m.NewPOForm.DeliveryDate, new { @id = "DeliveryDate", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "", @type = "date" })
+                                </div>
+                            </div>
+                            <div class="row has-danger">
+                                <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                                    @Html.ValidationMessageFor(m => m.NewPOForm.DeliveryDate, null, new { @class = "form-control-feedback" })
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <div id="counter" class="d-none">@i</div>
+                    <div class="g-mt-30 col-md-12 col-sm-12">
+                        <div class="row">
+                            @*<div class="col-md-9 col-sm-8"></div>*@
+                            <div class="col-md-2 offset-md-10 col-sm-4 offset-sm-8">
+                                <div class="media">
+                                    <div class="d-flex u-main-nav--push-right text-right">
+                                        <div class="row">
+                                            <a id="ConfirmPO" class="btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">CONFIRM PO</a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
             </div>
         </div>
-    </div>
+            
+            
     <div class="modal">
     </div>
-                        }
+}
 
 @section scripts {
     <script type="text/javascript">

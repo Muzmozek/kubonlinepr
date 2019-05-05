@@ -28,27 +28,23 @@ namespace KUBOnlinePRPM.Controllers
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
-                int CustId = Int32.Parse(Session["CompanyId"].ToString());
-                var ProjectNameQuery = (from m in db.Projects
-                                        where m.custId == CustId
-                                        select new
-                                        {
-                                            ProjectId = m.projectId,
-                                            Dimension = m.dimension,
-                                            Description = m.dimension + " - " + m.projectCode,
-                                            Code = m.projectCode,
-                                        }).OrderBy(c => c.Dimension).ThenBy(c => c.Code);
-                var VendorListQuery = (from m in db.Vendors
-                                       where m.custId == CustId
-                                       select new
-                                       {
-                                           VendorId = m.vendorId,
-                                           VendorName = m.vendorNo + " - " + m.name,
-                                           VendorNo = m.vendorNo,
-                                       }).OrderBy(c => c.VendorNo).ThenBy(c => c.VendorName);
-                var VendorStaffQuery = db.VendorStaffs.Select(c => new { StaffId = c.staffId, VendorContactName = c.vendorContactName }).OrderBy(c => c.VendorContactName);
+                POModel NewPO = new POModel
+                {
+                    UserId = Int32.Parse(Session["UserId"].ToString()),
+                    Type = type
+                };
+                int PRId = Int32.Parse(Session["PRId"].ToString());
+                POModel PODetail = new POModel();
+                int PRCustId = (from m in db.PurchaseRequisitions
+                                join n in db.Projects on m.ProjectId equals n.projectId
+                                where m.PRId == PRId
+                                select new
+                                {
+                                    CustId = n.custId
+                                }).First().CustId;
+
                 var PayToVendorQuery = (from m in db.Vendors
-                                        where m.custId == CustId
+                                        where m.custId == PRCustId
                                         select new
                                         {
                                             VendorId = m.vendorId,
@@ -56,89 +52,97 @@ namespace KUBOnlinePRPM.Controllers
                                             VendorNo = m.vendorNo,
                                         }).OrderBy(c => c.VendorNo).ThenBy(c => c.VendorName);
                 var PaymentTermsCodeQuery = (from m in db.PaymentTerms
-                                             where m.custId == CustId
+                                             where m.custId == PRCustId
                                              select new
                                              {
                                                  PaymentTermsId = m.paymentTermsId,
                                                  PaymentDescription = m.paymentCode + " - " + m.paymentDescription,
                                                  PaymentCode = m.paymentCode,
                                              }).OrderBy(c => c.PaymentCode).ThenBy(c => c.PaymentDescription);
+                var LocationQuery = db.Locations.Select(m => new { LocationCodeId = m.locationId, LocationCode = m.locationCode, Address = m.locationAddress + m.locationCity }).OrderBy(m => m.LocationCode);
+                var SpecReviewerQuery = db.Groups.Select(c => new GroupList { GroupId = c.groupId, GroupName = c.groupName }).OrderBy(c => c.GroupName);
+                var PurchaserCodeQuery = db.Purchasers.Select(m => new { PurchaserCodeId = m.purchaserId, PurchaserCode = m.purchaserCode }).OrderBy(m => m.PurchaserCode);
+                PODetail.UserId = Int32.Parse(Session["UserId"].ToString());
+                PODetail.NewPOForm = (from a in db.PurchaseRequisitions
+                                      join b in db.Users on a.PreparedById equals b.userId into s
+                                      join d in db.Projects on a.ProjectId equals d.projectId
+                                      join e in db.Vendors on a.VendorId equals e.vendorId into f
+                                      join g in db.VendorStaffs on a.VendorStaffId equals g.staffId into l
+                                      join h in db.PR_Items on a.PRId equals h.PRId
+                                      join j in db.PopulateItemLists on h.codeId equals j.codeId into k
+                                      from w in l.DefaultIfEmpty()
+                                      from x in s.DefaultIfEmpty()
+                                      from y in f.DefaultIfEmpty()
+                                      from z in k.DefaultIfEmpty()
+                                      where a.PRId == PRId
+                                      select new NewPOModel()
+                                      {
+                                          PRNo = a.PRNo,
+                                          ProjectId = a.ProjectId,
+                                          ProjectName = d.projectName,
+                                          //PaperRefNo = a.PaperRefNo,
+                                          //ch = x.childCompanyId,
+                                          VendorId = a.VendorId,
+                                          VendorName = y.name,
+                                          VendorCode = y.vendorNo,
+                                          VendorQuoteNo = a.VendorQuoteNo,
+                                          VendorEmail = w.vendorEmail,
+                                          VendorStaffId = w.staffId,
+                                          VendorContactNo = w.vendorContactNo,
+                                          PreparedById = a.PreparedById,
+                                          PRDate = a.PreparedDate,
+                                          DiscountAmount = a.DiscountAmount,
+                                          DiscountPerc = a.Discount_,
+                                          TotalExclSST = a.TotalExclSST,
+                                          TotalSST = a.TotalSST,
+                                          TotalIncSST = a.TotalIncSST,
+                                          SpecReviewerId = a.SpecsReviewerId
+                                      }).FirstOrDefault();
 
-                int UserId = Int32.Parse(Session["UserId"].ToString());
-                var getRole = (from m in db.Users
-                               join n in db.Users_Roles on m.userId equals n.userId
-                               where m.userId == UserId
-                               select new RoleList()
-                               {
-                                   RoleId = n.roleId,
-                                   RoleName = n.Role.name
-                               }).ToList();
+                PODetail.NewPOForm.POItemListObject = (from m in db.PR_Items.DefaultIfEmpty()
+                                                       from n in db.PopulateItemLists.Where(x => m.codeId == x.codeId && m.itemTypeId == x.itemTypeId).DefaultIfEmpty()
+                                                       join o in db.Projects on m.jobNoId equals o.projectId into p
+                                                       join r in db.ItemTypes on m.itemTypeId equals r.itemTypeId into s
+                                                       join u in db.JobTasks on m.jobTaskNoId equals u.jobTaskNoId into v
+                                                       join x in db.TaxCodes on m.taxCodeId equals x.TaxCodeId into y
+                                                       join a in db.UOMs on m.UoMId equals a.UoMId into b
+                                                       from q in p.DefaultIfEmpty()
+                                                       from t in s.DefaultIfEmpty()
+                                                       from w in v.DefaultIfEmpty()
+                                                       from z in y.DefaultIfEmpty()
+                                                       from c in b.DefaultIfEmpty()
+                                                       where m.PRId == PRId
+                                                       select new POItemsTable()
+                                                       {
+                                                           ItemsId = m.itemsId,
+                                                           DateRequired = m.dateRequired,
+                                                           ItemTypeId = m.itemTypeId,
+                                                           CodeId = m.codeId.Value,
+                                                           ItemCode = n.Description,
+                                                           Description = m.description,
+                                                           CustPONo = m.custPONo,
+                                                           Quantity = m.quantity,
+                                                           UoMId = m.UoMId,
+                                                           UOM = c.UoMCode,
+                                                           JobNoId = q.projectId,
+                                                           JobNo = q.projectCode,
+                                                           JobTaskNoId = m.jobTaskNoId,
+                                                           JobTaskNo = w.jobTaskNo,
+                                                           UnitPrice = m.unitPrice.Value,
+                                                           TotalPrice = m.totalPrice.Value,
+                                                           UnitPriceIncSST = m.unitPriceIncSST,
+                                                           TotalPriceIncSST = m.totalPriceIncSST,
+                                                           DimProjectId = m.dimProjectId,
+                                                           DimDeptId = m.dimDeptId
+                                                       }).ToList();
 
-                POModel NewPO = new POModel
-                {
-                    UserId = Int32.Parse(Session["UserId"].ToString()),
-                    Type = type,
-                    RoleIdList = getRole
-                };
-                int PRId = Int32.Parse(Session["PRId"].ToString());
-                NewPO.NewPOForm = (from a in db.PurchaseRequisitions
-                                   join b in db.Users on a.PreparedById equals b.userId into s
-                                   join c in db.PRStatus on a.StatusId equals c.statusId
-                                   join d in db.Projects on a.ProjectId equals d.projectId
-                                   join e in db.Vendors on a.VendorId equals e.vendorId into f
-                                   join g in db.VendorStaffs on a.VendorStaffId equals g.staffId into l
-                                   join h in db.PR_Items on a.PRId equals h.PRId
-                                   join j in db.PopulateItemLists on h.codeId equals j.codeId into k
-                                   from w in l.DefaultIfEmpty()
-                                   from x in s.DefaultIfEmpty()
-                                   from y in f.DefaultIfEmpty()
-                                   from z in k.DefaultIfEmpty()
-                                   where a.PRId == PRId
-                                   select new NewPOModel()
-                                   {
-                                       //PRNo = a.PRNo,
-                                       ProjectId = a.ProjectId,
-                                       VendorId = a.VendorId,
-                                       VendorEmail = w.vendorEmail,
-                                       VendorStaffId = w.staffId,
-                                       VendorContactNo = w.vendorContactNo,
-                                       PreparedById = a.PreparedById,
-                                       PODate = a.PreparedDate,
-                                       Saved = a.Saved,
-                                       //TotalAmountRequired = a.AmountRequired.Value
-                                       //StatusId = a.StatusId.Trim()
-                                   }).FirstOrDefault();
-                NewPO.NewPOForm.POItemListObject = (from m in db.PR_Items
-                                                    from n in db.PopulateItemLists.Where(x => m.codeId == x.codeId && m.itemTypeId == x.itemTypeId).DefaultIfEmpty()
-                                                        //from p in o.DefaultIfEmpty()
-                                                    where m.PRId == PRId && n.custId == CustId && m.outStandingQuantity > 0
-                                                    select new POItemsTable()
-                                                    {
-                                                        ItemsId = m.itemsId,
-                                                        ItemTypeId = m.itemTypeId,
-                                                        DateRequired = m.dateRequired,
-                                                        Description = m.description,
-                                                        CodeId = n.codeId,
-                                                        ItemCode = n.ItemDescription,
-                                                        OutStandingQuantity = m.outStandingQuantity.Value,
-                                                        UnitPrice = m.unitPrice.Value,
-                                                        //TotalPrice = m.totalPrice,
-                                                        UOM = n.UoM
-                                                    }).ToList();
+                ViewBag.PayToVendorList = new SelectList(PayToVendorQuery.AsEnumerable(), "VendorId", "VendorName", PODetail.NewPOForm.PayToVendorId);
+                ViewBag.PaymentTermsCodeList = new SelectList(PaymentTermsCodeQuery.AsEnumerable(), "PaymentTermsId", "PaymentDescription", PODetail.NewPOForm.PaymentTermsId);
+                ViewBag.SpecReviewerList = new SelectList(SpecReviewerQuery.AsEnumerable(), "GroupId", "GroupName", PODetail.NewPOForm.SpecReviewerId);
+                ViewBag.PurchaserCodeList = new SelectList(PurchaserCodeQuery.AsEnumerable(), "PurchaserCodeId", "PurchaserCode", PODetail.NewPOForm.PurchaserCodeId);
+                ViewBag.LocationCodeList = new SelectList(LocationQuery.AsEnumerable(), "LocationCodeId", "LocationCode", PODetail.NewPOForm.LocationCodeId);
 
-                //TotalBudgetedQuantity
-                //foreach (var item in NewPO.NewPOForm.POItemListObject)
-                //{
-
-                //}
-
-                ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "description", NewPO.NewPOForm.ProjectId);
-                ViewBag.VendorList = new SelectList(VendorListQuery.AsEnumerable(), "vendorId", "VendorName", NewPO.NewPOForm.VendorId);
-                ViewBag.VendorStaffList = new SelectList(VendorStaffQuery.AsEnumerable(), "staffId", "VendorContactName", NewPO.NewPOForm.VendorStaffId);
-                ViewBag.PayToVendorList = new SelectList(PayToVendorQuery.AsEnumerable(), "VendorId", "VendorName", NewPO.NewPOForm.PayToVendorId);
-                ViewBag.PaymentTermsCodeList = new SelectList(PaymentTermsCodeQuery.AsEnumerable(), "PaymentTermsId", "PaymentDescription", NewPO.NewPOForm.PaymentTermsId);
-
-                return View(NewPO);
+                return View(PODetail);
             }
             else
             {
