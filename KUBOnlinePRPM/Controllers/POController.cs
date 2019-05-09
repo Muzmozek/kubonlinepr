@@ -371,7 +371,34 @@ namespace KUBOnlinePRPM.Controllers
                                                    Status = q.status,
                                                    POType = o.PRType
                                                }).ToList();
-                    } else
+                    }
+                    else if (UserId == 100)
+                    {
+                        POList.POListObject = (from m in db.PurchaseOrders
+                                               join n in db.Vendors on m.vendorId equals n.vendorId
+                                               join o in db.PurchaseRequisitions on m.PRId equals o.PRId
+                                               join p in db.Users on m.PreparedById equals p.userId
+                                               join q in db.POStatus on m.StatusId equals q.statusId
+                                               join t in db.Projects on m.projectId equals t.projectId
+                                               join r in db.Customers on t.custId equals r.custId
+                                               where m.CustId == 4
+                                               select new POListTable()
+                                               {
+                                                   POId = m.POId,
+                                                   PONo = m.PONo,
+                                                   PODate = m.PODate,
+                                                   PRNo = o.PRNo,
+                                                   Company = r.name,
+                                                   RequestedName = p.userName,
+                                                   VendorId = n.vendorNo,
+                                                   VendorCompany = n.name,
+                                                   TotalPrice = m.TotalPrice,
+                                                   POAging = m.POAging,
+                                                   Status = q.status,
+                                                   POType = o.PRType
+                                               }).ToList();
+                    }
+                    else
                     {
                         POList.POListObject = (from m in db.PurchaseOrders
                                                join n in db.Vendors on m.vendorId equals n.vendorId
