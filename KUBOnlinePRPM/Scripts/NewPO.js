@@ -54,7 +54,7 @@
         }            
     });
 
-    $(document).on("click", ".saveSubmit", function (e) {
+    $(document).on("click", "#ConfirmPO", function (e) {
         e.preventDefault();
         var fd = new FormData(); var other_data; var PRType; var URL;
             POType = $("#NewPO").find("#POType").val();
@@ -70,33 +70,14 @@
             } else {
                 ItemsId = $(POItemTable.row(i).data()[0]).val();
             }
-            var unitPrice = $(input).find("input[name='UnitPrice']").val(); var totalPrice = $(input).find("input[name='TotalPrice']").val();
-            var ItemTypeId = $(input).find("input[name='ItemTypeId']").val();
-            var UoM = $(input).find("input[name='UoM']").val();
-            if (unitPrice === undefined)
-                unitPrice = "";
-            if (totalPrice === undefined)
-                totalPrice = "";
-            if (UoM === undefined)
-                UoM = "";
-            if (ItemTypeId === undefined)
-                ItemTypeId = "";
+            var totalPrice = $(input).find("#TotalPrice" + (i + 1)).val();
+            var Quantity = $(input).find("#Quantity" + (i + 1)).val();
+            var OutstandingQuantity = $(input).find("#OutstandingQuantity" + (i + 1)).val();
             fd.append("NewPOForm.POItemListObject[" + i + "].ItemsId", ItemsId);
-            fd.append("NewPOForm.POItemListObject[" + i + "].ItemTypeId", ItemTypeId);
-            fd.append("NewPOForm.POItemListObject[" + i + "].DateRequired", $(input).find("input[name='DateRequired']").val());
-            fd.append("NewPOForm.POItemListObject[" + i + "].Description", $(input).find("input[name='Description']").val());
-            fd.append("NewPOForm.POItemListObject[" + i + "].CodeId", $(input).find("input[name='CodeId']").val());
-            fd.append("NewPOForm.POItemListObject[" + i + "].CustPONo", $(input).find("input[name='CustPONo']").val());
-            fd.append("NewPOForm.POItemListObject[" + i + "].Quantity", $(input).find("input[name='Quantity']").val());
-            fd.append("NewPOForm.POItemListObject[" + i + "].UOM", UoM);
-            fd.append("NewPOForm.POItemListObject[" + i + "].UnitPrice", unitPrice);
+            fd.append("NewPOForm.POItemListObject[" + i + "].Quantity", Quantity);
+            fd.append("NewPOForm.POItemListObject[" + i + "].OutstandingQuantity", OutstandingQuantity);
             fd.append("NewPOForm.POItemListObject[" + i + "].TotalPrice", totalPrice);
         });
-        if ($(this)[0].id === "SavePO") {
-            fd.append("NewPOForm.SelectSave", true);
-        } else if ($(this)[0].id === "SubmitPO") {
-            fd.append("NewPOForm.SelectSubmit", true);
-        }
         $.ajax({
             url: UrlNewPO,
             type: 'POST',
@@ -109,36 +90,24 @@
             },
             dataType: "json",
             success: function (resp) {
-                //if (resp.success && resp.Saved && resp.NewPO) {
-                //    $.post($("#ViewPODetails").attr('href'), {
-                //        POId: resp.POId,
-                //        POType: POType
-                //    }, function (resp) {
-                //        alert("The PO has been saved");
-                //        window.location = resp.url;
-                //    });
-                //} else if (resp.success && resp.Saved) {
-                if (resp.success && resp.Saved) {
-                    alert("The PO has been saved");
-                    window.location = UrlPRTabs + "?PRId=" + PRId + "&PRType=" + POType;
-                    //$("body").removeClass("loading");
-                    //$("#nav-4-1-primary-hor-center--PODetails").load(UrlPOTabs + ' #PODetailsTab');
-                } else if (resp.success && resp.Submited) {
-                    alert("The PR has been submited");
-                    window.location = UrlPRTabs + "?PRId=" + PRId + "&PRType=" + POType;
-                    //$.post($("#UrlPOList").attr('href'), {
-                    //    PRId: resp.PRId,
-                    //    PRType: POType
-                    //}, function (resp) {
-                    //    alert("The PR has been submited");
-                    //    //window.location = $("#UrlPOList").attr('href') + "?PRId=" + PRId + "&PRType=" + POType;
-                    //    window.location = $("#UrlPOList").attr('href') + "?type=All";
-                    //});
-                } else if (resp.success === false && resp.exception === true) {
-                    alert("Exception occured. Please contact admin");
-                    $('#NewPO').html(resp.view);
-                    $("body").removeClass("loading");
+                if (resp.success === true) {
+                    alert(resp.message);
+                    $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
+                        generatePRItemTable();
+                    });
+                    $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                        $("body").removeClass("loading");
+                    });
                 }
+                else if (resp.success === false && resp.exception === false) {
+                    alert("Validation error");
+                    $.each(resp.data, function (key, input) {
+                        $('span[data-valmsg-for="' + input.key + '"]').text(input.errors[0]);
+                    });
+                    $("body").removeClass("loading");
+                } else {
+                    window.location = resp.url;
+                }                  
             }
         });
     });

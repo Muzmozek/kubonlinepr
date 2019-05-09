@@ -205,6 +205,7 @@
                                         <div class="d-flex align-self-center">Quantity</div>
                                     </div>
                                 </th>
+                                <th class="d-none">OutStanding Quantity</th>
                                 <th class="desktop">
                                     <div class="media">
                                         <div class="d-flex align-self-center">Unit Price (RM)</div>
@@ -220,21 +221,22 @@
                         <tbody>
                             @{
                                 int i = 1; var CustPONo = "CustPONo" + i; var OutStandingQuantity = "OutStandingQuantity" + i;
-                                var Quantity = "Quantity" + i;
+                                var Quantity = "Quantity" + i; var TotalPrice = "TotalPrice" + i;
                                 foreach (var item in Model.NewPOForm.POItemListObject)
                                 {
-                                    <tr>
-                                        <td class="d-none">@Html.DisplayFor(modelItem => item.ItemsId)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.DateRequired)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.ItemCode)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.Description)</td>
-                                        <td class="CustPONo">@Html.DisplayFor(modelItem => item.CustPONo)</td>
-                                        <td>
-                                            <input id="@Quantity" class="Quantity form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="Quantity" value="@item.Quantity" type="text">
-                                        </td>
-                                        <td class="UnitPrice">@Html.DisplayFor(modelItem => item.UnitPrice)</td>
-                                        <td class="TotalPrice">@Html.DisplayFor(modelItem => item.TotalPrice)</td>
-                                    </tr>
+                            <tr>
+                                <td class="d-none">@Html.DisplayFor(modelItem => item.ItemsId)</td>
+                                <td>@Html.DisplayFor(modelItem => item.DateRequired)</td>
+                                <td>@Html.DisplayFor(modelItem => item.ItemCode)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                                <td class="CustPONo">@Html.DisplayFor(modelItem => item.CustPONo)</td>
+                                <td>
+                                    <input id="@Quantity" class="Quantity form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="Quantity" value="@item.Quantity" type="text">
+                                </td>
+                                <td id="@OutStandingQuantity" class="d-none">@Html.DisplayFor(modelItem => item.OutStandingQuantity)</td>
+                                <td class="UnitPrice">@Html.DisplayFor(modelItem => item.UnitPrice)</td>
+                                <td id="@TotalPrice" class="TotalPrice">@Html.DisplayFor(modelItem => item.TotalPrice)</td>
+                            </tr>
                                     i++;
                                 }
                             }

@@ -462,9 +462,12 @@ namespace KUBOnlinePRPM.Controllers
             //    db.NotificationMsgs.Add(_objDetails_AmountRequired);
             //    FormerPRDetails.AmountRequired = x.NewPRForm.AmountRequired;
             //}
-            Budget FormerBudget = db.Budgets.First(m => m.PRId == x.PRId);
-            FormerBudget.progress = x.NewPRForm.AmountInProgress.Value;
-
+            Budget FormerBudget = db.Budgets.FirstOrDefault(m => m.PRId == x.PRId);
+            if (FormerBudget != null)
+            {
+                FormerBudget.progress = x.NewPRForm.AmountInProgress.Value;
+            }
+            
             if (FormerPRDetails.Justification != x.NewPRForm.Justification)
             {
                 NotificationMsg _objDetails_Justification = new NotificationMsg

@@ -122,6 +122,7 @@ namespace KUBOnlinePRPM.Controllers
                                                            Description = m.description,
                                                            CustPONo = m.custPONo,
                                                            Quantity = m.quantity,
+                                                           OutStandingQuantity = m.outStandingQuantity.Value,
                                                            UoMId = m.UoMId,
                                                            UOM = c.UoMCode,
                                                            JobNoId = q.projectId,
@@ -151,90 +152,158 @@ namespace KUBOnlinePRPM.Controllers
         }
 
         [HttpPost]
+        [ValidateAjax]
         public ActionResult NewPO(POModel POModel)
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
-                int CustId = Int32.Parse(Session["CompanyId"].ToString());
-                var ProjectNameQuery = (from m in db.Projects
-                                        where m.custId == CustId
-                                        select new
-                                        {
-                                            ProjectId = m.projectId,
-                                            Dimension = m.dimension,
-                                            Description = m.dimension + " - " + m.projectCode,
-                                            Code = m.projectCode,
-                                        }).OrderBy(c => c.Dimension).ThenBy(c => c.Code);
-                var VendorListQuery = (from m in db.Vendors
-                                       where m.custId == CustId
-                                       select new
-                                       {
-                                           VendorId = m.vendorId,
-                                           VendorName = m.vendorNo + " - " + m.name,
-                                           VendorNo = m.vendorNo,
-                                       }).OrderBy(c => c.VendorNo).ThenBy(c => c.VendorName);
-                var VendorStaffQuery = db.VendorStaffs.Select(c => new { StaffId = c.staffId, VendorContactName = c.vendorContactName }).OrderBy(c => c.VendorContactName);
-                var PayToVendorQuery = (from m in db.Vendors
-                                        where m.custId == CustId
-                                        select new
-                                        {
-                                            VendorId = m.vendorId,
-                                            VendorName = m.vendorNo + " - " + m.name,
-                                            VendorNo = m.vendorNo,
-                                        }).OrderBy(c => c.VendorNo).ThenBy(c => c.VendorName);
-                var PaymentTermsCodeQuery = (from m in db.PaymentTerms
-                                             where m.custId == CustId
-                                             select new
-                                             {
-                                                 PaymentTermsId = m.paymentTermsId,
-                                                 PaymentDescription = m.paymentCode + " - " + m.paymentDescription,
-                                                 PaymentCode = m.paymentCode,
-                                             }).OrderBy(c => c.PaymentCode).ThenBy(c => c.PaymentDescription);
+                int UserId = Int32.Parse(Session["UserId"].ToString());
+                PurchaseOrder newPO = new PurchaseOrder();
+                newPO.uuid = Guid.NewGuid();
+                newPO.PRId = Int32.Parse(Session["PRId"].ToString());
+                PurchaseRequisition updatePR = db.PurchaseRequisitions.First(m => m.PRId == newPO.PRId);
+                var updatePRItem = db.PR_Items.ToList<PR_Items>().Where(m => m.PRId == newPO.PRId);
+                int PRCustId = (from m in db.PurchaseRequisitions
+                                join n in db.Projects on m.ProjectId equals n.projectId
+                                where m.PRId == newPO.PRId
+                                select new
+                                {
+                                    CustId = n.custId
+                                }).First().CustId;
 
-                if (!ModelState.IsValid)
+                string CustName = "";
+                switch (PRCustId)
                 {
-                    ViewBag.ProjectNameList = new SelectList(ProjectNameQuery.AsEnumerable(), "projectId", "projectName", POModel.NewPOForm.ProjectId);
-                    ViewBag.VendorList = new SelectList(VendorListQuery.AsEnumerable(), "vendorId", "VendorName", POModel.NewPOForm.VendorId);
-                    ViewBag.VendorStaffList = new SelectList(VendorStaffQuery.AsEnumerable(), "staffId", "VendorContactName", POModel.NewPOForm.VendorStaffId);
-                    ViewBag.PayToVendorList = new SelectList(PayToVendorQuery.AsEnumerable(), "VendorId", "VendorName", POModel.NewPOForm.PayToVendorId);
-                    ViewBag.PaymentTermsCodeList = new SelectList(PaymentTermsCodeQuery.AsEnumerable(), "PaymentTermsId", "PaymentDescription", POModel.NewPOForm.PaymentTermsId);
-
-                    return new JsonResult
-                    {
-                        Data = new
-                        {
-                            success = false,
-                            exception = true,
-                            type = POModel.Type,
-                            POId = POModel.POId,
-                            Saved = POModel.NewPOForm.SelectSave,
-                            Submited = POModel.NewPOForm.SelectSubmit,
-                            NewPO = true,
-                            view = this.PartialView("NewPO", POModel)
-                        },
-                        JsonRequestBehavior = JsonRequestBehavior.AllowGet
-                    };
+                    case 1:
+                        CustName = "KUBTelsequence";
+                        break;
+                    case 2:
+                        CustName = "KUBMsequence";
+                        break;
+                    case 3:
+                        CustName = "KUBAHsequence";
+                        break;
+                    case 4:
+                        CustName = "KUBMGazsequence";
+                        break;
+                    case 5:
+                        CustName = "KUBPowersequence";
+                        break;
+                    case 6:
+                        CustName = "KUBMasequence";
+                        break;
+                    case 7:
+                        CustName = "KUBMaluasequence";
+                        break;
+                    case 8:
+                        CustName = "KUBSsequence";
+                        break;
                 }
-                POModel.PRId = Int32.Parse(Session["PRId"].ToString());
-                POModel.UserId = Int32.Parse(Session["UserId"].ToString());
-                POModel.CustId = Int32.Parse(Session["CompanyId"].ToString());
-                POSaveDbLogic(POModel);
 
-                return new JsonResult
+                var checkPOforCust = (from m in db.PurchaseOrders
+                                      join n in db.Projects on m.projectId equals n.projectId
+                                      where n.custId == PRCustId
+                                      select new
+                                      {
+                                          PONo = m.PONo,
+                                          POId = m.POId
+                                      }).OrderByDescending(m => m.POId).FirstOrDefault();
+
+                if (checkPOforCust != null)
                 {
-                    Data = new
+                    int NewPOsequence = Int32.Parse(checkPOforCust.PONo.Split('-')[2]) + 1;
+                    if (ConfigurationManager.AppSettings[CustName] != null)
                     {
-                        success = true,
-                        exception = false,
-                        type = POModel.Type,
-                        POId = POModel.POId,
-                        Saved = POModel.NewPOForm.SelectSave,
-                        Submited = POModel.NewPOForm.SelectSubmit,
-                        NewPO = true,
-                        view = this.PartialView("NewPO", POModel)
-                    },
-                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                        NewPOsequence = Int32.Parse(ConfigurationManager.AppSettings[CustName].ToString()) + 1;
+                    }
+                    newPO.PONo = "PO-" + DateTime.Now.Year.ToString().Substring(2) + "-" + string.Format("{0}{1}", 0, NewPOsequence.ToString("D4"));
+                }
+                else
+                {
+                    int NewPOsequence = 1;
+                    if (ConfigurationManager.AppSettings[CustName] != null)
+                    {
+                        NewPOsequence = Int32.Parse(ConfigurationManager.AppSettings[CustName].ToString());
+                    }
+                    newPO.PONo = "PO-" + DateTime.Now.Year.ToString().Substring(2) + "-" + string.Format("{0}{1}", 0, NewPOsequence.ToString("D4"));
+                }
+                //newPO.PONo = "dummyset";
+                newPO.CustId = updatePR.CustId;
+                newPO.PODate = DateTime.Now;
+                newPO.projectId = updatePR.ProjectId;
+                newPO.vendorId = updatePR.VendorId.Value;
+                newPO.VendorQuoteNo = updatePR.VendorQuoteNo;
+                //newPO.vendorStaffId = PRModel.NewPRForm.VendorStaffId;
+                newPO.PreparedById = UserId;
+                newPO.PreparedDate = DateTime.Now;
+                newPO.Saved = 0;
+                newPO.Submited = true;
+                newPO.SubmitDate = DateTime.Now;
+                newPO.POAging = 0;
+                newPO.TotalPrice = updatePR.AmountRequired;
+                newPO.DiscountAmount = updatePR.DiscountAmount;
+                newPO.Discount_ = updatePR.Discount_;
+                newPO.TotalExcSST = updatePR.TotalExclSST;
+                newPO.TotalSST = updatePR.TotalSST;
+                newPO.TotalIncSST = updatePR.TotalIncSST;
+                newPO.SpecsReviewerId = updatePR.SpecsReviewerId;
+                newPO.StatusId = "PO01";
+                db.PurchaseOrders.Add(newPO);
+                db.SaveChanges();
+
+                db.SaveChanges();
+
+                int TotalQuantity = 0;
+                foreach (var value in updatePRItem)
+                {
+                    PO_Item _objNewPOItem = new PO_Item
+                    {
+                        uuid = Guid.NewGuid(),
+                        POId = newPO.POId,
+                        itemsId = value.itemsId,
+                        itemTypeId = value.itemTypeId,
+                        dateRequired = value.dateRequired,
+                        description = value.description,
+                        codeId = value.codeId.Value,
+                        custPONo = value.custPONo,
+                        quantity = value.quantity,
+                        UoMId = value.UoMId,
+                        unitPrice = value.unitPrice.Value,
+                        unitPriceIncSST = value.unitPriceIncSST,
+                        totalPrice = value.totalPrice.Value,
+                        totalPriceIncSST = value.totalPriceIncSST,
+                        jobNoId = value.jobNoId,
+                        jobTaskNoId = value.jobTaskNoId,
+                        taxCodeId = value.taxCodeId,
+                        dimProjectId = value.dimProjectId,
+                        dimDeptId = value.dimDeptId
+                    };
+                    db.PO_Item.Add(_objNewPOItem);
+                    db.SaveChanges();
+
+                    PR_Items _objUpdatePRItem = db.PR_Items.First(m => m.itemsId == value.itemsId);
+                    _objUpdatePRItem.outStandingQuantity = _objUpdatePRItem.outStandingQuantity - _objNewPOItem.quantity;
+
+                    newPO.POAging = 0;
+                    db.SaveChanges();
+
+                    TotalQuantity = TotalQuantity + _objNewPOItem.quantity;
+                }
+
+                newPO.TotalQuantity = TotalQuantity;
+                NotificationMsg _objSubmited = new NotificationMsg
+                {
+                    uuid = Guid.NewGuid(),
+                    POId = newPO.POId,
+                    msgDate = DateTime.Now,
+                    fromUserId = UserId,
+                    msgType = "Trail",
+                    message = Session["FullName"].ToString() + " has issue new PO No. " + newPO.PONo + " subject for confirmation"
                 };
+                db.NotificationMsgs.Add(_objSubmited);
+                db.SaveChanges();
+
+                return Json(new { success = true, message = "The PO has been issued" });
             }
             else
             {
