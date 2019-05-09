@@ -938,33 +938,39 @@ namespace KUBOnlinePRPM.Controllers
                     updatePO.DeliveryDate = DeliveryDate;
                     updatePO.StatusId = "PO03";
 
-                    GL updateGL = db.GLs.First(m => m.codeId == getCodeId);
-                    if (updateGL.budgetAmount != null)
+                    if (ConfigurationManager.AppSettings["TestUser"] == "true")
                     {
-                        Budget updateBudget = db.Budgets.First(m => m.PRId == updatePO.PRId);
-                        updateBudget.utilized = true;
-                        db.SaveChanges();
-                    }
-                    var getUtilizedBudget = db.Budgets.Select(m => new { CodeId = m.codeId, initialUtilized = m.initialUtilized, utilized = m.utilized }).Where(m => m.CodeId == getCodeId && m.utilized == true).GroupBy(m => m.CodeId).Select(n => new { total = n.Sum(o => o.initialUtilized) }).SingleOrDefault();
-                    var updateProgress = db.Budgets.Where(m => m.codeId == getCodeId).ToList();
-
-                    if (getUtilizedBudget != null)
-                    {
-                        updateGL.budgetUtilized = getUtilizedBudget.total;
-                        updateGL.budgetBalance = updateGL.budgetAmount.Value - getUtilizedBudget.total;
-                        var AmountInProgress = db.Budgets.Select(m => new { CodeId = m.codeId, initialUtilized = m.initialUtilized, utilized = m.utilized }).Where(m => m.CodeId == getCodeId && m.utilized == false).GroupBy(m => m.CodeId).Select(n => new { total = n.Sum(o => o.initialUtilized) }).SingleOrDefault();
-                        if (AmountInProgress != null)
+                        GL updateGL = db.GLs.First(m => m.codeId == getCodeId);
+                        if (updateGL.budgetAmount != null)
                         {
-                            updateProgress.ForEach(m => m.progress = AmountInProgress.total);
-                        } else
-                        {
-                            updateProgress.ForEach(m => m.progress = 0);
+                            Budget updateBudget = db.Budgets.First(m => m.PRId == updatePO.PRId);
+                            updateBudget.utilized = true;
+                            db.SaveChanges();
                         }
-                        
-                    } else
-                    {
-                        updateGL.budgetUtilized = updatePO.TotalIncSST;
+                        var getUtilizedBudget = db.Budgets.Select(m => new { CodeId = m.codeId, initialUtilized = m.initialUtilized, utilized = m.utilized }).Where(m => m.CodeId == getCodeId && m.utilized == true).GroupBy(m => m.CodeId).Select(n => new { total = n.Sum(o => o.initialUtilized) }).SingleOrDefault();
+                        var updateProgress = db.Budgets.Where(m => m.codeId == getCodeId).ToList();
+
+                        if (getUtilizedBudget != null)
+                        {
+                            updateGL.budgetUtilized = getUtilizedBudget.total;
+                            updateGL.budgetBalance = updateGL.budgetAmount.Value - getUtilizedBudget.total;
+                            var AmountInProgress = db.Budgets.Select(m => new { CodeId = m.codeId, initialUtilized = m.initialUtilized, utilized = m.utilized }).Where(m => m.CodeId == getCodeId && m.utilized == false).GroupBy(m => m.CodeId).Select(n => new { total = n.Sum(o => o.initialUtilized) }).SingleOrDefault();
+                            if (AmountInProgress != null)
+                            {
+                                updateProgress.ForEach(m => m.progress = AmountInProgress.total);
+                            }
+                            else
+                            {
+                                updateProgress.ForEach(m => m.progress = 0);
+                            }
+
+                        }
+                        else
+                        {
+                            updateGL.budgetUtilized = updatePO.TotalIncSST;
+                        }
                     }
+                    
                     //var POItemList = (from m in db.PO_Item
                     //                  from n in db.PopulateItemLists.Where(x => m.codeId == x.codeId && m.itemTypeId == x.itemTypeId).DefaultIfEmpty()
                     //                  join p in db.PR_Items on m.itemsId equals p.itemsId

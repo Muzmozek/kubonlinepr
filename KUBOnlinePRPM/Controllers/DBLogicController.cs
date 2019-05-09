@@ -17,6 +17,7 @@ using System.Data.Entity.Core.EntityClient;
 using System.Data.Entity.Core.Objects;
 using System.Data.Common;
 using System.IO;
+using System.Configuration;
 
 namespace KUBOnlinePRPM.Controllers
 {
@@ -89,7 +90,7 @@ namespace KUBOnlinePRPM.Controllers
                 _objNewPR.AmountPOBalance = _objNewPR.AmountPOBalance + _objNewPRItem.outStandingQuantity;
                 db.PR_Items.Add(_objNewPRItem);
 
-                if (InitCodeId != value.CodeId.Value)
+                if (value.CodeId != null && InitCodeId != value.CodeId.Value)
                 {
                     Budget createBudget = new Budget();
                     createBudget.uuid = Guid.NewGuid();
@@ -102,14 +103,17 @@ namespace KUBOnlinePRPM.Controllers
                     db.Budgets.Add(createBudget);
                     db.SaveChanges();
 
-                    var AmountInProgress = db.Budgets.Select(m => new { CodeId = m.codeId, initialUtilized = m.initialUtilized, utilized = m.utilized }).Where(m => m.CodeId == value.CodeId.Value && m.utilized == false).GroupBy(m => m.CodeId).Select(n => new { total = n.Sum(o => o.initialUtilized) }).SingleOrDefault();
-                    var updateProgress = db.Budgets.Where(m => m.codeId == value.CodeId.Value).ToList();
+                    if (ConfigurationManager.AppSettings["TestUser"] == "true")
+                    {
+                        var AmountInProgress = db.Budgets.Select(m => new { CodeId = m.codeId, initialUtilized = m.initialUtilized, utilized = m.utilized }).Where(m => m.CodeId == value.CodeId.Value && m.utilized == false).GroupBy(m => m.CodeId).Select(n => new { total = n.Sum(o => o.initialUtilized) }).SingleOrDefault();
+                        var updateProgress = db.Budgets.Where(m => m.codeId == value.CodeId.Value).ToList();
 
-                    if (AmountInProgress != null)
-                    {                       
-                        updateProgress.ForEach(m => m.progress = AmountInProgress.total);                       
-                    }
-                    db.SaveChanges();
+                        if (AmountInProgress != null)
+                        {
+                            updateProgress.ForEach(m => m.progress = AmountInProgress.total);
+                        }
+                        db.SaveChanges();
+                    }                   
                     InitCodeId = createBudget.codeId;
                 }
 
@@ -462,12 +466,14 @@ namespace KUBOnlinePRPM.Controllers
             //    db.NotificationMsgs.Add(_objDetails_AmountRequired);
             //    FormerPRDetails.AmountRequired = x.NewPRForm.AmountRequired;
             //}
-            Budget FormerBudget = db.Budgets.FirstOrDefault(m => m.PRId == x.PRId);
-            if (FormerBudget != null)
+            if (ConfigurationManager.AppSettings["TestUser"] == "true")
             {
-                FormerBudget.progress = x.NewPRForm.AmountInProgress.Value;
-            }
-            
+                Budget FormerBudget = db.Budgets.FirstOrDefault(m => m.PRId == x.PRId);
+                if (FormerBudget != null && ConfigurationManager.AppSettings["TestUser"] == "true")
+                {
+                    FormerBudget.progress = x.NewPRForm.AmountInProgress.Value;
+                }
+            }                       
             if (FormerPRDetails.Justification != x.NewPRForm.Justification)
             {
                 NotificationMsg _objDetails_Justification = new NotificationMsg
