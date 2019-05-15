@@ -330,23 +330,26 @@
                 </div>
             </section>
         </div>*@
-            @*<div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
-                <section>
-                    <div class="row">
-                        <div class="col-md-4 col-sm-4 formfield">
-                            <span>Amount In Progress</span>
+            @if (Model.TestUser == true)
+            {
+                <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
+                    <section>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 formfield">
+                                <span>Amount In Progress</span>
+                            </div>
+                            <div class="d-flex col-md-8 col-sm-8">
+                                @Html.TextBoxFor(m => m.NewPRForm.AmountInProgress, String.Format("{0:n}", Model.NewPRForm.AmountInProgress), new { @id = "AmountInProgress", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "shall be calculated when insert GL item", @type = "text", @readonly = true })
+                            </div>
                         </div>
-                        <div class="d-flex col-md-8 col-sm-8">
-                            @Html.TextBoxFor(m => m.NewPRForm.AmountInProgress, String.Format("{0:n}", Model.NewPRForm.AmountInProgress), new { @id = "AmountInProgress", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @placeholder = "shall be calculated when insert GL item", @type = "text", @readonly = true })
+                        <div class="row">
+                            <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
+                                @Html.ValidationMessageFor(m => m.NewPRForm.AmountInProgress, null, new { @class = "form-control-feedback" })
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="d-flex offset-md-4 offset-sm-4 col-md-8 col-sm-8">
-                            @Html.ValidationMessageFor(m => m.NewPRForm.AmountInProgress, null, new { @class = "form-control-feedback" })
-                        </div>
-                    </div>
-                </section>
-            </div>*@
+                    </section>
+                </div>
+            }
             <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
                 <section>
                     <div class="row">

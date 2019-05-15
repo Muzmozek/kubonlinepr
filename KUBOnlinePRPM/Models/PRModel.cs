@@ -36,6 +36,7 @@ namespace KUBOnlinePRPM.Models
         public int PRReviewer { get; set; }
         public int PRRecommender { get; set; }
         public string EmailAddress { get; set; }
+        public bool TestUser { get; set; }
     }
     public class NewPRModel
     {
