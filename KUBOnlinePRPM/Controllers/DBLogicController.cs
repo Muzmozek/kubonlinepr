@@ -181,18 +181,7 @@ namespace KUBOnlinePRPM.Controllers
                                           FullName = m.firstName + " " + m.lastName,
                                           EmailAddress = m.emailAddress
                                       }).ToList();
-                } else if (model.CustId == 4)
-                {
-                    //En. Bad as temporary procurement man for KUBgaz
-                    getProcurement = (from m in db.Users
-                                      where m.userId == 100
-                                      select new PRModel()
-                                      {
-                                          UserId = m.userId,
-                                          FullName = m.firstName + " " + m.lastName,
-                                          EmailAddress = m.emailAddress
-                                      }).ToList();
-                }
+                } 
                 else
                 {
                     getProcurement = (from m in db.Users
@@ -655,8 +644,8 @@ namespace KUBOnlinePRPM.Controllers
                     {
                         
                             var formerCodeId = db.PR_Items.First(m => m.PRId == x.PRId);
-                            var FormerItemCode = db.PopulateItemLists.Select(m => new { ItemDescription = m.ItemDescription, CodeId = m.codeId, CustId = m.custId }).Where(m => m.CustId == FormerPRDetails.CustId).Where(m => m.CodeId == formerCodeId.codeId).FirstOrDefault();
-                            var NewItemCode = db.PopulateItemLists.Select(m => new { ItemDescription = m.ItemDescription, CodeId = m.codeId, CustId = m.custId }).Where(m => m.CustId == FormerPRDetails.CustId).Where(m => m.CodeId == value.CodeId).FirstOrDefault();
+                            var FormerItemCode = db.PopulateItemLists.Select(m => new { ItemDescription = m.ItemDescription, CodeId = m.codeId, CustId = m.custId }).Where(m => m.CustId == updateProject.custId).Where(m => m.CodeId == formerCodeId.codeId).FirstOrDefault();
+                            var NewItemCode = db.PopulateItemLists.Select(m => new { ItemDescription = m.ItemDescription, CodeId = m.codeId, CustId = m.custId }).Where(m => m.CustId == updateProject.custId).Where(m => m.CodeId == value.CodeId).FirstOrDefault();
                             NotificationMsg _objDetails_CodeId = new NotificationMsg();
                             _objDetails_CodeId.uuid = Guid.NewGuid();
                             _objDetails_CodeId.PRId = x.PRId;
@@ -920,18 +909,6 @@ namespace KUBOnlinePRPM.Controllers
                     getProcurement = (from m in db.Users
                                       join n in db.Users_Roles on m.userId equals n.userId
                                       where n.roleId == "R03" && (m.companyId == x.CustId || m.companyId == 2) && m.childCompanyId == getPRPreparerChildCustId.childCompanyId
-                                      select new PRModel()
-                                      {
-                                          UserId = m.userId,
-                                          FullName = m.firstName + " " + m.lastName,
-                                          EmailAddress = m.emailAddress
-                                      }).ToList();
-                }
-                else if (x.CustId == 4)
-                {
-                    //En. Bad as temporary procurement man for KUBgaz
-                    getProcurement = (from m in db.Users
-                                      where m.userId == 100
                                       select new PRModel()
                                       {
                                           UserId = m.userId,

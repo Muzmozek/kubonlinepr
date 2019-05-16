@@ -2176,18 +2176,6 @@ namespace KUBOnlinePRPM.Controllers
                                               EmailAddress = m.emailAddress
                                           }).ToList();
                     }
-                    else if (PR.CustId == 4)
-                    {
-                        //En. Bad as temporary procurement man for KUBgaz
-                        getProcurement = (from m in db.Users
-                                          where m.userId == 100
-                                          select new PRModel()
-                                          {
-                                              UserId = m.userId,
-                                              FullName = m.firstName + " " + m.lastName,
-                                              EmailAddress = m.emailAddress
-                                          }).ToList();
-                    }
                     else
                     {
                         getProcurement = (from m in db.Users
@@ -2449,18 +2437,6 @@ namespace KUBOnlinePRPM.Controllers
                         getProcurement = (from m in db.Users
                                           join n in db.Users_Roles on m.userId equals n.userId
                                           where n.roleId == "R03" && (m.companyId == objPRDetails.CustId || m.companyId == 2) && m.childCompanyId == getPRPreparerChildCustId.childCompanyId
-                                          select new PRModel()
-                                          {
-                                              UserId = m.userId,
-                                              FullName = m.firstName + " " + m.lastName,
-                                              EmailAddress = m.emailAddress
-                                          }).ToList();
-                    }
-                    else if (objPRDetails.CustId == 4)
-                    {
-                        //En. Bad as temporary procurement man for KUBgaz
-                        getProcurement = (from m in db.Users
-                                          where m.userId == 100
                                           select new PRModel()
                                           {
                                               UserId = m.userId,
@@ -3504,10 +3480,10 @@ namespace KUBOnlinePRPM.Controllers
                                        EmailAddress = m.emailAddress
                                    }).ToList();
 
-                    if (PRService.CheckAmountScenarioOne(amountBudget, PR.CustId) && PRService.IncludeInBudget(PR))
+                    if (PRService.CheckAmountScenarioOne(amountBudget, PR.CustId) && PRService.IncludeInBudget(PR, PR.CustId))
                     {
                         PR.Scenario = 1;
-                    } else if ((PRService.IncludeInBudget(PR) == false && PRService.CheckAmountScenarioOne(amountBudget, PR.CustId)) || PRService.CheckAmountScenarioTwo(amountBudget, PR.CustId))
+                    } else if ((PRService.IncludeInBudget(PR, PR.CustId) == false && PRService.CheckAmountScenarioOne(amountBudget, PR.CustId)) || PRService.CheckAmountScenarioTwo(amountBudget, PR.CustId))
                     {
                         PR.Scenario = 2;
                     } else if (PRService.CheckAmountScenarioThree(amountBudget, PR.CustId))
