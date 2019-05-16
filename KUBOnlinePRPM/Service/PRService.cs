@@ -19,7 +19,7 @@ namespace KUBOnlinePRPM.Service
         // check project amount
         public bool CheckAmountScenarioOne(decimal amount, int custId)
         {
-            if (amount <= 20000)
+            if (amount <= 20000 || custId == 1)
                 return true;
 
             return false;
@@ -48,9 +48,9 @@ namespace KUBOnlinePRPM.Service
             return false;
         }
 
-        public bool IncludeInBudget(PurchaseRequisition purchaseRequisition)
+        public bool IncludeInBudget(PurchaseRequisition purchaseRequisition, int custId)
         {
-            return (purchaseRequisition.Budgeted) ? true : false;
+            return (purchaseRequisition.Budgeted || custId == 1) ? true : false;
         }
 
         public HeirarchyModel populateUserList()
