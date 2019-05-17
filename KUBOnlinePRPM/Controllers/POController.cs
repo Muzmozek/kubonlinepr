@@ -1098,6 +1098,7 @@ namespace KUBOnlinePRPM.Controllers
                                           DeliveryDate = a.DeliveryDate,
                                           DiscountAmount = a.DiscountAmount,
                                           PurchaserCode = n.purchaserCode,
+                                          CompanyName = q.locationName,
                                           DeliveryTo = q.locationAddress + " " + q.locationCity + " " + q.PostCode + " " + q.State + " " + q.CountryRegionCode,
                                           AmountRequired = a.TotalPrice,
                                           TotalBeforeDisc = a.TotalExcSST + a.DiscountAmount,
