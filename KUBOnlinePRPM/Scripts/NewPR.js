@@ -461,13 +461,13 @@ $(document).on('ready', function () {
             //    fd.append(input.name, true);
             //else if (input.name === "NewPRForm.Budgeted" && input.value === "off")
             //    fd.append(input.name, false);
-            if (POType !== null && i < 19 && TestUser === true) {
+            if (POType !== null && i < 19 && TestUser === "True") {
                 fd.append(input.name, input.value);
-            } else if (POType !== null && i < 18 && TestUser === false) {
+            } else if (POType !== null && i < 18 && TestUser === "False") {
                 fd.append(input.name, input.value);
-            } else if (PRType === $("#NewPR").find("#PRType").val() && i < 13 && TestUser === true) {
+            } else if (PRType === $("#NewPR").find("#PRType").val() && i < 13 && TestUser === "True") {
                 fd.append(input.name, input.value);
-            }  else if (PRType === $("#NewPR").find("#PRType").val() && i < 12 && TestUser === false) {
+            } else if (PRType === $("#NewPR").find("#PRType").val() && i < 12 && TestUser === "False") {
                 fd.append(input.name, input.value);
             }        
         });              
@@ -595,13 +595,13 @@ $(document).on('ready', function () {
             //    fd.append(input.name, true);
             //else if (input.name === "NewPRForm.Budgeted" && input.value === "off")
             //    fd.append(input.name, false);
-            if (POType !== null && i < 19 && TestUser === true) {
+            if (POType !== null && i < 19 && TestUser === "True") {
                 fd.append(input.name, input.value);
-            } else if (POType !== null && i < 18 && TestUser === false) {
+            } else if (POType !== null && i < 18 && TestUser === "False") {
                 fd.append(input.name, input.value);
-            } else if (PRType === $("#NewPR").find("#PRType").val() && i < 13 && TestUser === true) {
+            } else if (PRType === $("#NewPR").find("#PRType").val() && i < 13 && TestUser === "True") {
                 fd.append(input.name, input.value);
-            } else if (PRType === $("#NewPR").find("#PRType").val() && i < 12 && TestUser === false) {
+            } else if (PRType === $("#NewPR").find("#PRType").val() && i < 12 && TestUser === "False") {
                 fd.append(input.name, input.value);
             }  
         });

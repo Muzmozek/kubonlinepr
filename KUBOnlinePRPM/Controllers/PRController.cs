@@ -1511,6 +1511,11 @@ namespace KUBOnlinePRPM.Controllers
                 ViewBag.VendorList = new SelectList(VendorListQuery.AsEnumerable(), "vendorId", "VendorName", PRDetail.NewPRForm.VendorId);
                 ViewBag.VendorStaffList = new SelectList(VendorStaffQuery.AsEnumerable(), "staffId", "VendorContactName", PRDetail.NewPRForm.VendorStaffId);
 
+                if (ConfigurationManager.AppSettings["TestUser"] == "true")
+                {
+                    PRDetail.TestUser = true;
+                }
+
                 return PartialView(PRDetail);
             }
             else
