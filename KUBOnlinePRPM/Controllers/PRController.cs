@@ -1044,6 +1044,11 @@ namespace KUBOnlinePRPM.Controllers
                                     Phase1Completed = m.Phase1Completed
                                 }).FirstOrDefault();
 
+            if (ConfigurationManager.AppSettings["TestUser"] == "true")
+            {
+                PRTabs.TestUser = true;
+            }
+
             return View(PRTabs);
         }
 
@@ -1505,11 +1510,6 @@ namespace KUBOnlinePRPM.Controllers
                 //ViewBag.ApproverNameList = new SelectList(ApproverNameQuery.AsEnumerable(), "approverId", "approverName", PRDetail.NewPRForm.ApproverId);
                 ViewBag.VendorList = new SelectList(VendorListQuery.AsEnumerable(), "vendorId", "VendorName", PRDetail.NewPRForm.VendorId);
                 ViewBag.VendorStaffList = new SelectList(VendorStaffQuery.AsEnumerable(), "staffId", "VendorContactName", PRDetail.NewPRForm.VendorStaffId);
-
-                if (ConfigurationManager.AppSettings["TestUser"] == "true")
-                {
-                    PRDetail.TestUser = true;
-                }
 
                 return PartialView(PRDetail);
             }

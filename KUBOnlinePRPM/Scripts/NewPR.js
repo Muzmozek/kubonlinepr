@@ -447,7 +447,7 @@ $(document).on('ready', function () {
 
     $(document).on("click", "#SaveNewPR, #SavePR", function (e) {       
         e.preventDefault();
-        var fd = new FormData(); var other_data; var PRType; var URL;
+        var fd = new FormData(); var other_data; var PRType; var URL; var newI = 0;
         if (POType === null) {
             PRType = $("#NewPR").find("#PRType").val(); 
         } else {
@@ -461,9 +461,13 @@ $(document).on('ready', function () {
             //    fd.append(input.name, true);
             //else if (input.name === "NewPRForm.Budgeted" && input.value === "off")
             //    fd.append(input.name, false);
-            if (POType !== null && i < 19) {
+            if (POType !== null && i < 19 && TestUser === true) {
                 fd.append(input.name, input.value);
-            } else if (PRType === $("#NewPR").find("#PRType").val() && i < 13) {
+            } else if (POType !== null && i < 18 && TestUser === false) {
+                fd.append(input.name, input.value);
+            } else if (PRType === $("#NewPR").find("#PRType").val() && i < 13 && TestUser === true) {
+                fd.append(input.name, input.value);
+            }  else if (PRType === $("#NewPR").find("#PRType").val() && i < 12 && TestUser === false) {
                 fd.append(input.name, input.value);
             }        
         });              
@@ -591,11 +595,15 @@ $(document).on('ready', function () {
             //    fd.append(input.name, true);
             //else if (input.name === "NewPRForm.Budgeted" && input.value === "off")
             //    fd.append(input.name, false);
-            if (POType !== null && i < 19) {
+            if (POType !== null && i < 19 && TestUser === true) {
                 fd.append(input.name, input.value);
-            } else if (PRType === $("#NewPR").find("#PRType").val() && i < 13) {
+            } else if (POType !== null && i < 18 && TestUser === false) {
                 fd.append(input.name, input.value);
-            }
+            } else if (PRType === $("#NewPR").find("#PRType").val() && i < 13 && TestUser === true) {
+                fd.append(input.name, input.value);
+            } else if (PRType === $("#NewPR").find("#PRType").val() && i < 12 && TestUser === false) {
+                fd.append(input.name, input.value);
+            }  
         });
         var data = PRItemTable.$("tbody tr");
         var ItemsId; openHiddenPRItemTable();
