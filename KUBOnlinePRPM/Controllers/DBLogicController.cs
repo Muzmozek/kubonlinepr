@@ -908,7 +908,7 @@ namespace KUBOnlinePRPM.Controllers
                 {
                     getProcurement = (from m in db.Users
                                       join n in db.Users_Roles on m.userId equals n.userId
-                                      where n.roleId == "R03" && (m.companyId == x.CustId || m.companyId == 2) && m.childCompanyId == getPRPreparerChildCustId.childCompanyId
+                                      where n.roleId == "R03" && (m.companyId == x.CustId || (m.companyId == 2 && m.childCompanyId == getPRPreparerChildCustId.childCompanyId))
                                       select new PRModel()
                                       {
                                           UserId = m.userId,
