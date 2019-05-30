@@ -1,7 +1,7 @@
 ﻿@model KUBOnlinePRPM.Models.PRModel
 
-@*@if (Model.NewPRForm.StatusId == "PR06" || Model.NewPRForm.StatusId == "PR14")
-{*@
+@if (Model.NewPRForm.StatusId == "PR06" || Model.NewPRForm.StatusId == "PR14")
+{
     <div class="row container-fluid">
         @*<div class="media-body align-self-center text-left">
                 <h3 class="g-font-weight-300 g-font-size-20 g-color-black">PR Online Summary (2018)</h3>
@@ -14,7 +14,7 @@
             </a>
         </div>
     </div>
-@*}*@
+}
 
 @using (Html.BeginForm("PRDetails", "PR", FormMethod.Post, new { @id = "PRDetails", @class = "checkFiles container-fluid g-mb-40" }))
 {

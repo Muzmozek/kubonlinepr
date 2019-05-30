@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-    //generatePRFileTable();
+    generatePRFileTable();
 
     var modal = new Custombox.modal({
         content: {

@@ -79,7 +79,7 @@
             }
         });
         var data = PRItemTable.$("tr");
-        var ItemsId; openHiddenPRItemTable();
+        var ItemsId;
         $.each(data, function (i, input) {
             if ($(PRItemTable.row(i).data()[0]).val() === "") {
                 ItemsId = 0;
@@ -152,7 +152,7 @@
                     if (resp.success === true) {
                         alert(resp.message);
                         $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
-                            generatePRItemTable();
+                            openHiddenPRItemTable();
                         });
                         $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
                             $("body").removeClass("loading");
