@@ -567,7 +567,7 @@
             @*@if (Model.NewPRForm.StatusId != "PR19" && Model.NewPRForm.StatusId != "PR01" && Session["ifFinance"] == null && Session["ifRequestor"] == null)*@
             @*@if (Model.NewPRForm.Phase1Completed == true)
         {*@
-            @if (Model.TestUser == true)
+            @if (Model.TestBudget == true)
             {
                 <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
                     <section>
@@ -1107,7 +1107,8 @@
 
                                 @if (Model.NewPRForm.StatusId == "PR02" && Model.NewPRForm.AdminId != 0)
                                 {
-                                    <a id="SavePreparedProcurement" class="saveSubmitProcDetail btn btn-md u-btn-white g-mr-5 g-mb-15">SAVE</a>
+                                    @*<a id="CalculateTotal" class="btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">Calculate TOTAL</a>*@
+                                    <a id="SavePreparedProcurement" class="saveSubmitProcDetail btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">SAVE</a>
                                     <a id="CancelPRProcurement" class="CancelPR btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">REJECT</a>
                                     <a id="SubmitPreparedProcurement" class="saveSubmitProcDetail btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">SUBMIT</a>
                                 }

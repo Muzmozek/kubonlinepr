@@ -1,7 +1,7 @@
 ﻿$(document).ready(function () {
-    $("body").removeClass("loading");
-    $.HSCore.components.HSFileAttachment.init('.js-file-attachment');
-    $.HSCore.helpers.HSFocusState.init();
+    //$("body").removeClass("loading");
+    //$.HSCore.components.HSFileAttachment.init('.js-file-attachment');
+    //$.HSCore.helpers.HSFocusState.init();
     //generatePRItemTable();
 
     $.ajaxSetup({
@@ -22,6 +22,38 @@
     //        effect: 'fadein',
     //        target: '#UploadProgressModal'
     //    }
+    //});
+
+    //$(document).on("click", "#CalculateTotal", function (e) {
+    //    var DiscountAmount = parseFloat(0); var TotalIncSST = parseFloat(0); var TotalSST = parseFloat(0); var AmountRequired = parseFloat(0);
+    //    for (var i = 1; i <= $(".CodeId").length; i++) {
+    //        if ($(".child #TotalPrice" + i).val() !== "" && $(".child #TotalPrice" + i).val() !== undefined) {
+    //            AmountRequired = (parseFloat(AmountRequired) + parseFloat($(".child #TotalPrice" + i).val())).toFixed(2);
+    //        } else {
+    //            AmountRequired = (parseFloat(AmountRequired) + 0).toFixed(2);
+    //        }
+    //        if ($(".child #TotalPriceIncSST" + i).val() !== "" && $(".child #TotalPriceIncSST" + i).val() !== undefined) {
+    //            TotalIncSST = (parseFloat(TotalIncSST) + parseFloat($(".child #TotalPriceIncSST" + i).val())).toFixed(2);
+    //        } else {
+    //            TotalIncSST = (parseFloat(TotalIncSST) + 0).toFixed(2);
+    //        }
+    //        if ($(".child #TotalPriceIncSST" + i).val() !== "" && $(".child #TotalPriceIncSST" + i).val() !== undefined && $(".child #TotalPrice" + i).val() !== undefined && $(".child #TotalPrice" + i).val() !== "") {
+    //            TotalSST = (parseFloat(TotalSST) + parseFloat($(".child #TotalPriceIncSST" + i).val() - $(".child #TotalPrice" + i).val())).toFixed(2);
+    //        } else {
+    //            TotalSST = (parseFloat(TotalSST)).toFixed(2);
+    //        }
+    //    }
+
+    //    if ($("#DiscountAmount").val() !== "") {
+    //        DiscountAmount = parseFloat($("#DiscountAmount").val());
+    //    }
+    //    var DiscountPerc = parseFloat(DiscountAmount / AmountRequired * 100).toFixed(2);
+    //    var TotalExcSST = parseFloat(AmountRequired - DiscountAmount).toFixed(2);
+    //    var TotalIncSST1 = parseFloat(TotalIncSST - DiscountAmount).toFixed(2);
+    //    $("#DiscountPerc").val(parseInt(DiscountPerc));
+    //    $("#TotalExclSST").val(TotalExcSST);
+    //    $("#TotalSST").val(TotalSST);
+    //    $("#TotalIncSST").val(TotalIncSST1);
     //});
 
     $(document).on("click", ".saveSubmitProcDetail", function (e) {
@@ -566,8 +598,8 @@
                 PRCustId: $("#CustId").val()
             },
             success: function (resp) {
-                var DiscountAmount = parseFloat(0); var UnitPrice = parseFloat(0); var TotalPrice = parseFloat(0);
-                openHiddenPRItemTable();
+                var UnitPrice = parseFloat(0); var TotalPrice = parseFloat(0);
+                //openHiddenPRItemTable();
                 if ($(".child #UnitPrice" + selectlistid).val() !== "") {
                     UnitPrice = parseFloat($(".child #UnitPrice" + selectlistid).val());
                 }
@@ -582,47 +614,18 @@
                 var TotalPriceIncSST = TotalPrice + (resp.TaxCodeInfo.SST / 100 * TotalPrice);
                 $("input", cell1).val(TotalPriceIncSST);
 
-                var TotalIncSST = parseFloat(0); var TotalSST = parseFloat(0); var AmountRequired = parseFloat(0);
-
                 //$(".child #TaxCodeId + " + selectlistid + " select").val(TaxCodeId);
                 $(".child #UnitPriceIncSST" + selectlistid).val(UnitPriceIncSST);
                 $(".child #TotalPriceIncSST" + selectlistid).val(TotalPriceIncSST);                
-                for (var i = 1; i <= $(".CodeId").length; i++) {                   
-                    if ($(".child #TotalPrice" + i).val() !== "" && $(".child #TotalPrice" + i).val() !== undefined) {
-                        AmountRequired = (parseFloat(AmountRequired) + parseFloat($(".child #TotalPrice" + i).val())).toFixed(2);
-                    } else {
-                        AmountRequired = (parseFloat(AmountRequired) + 0).toFixed(2);
-                    }
-                    if ($(".child #TotalPriceIncSST" + i).val() !== "" && $(".child #TotalPriceIncSST" + i).val() !== undefined) {
-                        TotalIncSST = (parseFloat(TotalIncSST) + parseFloat($(".child #TotalPriceIncSST" + i).val())).toFixed(2);
-                    } else {
-                        TotalIncSST = (parseFloat(TotalIncSST) + 0).toFixed(2);
-                    }
-                    if ($(".child #TotalPriceIncSST" + i).val() !== "" && $(".child #TotalPriceIncSST" + i).val() !== undefined && $(".child #TotalPrice" + i).val() !== undefined && $(".child #TotalPrice" + i).val() !== "") {
-                        TotalSST = (parseFloat(TotalSST) + parseFloat($(".child #TotalPriceIncSST" + i).val() - $(".child #TotalPrice" + i).val())).toFixed(2);
-                    } else {
-                        TotalSST = (parseFloat(TotalSST)).toFixed(2);
-                    }
-                }
-                
-                if ($("#DiscountAmount").val() !== "") {
-                    DiscountAmount = parseFloat($("#DiscountAmount").val());
-                }
-                var DiscountPerc = parseFloat(DiscountAmount / AmountRequired * 100).toFixed(2);
-                var TotalExcSST = parseFloat(AmountRequired - DiscountAmount).toFixed(2);
-                var TotalIncSST1 = parseFloat(TotalIncSST - DiscountAmount).toFixed(2);
-                $("#DiscountPerc").val(parseInt(DiscountPerc));
-                $("#TotalExclSST").val(TotalExcSST);
-                $("#TotalSST").val(TotalSST);
-                $("#TotalIncSST").val(TotalIncSST1);
-                generatePRItemTable();
+                //generatePRItemTable();
+                calculateTotal();
                 $("body").removeClass("loading");
             }
         });
     });
 
     $(document).on("change", ".child .UnitPrice", function () {
-        var UnitPrice = parseFloat($(this).val()); var DiscountAmount = parseFloat(0); var TaxCodeId = 0;
+        var UnitPrice = parseFloat($(this).val()); var TaxCodeId = 0;
         var selectlistid = $(this)[0].id.substring(9, $(this)[0].id.length);
         var Quantity = $("#Quantity" + selectlistid).val();        
         var TotalPrice = parseFloat(UnitPrice * Quantity /*+ parseFloat(SST)*/);
@@ -637,10 +640,9 @@
                 PRCustId: $("#CustId").val()
             },
             success: function (resp) {
-                var AmountRequired = parseFloat(0); var TotalIncSST = parseFloat(0); var TotalSST = parseFloat(0);
                 var UnitPriceIncSST = (UnitPrice + (resp.TaxCodeInfo.SST / 100 * UnitPrice)).toFixed(2);
                 var TotalPriceIncSST = (TotalPrice + (resp.TaxCodeInfo.SST / 100 * TotalPrice)).toFixed(2);  
-                openHiddenPRItemTable();
+                //openHiddenPRItemTable();
                 $(".child #UnitPriceIncSST" + selectlistid).val(UnitPriceIncSST);
                 $(".child #TotalPriceIncSST" + selectlistid).val(TotalPriceIncSST);
                 $(".child #TotalPrice" + selectlistid).val(TotalPrice);       
@@ -648,36 +650,9 @@
                 var cell1 = PRItemTable.cell({ row: selectlistid - 1, column: 13 }).node();
                 //$(".child #UnitPriceIncSST" + selectlistid, cell).val(UnitPriceIncSST);
                 $("input", cell1).val(TotalPriceIncSST);
-                $('input', cell).val(TotalPrice);
-                for (var i = 1; i <= $(".CodeId").length; i++) {
-                    if ($(".child #TotalPrice" + i).val() !== "" && $(".child #TotalPrice" + i).val() !== undefined ) {
-                        AmountRequired = (parseFloat(AmountRequired) + parseFloat($(".child #TotalPrice" + i).val())).toFixed(2);
-                    } else {
-                        AmountRequired = (parseFloat(AmountRequired) + 0).toFixed(2);
-                    }
-                    if ($(".child #TotalPriceIncSST" + i).val() !== "" && $(".child #TotalPriceIncSST" + i).val() !== undefined) {
-                        TotalIncSST = (parseFloat(TotalIncSST) + parseFloat($(".child #TotalPriceIncSST" + i).val())).toFixed(2);
-                    } else {
-                        TotalIncSST = (parseFloat(TotalIncSST) + 0).toFixed(2);
-                    }
-                    if ($(".child #TotalPriceIncSST" + i).val() !== "" && $(".child #TotalPriceIncSST" + i).val() !== undefined && $(".child #TotalPrice" + i).val() !== undefined  && $(".child #TotalPrice" + i).val() !== "") {
-                        TotalSST = (parseFloat(TotalSST) + parseFloat($(".child #TotalPriceIncSST" + i).val() - $(".child #TotalPrice" + i).val())).toFixed(2);
-                    } else {
-                        TotalSST = (parseFloat(TotalSST)).toFixed(2);
-                    }
-                }
-                
-                if ($("#DiscountAmount").val() !== "") {
-                    DiscountAmount = parseFloat($("#DiscountAmount").val());
-                }
-                var DiscountPerc = parseFloat(DiscountAmount / AmountRequired * 100).toFixed(2);
-                var TotalExcSST = parseFloat(AmountRequired - DiscountAmount).toFixed(2);
-                var TotalIncSST1 = parseFloat(TotalIncSST - DiscountAmount).toFixed(2);
-                $("#DiscountPerc").val(parseInt(DiscountPerc));
-                $("#TotalExclSST").val(TotalExcSST);
-                $("#TotalSST").val(TotalSST);
-                $("#TotalIncSST").val(TotalIncSST1);
-                generatePRItemTable();
+                $('input', cell).val(TotalPrice);               
+                //generatePRItemTable();
+                calculateTotal();
                 $("body").removeClass("loading");
             }
         });        
@@ -686,35 +661,14 @@
     $(document).on("change", "#DiscountAmount", function () {
         var DiscountAmount = parseFloat($(this).val());
         //$("body").addClass("loading");
-        openHiddenPRItemTable();
+        //openHiddenPRItemTable();
         //var Quantity = $("#Quantity" + $(this)[0].id.substring(9, $(this)[0].id.length)).val();
         //var SST = $(".child #SST" + $(this)[0].id.substring(9, $(this)[0].id.length)).val();
         //if (SST === "") {
         //    SST = 0;
         //}
-        var AmountRequired = parseFloat(0); var TotalSST = parseFloat(0);
-        //$(".child #TotalPrice" + $(this)[0].id.substring(9, $(this)[0].id.length)).val(TotalPrice);
-        for (var i = 1; i <= $(".CodeId").length; i++) {
-            if ($(".child #TotalPrice" + i).val() !== "" && $(".child #TotalPrice" + i).val() !== undefined) {
-                AmountRequired = (parseFloat(AmountRequired) + parseFloat($(".child #TotalPrice" + i).val())).toFixed(2);
-            } else {
-                AmountRequired = (parseFloat(AmountRequired) + 0).toFixed(2);
-            }
-            if ($(".child #TotalPriceIncSST" + i).val() !== "" && $(".child #TotalPriceIncSST" + i).val() !== undefined && $(".child #TotalPrice" + i).val() !== undefined && $(".child #TotalPrice" + i).val() !== "") {
-                TotalSST = (parseFloat(TotalSST) + parseFloat($(".child #TotalPriceIncSST" + i).val() - $(".child #TotalPrice" + i).val()));
-            } else {
-                TotalSST = (parseFloat(TotalSST));
-            }
-        }
-        var DiscountPerc = parseFloat(DiscountAmount / AmountRequired * 100).toFixed(2);
-        var TotalExcSST = parseFloat(AmountRequired - DiscountAmount);
-        var TotalIncSST = parseFloat(TotalExcSST + TotalSST).toFixed(2);
-        $("#AmountRequired").val(AmountRequired);
-        $("#DiscountPerc").val(parseInt(DiscountPerc));
-        $("#TotalExclSST").val(TotalExcSST.toFixed(2));
-        $("#TotalSST").val(TotalSST.toFixed(2));
-        $("#TotalIncSST").val(TotalIncSST);
-        generatePRItemTable();
+        calculateTotal();
+        //generatePRItemTable();
         //$("body").removeClass("loading");
     });
 

@@ -103,7 +103,7 @@ namespace KUBOnlinePRPM.Controllers
                     db.Budgets.Add(createBudget);
                     db.SaveChanges();
 
-                    if (ConfigurationManager.AppSettings["TestUser"] == "true")
+                    if (ConfigurationManager.AppSettings["TestBudget"] == "true")
                     {
                         var AmountInProgress = db.Budgets.Select(m => new { CodeId = m.codeId, initialUtilized = m.initialUtilized, utilized = m.utilized }).Where(m => m.CodeId == value.CodeId.Value && m.utilized == false).GroupBy(m => m.CodeId).Select(n => new { total = n.Sum(o => o.initialUtilized) }).SingleOrDefault();
                         var updateProgress = db.Budgets.Where(m => m.codeId == value.CodeId.Value).ToList();
@@ -455,10 +455,10 @@ namespace KUBOnlinePRPM.Controllers
             //    db.NotificationMsgs.Add(_objDetails_AmountRequired);
             //    FormerPRDetails.AmountRequired = x.NewPRForm.AmountRequired;
             //}
-            if (ConfigurationManager.AppSettings["TestUser"] == "true")
+            if (ConfigurationManager.AppSettings["TestBudget"] == "true")
             {
                 Budget FormerBudget = db.Budgets.FirstOrDefault(m => m.PRId == x.PRId);
-                if (FormerBudget != null && ConfigurationManager.AppSettings["TestUser"] == "true")
+                if (FormerBudget != null && ConfigurationManager.AppSettings["TestBudget"] == "true")
                 {
                     FormerBudget.progress = x.NewPRForm.AmountInProgress.Value;
                 }

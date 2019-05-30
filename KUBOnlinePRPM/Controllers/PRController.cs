@@ -528,9 +528,9 @@ namespace KUBOnlinePRPM.Controllers
                 i++;
             }
 
-            if (ConfigurationManager.AppSettings["TestUser"] == "true")
+            if (ConfigurationManager.AppSettings["TestBudget"] == "true")
             {
-                model.TestUser = true;
+                model.TestBudget = true;
             }
 
             return View(model);
@@ -1044,9 +1044,9 @@ namespace KUBOnlinePRPM.Controllers
                                     Phase1Completed = m.Phase1Completed
                                 }).FirstOrDefault();
 
-            if (ConfigurationManager.AppSettings["TestUser"] == "true")
+            if (ConfigurationManager.AppSettings["TestBudget"] == "true")
             {
-                PRTabs.TestUser = true;
+                PRTabs.TestBudget = true;
             }
 
             return View(PRTabs);
@@ -1511,9 +1511,9 @@ namespace KUBOnlinePRPM.Controllers
                 ViewBag.VendorList = new SelectList(VendorListQuery.AsEnumerable(), "vendorId", "VendorName", PRDetail.NewPRForm.VendorId);
                 ViewBag.VendorStaffList = new SelectList(VendorStaffQuery.AsEnumerable(), "staffId", "VendorContactName", PRDetail.NewPRForm.VendorStaffId);
 
-                if (ConfigurationManager.AppSettings["TestUser"] == "true")
+                if (ConfigurationManager.AppSettings["TestBudget"] == "true")
                 {
-                    PRDetail.TestUser = true;
+                    PRDetail.TestBudget = true;
                 }
 
                 return PartialView(PRDetail);

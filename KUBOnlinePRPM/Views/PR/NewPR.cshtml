@@ -330,7 +330,7 @@
                 </div>
             </section>
         </div>*@
-            @if (Model.TestUser == true)
+            @if (Model.TestBudget == true)
             {
                 <div class="g-brd-around g-brd-gray-light-v7 g-rounded-4 g-pa-5 g-pa-5--md">
                     <section>
@@ -543,7 +543,8 @@
         var UrlItemCodeInfo = "@Url.Action("GetItemCodeInfo", "PR")";
         var POType = null;
         var UrlGetUoM = "@Url.Action("GetUoM", "PR")";
-        var TestUser = "@Model.TestUser";
+        var TestBudget = "@Model.TestBudget";
+        var ifProcurement = "@Session["ifProcurement"]";
     </script>
     <script src="~/Scripts/NewPR.js"></script>
     <script src="~/Scripts/PRDetails.js"></script>

@@ -153,21 +153,21 @@ function generatePRItemTable() {
 }
 
 function openHiddenPRItemTable() {
+    //Custombox.modal.open();
     if (POType !== null && Phase1Completed === "True") {
         PRItemTable = $('#PRItemTable').DataTable({
             serverSide: false,
             //dom: 'frtiS',
-            processing: true,
             deferRender: true,
             ordering: false,
             paging: false,
             searching: false,
             bAutoWidth: false,
-            stateSave: true,
+            stateSave: false,
             columnDefs: [
                 { visible: false, targets: [0] }
                 , {
-                    targets: [4, 5, 8, 9, 10, 11, 12, 13, 14,15],
+                    targets: [4, 5, 8, 9, 10, 11, 12, 13, 14, 15],
                     render: function (data, type, row, meta) {
                         if (type === 'display') {
                             var api = new $.fn.dataTable.Api(meta.settings);
@@ -229,13 +229,12 @@ function openHiddenPRItemTable() {
         PRItemTable = $('#PRItemTable').DataTable({
             serverSide: false,
             //dom: 'frtiS',
-            processing: true,
             deferRender: true,
             ordering: false,
             paging: false,
             searching: false,
             bAutoWidth: false,
-            stateSave: true,
+            stateSave: false,
             columnDefs: [
                 { visible: false, targets: [0] }
                 , {
@@ -298,14 +297,15 @@ function openHiddenPRItemTable() {
             }
         });
     }
+    //Custombox.modal.close();
 }
 
 function generatePRFileTable() {
     PRFileTable = $('#PRFileTable').DataTable({
         serverSide: false,
         //dom: 'frtiS',
-        processing: true,
-        deferRender: true,
+        processing: false,
+        deferRender: false,
         ordering: false,
         paging: false,
         searching: false,
@@ -325,10 +325,46 @@ function generatePRFileTable() {
     });
 }
 
+function calculateTotal() {
+    var DiscountAmount = parseFloat(0); var TotalIncSST = parseFloat(0); var TotalSST = parseFloat(0); var AmountRequired = parseFloat(0);
+    for (var i = 1; i <= $(".CodeId").length; i++) {
+        if ($(".child #TotalPrice" + i).val() !== "" && $(".child #TotalPrice" + i).val() !== undefined) {
+            AmountRequired = (parseFloat(AmountRequired) + parseFloat($(".child #TotalPrice" + i).val())).toFixed(2);
+        } else {
+            AmountRequired = (parseFloat(AmountRequired) + 0).toFixed(2);
+        }
+        if ($(".child #TotalPriceIncSST" + i).val() !== "" && $(".child #TotalPriceIncSST" + i).val() !== undefined) {
+            TotalIncSST = (parseFloat(TotalIncSST) + parseFloat($(".child #TotalPriceIncSST" + i).val())).toFixed(2);
+        } else {
+            TotalIncSST = (parseFloat(TotalIncSST) + 0).toFixed(2);
+        }
+        if ($(".child #TotalPriceIncSST" + i).val() !== "" && $(".child #TotalPriceIncSST" + i).val() !== undefined && $(".child #TotalPrice" + i).val() !== undefined && $(".child #TotalPrice" + i).val() !== "") {
+            TotalSST = (parseFloat(TotalSST) + parseFloat($(".child #TotalPriceIncSST" + i).val() - $(".child #TotalPrice" + i).val())).toFixed(2);
+        } else {
+            TotalSST = (parseFloat(TotalSST)).toFixed(2);
+        }
+    }
+
+    if ($("#DiscountAmount").val() !== "") {
+        DiscountAmount = parseFloat($("#DiscountAmount").val());
+    }
+    var DiscountPerc = parseFloat(DiscountAmount / AmountRequired * 100).toFixed(2);
+    var TotalExcSST = parseFloat(AmountRequired - DiscountAmount).toFixed(2);
+    var TotalIncSST1 = parseFloat(TotalIncSST - DiscountAmount).toFixed(2);
+    $("#DiscountPerc").val(parseInt(DiscountPerc));
+    $("#TotalExclSST").val(TotalExcSST);
+    $("#TotalSST").val(TotalSST);
+    $("#TotalIncSST").val(TotalIncSST1);
+}
+
 $(document).on('ready', function () {
     $.HSCore.components.HSFileAttachment.init('.js-file-attachment');
     $.HSCore.helpers.HSFocusState.init();
-    generatePRItemTable();
+    if (ifProcurement != "") {
+        openHiddenPRItemTable();
+    } else {
+        generatePRItemTable();
+    }
 
     $('#PRItemTable tbody').on('keyup change', '.child input, .child select, .child textarea', function (e) {
         var $el = $(this);
@@ -461,13 +497,13 @@ $(document).on('ready', function () {
             //    fd.append(input.name, true);
             //else if (input.name === "NewPRForm.Budgeted" && input.value === "off")
             //    fd.append(input.name, false);
-            if (POType !== null && i < 19 && TestUser === "True") {
+            if (POType !== null && i < 19 && TestBudget === "True") {
                 fd.append(input.name, input.value);
-            } else if (POType !== null && i < 18 && TestUser === "False") {
+            } else if (POType !== null && i < 18 && TestBudget === "False") {
                 fd.append(input.name, input.value);
-            } else if (PRType === $("#NewPR").find("#PRType").val() && i < 13 && TestUser === "True") {
+            } else if (PRType === $("#NewPR").find("#PRType").val() && i < 13 && TestBudget === "True") {
                 fd.append(input.name, input.value);
-            } else if (PRType === $("#NewPR").find("#PRType").val() && i < 12 && TestUser === "False") {
+            } else if (PRType === $("#NewPR").find("#PRType").val() && i < 12 && TestBudget === "False") {
                 fd.append(input.name, input.value);
             }        
         });              
@@ -595,13 +631,13 @@ $(document).on('ready', function () {
             //    fd.append(input.name, true);
             //else if (input.name === "NewPRForm.Budgeted" && input.value === "off")
             //    fd.append(input.name, false);
-            if (POType !== null && i < 19 && TestUser === "True") {
+            if (POType !== null && i < 19 && TestBudget === "True") {
                 fd.append(input.name, input.value);
-            } else if (POType !== null && i < 18 && TestUser === "False") {
+            } else if (POType !== null && i < 18 && TestBudget === "False") {
                 fd.append(input.name, input.value);
-            } else if (PRType === $("#NewPR").find("#PRType").val() && i < 13 && TestUser === "True") {
+            } else if (PRType === $("#NewPR").find("#PRType").val() && i < 13 && TestBudget === "True") {
                 fd.append(input.name, input.value);
-            } else if (PRType === $("#NewPR").find("#PRType").val() && i < 12 && TestUser === "False") {
+            } else if (PRType === $("#NewPR").find("#PRType").val() && i < 12 && TestBudget === "False") {
                 fd.append(input.name, input.value);
             }  
         });

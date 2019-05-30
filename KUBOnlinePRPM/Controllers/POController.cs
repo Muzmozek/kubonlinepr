@@ -886,7 +886,7 @@ namespace KUBOnlinePRPM.Controllers
                     updatePO.DeliveryDate = DeliveryDate;
                     updatePO.StatusId = "PO03";
 
-                    if (ConfigurationManager.AppSettings["TestUser"] == "true")
+                    if (ConfigurationManager.AppSettings["TestBudget"] == "true")
                     {
                         GL updateGL = db.GLs.First(m => m.codeId == getCodeId);
                         if (updateGL.budgetAmount != null)
