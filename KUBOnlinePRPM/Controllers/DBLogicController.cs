@@ -173,8 +173,7 @@ namespace KUBOnlinePRPM.Controllers
                 if (model.CustId == 3 && getPRPreparerChildCustId.childCompanyId == 16)
                 {
                     getProcurement = (from m in db.Users
-                                      join n in db.Users_Roles on m.userId equals n.userId
-                                      where n.roleId == "R03" && (m.companyId == model.CustId || m.companyId == 2) && m.childCompanyId == getPRPreparerChildCustId.childCompanyId
+                                      where m.userId == 210 || m.userId == 89
                                       select new PRModel()
                                       {
                                           UserId = m.userId,
@@ -907,8 +906,7 @@ namespace KUBOnlinePRPM.Controllers
                 if (x.CustId == 3 && getPRPreparerChildCustId.childCompanyId == 16)
                 {
                     getProcurement = (from m in db.Users
-                                      join n in db.Users_Roles on m.userId equals n.userId
-                                      where n.roleId == "R03" && (m.companyId == x.CustId || (m.companyId == 2 && m.childCompanyId == getPRPreparerChildCustId.childCompanyId))
+                                      where m.userId == 210 || m.userId == 89
                                       select new PRModel()
                                       {
                                           UserId = m.userId,

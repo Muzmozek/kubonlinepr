@@ -2172,8 +2172,7 @@ namespace KUBOnlinePRPM.Controllers
                     if (PR.CustId == 3 && getPRPreparerChildCustId.childCompanyId == 16)
                     {
                         getProcurement = (from m in db.Users
-                                          join n in db.Users_Roles on m.userId equals n.userId
-                                          where n.roleId == "R03" && (m.companyId == PR.CustId || m.companyId == 2) && m.childCompanyId == getPRPreparerChildCustId.childCompanyId
+                                          where m.userId == 210 || m.userId == 89
                                           select new PRModel()
                                           {
                                               UserId = m.userId,
@@ -2440,8 +2439,7 @@ namespace KUBOnlinePRPM.Controllers
                     if (objPRDetails.CustId == 3 && getPRPreparerChildCustId.childCompanyId == 16)
                     {
                         getProcurement = (from m in db.Users
-                                          join n in db.Users_Roles on m.userId equals n.userId
-                                          where n.roleId == "R03" && (m.companyId == objPRDetails.CustId || m.companyId == 2) && m.childCompanyId == getPRPreparerChildCustId.childCompanyId
+                                          where m.userId == 210 || m.userId == 89
                                           select new PRModel()
                                           {
                                               UserId = m.userId,
@@ -4400,7 +4398,7 @@ namespace KUBOnlinePRPM.Controllers
                 }
                 else
                 {
-                    int CustId = db.Projects.First(m => m.custId == PR.CustId).custId;
+                    int CustId = db.Projects.First(m => m.projectId == PR.ProjectId).custId;
                     switch (PR.Scenario)
                     {                       
                         case 3:
@@ -4726,7 +4724,7 @@ namespace KUBOnlinePRPM.Controllers
                 getDone.done = true;
                 db.SaveChanges();
 
-                int CustId = db.Projects.First(m => m.custId == PR.CustId).custId;
+                int CustId = db.Projects.First(m => m.projectId == PR.ProjectId).custId;
                 var getRecommenderII = new List<PRModel>();
                 switch (CustId)
                 {
@@ -4998,8 +4996,7 @@ namespace KUBOnlinePRPM.Controllers
                     if (PR.CustId == 3 && getPRPreparerChildCustId.childCompanyId == 16)
                     {
                         getProcurement = (from m in db.Users
-                                          join n in db.Users_Roles on m.userId equals n.userId
-                                          where n.roleId == "R03" && (m.companyId == PR.CustId || m.companyId == 2) && m.childCompanyId == getPRPreparerChildCustId.childCompanyId
+                                          where m.userId == 210 && m.userId == 89
                                           select new PRModel()
                                           {
                                               UserId = m.userId,
@@ -5437,20 +5434,7 @@ namespace KUBOnlinePRPM.Controllers
                 if (UpdatePRStatus.CustId == 3 && getPRPreparerChildCustId.childCompanyId == 16)
                 {
                     getProcurement = (from m in db.Users
-                                      join n in db.Users_Roles on m.userId equals n.userId
-                                      where n.roleId == "R03" && (m.companyId == UpdatePRStatus.CustId || m.companyId == 2) && m.childCompanyId == getPRPreparerChildCustId.childCompanyId
-                                      select new PRModel()
-                                      {
-                                          UserId = m.userId,
-                                          FullName = m.firstName + " " + m.lastName,
-                                          EmailAddress = m.emailAddress
-                                      }).ToList();
-                }
-                else if (UpdatePRStatus.CustId == 4)
-                {
-                    //En. Bad as temporary procurement man for KUBgaz
-                    getProcurement = (from m in db.Users
-                                      where m.userId == 100
+                                      where m.userId == 210 && m.userId == 89
                                       select new PRModel()
                                       {
                                           UserId = m.userId,
