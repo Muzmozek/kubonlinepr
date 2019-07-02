@@ -4989,8 +4989,8 @@ namespace KUBOnlinePRPM.Controllers
                 getDone.done = true;
                 db.SaveChanges();
 
-                if (PRType != "Blanket")
-                {
+                //if (PRType != "Blanket")
+                //{
                     var getPRPreparerChildCustId = db.Users.First(m => m.userId == PR.PreparedById);
                     var getProcurement = new List<PRModel>();
                     if (PR.CustId == 3 && getPRPreparerChildCustId.childCompanyId == 16)
@@ -5040,6 +5040,19 @@ namespace KUBOnlinePRPM.Controllers
                     db.NotificationMsgs.Add(objTask);
                     db.SaveChanges();
 
+                    NotificationMsg _objSendMessage = new NotificationMsg
+                    {
+                        uuid = Guid.NewGuid(),
+                        //POId = PR.poi,
+                        PRId = PR.PRId,
+                        msgDate = DateTime.Now,
+                        fromUserId = Int32.Parse(Session["UserId"].ToString()),
+                        message = Session["FullName"].ToString() + " has approved the PR No: " + PR.PRNo + " application. ",
+                        msgType = "Trail"
+                    };
+                    db.NotificationMsgs.Add(_objSendMessage);
+                    db.SaveChanges();
+
                     foreach (var item in getProcurement)
                     {
                         NotiGroup Task = new NotiGroup()
@@ -5061,30 +5074,56 @@ namespace KUBOnlinePRPM.Controllers
                         x.NewPRForm.ApproverName = item.FullName;
                         SendEmailPRNotification(x, "ToProcurementNoti");
                     }
-                }
-                else
-                {
-                    NotificationMsg objTask = new NotificationMsg()
-                    {
-                        uuid = Guid.NewGuid(),
-                        message = PR.PRNo + " pending for you to issue new PO (blanket)",
-                        fromUserId = Int32.Parse(Session["UserId"].ToString()),
-                        msgDate = DateTime.Now,
-                        msgType = "Task",
-                        PRId = PrId
-                    };
-                    db.NotificationMsgs.Add(objTask);
-                    db.SaveChanges();
+                //}
+                //else
+                //{
+                //    NotificationMsg objTask = new NotificationMsg()
+                //    {
+                //        uuid = Guid.NewGuid(),
+                //        message = PR.PRNo + " pending for you to issue new PO (blanket)",
+                //        fromUserId = Int32.Parse(Session["UserId"].ToString()),
+                //        msgDate = DateTime.Now,
+                //        msgType = "Task",
+                //        PRId = PrId
+                //    };
+                //    db.NotificationMsgs.Add(objTask);
+                //    db.SaveChanges();
 
-                    NotiGroup Task = new NotiGroup()
-                    {
-                        uuid = Guid.NewGuid(),
-                        msgId = objTask.msgId,
-                        toUserId = PR.PreparedById
-                    };
-                    db.NotiGroups.Add(Task);
-                    db.SaveChanges();
-                }
+                //    NotificationMsg _objSendMessage = new NotificationMsg
+                //    {
+                //        uuid = Guid.NewGuid(),
+                //        //POId = PR.poi,
+                //        PRId = PR.PRId,
+                //        msgDate = DateTime.Now,
+                //        fromUserId = Int32.Parse(Session["UserId"].ToString()),
+                //        message = Session["FullName"].ToString() + " has approved the PR No: " + PR.PRNo + " application. ",
+                //        msgType = "Trail"
+                //    };
+                //    db.NotificationMsgs.Add(_objSendMessage);
+                //    db.SaveChanges();
+
+                //    foreach (var item in getProcurement)
+                //    {
+                //        NotiGroup Task = new NotiGroup()
+                //        {
+                //            uuid = Guid.NewGuid(),
+                //            msgId = objTask.msgId,
+                //            toUserId = item.UserId
+                //        };
+                //        db.NotiGroups.Add(Task);
+                //        db.SaveChanges();
+
+                //        PRModel x = new PRModel();
+                //        x.PRId = PR.PRId;
+                //        x.UserId = UserId;
+                //        x.EmailAddress = item.EmailAddress;
+                //        x.NewPRForm = new NewPRModel();
+                //        x.NewPRForm.PRNo = PR.PRNo;
+                //        x.NewPRForm.ApproverId = item.UserId;
+                //        x.NewPRForm.ApproverName = item.FullName;
+                //        SendEmailPRNotification(x, "ToProcurementNoti");
+                //    }
+                //}
                 // todo the session must be HOC
 
                 return Json("Successfully approve");

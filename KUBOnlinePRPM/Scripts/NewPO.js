@@ -65,15 +65,10 @@
         var data = POItemTable.$("tr");
         var ItemsId;
         $.each(data, function (i, input) {
-            if ($(POItemTable.row(i).data()[0]).val() === "") {
-                ItemsId = 0;
-            } else {
-                ItemsId = $(POItemTable.row(i).data()[0]).val();
-            }
-            var totalPrice = $(input).find("#TotalPrice" + (i + 1)).val();
-            var Quantity = $(input).find("#Quantity" + (i + 1)).val();
-            var OutstandingQuantity = $(input).find("#OutstandingQuantity" + (i + 1)).val();
-            fd.append("NewPOForm.POItemListObject[" + i + "].ItemsId", ItemsId);
+            var totalPrice = $(input).find('.TotalPrice')[0].textContent;
+            var Quantity = $(input).find("input[name='Quantity']").val();
+            var OutstandingQuantity = $(input).find('.OutstandingQuantity')[0].textContent;
+            fd.append("NewPOForm.POItemListObject[" + i + "].ItemsId", POItemTable.row(i).data()[0]);
             fd.append("NewPOForm.POItemListObject[" + i + "].Quantity", Quantity);
             fd.append("NewPOForm.POItemListObject[" + i + "].OutstandingQuantity", OutstandingQuantity);
             fd.append("NewPOForm.POItemListObject[" + i + "].TotalPrice", totalPrice);
