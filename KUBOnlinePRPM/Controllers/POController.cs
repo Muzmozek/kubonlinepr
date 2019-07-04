@@ -96,7 +96,8 @@ namespace KUBOnlinePRPM.Controllers
                                           TotalExclSST = a.TotalExclSST,
                                           TotalSST = a.TotalSST,
                                           TotalIncSST = a.TotalIncSST,
-                                          SpecReviewerId = a.SpecsReviewerId
+                                          SpecReviewerId = a.SpecsReviewerId,
+                                          StatusId = "PO01"
                                       }).FirstOrDefault();
 
                 PODetail.NewPOForm.POItemListObject = (from m in db.PR_Items.DefaultIfEmpty()
@@ -247,43 +248,48 @@ namespace KUBOnlinePRPM.Controllers
                 newPO.TotalSST = updatePR.TotalSST;
                 newPO.TotalIncSST = updatePR.TotalIncSST;
                 newPO.SpecsReviewerId = updatePR.SpecsReviewerId;
-                newPO.StatusId = "PO01";
+                newPO.PayToVendorId = POModel.NewPOForm.PayToVendorId;
+                newPO.LocationCodeId = POModel.NewPOForm.LocationCodeId;
+                newPO.OrderDate = POModel.NewPOForm.OrderDate;
+                newPO.PaymentTermsId = POModel.NewPOForm.PaymentTermsId;
+                newPO.PurchaserId = POModel.NewPOForm.PurchaserCodeId;
+                newPO.DeliveryDate = POModel.NewPOForm.DeliveryDate;
+                newPO.StatusId = "PO03";
                 db.PurchaseOrders.Add(newPO);
                 db.SaveChanges();
 
                 db.SaveChanges();
 
                 int TotalQuantity = 0;
-                foreach (var value in updatePRItem)
+                foreach (var value in POModel.NewPOForm.POItemListObject)
                 {
+                    PR_Items _objUpdatePRItem = db.PR_Items.First(m => m.itemsId == value.ItemsId);
                     PO_Item _objNewPOItem = new PO_Item
                     {
                         uuid = Guid.NewGuid(),
                         POId = newPO.POId,
-                        itemsId = value.itemsId,
-                        itemTypeId = value.itemTypeId,
-                        dateRequired = value.dateRequired,
-                        description = value.description,
-                        codeId = value.codeId.Value,
-                        custPONo = value.custPONo,
-                        quantity = value.quantity,
-                        UoMId = value.UoMId,
-                        unitPrice = value.unitPrice.Value,
-                        unitPriceIncSST = value.unitPriceIncSST,
-                        totalPrice = value.totalPrice.Value,
-                        totalPriceIncSST = value.totalPriceIncSST,
-                        jobNoId = value.jobNoId,
-                        jobTaskNoId = value.jobTaskNoId,
-                        taxCodeId = value.taxCodeId,
-                        dimProjectId = value.dimProjectId,
-                        dimDeptId = value.dimDeptId
+                        itemsId = value.ItemsId,
+                        itemTypeId = _objUpdatePRItem.itemTypeId,
+                        dateRequired = _objUpdatePRItem.dateRequired,
+                        description = _objUpdatePRItem.description,
+                        codeId = _objUpdatePRItem.codeId.Value,
+                        custPONo = _objUpdatePRItem.custPONo,
+                        quantity = value.Quantity,
+                        UoMId = _objUpdatePRItem.UoMId,
+                        unitPrice = _objUpdatePRItem.unitPrice.Value,
+                        unitPriceIncSST = _objUpdatePRItem.unitPriceIncSST,
+                        totalPrice = _objUpdatePRItem.unitPrice.Value * value.Quantity,
+                        totalPriceIncSST = _objUpdatePRItem.unitPriceIncSST * value.Quantity,
+                        jobNoId = _objUpdatePRItem.jobNoId,
+                        jobTaskNoId = _objUpdatePRItem.jobTaskNoId,
+                        taxCodeId = _objUpdatePRItem.taxCodeId,
+                        dimProjectId = _objUpdatePRItem.dimProjectId,
+                        dimDeptId = _objUpdatePRItem.dimDeptId
                     };
                     db.PO_Item.Add(_objNewPOItem);
                     db.SaveChanges();
 
-                    PR_Items _objUpdatePRItem = db.PR_Items.First(m => m.itemsId == value.itemsId);
                     _objUpdatePRItem.outStandingQuantity = _objUpdatePRItem.outStandingQuantity - _objNewPOItem.quantity;
-
                     newPO.POAging = 0;
                     db.SaveChanges();
 
