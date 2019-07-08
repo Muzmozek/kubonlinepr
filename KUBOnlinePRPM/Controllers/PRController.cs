@@ -2677,7 +2677,7 @@ namespace KUBOnlinePRPM.Controllers
                                           join j in db.PopulateItemLists on h.codeId equals j.codeId into k
                                           join m in db.PurchaseTypes on a.PurchaseTypeId equals m.purchaseTypeId
                                           join n in db.Customers on b.companyId equals n.custId
-                                          from o in db.PR_Reviewer.Where(x => x.PRId == PRDetail.PRId && x.reviewed == 1)
+                                          //from o in db.PR_Reviewer.Where(x => x.PRId == PRDetail.PRId && x.reviewed == 1)
                                           from q in db.PR_Approver.Where(x => x.PRId == PRDetail.PRId && x.approverApproved == 1)
                                           from s in db.PR_HOD.Where(x => x.PRId == PRDetail.PRId && x.HODApprovedP1 == 1)
                                           join t in db.Users on s.HODId equals t.userId
@@ -2721,8 +2721,8 @@ namespace KUBOnlinePRPM.Controllers
                                               //HODApprovedDate2 = s.HODApprovedDate2.Value,
                                               ApproverId = q.approverId,
                                               ApprovedDate = q.approverApprovedDate.Value,
-                                              ReviewerId = o.reviewerId,
-                                              ReviewedDate = o.reviewedDate.Value,
+                                              //ReviewerId = o.reviewerId,
+                                              //ReviewedDate = o.reviewedDate.Value,
                                               RecommenderId = u.recommenderId,
                                               RecommendDate = u.recommendedDate,
                                               Saved = a.Saved,
@@ -2736,11 +2736,11 @@ namespace KUBOnlinePRPM.Controllers
                         User getFullname = db.Users.First(m => m.userId == PRDetail.NewPRForm.ApproverId);
                         PRDetail.NewPRForm.ApproverName = getFullname.firstName + " " + getFullname.lastName;
                     }
-                    if (PRDetail.NewPRForm.ReviewerId != 0)
-                    {
-                        User getFullname = db.Users.First(m => m.userId == PRDetail.NewPRForm.ReviewerId);
-                        PRDetail.NewPRForm.ReviewerName = getFullname.firstName + " " + getFullname.lastName;
-                    }
+                    //if (PRDetail.NewPRForm.ReviewerId != 0)
+                    //{
+                    //    User getFullname = db.Users.First(m => m.userId == PRDetail.NewPRForm.ReviewerId);
+                    //    PRDetail.NewPRForm.ReviewerName = getFullname.firstName + " " + getFullname.lastName;
+                    //}
                     if (PRDetail.NewPRForm.RecommenderId != null && PRDetail.NewPRForm.RecommenderId != 0)
                     {
                         User getFullname = db.Users.First(m => m.userId == PRDetail.NewPRForm.RecommenderId);
@@ -2759,7 +2759,7 @@ namespace KUBOnlinePRPM.Controllers
                                           join j in db.PopulateItemLists on h.codeId equals j.codeId into k
                                           join m in db.PurchaseTypes on a.PurchaseTypeId equals m.purchaseTypeId
                                           join n in db.Customers on b.companyId equals n.custId
-                                          from o in db.PR_Reviewer.Where(x => x.PRId == PRDetail.PRId && x.reviewed == 1)
+                                          //from o in db.PR_Reviewer.Where(x => x.PRId == PRDetail.PRId && x.reviewed == 1)
                                           from q in db.PR_Approver.Where(x => x.PRId == PRDetail.PRId && x.approverApproved == 1)
                                           from s in db.PR_HOD.Where(x => x.PRId == PRDetail.PRId && x.HODApprovedP1 == 1)
                                           join t in db.Users on s.HODId equals t.userId
@@ -2805,8 +2805,8 @@ namespace KUBOnlinePRPM.Controllers
                                               //HODApprovedDate2 = s.HODApprovedDate2.Value,
                                               ApproverId = q.approverId,
                                               ApprovedDate = q.approverApprovedDate.Value,
-                                              ReviewerId = o.reviewerId,
-                                              ReviewedDate = o.reviewedDate.Value,
+                                              //ReviewerId = o.reviewerId,
+                                              //ReviewedDate = o.reviewedDate.Value,
                                               RecommenderId = u.recommenderId,
                                               RecommendDate = u.recommendedDate,
                                               RecommenderIdII = ac.recommenderId,
@@ -2824,11 +2824,11 @@ namespace KUBOnlinePRPM.Controllers
                         User getFullname = db.Users.First(m => m.userId == PRDetail.NewPRForm.ApproverId);
                         PRDetail.NewPRForm.ApproverName = getFullname.firstName + " " + getFullname.lastName;
                     }
-                    if (PRDetail.NewPRForm.ReviewerId != 0)
-                    {
-                        User getFullname = db.Users.First(m => m.userId == PRDetail.NewPRForm.ReviewerId);
-                        PRDetail.NewPRForm.ReviewerName = getFullname.firstName + " " + getFullname.lastName;
-                    }
+                    //if (PRDetail.NewPRForm.ReviewerId != 0)
+                    //{
+                    //    User getFullname = db.Users.First(m => m.userId == PRDetail.NewPRForm.ReviewerId);
+                    //    PRDetail.NewPRForm.ReviewerName = getFullname.firstName + " " + getFullname.lastName;
+                    //}
                     if (PRDetail.NewPRForm.RecommenderId != null && PRDetail.NewPRForm.RecommenderId != 0)
                     {
                         User getFullname = db.Users.First(m => m.userId == PRDetail.NewPRForm.RecommenderId);
@@ -3849,6 +3849,18 @@ namespace KUBOnlinePRPM.Controllers
                     }
                     else
                     {
+                        PR.StatusId = "PR05";
+                        NotificationMsg _objSubmited = new NotificationMsg
+                        {
+                            uuid = Guid.NewGuid(),
+                            PRId = PrId,
+                            msgDate = DateTime.Now,
+                            fromUserId = UserId,
+                            msgType = "Trail",
+                            message = getFullName.firstName + " " + getFullName.lastName + " has submit PR application for PR No. " + PR.PRNo + " subject for approval"
+                        };
+                        db.NotificationMsgs.Add(_objSubmited);
+
                         var getApprover = new List<PRModel>();
                         int CustId = db.Projects.First(m => m.projectId == PR.ProjectId).custId;
                         if (CustId == 2)
@@ -4067,7 +4079,7 @@ namespace KUBOnlinePRPM.Controllers
                     }
                     else
                     {
-                            var getRecommenderII = new List<PRModel>();
+                        var getRecommenderII = new List<PRModel>();
                         int CustId = db.Projects.First(m => m.projectId == PR.ProjectId).custId;
                         if (CustId == 2 || CustId == 6 || CustId == 4)
                             {
@@ -4107,7 +4119,18 @@ namespace KUBOnlinePRPM.Controllers
                                 PRId = PR.PRId
                             };
                             db.NotificationMsgs.Add(objTask);
-                            db.SaveChanges();
+
+                        NotificationMsg _objSubmited = new NotificationMsg
+                        {
+                            uuid = Guid.NewGuid(),
+                            PRId = PrId,
+                            msgDate = DateTime.Now,
+                            fromUserId = UserId,
+                            msgType = "Trail",
+                            message = getFullName.firstName + " " + getFullName.lastName + " has submit PR application for PR No. " + PR.PRNo + " subject for joint recommendation"
+                        };
+                        db.NotificationMsgs.Add(_objSubmited);
+                        db.SaveChanges();
 
                             foreach (var item in getRecommenderII)
                             {
@@ -4362,7 +4385,17 @@ namespace KUBOnlinePRPM.Controllers
                     }
                 }
                 else
-                {
+                {                    
+                    //NotificationMsg _objSubmited = new NotificationMsg
+                    //{
+                    //    uuid = Guid.NewGuid(),
+                    //    PRId = PrId,
+                    //    msgDate = DateTime.Now,
+                    //    fromUserId = UserId,
+                    //    msgType = "Trail",
+                    //    message = getFullName.firstName + " " + getFullName.lastName + " has submit PR application for PR No. " + PR.PRNo + " subject for approval"
+                    //};
+                    //db.NotificationMsgs.Add(_objSubmited);
                     int CustId = db.Projects.First(m => m.projectId == PR.ProjectId).custId;
                     switch (PR.Scenario)
                     {
@@ -4457,6 +4490,7 @@ namespace KUBOnlinePRPM.Controllers
 
                         case 2:
                             {
+                                PR.StatusId = "PR05";
                                 var getApprover = new List<PRModel>();
                                 if (CustId == 2)
                                 {
@@ -4785,6 +4819,7 @@ namespace KUBOnlinePRPM.Controllers
 
                         case 2:
                             {
+                                PR.StatusId = "PR05";
                                 if (CustId == 2)
                                 {
                                     getApprover = (from m in db.Users
@@ -4871,7 +4906,8 @@ namespace KUBOnlinePRPM.Controllers
                             }
 
                         case 1:
-                            {                                
+                            {
+                                PR.StatusId = "PR05";
                                 switch (CustId)
                                 {
                                     case 2:
