@@ -548,7 +548,7 @@
     //});
 
     $(".CodeId").on("change", function () {
-        if ($(this).find('option:selected').val() !== "") {
+        if ($(this).find('option:selected').val() !== "" && TestBudget !== "False") {
             var codeId = $(this).find('option:selected').val();
             $.ajax({
                 url: UrlItemCodeInfo,
