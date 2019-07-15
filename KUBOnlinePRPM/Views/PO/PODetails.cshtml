@@ -243,7 +243,7 @@
                                             <tr>
                                                 <td class="d-none">@Html.DisplayFor(modelItem => item.ItemsId)</td>
                                                 <td>@Html.DisplayFor(modelItem => item.DateRequired)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.ItemCode)</td>
+                                                <td>@Html.DisplayFor(modelItem => item.ItemCode, new { @class = "CodeId" })</td>
                                                 <td>@Html.DisplayFor(modelItem => item.Description)</td>
                                                 @if (Model.Type == "Blanket")
                                                 {
