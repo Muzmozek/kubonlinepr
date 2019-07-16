@@ -21,8 +21,9 @@ namespace KUBOnlinePRPM.Controllers.Admin
         {
             POModel model = new POModel();
             model.StartDate =  DateTime.Parse("2018-01-01"); model.EndDate = DateTime.Now;
-            model.POHeaderList = GetPOHeaderTable(model.StartDate, model.EndDate);
-            model.POLineList = GetPOLineTable(model.StartDate, model.EndDate);
+            int custId = Int32.Parse(Session["CompanyId"].ToString());
+            model.POHeaderList = GetPOHeaderTable(model.StartDate, model.EndDate, custId);
+            model.POLineList = GetPOLineTable(model.StartDate, model.EndDate, custId);
 
             return View(model);
         }
@@ -34,8 +35,9 @@ namespace KUBOnlinePRPM.Controllers.Admin
             {
                 try
                 {
-                    model.POHeaderList = GetPOHeaderTable(model.StartDate, model.EndDate);
-                    model.POLineList = GetPOLineTable(model.StartDate, model.EndDate);
+                    int custId = Int32.Parse(Session["CompanyId"].ToString());
+                    model.POHeaderList = GetPOHeaderTable(model.StartDate, model.EndDate, custId);
+                    model.POLineList = GetPOLineTable(model.StartDate, model.EndDate, custId);
                     //EntityToNavHeaderExcel(model.StartDate, model.EndDate, model.ExtractFileLocation);
                     //model.NotiListObject = (from m in db.NotificationMsgs
                     //                        join n in db.Users on m.fromUserId equals n.userId

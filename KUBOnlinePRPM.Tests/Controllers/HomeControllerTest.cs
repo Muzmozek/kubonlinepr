@@ -348,7 +348,7 @@ namespace KUBOnlinePRPM.Tests.Controllers
                     YourReference = dataRow.Field<string>("Your Reference"),
                     OrderDate = dataRow.Field<DateTime>("Order Date"),
                     PostingDate = dataRow.Field<DateTime>("Posting Date"),
-                    ExpectedReceiptDate = dataRow.Field<string>("Expected Receipt Date"),
+                    ExpectedReceiptDate = dataRow.Field<DateTime?>("Expected Receipt Date"),
                     PostingDescription = dataRow.Field<string>("Posting Description"),
                     LocationCode = dataRow.Field<string>("Location Code"),
                     ShortcutDimension1Code = dataRow.Field<string>("Shortcut Dimension 1 Code"),
@@ -461,8 +461,8 @@ namespace KUBOnlinePRPM.Tests.Controllers
                     Quantity = dataRow.Field<int?>("Quantity"),
                     DirectUnitCost = dataRow.Field<decimal?>("Direct Unit Cost"),
                     Amount = dataRow.Field<decimal?>("Amount"),
-                    DimProject = dataRow.Field<string>("Dim-Project"),
-                    DimDepartment = dataRow.Field<string>("Dim-Department")
+                    //DimProject = dataRow.Field<string>("Dim-Project"),
+                    //DimDepartment = dataRow.Field<string>("Dim-Department")
                 }).ToList();
         }
 

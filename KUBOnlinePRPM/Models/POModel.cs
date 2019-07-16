@@ -146,9 +146,9 @@ namespace KUBOnlinePRPM.Models
         public string BuyFromVendorNo { get; set;}
         public string PayToVendorNo { get; set; }
         public string YourReference { get; set; }
-        public DateTime OrderDate { get; set; }
-        public DateTime PostingDate { get; set; }
-        public string ExpectedReceiptDate { get; set; }
+        public DateTime? OrderDate { get; set; }
+        public DateTime? PostingDate { get; set; }
+        public DateTime? ExpectedReceiptDate { get; set; }
         public string PostingDescription { get; set; }
         public string LocationCode { get; set; }
         public string ShortcutDimension1Code { get; set; }
@@ -166,12 +166,15 @@ namespace KUBOnlinePRPM.Models
         public string Type { get; set; }
         public string No { get; set; }
         public string LocationCode { get; set; }
+        public string PostingGroup { get; set; }
+        public DateTime? ExpReceiptDate { get; set; }
         public string Description { get; set; }
         public string UnitofMeasure { get; set; }
         public int? Quantity { get; set; }
+        public int? OutStandingQuantity { get; set; }
         public decimal? DirectUnitCost { get; set; }
         public decimal? Amount { get; set; }
-        public string DimProject { get; set; }
-        public string DimDepartment { get; set; }
+        //public string DimProject { get; set; }
+        //public string DimDepartment { get; set; }
     }
 }

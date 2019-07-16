@@ -24,7 +24,7 @@
             //    { visible: false, targets: [0] }
             //],
             destroy: true,
-            aaSorting: [0, "asc"],
+            aaSorting: [1, "desc"],
             responsive: {
                 breakpoints: [
                     { name: 'desktop', width: 1024 },
@@ -49,7 +49,7 @@
             //    { visible: false, targets: [0] }
             //],
             destroy: true,
-            aaSorting: [0, "asc"],
+            aaSorting: [1, "desc"],
             responsive: {
                 breakpoints: [
                     { name: 'desktop', width: 1024 },

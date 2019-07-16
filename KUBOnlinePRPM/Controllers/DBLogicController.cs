@@ -1611,7 +1611,7 @@ namespace KUBOnlinePRPM.Controllers
             return HOGPSSList;
         }
 
-        protected List<POHeaderTable> GetPOHeaderTable(DateTime startDate, DateTime endDate)
+        protected List<POHeaderTable> GetPOHeaderTable(DateTime startDate, DateTime endDate, int custid)
         {
             SqlConnection conn = null;
             DataTable returnDT = new DataTable("POHeaderTable");
@@ -1626,26 +1626,27 @@ namespace KUBOnlinePRPM.Controllers
                     info = e.Message.ToString();
                 };
                 string sql = "";
-                sql = "SELECT 'Order'                       AS [Document Type], " +
+                sql = "SELECT p.prtype                        AS [Document Type], " +
                                "m.pono                        AS [No.], " +
                                "n.vendorno                    AS [Buy-from Vendor No.], " +
                                "n.vendorno                    AS [Pay-to Vendor No.], " +
-                               "''                            AS [Your Reference], " +
-                               "m.prepareddate                AS [Order Date], " +
+                               "m.orderdate                AS [Order Date], " +
                                "m.submitdate                  AS [Posting Date], " +
-                               "''                            AS [Expected Receipt Date], " +
-                               "Concat ('Order', ' ', m.pono) AS [Posting Description], " +
-                               "o.abbreviation                AS [Location Code], " +
-                               "''                            AS [Shortcut Dimension 1 Code], " +
-                               "''                            AS [Shortcut Dimension 2 Code], " +
-                               "''                            AS [Vendor Posting Group], " +
-                               "''                            AS [Currency Code] " +
+                               "m.deliverydate                            AS [Expected Receipt Date], " +
+                               "Concat ('Order', ' ', m.pono) AS [Posting Description] " +
+                        //"o.abbreviation                AS [Location Code], " +
+                        //"''                            AS [Shortcut Dimension 1 Code], " +
+                        //"''                            AS [Shortcut Dimension 2 Code], " +
+                        //"''                            AS [Vendor Posting Group], " +
+                        //"''                            AS [Currency Code] " +
                         "FROM   purchaseorder m " +
                                "LEFT JOIN vendor n " +
                                       "ON ( m.paytovendorid = n.vendorid ) " +
                                "LEFT JOIN customer o " +
                                       "ON ( m.custid = o.custid ) " +
-                        "WHERE m.SubmitDate between @startDate and @endDate and n.vendorNo IS NOT NULL";
+                               "LEFT JOIN purchaserequisition p " +
+                                      "ON ( m.prid = p.prid ) " +
+                        "WHERE m.SubmitDate between @startDate and @endDate and n.vendorNo IS NOT NULL and m.custid = @custId";
 
                 SqlCommand SQLcmd = new SqlCommand(sql, conn)
                 {
@@ -1657,8 +1658,22 @@ namespace KUBOnlinePRPM.Controllers
                 SQLcmd.Parameters["@startDate"].Value = startDate.ToShortDateString();
                 SQLcmd.Parameters.Add("@endDate", SqlDbType.DateTime);
                 SQLcmd.Parameters["@endDate"].Value = endDate.ToShortDateString();
+                SQLcmd.Parameters.Add("@custId", SqlDbType.Int);
+                SQLcmd.Parameters["@custId"].Value = custid;
 
-                SQLDataADP.Fill(returnDT);                    
+                SQLDataADP.Fill(returnDT);
+
+                foreach (DataRow row in returnDT.Rows)
+                {
+                    if (row["Document Type"].ToString() == "Generic")
+                    {
+                        row["Document Type"] = "Order";
+                    }
+                    else if (row["Document Type"].ToString() == "Blanket")
+                    {
+                        row["Document Type"] = "Blanket Order";
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -1676,22 +1691,22 @@ namespace KUBOnlinePRPM.Controllers
                     No = dataRow.Field<string>("No."),
                     BuyFromVendorNo = dataRow.Field<string>("Buy-from Vendor No."),
                     PayToVendorNo = dataRow.Field<string>("Pay-to Vendor No."),
-                    YourReference = dataRow.Field<string>("Your Reference"),
-                    OrderDate = dataRow.Field<DateTime>("Order Date"),
-                    PostingDate = dataRow.Field<DateTime>("Posting Date"),
-                    ExpectedReceiptDate = dataRow.Field<string>("Expected Receipt Date"),
-                    PostingDescription = dataRow.Field<string>("Posting Description"),
-                    LocationCode = dataRow.Field<string>("Location Code"),
-                    ShortcutDimension1Code = dataRow.Field<string>("Shortcut Dimension 1 Code"),
-                    ShortcutDimension2Code = dataRow.Field<string>("Shortcut Dimension 2 Code"),
-                    VendorPostingGroup = dataRow.Field<string>("Vendor Posting Group"),
-                    CurrencyCode = dataRow.Field<string>("Currency Code")
+                    //YourReference = dataRow.Field<string>("Your Reference"),
+                    OrderDate = dataRow.Field<DateTime?>("Order Date"),
+                    PostingDate = dataRow.Field<DateTime?>("Posting Date"),
+                    ExpectedReceiptDate = dataRow.Field<DateTime?>("Expected Receipt Date"),
+                    PostingDescription = dataRow.Field<string>("Posting Description")
+                    //LocationCode = dataRow.Field<string>("Location Code"),
+                    //ShortcutDimension1Code = dataRow.Field<string>("Shortcut Dimension 1 Code"),
+                    //ShortcutDimension2Code = dataRow.Field<string>("Shortcut Dimension 2 Code"),
+                    //VendorPostingGroup = dataRow.Field<string>("Vendor Posting Group"),
+                    //CurrencyCode = dataRow.Field<string>("Currency Code")
                 }).ToList();
 
             return POHeaderList;
         }
 
-        protected List<POLineTable> GetPOLineTable(DateTime startDate, DateTime endDate)
+        protected List<POLineTable> GetPOLineTable(DateTime startDate, DateTime endDate, int custid)
         {
             SqlConnection conn = null;
             DataTable returnDT = new DataTable("POLineTable");
@@ -1706,25 +1721,28 @@ namespace KUBOnlinePRPM.Controllers
                     info = e.Message.ToString();
                 };
                 string sql = "";
-                sql = "SELECT 'Order'        AS [Document Type], " +
+                sql = "SELECT v.prtype         AS [Document Type], " +
                                "m.pono         AS [Document No.], " +
                                "''             AS [Line No.], " +
                                "n.vendorno     AS [Buy-from Vendor No.], " +
                                "q.type         AS [Type], " +
                                "r.itemcode     AS [No.], " +
-                               "o.abbreviation AS [Location Code], " +
+                               "o.locationcode AS [Location Code], " +
+                               "'' AS [Posting Group], " +
+                               "m.deliverydate AS [Expected Receipt Date], " +
                                "r.description  AS [Description], " +
-                               "r.uom          AS [Unit of Measure], " +
+                               "w.uomcode      AS [Unit of Measure], " +
                                "p.quantity     AS [Quantity], " +
+                               "u.outstandingquantity     AS [Outstanding Quantity], " +
                                "p.[unitprice]  AS [Direct Unit Cost], " +
-                               "p.[totalprice] AS [Amount], " +
-                               "u.projectCode AS [Dim-Project], " +
-                               "v.projectcode  AS [Dim-Department] " +
+                               "p.[totalprice] AS [Amount] " +
+                        //"u.projectCode AS [Dim-Project], " +
+                        //"v.projectcode  AS [Dim-Department] " +
                         "FROM   purchaseorder m " +
                                "LEFT JOIN vendor n " +
                                       "ON ( m.paytovendorid = n.vendorid ) " +
-                               "LEFT JOIN customer o " +
-                                      "ON ( m.custid = o.custid ) " +
+                               "LEFT JOIN location o " +
+                                      "ON ( m.locationcodeid = o.locationid ) " +
                                "LEFT JOIN po_item p " +
                                       "ON ( m.poid = p.poid ) " +
                                "LEFT JOIN itemtype q " +
@@ -1732,11 +1750,18 @@ namespace KUBOnlinePRPM.Controllers
                                "LEFT JOIN populateitemlist r " +
                                       "ON ( p.itemtypeid = r.itemtypeid " +
                                            "AND p.codeid = r.codeid ) " +
-                               "LEFT JOIN project u " +
-                                      "ON ( m.projectid = u.projectid and u.dimension = 'PROJECT' ) " +
-                               "LEFT JOIN project v " +
-                                      "ON ( m.projectid = v.projectid and v.dimension = 'DEPARTMENT' ) " +
-                        "WHERE m.SubmitDate between @startDate and @endDate and n.vendorNo IS NOT NULL";
+                               "LEFT JOIN pr_items u " +
+                                      "ON ( p.itemsid = u.itemsid ) " +
+                               "LEFT JOIN purchaserequisition v " +
+                                      "ON ( u.prid = v.prid ) " +
+                               "LEFT JOIN uom w " +
+                                      "ON ( p.uomid = w.uomid ) " +
+                        //"LEFT JOIN project u " +
+                        //       "ON ( m.projectid = u.projectid and u.dimension = 'PROJECT' ) " +
+                        //"LEFT JOIN project v " +
+                        //       "ON ( m.projectid = v.projectid and v.dimension = 'DEPARTMENT' ) " +
+                        "WHERE m.SubmitDate between @startDate and @endDate and n.vendorNo IS NOT NULL and m.custid = @custId " +
+                        "ORDER BY m.pono DESC";
 
                 SqlCommand SQLcmd = new SqlCommand(sql, conn)
                 {
@@ -1748,13 +1773,15 @@ namespace KUBOnlinePRPM.Controllers
                 SQLcmd.Parameters["@startDate"].Value = startDate.ToShortDateString();
                 SQLcmd.Parameters.Add("@endDate", SqlDbType.DateTime);
                 SQLcmd.Parameters["@endDate"].Value = endDate.ToShortDateString();
-
+                SQLcmd.Parameters.Add("@custId", SqlDbType.Int);
+                SQLcmd.Parameters["@custId"].Value = custid;
                 SQLDataADP.Fill(returnDT);
 
-                string DocNo = ""; int LineNo = 0;
+                string DocNo = ""; string NewDocNo = ""; int LineNo = 0;
                 foreach (DataRow row in returnDT.Rows)
                 {
-                    if (row["Document No."].ToString() != DocNo)
+                    NewDocNo = row["Document No."].ToString();
+                    if (DocNo != row["Document No."].ToString())
                     {
                         row["Line No."] = 10000;
                         LineNo = 10000;
@@ -1764,7 +1791,24 @@ namespace KUBOnlinePRPM.Controllers
                         LineNo = LineNo + 10000;
                         row["Line No."] = LineNo;
                     }
-                    DocNo = row["Document No."].ToString();
+                    DocNo = NewDocNo;
+
+                    if (row["Type"].ToString() == "GL")
+                    {
+                        row["Type"] = "G/L Account";
+                    }
+                    else if (row["Type"].ToString() == "FA")
+                    {
+                        row["Type"] = "Fixed Asset";
+                    }
+
+                    if (row["Document Type"].ToString() == "Generic")
+                    {
+                        row["Document Type"] = "Order";
+                    } else if (row["Document Type"].ToString() == "Blanket")
+                    {
+                        row["Document Type"] = "Blanket Order";
+                    }
                 }                
             }
             catch (Exception ex)
@@ -1786,13 +1830,16 @@ namespace KUBOnlinePRPM.Controllers
                     Type = dataRow.Field<string>("Type"),
                     No = dataRow.Field<string>("No."),
                     LocationCode = dataRow.Field<string>("Location Code"),
+                    PostingGroup = dataRow.Field<string>("Posting Group"),
+                    ExpReceiptDate = dataRow.Field<DateTime?>("Expected Receipt Date"),
                     Description = dataRow.Field<string>("Description"),
                     UnitofMeasure = dataRow.Field<string>("Unit of Measure"),
                     Quantity = dataRow.Field<int?>("Quantity"),
+                    OutStandingQuantity = dataRow.Field<int?>("Outstanding Quantity"),
                     DirectUnitCost = dataRow.Field<decimal?>("Direct Unit Cost"),
-                    Amount = dataRow.Field<decimal?>("Amount"),
-                    DimProject = dataRow.Field<string>("Dim-Project"),
-                    DimDepartment = dataRow.Field<string>("Dim-Department")
+                    Amount = dataRow.Field<decimal?>("Amount")
+                    //DimProject = dataRow.Field<string>("Dim-Project"),
+                    //DimDepartment = dataRow.Field<string>("Dim-Department")
                 }).ToList();
 
             return POLineList;

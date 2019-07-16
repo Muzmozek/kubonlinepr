@@ -60,9 +60,6 @@
                             Pay-to Vendor No.
                         </th>
                         <th>
-                            Your Reference
-                        </th>
-                        <th>
                             Order Date
                         </th>
                         <th>
@@ -74,11 +71,11 @@
                         <th>
                             Posting Description
                         </th>
-                        <th>Location Code</th>
+                        @*<th>Location Code</th>
                         <th>Shortcut Dimension 1 Code</th>
                         <th>Shortcut Dimension 2 Code</th>
                         <th>Vendor Posting Group</th>
-                        <th>Currency Code</th>
+                        <th>Currency Code</th>*@
                     </tr>
                 <thead>
                 </thead>
@@ -99,21 +96,30 @@
                                 @Html.DisplayFor(modelItem => item.PayToVendorNo)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.YourReference)
+                                @if (item.OrderDate.HasValue)
+                                {
+                                    @*@Html.DisplayFor(modelItem => item.OrderDate.Value.ToShortDateString())*@
+                                    @item.OrderDate.Value.ToShortDateString()
+                                }                                
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.OrderDate)
-                            </td>
+                                @if (item.PostingDate.HasValue)
+                                {
+                                    @*@Html.DisplayFor(modelItem => item.PostingDate.Value.ToShortDateString())*@
+                                    @item.PostingDate.Value.ToShortDateString()
+                                }
+                                </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.PostingDate)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ExpectedReceiptDate)
-                            </td>
+                                @if (item.ExpectedReceiptDate.HasValue)
+                                {
+                                    @*@Html.DisplayFor(modelItem => item.ExpectedReceiptDate.Value.ToShortDateString())*@
+                                    @item.ExpectedReceiptDate.Value.ToShortDateString()
+                                }
+                                </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.PostingDescription)
                             </td>
-                            <td>
+                            @*<td>
                                 @Html.DisplayFor(modelItem => item.LocationCode)
                             </td>
                             <td>
@@ -127,7 +133,7 @@
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.CurrencyCode)
-                            </td>
+                            </td>*@
                         </tr>
                     }
                 </tbody>
@@ -157,66 +163,85 @@
                             Location Code
                         </th>
                         <th>
+                            Posting Group
+                        </th>
+                        <th>
+                            Expected Receipt Date
+                        </th>
+                        <th>
                             Description
                         </th>
                         <th>
                             Unit of Measure
                         </th>
                         <th>Quantity</th>
+                        <th>Outstanding Quantity</th>
                         <th>Direct Unit Cost</th>
                         <th>Amount</th>
-                        <th>Dim-Project</th>
-                        <th>Dim-Department</th>
+                        @*<th>Dim-Project</th>
+        <th>Dim-Department</th>*@
                     </tr>
                 <thead>
                 </thead>
                 <tbody>
                     @foreach (var item in Model.POLineList)
                     {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.DocumentType)
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DocumentType)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DocumentNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LineNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BuyFromVendorNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Type)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.No)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LocationCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PostingGroup)
+                        </td>
+                        <td>
+                            @if (item.ExpReceiptDate.HasValue)
+                            {
+                                @item.ExpReceiptDate.Value.ToShortDateString()
+                            }
                             </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.DocumentNo)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.LineNo)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.BuyFromVendorNo)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Type)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.No)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.LocationCode)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Description)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.UnitofMeasure)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Quantity)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.DirectUnitCost)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Amount)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.DimProject)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.DimDepartment)
-                            </td>
-                        </tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UnitofMeasure)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Quantity)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OutStandingQuantity)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DirectUnitCost)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Amount)
+                        </td>
+                        @*<td>
+            @Html.DisplayFor(modelItem => item.DimProject)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DimDepartment)
+        </td>*@
+                    </tr>
                     }
                 </tbody>
             </table>
