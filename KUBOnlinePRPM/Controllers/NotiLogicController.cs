@@ -167,41 +167,53 @@ namespace KUBOnlinePRPM.Controllers
                                            ChildCompanyId = n.childCompanyId
                                        }).FirstOrDefault();
             var getHODDetails = new UserModel();
-            if (PR.CustId == 2)
+            switch (PR.CustId)
             {
-                getHODDetails = (from m in db.PR_HOD
-                                 join n in db.Users on m.HODId equals n.userId
-                                 join o in db.ChildCustomers on n.childCompanyId equals o.childCustId
-                                 where m.PRId == PR.PRId && o.childCustId == getRequestorDetails.ChildCompanyId
-                                 select new UserModel()
-                                 {
-                                     UserId = n.userId,
-                                     FullName = n.firstName + " " + n.lastName,
-                                     EmailAddress = n.emailAddress
-                                 }).FirstOrDefault();
-            } else if (PR.CustId == 3 && getRequestorDetails.ChildCompanyId == 16) {
-                getHODDetails = (from m in db.PR_HOD
-                                 join n in db.Users on m.HODId equals n.userId
-                                 where m.PRId == PR.PRId
-                                 select new UserModel()
-                                 {
-                                     UserId = n.userId,
-                                     FullName = n.firstName + " " + n.lastName,
-                                     EmailAddress = n.emailAddress
-                                 }).FirstOrDefault();
-            }
-            else
-            {
-                getHODDetails = (from m in db.PR_HOD
-                                 join n in db.Users on m.HODId equals n.userId
-                                 join o in db.Users on n.userId equals o.superiorId
-                                 where m.PRId == PR.PRId && o.userId == getRequestorDetails.UserId
-                                 select new UserModel()
-                                 {
-                                     UserId = n.userId,
-                                     FullName = n.firstName + " " + n.lastName,
-                                     EmailAddress = n.emailAddress
-                                 }).FirstOrDefault();
+                case 2:
+                    switch (getRequestorDetails.ChildCompanyId)
+                    {
+                        case 3:
+                        case 5:
+                        case 8:
+                        case 9:
+                        case 10:
+                            getHODDetails = (from m in db.Users
+                                             join o in db.Users on m.superiorId equals o.userId
+                                             join n in db.Users_Roles on o.userId equals n.userId
+                                             where n.roleId == "R02" && m.companyId == PR.CustId && m.userId == getRequestorDetails.UserId
+                                             select new UserModel()
+                                             {
+                                                 UserId = o.userId,
+                                                 FullName = o.firstName + " " + o.lastName,
+                                                 EmailAddress = o.emailAddress
+                                             }).FirstOrDefault();
+                            break;
+                        default:
+                            getHODDetails = (from m in db.Users
+                                      join n in db.Users_Roles on m.userId equals n.userId
+                                      join o in db.ChildCustomers on m.childCompanyId equals o.childCustId
+                                      where n.roleId == "R02" && m.companyId == PR.CustId && m.childCompanyId == getRequestorDetails.ChildCompanyId
+                                             select new UserModel()
+                                      {
+                                                 UserId = m.userId,
+                                                 FullName = m.firstName + " " + m.lastName,
+                                                 EmailAddress = m.emailAddress
+                                      }).FirstOrDefault();
+                            break;
+                    }
+                    break;
+                default:
+                    getHODDetails = (from m in db.Users
+                              join o in db.Users on m.superiorId equals o.userId
+                              join n in db.Users_Roles on o.userId equals n.userId
+                              where n.roleId == "R02" && m.companyId == PR.CustId && m.userId == getRequestorDetails.UserId
+                                     select new UserModel()
+                              {
+                                  UserId = o.userId,
+                                  FullName = o.firstName + " " + o.lastName,
+                                  EmailAddress = o.emailAddress
+                              }).FirstOrDefault();
+                    break;
             }
             //var getReviewerDetails = (from m in db.PR_Reviewer
             //                          join n in db.Users on m.reviewerId equals n.userId

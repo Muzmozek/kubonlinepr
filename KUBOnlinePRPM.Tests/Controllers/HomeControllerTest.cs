@@ -193,7 +193,7 @@ namespace KUBOnlinePRPM.Tests.Controllers
                 {
                     getLeaderName += item.HODApproverName + ", ";
                 }
-                LeaderUserId = item.HODApproverId;
+                LeaderUserId = item.HODApproverId.Value;
             }
 
             var getHOD = (from m in db.Users

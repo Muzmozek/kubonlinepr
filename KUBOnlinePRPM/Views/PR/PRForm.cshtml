@@ -452,12 +452,19 @@
                 <img src="@Context.Server.MapPath("~/Images/red-grunge-approved-rubber-stamp-600w.jpg")" width="66" height="50" />
             </td>
             <td class="td2" style="height:40px;">
+                @if (Model.NewPRForm.HODApprovedDate1 == null)
+                {
+
+                }
+                else
+                {
                 <img src="@Context.Server.MapPath("~/Images/red-grunge-approved-rubber-stamp-600w.jpg")" width="66" height="50" />
+                }
             </td>
             <td class="td2" style="height:40px; border-right:1px solid black;">
-                @if (Model.NewPRForm.Scenario == 1 || Model.FinalApproverId != 0)
+                @*@if (Model.NewPRForm.Scenario == 1 || Model.FinalApproverId != 0)
                 {
-                    if (Model.NewPRForm.ReviewedDate == null)
+                    if (Model.NewPRForm.HODApprovedDate1 == null)
                     {
 
                     }
@@ -467,8 +474,8 @@
                     }
                 }
                 else
-                {
-                    if (Model.NewPRForm.RecommendDate == null)
+                {*@
+                    @if (Model.NewPRForm.RecommendDate == null)
                     {
 
                     }
@@ -476,12 +483,19 @@
                     {
                         <img src="@Context.Server.MapPath("~/Images/red-grunge-approved-rubber-stamp-600w.jpg")" width="66" height="50" />
                     }
-                }
+                @*}*@
             </td>
         </tr>
         <tr>
             <td class="td2" style="">Name: @Model.NewPRForm.RequestorName</td>
-            <td class="td2" style="">Name: @Model.NewPRForm.HODApproverName</td>
+            @if (Model.NewPRForm.HODApprovedDate1 != null)
+            {
+                <td class="td2" style="">Name: @Model.NewPRForm.HODApproverName</td>
+            }
+            else
+            {
+                <td class="td2" style="">Name: </td>
+            }
             @if (Model.NewPRForm.Scenario == 1 || Model.FinalApproverId != 0)
             {
                 <td class="td2" style=" border-right: 1px solid black;">Name: @Model.NewPRForm.ReviewerName</td>
@@ -493,7 +507,14 @@
         </tr>
         <tr>
             <td class="td2" style="border-bottom: 1px solid black; padding-bottom:10px;">Date: @Model.NewPRForm.PreparedDate.ToShortDateString()</td>
-            <td class="td2" style="border-bottom: 1px solid black; padding-bottom:10px;">Date: @Model.NewPRForm.HODApprovedDate1.ToShortDateString()</td>
+            @if (Model.NewPRForm.HODApprovedDate1 != null)
+            {
+                <td class="td2" style="border-bottom: 1px solid black; padding-bottom:10px;">Date: @Model.NewPRForm.HODApprovedDate1.Value.ToShortDateString()</td>
+            }
+            else
+            {
+                <td class="td2" style="border-bottom: 1px solid black; padding-bottom:10px;">Date: </td>
+            }
             @if (Model.NewPRForm.Scenario == 1 || Model.FinalApproverId != 0)
             {
                 if (Model.NewPRForm.ReviewerName != null)

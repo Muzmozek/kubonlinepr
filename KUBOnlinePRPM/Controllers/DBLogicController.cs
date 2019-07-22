@@ -159,7 +159,7 @@ namespace KUBOnlinePRPM.Controllers
                 generatePRNo.Submited = generatePRNo.Submited + 1;
                 generatePRNo.SubmitDate = DateTime.Now;
                 generatePRNo.PRAging = model.NewPRForm.PRAging;
-                generatePRNo.StatusId = "PR09";
+                
                 generateMsg.uuid = Guid.NewGuid();
                 generateMsg.message = model.FullName + " has submit new PR  No. " + _objNewPR.PRNo;
                 generateMsg.PRId = _objNewPR.PRId;
@@ -214,6 +214,7 @@ namespace KUBOnlinePRPM.Controllers
                 if (getHOD != null)
                 {
                     int HODApproverId = 0;
+                    generatePRNo.StatusId = "PR09";
                     foreach (var item in getHOD)
                     {
                         if (HODApproverId != item.HODApproverId)
@@ -221,7 +222,7 @@ namespace KUBOnlinePRPM.Controllers
                             PR_HOD _objHOD = new PR_HOD
                             {
                                 uuid = Guid.NewGuid(),
-                                HODId = item.HODApproverId,
+                                HODId = item.HODApproverId.Value,
                                 PRId = _objNewPR.PRId,
                                 HODApprovedP1 = model.NewPRForm.HODApproverApprovedP1
                             };
@@ -244,19 +245,19 @@ namespace KUBOnlinePRPM.Controllers
                             {
                                 uuid = Guid.NewGuid(),
                                 msgId = objTask.msgId,
-                                toUserId = item.HODApproverId,
+                                toUserId = item.HODApproverId.Value,
                                 resubmit = false
                             };
                             db.NotiGroups.Add(ApproverTask);
                             db.SaveChanges();
 
                             model.NewPRForm.PRNo = generatePRNo.PRNo;
-                            model.NewPRForm.ApproverId = item.HODApproverId;
+                            model.NewPRForm.ApproverId = item.HODApproverId.Value;
                             model.NewPRForm.ApproverName = item.HODApproverName;
                             model.EmailAddress = item.ApproverEmail;
                             SendEmailPRNotification(model, "ApprovalInitial");
                         }
-                        HODApproverId = item.HODApproverId;
+                        HODApproverId = item.HODApproverId.Value;
                     }
 
                     var getFinance = (from m in db.Users
@@ -285,6 +286,7 @@ namespace KUBOnlinePRPM.Controllers
                 else
                 {
                     int UserId = Int32.Parse(Session["UserId"].ToString());
+                    generatePRNo.StatusId = "PR19";
                     var getFinance = (from m in db.Users
                                       join n in db.Users_Roles on m.userId equals n.userId
                                       where n.roleId == "R13" && m.companyId == model.CustId
@@ -856,7 +858,7 @@ namespace KUBOnlinePRPM.Controllers
                 {
                     FormerPRDetails.BidWaiverRefNo = x.NewPRForm.BidWaiverRefNo;
                 }
-                FormerPRDetails.StatusId = "PR09";
+                
                 NotificationMsg _objSubmited = new NotificationMsg
                 {
                     uuid = Guid.NewGuid(),
@@ -901,7 +903,7 @@ namespace KUBOnlinePRPM.Controllers
                         getHOD = (from m in db.Users
                                   join o in db.Users on m.superiorId equals o.userId
                                   join n in db.Users_Roles on o.userId equals n.userId
-                                  where n.roleId == "R02" && m.companyId == x.CustId && m.userId == x.NewPRForm.PreparedById
+                                  where n.roleId == "R02" && m.companyId == x.CustId && m.userId == FormerPRDetails.PreparedById
                                   select new NewPRModel()
                                   {
                                       HODApproverId = o.userId,
@@ -914,6 +916,7 @@ namespace KUBOnlinePRPM.Controllers
                 if (getHOD != null)
                 {
                     int HODApproverId = 0;
+                    FormerPRDetails.StatusId = "PR09";
                     foreach (var item in getHOD)
                     {
                         if (HODApproverId != item.HODApproverId)
@@ -921,7 +924,7 @@ namespace KUBOnlinePRPM.Controllers
                             PR_HOD _objHOD = new PR_HOD
                             {
                                 uuid = Guid.NewGuid(),
-                                HODId = item.HODApproverId,
+                                HODId = item.HODApproverId.Value,
                                 PRId = FormerPRDetails.PRId,
                                 HODApprovedP1 = x.NewPRForm.HODApproverApprovedP1
                             };
@@ -944,19 +947,19 @@ namespace KUBOnlinePRPM.Controllers
                             {
                                 uuid = Guid.NewGuid(),
                                 msgId = objTask.msgId,
-                                toUserId = item.HODApproverId,
+                                toUserId = item.HODApproverId.Value,
                                 resubmit = false
                             };
                             db.NotiGroups.Add(ApproverTask);
                             db.SaveChanges();
 
                             x.NewPRForm.PRNo = FormerPRDetails.PRNo;
-                            x.NewPRForm.ApproverId = item.HODApproverId;
+                            x.NewPRForm.ApproverId = item.HODApproverId.Value;
                             x.NewPRForm.ApproverName = item.HODApproverName;
                             x.EmailAddress = item.ApproverEmail;
                             SendEmailPRNotification(x, "ApprovalInitial");
                         }
-                        HODApproverId = item.HODApproverId;
+                        HODApproverId = item.HODApproverId.Value;
                     }
 
                     var getFinance = (from m in db.Users
@@ -985,6 +988,7 @@ namespace KUBOnlinePRPM.Controllers
                 else
                 {
                     int UserId = Int32.Parse(Session["UserId"].ToString());
+                    FormerPRDetails.StatusId = "PR19";
                     var getFinance = (from m in db.Users
                                       join n in db.Users_Roles on m.userId equals n.userId
                                       where n.roleId == "R13" && m.companyId == x.CustId
@@ -1040,12 +1044,12 @@ namespace KUBOnlinePRPM.Controllers
                 }
 
                 var getProcurement = new List<PRModel>();
-                switch (x.CustId)
-                {
+                switch (FormerPRDetails.CustId)
+                {                   
                     case 2:
                         getProcurement = (from m in db.Users
                                           join n in db.Users_Roles on m.userId equals n.userId
-                                          where n.roleId == "R03" && m.companyId == x.CustId && m.userId == x.NewPRForm.PreparedById
+                                          where n.roleId == "R03" && m.companyId == FormerPRDetails.CustId && m.userId == FormerPRDetails.PreparedById
                                           select new PRModel()
                                           {
                                               UserId = m.userId,
@@ -1063,7 +1067,7 @@ namespace KUBOnlinePRPM.Controllers
                         {
                             getProcurement = (from m in db.Users
                                               join n in db.Users_Roles on m.userId equals n.userId
-                                              where n.roleId == "R03" && m.companyId == x.CustId
+                                              where n.roleId == "R03" && m.companyId == FormerPRDetails.CustId
                                               select new PRModel()
                                               {
                                                   UserId = m.userId,
@@ -1075,7 +1079,7 @@ namespace KUBOnlinePRPM.Controllers
                     default:
                         getProcurement = (from m in db.Users
                                           join n in db.Users_Roles on m.userId equals n.userId
-                                          where n.roleId == "R03" && m.companyId == x.CustId
+                                          where n.roleId == "R03" && m.companyId == FormerPRDetails.CustId
                                           select new PRModel()
                                           {
                                               UserId = m.userId,
