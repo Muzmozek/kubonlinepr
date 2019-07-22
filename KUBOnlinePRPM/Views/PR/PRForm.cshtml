@@ -192,7 +192,7 @@
             decimal Quantity = Model.NewPRForm.PRItemListObject[i].Quantity;
 <tr class="c1_2">
                 <td class="c4_1" style="width:98px">@Model.NewPRForm.PRItemListObject[i].DateRequired.ToShortDateString()</td>
-                <td colspan="4" class="c11_3">@Model.NewPRForm.PRItemListObject[i].Description<br /><br />@*@Html.Raw(Html.Encode(item.Remarks).Replace("\r\n", "<br /><br />").Replace("\n", "<br />"))*@</td>
+                <td colspan="4" class="c11_3">@Model.NewPRForm.PRItemListObject[i].Description<br /><br />@*@Html.Raw(Html.Encode(@Model.NewPRForm.PRItemListObject[i].Remarks).Replace("\r\n", "<br /><br />").Replace("\n", "<br />"))*@</td>
                 <td colspan="2" class="c11_2">@Model.NewPRForm.PRItemListObject[i].ItemCode</td>
                 <td class="c11_2" style="width:65px">@*@Model.NewPRForm.PRItemListObject[i].ItemCode*@</td>
                 <td class="c11_2" style="width:78px">@Model.NewPRForm.PRItemListObject[i].CustPONo</td>
