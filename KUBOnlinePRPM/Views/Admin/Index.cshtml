@@ -25,6 +25,18 @@
                     @Html.TextBoxFor(m => m.EndDate, new { @id = "EndDate", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "date" })
                 </div>
             </div>
+            @if (Model.CustId == 3)
+            {
+                <div class="row g-mb-20">
+                    <div class="col-md-2 col-sm-2 formfield">
+                        <span>Subsidiary</span>
+                    </div>
+                    <div class="d-flex col-md-4 col-sm-4">
+                        @Html.DropDownListFor(m => m.CustId, (IEnumerable<SelectListItem>)ViewBag.SubsidiaryList, "", new { @id = "SubsidiaryList", @class = "custom-select g-width-100vw g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                    </div>
+                </div>
+            }
+            
             @*<input id="@DateRequired" class="form-control rounded-0 form-control-md" value="@item.DateRequired.ToString("yyyy-MM-dd")" name="DateRequired" type="date">*@
             @*<div class="row g-mb-20">
             <div class="col-md-2 col-sm-2 formfield">
@@ -72,10 +84,10 @@
                             Posting Description
                         </th>
                         @*<th>Location Code</th>
-                        <th>Shortcut Dimension 1 Code</th>
-                        <th>Shortcut Dimension 2 Code</th>
-                        <th>Vendor Posting Group</th>
-                        <th>Currency Code</th>*@
+                    <th>Shortcut Dimension 1 Code</th>
+                    <th>Shortcut Dimension 2 Code</th>
+                    <th>Vendor Posting Group</th>
+                    <th>Currency Code</th>*@
                     </tr>
                 <thead>
                 </thead>
@@ -100,7 +112,7 @@
                                 {
                                     @*@Html.DisplayFor(modelItem => item.OrderDate.Value.ToShortDateString())*@
                                     @item.OrderDate.Value.ToShortDateString()
-                                }                                
+                                }
                             </td>
                             <td>
                                 @if (item.PostingDate.HasValue)
@@ -108,32 +120,32 @@
                                     @*@Html.DisplayFor(modelItem => item.PostingDate.Value.ToShortDateString())*@
                                     @item.PostingDate.Value.ToShortDateString()
                                 }
-                                </td>
+                            </td>
                             <td>
                                 @if (item.ExpectedReceiptDate.HasValue)
                                 {
                                     @*@Html.DisplayFor(modelItem => item.ExpectedReceiptDate.Value.ToShortDateString())*@
                                     @item.ExpectedReceiptDate.Value.ToShortDateString()
                                 }
-                                </td>
+                            </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.PostingDescription)
                             </td>
                             @*<td>
-                                @Html.DisplayFor(modelItem => item.LocationCode)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ShortcutDimension1Code)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ShortcutDimension2Code)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.VendorPostingGroup)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.CurrencyCode)
-                            </td>*@
+                            @Html.DisplayFor(modelItem => item.LocationCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ShortcutDimension1Code)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ShortcutDimension2Code)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.VendorPostingGroup)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CurrencyCode)
+                        </td>*@
                         </tr>
                     }
                 </tbody>
@@ -179,69 +191,69 @@
                         <th>Direct Unit Cost</th>
                         <th>Amount</th>
                         @*<th>Dim-Project</th>
-        <th>Dim-Department</th>*@
+                    <th>Dim-Department</th>*@
                     </tr>
                 <thead>
                 </thead>
                 <tbody>
                     @foreach (var item in Model.POLineList)
                     {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DocumentType)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DocumentNo)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LineNo)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.BuyFromVendorNo)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Type)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.No)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LocationCode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PostingGroup)
-                        </td>
-                        <td>
-                            @if (item.ExpReceiptDate.HasValue)
-                            {
-                                @item.ExpReceiptDate.Value.ToShortDateString()
-                            }
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DocumentType)
                             </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Description)
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DocumentNo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LineNo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.BuyFromVendorNo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Type)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.No)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LocationCode)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PostingGroup)
+                            </td>
+                            <td>
+                                @if (item.ExpReceiptDate.HasValue)
+                                {
+                                    @item.ExpReceiptDate.Value.ToShortDateString()
+                                }
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.UnitofMeasure)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Quantity)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.OutStandingQuantity)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DirectUnitCost)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Amount)
+                            </td>
+                            @*<td>
+                            @Html.DisplayFor(modelItem => item.DimProject)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.UnitofMeasure)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Quantity)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.OutStandingQuantity)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DirectUnitCost)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Amount)
-                        </td>
-                        @*<td>
-            @Html.DisplayFor(modelItem => item.DimProject)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DimDepartment)
-        </td>*@
-                    </tr>
+                            @Html.DisplayFor(modelItem => item.DimDepartment)
+                        </td>*@
+                        </tr>
                     }
                 </tbody>
             </table>

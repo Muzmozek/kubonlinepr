@@ -386,29 +386,58 @@ namespace KUBOnlinePRPM.Controllers
                     }                   
                     else
                     {
-                        POList.POListObject = (from m in db.PurchaseOrders
-                                               join n in db.Vendors on m.vendorId equals n.vendorId
-                                               join o in db.PurchaseRequisitions on m.PRId equals o.PRId
-                                               join p in db.Users on m.PreparedById equals p.userId
-                                               join q in db.POStatus on m.StatusId equals q.statusId
-                                               join t in db.Projects on m.projectId equals t.projectId
-                                               join r in db.Customers on t.custId equals r.custId
-                                               where m.CustId == CustId
-                                               select new POListTable()
-                                               {
-                                                   POId = m.POId,
-                                                   PONo = m.PONo,
-                                                   PODate = m.PODate,
-                                                   PRNo = o.PRNo,
-                                                   Company = r.name,
-                                                   RequestedName = p.userName,
-                                                   VendorId = n.vendorNo,
-                                                   VendorCompany = n.name,
-                                                   TotalPrice = m.TotalPrice,
-                                                   POAging = m.POAging,
-                                                   Status = q.status,
-                                                   POType = o.PRType
-                                               }).ToList();
+                        if (CustId == 2)
+                        {
+                            int ChildCustId = Int32.Parse(Session["ChildCompanyId"].ToString());
+                            POList.POListObject = (from m in db.PurchaseOrders
+                                                   join n in db.Vendors on m.vendorId equals n.vendorId
+                                                   join o in db.PurchaseRequisitions on m.PRId equals o.PRId
+                                                   join p in db.Users on m.PreparedById equals p.userId
+                                                   join q in db.POStatus on m.StatusId equals q.statusId
+                                                   join t in db.Projects on m.projectId equals t.projectId
+                                                   join r in db.Customers on t.custId equals r.custId
+                                                   where m.CustId == CustId && p.childCompanyId == ChildCustId
+                                                   select new POListTable()
+                                                   {
+                                                       POId = m.POId,
+                                                       PONo = m.PONo,
+                                                       PODate = m.PODate,
+                                                       PRNo = o.PRNo,
+                                                       Company = r.name,
+                                                       RequestedName = p.userName,
+                                                       VendorId = n.vendorNo,
+                                                       VendorCompany = n.name,
+                                                       TotalPrice = m.TotalPrice,
+                                                       POAging = m.POAging,
+                                                       Status = q.status,
+                                                       POType = o.PRType
+                                                   }).ToList();
+                        } else
+                        {
+                            POList.POListObject = (from m in db.PurchaseOrders
+                                                   join n in db.Vendors on m.vendorId equals n.vendorId
+                                                   join o in db.PurchaseRequisitions on m.PRId equals o.PRId
+                                                   join p in db.Users on m.PreparedById equals p.userId
+                                                   join q in db.POStatus on m.StatusId equals q.statusId
+                                                   join t in db.Projects on m.projectId equals t.projectId
+                                                   join r in db.Customers on t.custId equals r.custId
+                                                   where m.CustId == CustId
+                                                   select new POListTable()
+                                                   {
+                                                       POId = m.POId,
+                                                       PONo = m.PONo,
+                                                       PODate = m.PODate,
+                                                       PRNo = o.PRNo,
+                                                       Company = r.name,
+                                                       RequestedName = p.userName,
+                                                       VendorId = n.vendorNo,
+                                                       VendorCompany = n.name,
+                                                       TotalPrice = m.TotalPrice,
+                                                       POAging = m.POAging,
+                                                       Status = q.status,
+                                                       POType = o.PRType
+                                                   }).ToList();
+                        }                       
                     }
                     
                     POList.Type = Type;
@@ -519,9 +548,11 @@ namespace KUBOnlinePRPM.Controllers
                                                  PaymentDescription = m.paymentCode + " - " + m.paymentDescription,
                                                  PaymentCode = m.paymentCode,
                                              }).OrderBy(c => c.PaymentCode).ThenBy(c => c.PaymentDescription);
-                var LocationQuery = db.Locations.Select(m => new { LocationCodeId = m.locationId, LocationCode = m.locationCode, Address = m.locationAddress + m.locationCity }).OrderBy(m => m.LocationCode);
+                var LocationQuery = db.Locations.Select(m => new { LocationCodeId = m.locationId, LocationCode = m.locationCode, Address = m.locationAddress + m.locationCity, CustId = m.custId }).Where(m => m.CustId == PRCustId).OrderBy(m => m.LocationCode);
                 var SpecReviewerQuery = db.Groups.Select(c => new GroupList { GroupId = c.groupId, GroupName = c.groupName }).OrderBy(c => c.GroupName);
-                var PurchaserCodeQuery = db.Purchasers.Select(m => new { PurchaserCodeId = m.purchaserId, PurchaserCode = m.purchaserCode }).OrderBy(m => m.PurchaserCode);
+                var PurchaserCodeQuery = db.Purchasers.Select(m => new { PurchaserCodeId = m.purchaserId, PurchaserCode = m.purchaserCode, CustId = m.custId })
+                    //.Where(m => m.CustId == PRCustId)
+                    .OrderBy(m => m.PurchaserCode);
                 PODetail.UserId = Int32.Parse(Session["UserId"].ToString());
                 PODetail.NewPOForm = (from a in db.PurchaseOrders
                                       join b in db.Projects on a.projectId equals b.projectId

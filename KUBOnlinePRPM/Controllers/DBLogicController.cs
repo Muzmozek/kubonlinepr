@@ -1785,7 +1785,9 @@ namespace KUBOnlinePRPM.Controllers
                                       "ON ( m.custid = o.custid ) " +
                                "LEFT JOIN purchaserequisition p " +
                                       "ON ( m.prid = p.prid ) " +
-                        "WHERE m.SubmitDate between @startDate and @endDate and n.vendorNo IS NOT NULL and m.custid = @custId";
+                               "LEFT JOIN project q " +
+                                      "ON ( m.projectid = q.projectid ) " +
+                        "WHERE m.SubmitDate between @startDate and @endDate and n.vendorNo IS NOT NULL and q.custid = @custId";
 
                 SqlCommand SQLcmd = new SqlCommand(sql, conn)
                 {
@@ -1895,11 +1897,13 @@ namespace KUBOnlinePRPM.Controllers
                                       "ON ( u.prid = v.prid ) " +
                                "LEFT JOIN uom w " +
                                       "ON ( p.uomid = w.uomid ) " +
+                               "LEFT JOIN project x " +
+                                      "ON ( m.projectid = x.projectid ) " +
                         //"LEFT JOIN project u " +
                         //       "ON ( m.projectid = u.projectid and u.dimension = 'PROJECT' ) " +
                         //"LEFT JOIN project v " +
                         //       "ON ( m.projectid = v.projectid and v.dimension = 'DEPARTMENT' ) " +
-                        "WHERE m.SubmitDate between @startDate and @endDate and n.vendorNo IS NOT NULL and m.custid = @custId " +
+                        "WHERE m.SubmitDate between @startDate and @endDate and n.vendorNo IS NOT NULL and x.custid = @custId " +
                         "ORDER BY m.pono DESC";
 
                 SqlCommand SQLcmd = new SqlCommand(sql, conn)

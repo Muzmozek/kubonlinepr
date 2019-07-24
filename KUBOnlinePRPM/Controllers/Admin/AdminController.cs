@@ -21,9 +21,28 @@ namespace KUBOnlinePRPM.Controllers.Admin
         {
             POModel model = new POModel();
             model.StartDate =  DateTime.Parse("2018-01-01"); model.EndDate = DateTime.Now;
-            int custId = Int32.Parse(Session["CompanyId"].ToString());
-            model.POHeaderList = GetPOHeaderTable(model.StartDate, model.EndDate, custId);
-            model.POLineList = GetPOLineTable(model.StartDate, model.EndDate, custId);
+            model.CustId = Int32.Parse(Session["CompanyId"].ToString());
+            model.POHeaderList = GetPOHeaderTable(model.StartDate, model.EndDate, model.CustId);
+            model.POLineList = GetPOLineTable(model.StartDate, model.EndDate, model.CustId);
+
+            List<SelectListItem> SubsidiaryList = new List<SelectListItem>();
+            SubsidiaryList.Add(new SelectListItem
+            {
+                Text = "KUB Agro Holding",
+                Value = "3"
+            });
+            SubsidiaryList.Add(new SelectListItem
+            {
+                Text = "KUB Malua",
+                Value = "7"
+            });
+            SubsidiaryList.Add(new SelectListItem
+            {
+                Text = "KUB Sepadu",
+                Value = "8"
+            });
+
+            ViewBag.SubsidiaryList = new SelectList(SubsidiaryList.AsEnumerable(), "Value", "Text");
 
             return View(model);
         }
@@ -35,9 +54,14 @@ namespace KUBOnlinePRPM.Controllers.Admin
             {
                 try
                 {
-                    int custId = Int32.Parse(Session["CompanyId"].ToString());
-                    model.POHeaderList = GetPOHeaderTable(model.StartDate, model.EndDate, custId);
-                    model.POLineList = GetPOLineTable(model.StartDate, model.EndDate, custId);
+                    //int custId = Int32.Parse(Session["CompanyId"].ToString()); 
+                    if (model.CustId == 0)
+                    {
+                        model.CustId = Int32.Parse(Session["CompanyId"].ToString());
+                    }
+                    model.POHeaderList = GetPOHeaderTable(model.StartDate, model.EndDate, model.CustId);
+                    model.POLineList = GetPOLineTable(model.StartDate, model.EndDate, model.CustId);
+                    model.CustId = Int32.Parse(Session["CompanyId"].ToString());
                     //EntityToNavHeaderExcel(model.StartDate, model.EndDate, model.ExtractFileLocation);
                     //model.NotiListObject = (from m in db.NotificationMsgs
                     //                        join n in db.Users on m.fromUserId equals n.userId
@@ -59,6 +83,24 @@ namespace KUBOnlinePRPM.Controllers.Admin
                     //                            //Done = m.done
                     //                        }).OrderByDescending(m => m.MsgDate).ToList();
                     //EntityToNavLineExcel("D:\\TestNavLineTemplate[" + DateTime.Now.ToString("yyyyMMdd") + "].xls", "Purchase Line", startDate, endDate, "Line");
+                    List<SelectListItem> SubsidiaryList = new List<SelectListItem>();
+                    SubsidiaryList.Add(new SelectListItem
+                    {
+                        Text = "KUB Agro Holding",
+                        Value = "3"
+                    });
+                    SubsidiaryList.Add(new SelectListItem
+                    {
+                        Text = "KUB Malua",
+                        Value = "7"
+                    });
+                    SubsidiaryList.Add(new SelectListItem
+                    {
+                        Text = "KUB Sepadu",
+                        Value = "8"
+                    });
+
+                    ViewBag.SubsidiaryList = new SelectList(SubsidiaryList.AsEnumerable(), "Value", "Text");
 
                     return new JsonResult
                     {
