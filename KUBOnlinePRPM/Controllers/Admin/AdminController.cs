@@ -22,8 +22,12 @@ namespace KUBOnlinePRPM.Controllers.Admin
             POModel model = new POModel();
             model.StartDate =  DateTime.Parse("2018-01-01"); model.EndDate = DateTime.Now;
             model.CustId = Int32.Parse(Session["CompanyId"].ToString());
-            model.POHeaderList = GetPOHeaderTable(model.StartDate, model.EndDate, model.CustId);
-            model.POLineList = GetPOLineTable(model.StartDate, model.EndDate, model.CustId);
+            if (model.CustId == 2)
+            {
+                model.ChildCustId = Int32.Parse(Session["ChildCompanyId"].ToString());
+            }            
+            model.POHeaderList = GetPOHeaderTable(model.StartDate, model.EndDate, model.CustId, model.ChildCustId);
+            model.POLineList = GetPOLineTable(model.StartDate, model.EndDate, model.CustId, model.ChildCustId);
 
             List<SelectListItem> SubsidiaryList = new List<SelectListItem>();
             SubsidiaryList.Add(new SelectListItem
@@ -59,9 +63,13 @@ namespace KUBOnlinePRPM.Controllers.Admin
                     {
                         model.CustId = Int32.Parse(Session["CompanyId"].ToString());
                     }
-                    model.POHeaderList = GetPOHeaderTable(model.StartDate, model.EndDate, model.CustId);
-                    model.POLineList = GetPOLineTable(model.StartDate, model.EndDate, model.CustId);
+                    model.POHeaderList = GetPOHeaderTable(model.StartDate, model.EndDate, model.CustId, model.ChildCustId);
+                    model.POLineList = GetPOLineTable(model.StartDate, model.EndDate, model.CustId, model.ChildCustId);
                     model.CustId = Int32.Parse(Session["CompanyId"].ToString());
+                    if (model.CustId == 2)
+                    {
+                        model.ChildCustId = Int32.Parse(Session["ChildCompanyId"].ToString());
+                    }
                     //EntityToNavHeaderExcel(model.StartDate, model.EndDate, model.ExtractFileLocation);
                     //model.NotiListObject = (from m in db.NotificationMsgs
                     //                        join n in db.Users on m.fromUserId equals n.userId

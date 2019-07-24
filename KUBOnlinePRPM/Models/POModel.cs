@@ -12,6 +12,7 @@ namespace KUBOnlinePRPM.Models
         public List<RoleList> RoleIdList { get; set; }
         public string Type { get; set; }
         public int CustId { get; set; }
+        public int ChildCustId { get; set; }
         public int POId { get; set; }
         public int PRId { get; set; }
         public string StatusId { get; set; }

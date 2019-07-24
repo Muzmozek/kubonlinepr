@@ -1750,7 +1750,7 @@ namespace KUBOnlinePRPM.Controllers
             return HOGPSSList;
         }
 
-        protected List<POHeaderTable> GetPOHeaderTable(DateTime startDate, DateTime endDate, int custid)
+        protected List<POHeaderTable> GetPOHeaderTable(DateTime startDate, DateTime endDate, int custid, int childcustid)
         {
             SqlConnection conn = null;
             DataTable returnDT = new DataTable("POHeaderTable");
@@ -1764,7 +1764,13 @@ namespace KUBOnlinePRPM.Controllers
                 {
                     info = e.Message.ToString();
                 };
-                string sql = "";
+                string sql = ""; string plussql = ""; string plussql2 = "";
+
+                if (custid == 2)
+                {
+                    plussql = "LEFT JOIN [user] r ON ( m.PreparedById = r.userId ) ";
+                    plussql2 = " and r.childCompanyId = @childcustid";
+                }
                 sql = "SELECT p.prtype                        AS [Document Type], " +
                                "m.pono                        AS [No.], " +
                                "n.vendorno                    AS [Buy-from Vendor No.], " +
@@ -1787,7 +1793,9 @@ namespace KUBOnlinePRPM.Controllers
                                       "ON ( m.prid = p.prid ) " +
                                "LEFT JOIN project q " +
                                       "ON ( m.projectid = q.projectid ) " +
-                        "WHERE m.SubmitDate between @startDate and @endDate and n.vendorNo IS NOT NULL and q.custid = @custId";
+                                      plussql +
+                        "WHERE m.SubmitDate between @startDate and @endDate and n.vendorNo IS NOT NULL and q.custid = @custId" +
+                        plussql2;
 
                 SqlCommand SQLcmd = new SqlCommand(sql, conn)
                 {
@@ -1801,6 +1809,8 @@ namespace KUBOnlinePRPM.Controllers
                 SQLcmd.Parameters["@endDate"].Value = endDate.ToShortDateString();
                 SQLcmd.Parameters.Add("@custId", SqlDbType.Int);
                 SQLcmd.Parameters["@custId"].Value = custid;
+                SQLcmd.Parameters.Add("@childcustid", SqlDbType.Int);
+                SQLcmd.Parameters["@childcustid"].Value = childcustid;
 
                 SQLDataADP.Fill(returnDT);
 
@@ -1847,7 +1857,7 @@ namespace KUBOnlinePRPM.Controllers
             return POHeaderList;
         }
 
-        protected List<POLineTable> GetPOLineTable(DateTime startDate, DateTime endDate, int custid)
+        protected List<POLineTable> GetPOLineTable(DateTime startDate, DateTime endDate, int custid, int childcustid)
         {
             SqlConnection conn = null;
             DataTable returnDT = new DataTable("POLineTable");
@@ -1861,7 +1871,13 @@ namespace KUBOnlinePRPM.Controllers
                 {
                     info = e.Message.ToString();
                 };
-                string sql = "";
+                string sql = ""; string plussql = ""; string plussql2 = "";
+
+                if (custid == 2)
+                {
+                    plussql = "LEFT JOIN [user] y ON ( m.PreparedById = y.userId ) ";
+                    plussql2 = "and y.childCompanyId = @childcustid ";
+                }
                 sql = "SELECT v.prtype         AS [Document Type], " +
                                "m.pono         AS [Document No.], " +
                                "''             AS [Line No.], " +
@@ -1899,11 +1915,12 @@ namespace KUBOnlinePRPM.Controllers
                                       "ON ( p.uomid = w.uomid ) " +
                                "LEFT JOIN project x " +
                                       "ON ( m.projectid = x.projectid ) " +
+                                      plussql +
                         //"LEFT JOIN project u " +
                         //       "ON ( m.projectid = u.projectid and u.dimension = 'PROJECT' ) " +
                         //"LEFT JOIN project v " +
                         //       "ON ( m.projectid = v.projectid and v.dimension = 'DEPARTMENT' ) " +
-                        "WHERE m.SubmitDate between @startDate and @endDate and n.vendorNo IS NOT NULL and x.custid = @custId " +
+                "WHERE m.SubmitDate between @startDate and @endDate and n.vendorNo IS NOT NULL and x.custid = @custId " + plussql2 +
                         "ORDER BY m.pono DESC";
 
                 SqlCommand SQLcmd = new SqlCommand(sql, conn)
@@ -1918,6 +1935,8 @@ namespace KUBOnlinePRPM.Controllers
                 SQLcmd.Parameters["@endDate"].Value = endDate.ToShortDateString();
                 SQLcmd.Parameters.Add("@custId", SqlDbType.Int);
                 SQLcmd.Parameters["@custId"].Value = custid;
+                SQLcmd.Parameters.Add("@childcustid", SqlDbType.Int);
+                SQLcmd.Parameters["@childcustid"].Value = childcustid;
                 SQLDataADP.Fill(returnDT);
 
                 string DocNo = ""; string NewDocNo = ""; int LineNo = 0;

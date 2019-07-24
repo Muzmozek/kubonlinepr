@@ -2,6 +2,7 @@
 
 @using (Html.BeginForm("Index", "Admin", FormMethod.Post, new { @id = "GenerateExcelPage", @class = "container-fluid g-mb-40" }))
 {
+    @Html.TextBoxFor(m => m.ChildCustId, new { @id = "ChildCustId", @class = "d-none", @type = "text" })
     <div class="row g-bg-white g-pa-20">
         <div class="col-md-12">
             <div class="media-body align-self-center text-left g-mb-30">
@@ -36,16 +37,16 @@
                     </div>
                 </div>
             }
-            
+
             @*<input id="@DateRequired" class="form-control rounded-0 form-control-md" value="@item.DateRequired.ToString("yyyy-MM-dd")" name="DateRequired" type="date">*@
             @*<div class="row g-mb-20">
-            <div class="col-md-2 col-sm-2 formfield">
-                <span>Generated File Location</span>
-            </div>
-            <div class="d-flex col-md-4 col-sm-4">
-                @Html.TextBoxFor(m => m.ExtractFileLocation, new { @id = "ExtractFileLocation", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text" })
-            </div>
-        </div>*@
+                    <div class="col-md-2 col-sm-2 formfield">
+                        <span>Generated File Location</span>
+                    </div>
+                    <div class="d-flex col-md-4 col-sm-4">
+                        @Html.TextBoxFor(m => m.ExtractFileLocation, new { @id = "ExtractFileLocation", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text" })
+                    </div>
+                </div>*@
             <div class="row">
                 @*<div class="col-md-9 col-sm-8"></div>*@
                 <div class="col-md-4 offset-md-2 col-sm-4 offset-sm-8">
@@ -84,10 +85,10 @@
                             Posting Description
                         </th>
                         @*<th>Location Code</th>
-                    <th>Shortcut Dimension 1 Code</th>
-                    <th>Shortcut Dimension 2 Code</th>
-                    <th>Vendor Posting Group</th>
-                    <th>Currency Code</th>*@
+                            <th>Shortcut Dimension 1 Code</th>
+                            <th>Shortcut Dimension 2 Code</th>
+                            <th>Vendor Posting Group</th>
+                            <th>Currency Code</th>*@
                     </tr>
                 <thead>
                 </thead>
@@ -132,20 +133,20 @@
                                 @Html.DisplayFor(modelItem => item.PostingDescription)
                             </td>
                             @*<td>
-                            @Html.DisplayFor(modelItem => item.LocationCode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ShortcutDimension1Code)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ShortcutDimension2Code)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.VendorPostingGroup)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.CurrencyCode)
-                        </td>*@
+                                    @Html.DisplayFor(modelItem => item.LocationCode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ShortcutDimension1Code)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ShortcutDimension2Code)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.VendorPostingGroup)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CurrencyCode)
+                                </td>*@
                         </tr>
                     }
                 </tbody>
@@ -191,7 +192,7 @@
                         <th>Direct Unit Cost</th>
                         <th>Amount</th>
                         @*<th>Dim-Project</th>
-                    <th>Dim-Department</th>*@
+                            <th>Dim-Department</th>*@
                     </tr>
                 <thead>
                 </thead>
@@ -248,11 +249,11 @@
                                 @Html.DisplayFor(modelItem => item.Amount)
                             </td>
                             @*<td>
-                            @Html.DisplayFor(modelItem => item.DimProject)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DimDepartment)
-                        </td>*@
+                                    @Html.DisplayFor(modelItem => item.DimProject)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DimDepartment)
+                                </td>*@
                         </tr>
                     }
                 </tbody>
@@ -261,8 +262,8 @@
     </div>
 }
 
-    <div class="modal">
-    </div>
+<div class="modal">
+</div>
 
 <div id="UploadProgressModal" class="text-left g-max-width-600 g-bg-white g-overflow-y-auto g-pa-20" style="display: none;">
     <button type="button" class="close" onclick="Custombox.modal.close();">
