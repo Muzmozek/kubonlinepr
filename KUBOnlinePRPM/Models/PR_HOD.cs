@@ -17,13 +17,13 @@ namespace KUBOnlinePRPM.Models
         public System.Guid uuid { get; set; }
         public int HODId { get; set; }
         public int PRId { get; set; }
-        public Nullable<System.DateTime> LastHODApprovedDate { get; set; }
         public int HODApprovedP1 { get; set; }
         public Nullable<System.DateTime> HODApprovedDate1 { get; set; }
         public int HODApprovedP2 { get; set; }
         public Nullable<System.DateTime> HODApprovedDate2 { get; set; }
+        public Nullable<System.DateTime> LastHODApprovedDate { get; set; }
     
-        public virtual User User { get; set; }
         public virtual PurchaseRequisition PurchaseRequisition { get; set; }
+        public virtual User User { get; set; }
     }
 }

@@ -18,27 +18,27 @@ namespace KUBOnlinePRPM.Models
         public Project()
         {
             this.PRs_FileUpload = new HashSet<PRs_FileUpload>();
-            this.PurchaseRequisitions = new HashSet<PurchaseRequisition>();
             this.PurchaseOrders = new HashSet<PurchaseOrder>();
+            this.PurchaseRequisitions = new HashSet<PurchaseRequisition>();
         }
     
         public System.Guid uuid { get; set; }
         public int projectId { get; set; }
+        public int custId { get; set; }
+        public string dimension { get; set; }
+        public string projectCode { get; set; }
         public string projectName { get; set; }
         public bool paperVerified { get; set; }
         public decimal budgetedAmount { get; set; }
         public decimal utilizedToDate { get; set; }
         public decimal budgetBalance { get; set; }
-        public int custId { get; set; }
-        public string dimension { get; set; }
-        public string projectCode { get; set; }
     
         public virtual Customer Customer { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PRs_FileUpload> PRs_FileUpload { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PurchaseRequisition> PurchaseRequisitions { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PurchaseRequisition> PurchaseRequisitions { get; set; }
     }
 }

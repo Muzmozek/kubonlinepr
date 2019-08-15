@@ -186,8 +186,8 @@ namespace KUBOnlinePRPM.Models
 
         [Required]
         [Range(0, int.MaxValue, ErrorMessage = "Please enter valid integer Number")]
-        public int Quantity { get; set; }
-        public int? OutstandingQuantity { get; set; }
+        public decimal Quantity { get; set; }
+        public decimal? OutstandingQuantity { get; set; }
         public int? UoMId { get; set; }
         public string UOM { get; set; }
         public decimal? UnitPrice { get; set; }

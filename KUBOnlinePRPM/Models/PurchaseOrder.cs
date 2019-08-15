@@ -37,7 +37,7 @@ namespace KUBOnlinePRPM.Models
         public bool Submited { get; set; }
         public Nullable<System.DateTime> SubmitDate { get; set; }
         public int POAging { get; set; }
-        public int TotalQuantity { get; set; }
+        public decimal TotalQuantity { get; set; }
         public decimal TotalPrice { get; set; }
         public decimal DiscountAmount { get; set; }
         public int Discount_ { get; set; }

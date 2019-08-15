@@ -8,6 +8,7 @@
         paging: false,
         searching: false,
         bAutoWidth: false,
+        stateSave: true,
         columnDefs: [
             { visible: false, targets: [0] }
         ],
@@ -19,6 +20,24 @@
                 { name: 'tablet', width: 768 },
                 { name: 'phone', width: 480 }
             ]
+            , details: {
+                //display: $.fn.dataTable.Responsive.display.childRowImmediate,
+                //type: '',
+                renderer: function (api, rowIdx, columns) {
+                    var data = $.map(columns, function (col, i) {
+                        return col.hidden ?
+                            '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+                            '<td>' + col.title + '</td> ' +
+                            '<td>' + col.data + '</td>' +
+                            '</tr>' :
+                            '';
+                    }).join('');
+
+                    return data ?
+                        $('<table width="100%" />').append(data) :
+                        false;
+                }
+            }
         }
     });
 }

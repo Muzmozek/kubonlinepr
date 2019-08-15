@@ -1183,7 +1183,7 @@ namespace KUBOnlinePRPM.Controllers
             newPO.PONo = "PO-" + DateTime.Now.Year + "-" + string.Format("{0}{1}", 0, newPO.POId.ToString("D4"));
             db.SaveChanges();
 
-            int TotalQuantity = 0; decimal TotalPrice = 0;
+            decimal TotalQuantity = 0; decimal TotalPrice = 0;
             foreach (var value in POModel.NewPOForm.POItemListObject)
             {
                 PO_Item _objNewPOItem = new PO_Item
@@ -1261,7 +1261,7 @@ namespace KUBOnlinePRPM.Controllers
             }
             db.SaveChanges();
             newPR.AmountPOBalance = 0;
-            int TotalQuantity = 0; decimal TotalPrice = 0;
+            decimal TotalQuantity = 0; decimal TotalPrice = 0;
             foreach (var value in x.NewPOForm.POItemListObject)
             {
                 PO_Item objPOItemDetails = db.PO_Item.FirstOrDefault(m => m.itemsId == value.ItemsId && m.POId == x.POId);
@@ -1996,8 +1996,8 @@ namespace KUBOnlinePRPM.Controllers
                     ExpReceiptDate = dataRow.Field<DateTime?>("Expected Receipt Date"),
                     Description = dataRow.Field<string>("Description"),
                     UnitofMeasure = dataRow.Field<string>("Unit of Measure"),
-                    Quantity = dataRow.Field<int?>("Quantity"),
-                    OutStandingQuantity = dataRow.Field<int?>("Outstanding Quantity"),
+                    Quantity = dataRow.Field<decimal?>("Quantity"),
+                    OutStandingQuantity = dataRow.Field<decimal?>("Outstanding Quantity"),
                     DirectUnitCost = dataRow.Field<decimal?>("Direct Unit Cost"),
                     Amount = dataRow.Field<decimal?>("Amount")
                     //DimProject = dataRow.Field<string>("Dim-Project"),

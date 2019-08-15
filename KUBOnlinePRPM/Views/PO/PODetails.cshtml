@@ -187,23 +187,28 @@
                             <table id="POItemTable" class="table table-striped table-bordered dt-responsive table-hover" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th class="d-none">Item Id</th>
+                                        <th class="d-none"></th>
                                         <th class="all">
                                             <div class="media">
                                                 <div class="d-flex align-self-center">Date required</div>
                                             </div>
                                         </th>
-                                        <th class="all">
+                                        <th class="desktop">
                                             <div class="media">
-                                                <div class="d-flex align-self-center">Code</div>
+                                                <div class="d-flex align-self-center">Item Type</div>
                                             </div>
                                         </th>
                                         <th class="desktop">
                                             <div class="media">
-                                                <div class="d-flex align-self-center">Description</div>
+                                                <div class="d-flex align-self-center">Item Code</div>
                                             </div>
                                         </th>
-                                        <th class="desktop">
+                                        <th class="tablet">
+                                            <div class="media">
+                                                <div class="d-flex align-self-center">Description/Spec</div>
+                                            </div>
+                                        </th>
+                                        <th class="tablet">
                                             <div class="media">
                                                 <div class="d-flex align-self-center">Cust PO No</div>
                                             </div>
@@ -219,12 +224,47 @@
                                         }
                                         <th class="desktop">
                                             <div class="media">
-                                                <div class="d-flex align-self-center">Unit Price (RM)</div>
+                                                <div class="d-flex align-self-center">UoM</div>
                                             </div>
                                         </th>
-                                        <th class="desktop">
+                                        <th class="tablet">
                                             <div class="media">
-                                                <div class="d-flex align-self-center">Total (RM)</div>
+                                                <div class="d-flex align-self-center">Job No</div>
+                                            </div>
+                                        </th>
+                                        <th class="tablet">
+                                            <div class="media">
+                                                <div class="d-flex align-self-center">Job Task No</div>
+                                            </div>
+                                        </th>
+                                        <th class="tablet">
+                                            <div class="media">
+                                                <div class="d-flex align-self-center">SST Code</div>
+                                            </div>
+                                        </th>
+                                        <th class="tablet">
+                                            <div class="media">
+                                                <div class="d-flex align-self-center">Unit Price excl SST (RM)</div>
+                                            </div>
+                                        </th>
+                                        <th class="tablet">
+                                            <div class="media">
+                                                <div class="d-flex align-self-center">Total price excl SST (RM)</div>
+                                            </div>
+                                        </th>
+                                        <th class="tablet">
+                                            <div class="media">
+                                                <div class="d-flex align-self-center">Total price incl SST (RM)</div>
+                                            </div>
+                                        </th>
+                                        <th class="tablet">
+                                            <div class="media">
+                                                <div class="d-flex align-self-center">DIM-Project</div>
+                                            </div>
+                                        </th>
+                                        <th class="tablet">
+                                            <div class="media">
+                                                <div class="d-flex align-self-center">DIM-Department</div>
                                             </div>
                                         </th>
                                         @if (Model.Type == "Blanket")
@@ -240,39 +280,47 @@
                                         var Quantity = "Quantity" + i;
                                         foreach (var item in Model.NewPOForm.POItemListObject)
                                         {
-                                            <tr>
-                                                <td class="d-none">@Html.DisplayFor(modelItem => item.ItemsId)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.DateRequired)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.ItemCode, new { @class = "CodeId" })</td>
-                                                <td>@Html.DisplayFor(modelItem => item.Description)</td>
-                                                @if (Model.Type == "Blanket")
-                                                {
-                                                    <td>
-                                                        <input id="@CustPONo" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="CustPONo" value="@item.CustPONo" type="text">
-                                                    </td>
-                                                    <td>
-                                                        <input id="@Quantity" class="Quantity form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="Quantity" value="@item.Quantity" type="text">
-                                                    </td>
-                                                    <td class="d-none"><input id="@OutStandingQuantity" class="OutStandingQuantity form-control custom-filter desktop" type="text" name="OutStandingQuantity" value="@item.OutStandingQuantity" /></td>
-                                                }
-                                                else
-                                                {
-                                                    <td class="CustPONo">@Html.DisplayFor(modelItem => item.CustPONo)</td>
-                                                    <td class="Quantity">@Html.DisplayFor(modelItem => item.Quantity)</td>
-                                                }
-                                                <td class="UnitPrice">@Html.DisplayFor(modelItem => item.UnitPrice)</td>
-                                                <td class="TotalPrice">@Html.DisplayFor(modelItem => item.TotalPrice)</td>
-                                                @if (Model.Type == "Blanket")
-                                                {
-                                                    <td>
-                                                        <div class="g-width-30 row">
-                                                            <a class="g-color-gray-dark-v5 g-text-underline--none--hover g-pa-5 RemovePOItem" data-toggle="tooltip" data-placement="top" data-original-title="Delete">
-                                                                <i class="icon-trash g-font-size-18 g-mr-7"></i>
-                                                            </a>
-                                                        </div>
-                                                    </td>
-                                                }
-                                            </tr>
+                                    <tr>
+                                        <td class="d-none">@Html.DisplayFor(modelItem => item.ItemsId)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.DateRequired)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.ItemType, new { @class = "ItemType" })</td>
+                                        <td>@Html.DisplayFor(modelItem => item.ItemCode, new { @class = "CodeId" })</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                                        @if (Model.Type == "Blanket")
+                                        {
+                                            <td>
+                                                <input id="@CustPONo" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="CustPONo" value="@item.CustPONo" type="text">
+                                            </td>
+                                            <td>
+                                                <input id="@Quantity" class="Quantity form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="Quantity" value="@item.Quantity" type="text">
+                                            </td>
+                                            <td class="d-none"><input id="@OutStandingQuantity" class="OutStandingQuantity form-control custom-filter desktop" type="text" name="OutStandingQuantity" value="@item.OutStandingQuantity" /></td>
+                                        }
+                                        else
+                                        {
+                                            <td class="CustPONo">@Html.DisplayFor(modelItem => item.CustPONo)</td>
+                                            <td class="Quantity">@Html.DisplayFor(modelItem => item.Quantity)</td>
+                                        }
+                                        <td>@Html.DisplayFor(modelItem => item.UOM)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.JobNo)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.JobTaskNo)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.TaxCode)</td>
+                                        <td class="UnitPrice">@Html.DisplayFor(modelItem => item.UnitPrice)</td>
+                                        <td class="TotalPrice">@Html.DisplayFor(modelItem => item.TotalPrice)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.TotalPriceIncSST)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.DimProject)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.DimDept)</td>
+                                        @if (Model.Type == "Blanket")
+                                        {
+                                            <td>
+                                                <div class="g-width-30 row">
+                                                    <a class="g-color-gray-dark-v5 g-text-underline--none--hover g-pa-5 RemovePOItem" data-toggle="tooltip" data-placement="top" data-original-title="Delete">
+                                                        <i class="icon-trash g-font-size-18 g-mr-7"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        }
+                                    </tr>
                                             i++;
                                         }
                                     }

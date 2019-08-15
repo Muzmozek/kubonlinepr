@@ -1,4 +1,6 @@
 ﻿$(document).ready(function () {
+    $.fn.dataTable.moment('D/M/YYYY h:m:s A');
+
     PRListTable = $('#PRListTable').DataTable({
         serverSide: false,
         dom: '<"btn-FloatLeft"l><"btn-FloatRight"B><"btn-FloatRight"f>tip',

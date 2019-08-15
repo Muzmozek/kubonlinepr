@@ -22,7 +22,7 @@ namespace KUBOnlinePRPM.Models
         public string description { get; set; }
         public int codeId { get; set; }
         public string custPONo { get; set; }
-        public int quantity { get; set; }
+        public decimal quantity { get; set; }
         public Nullable<int> UoMId { get; set; }
         public decimal unitPrice { get; set; }
         public decimal totalPrice { get; set; }

@@ -214,21 +214,17 @@
     <Compile Include="Models\JobTask.cs">
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\KUBOnlinePR.Context1.cs">
+    <Compile Include="Models\KUBOnlinePR.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>KUBOnlinePR.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\KUBOnlinePR.cs" />
-    <Compile Include="Models\KUBOnlinePR.Designer.cs">
-      <DependentUpon>KUBOnlinePR.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Models\KUBOnlinePR1.cs">
+    <Compile Include="Models\KUBOnlinePR.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\KUBOnlinePR1.Designer.cs">
+    <Compile Include="Models\KUBOnlinePR.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>KUBOnlinePR.edmx</DependentUpon>
@@ -317,6 +313,9 @@
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Role.cs">
+      <DependentUpon>KUBOnlinePR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sysdiagram.cs">
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TaxCode.cs">
@@ -545,6 +544,7 @@
     <Content Include="Assets\datatables\js\responsive.bootstrap4.js" />
     <Content Include="Assets\datatables\js\semantic.js" />
     <Content Include="Assets\datatables\js\vfs_fonts.js" />
+    <Content Include="Assets\datetime-moment.js" />
     <Content Include="Assets\fancybox\jquery.fancybox.css" />
     <Content Include="Assets\fancybox\jquery.fancybox.js" />
     <Content Include="Assets\fancybox\jquery.fancybox.min.css" />
@@ -5150,6 +5150,7 @@
     <Content Include="Assets\malihu-scrollbar\jquery.mCustomScrollbar.min.css" />
     <Content Include="Assets\masonry.pkgd.js" />
     <Content Include="Assets\modernizr-2.8.3.js" />
+    <Content Include="Assets\moment.js" />
     <Content Include="Assets\morris-js\morris.min.css" />
     <Content Include="Assets\morris-js\morris.min.js" />
     <Content Include="Assets\multiselect\css\multi-select.css" />
@@ -5167,11 +5168,13 @@
     <Content Include="Images\signature.png" />
     <Content Include="Models\KUBOnlinePR.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>KUBOnlinePR.Context1.cs</LastGenOutput>
+      <DependentUpon>KUBOnlinePR.edmx</DependentUpon>
+      <LastGenOutput>KUBOnlinePR.Context.cs</LastGenOutput>
     </Content>
     <Content Include="Models\KUBOnlinePR.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>KUBOnlinePR1.cs</LastGenOutput>
+      <DependentUpon>KUBOnlinePR.edmx</DependentUpon>
+      <LastGenOutput>KUBOnlinePR.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\AuditTrail.js" />
     <Content Include="Scripts\BPRPOList.js" />
@@ -5637,7 +5640,7 @@
     <Content Include="Assets\robicch-jQueryGantt\res\icons.woff" />
     <EntityDeploy Include="Models\KUBOnlinePR.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>KUBOnlinePR1.Designer.cs</LastGenOutput>
+      <LastGenOutput>KUBOnlinePR.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <Content Include="Models\KUBOnlinePR.edmx.diagram">
       <DependentUpon>KUBOnlinePR.edmx</DependentUpon>

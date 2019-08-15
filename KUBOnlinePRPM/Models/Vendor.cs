@@ -17,34 +17,31 @@ namespace KUBOnlinePRPM.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Vendor()
         {
-            this.VendorStaffs = new HashSet<VendorStaff>();
-            this.PurchaseRequisitions = new HashSet<PurchaseRequisition>();
             this.PurchaseOrders = new HashSet<PurchaseOrder>();
+            this.PurchaseRequisitions = new HashSet<PurchaseRequisition>();
         }
     
         public System.Guid uuid { get; set; }
         public int vendorId { get; set; }
-        public string name { get; set; }
-        public Nullable<int> createByUserId { get; set; }
-        public Nullable<System.DateTime> createDate { get; set; }
-        public Nullable<int> lastModifyByUserId { get; set; }
-        public Nullable<System.DateTime> lastModifyDate { get; set; }
         public string vendorNo { get; set; }
+        public string name { get; set; }
         public int custId { get; set; }
         public string quotationNo { get; set; }
         public string contactName { get; set; }
         public string telephoneNo { get; set; }
         public string email { get; set; }
         public string address { get; set; }
+        public Nullable<int> createByUserId { get; set; }
+        public Nullable<System.DateTime> createDate { get; set; }
+        public Nullable<int> lastModifyByUserId { get; set; }
+        public Nullable<System.DateTime> lastModifyDate { get; set; }
     
-        public virtual User User { get; set; }
-        public virtual User User1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<VendorStaff> VendorStaffs { get; set; }
         public virtual Customer Customer { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PurchaseRequisition> PurchaseRequisitions { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PurchaseRequisition> PurchaseRequisitions { get; set; }
+        public virtual User User { get; set; }
+        public virtual User User1 { get; set; }
     }
 }

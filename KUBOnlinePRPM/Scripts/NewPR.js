@@ -360,7 +360,7 @@ function calculateTotal() {
 $(document).on('ready', function () {
     $.HSCore.components.HSFileAttachment.init('.js-file-attachment');
     $.HSCore.helpers.HSFocusState.init();
-    if (ifProcurement != "") {
+    if (ifProcurement !== "") {
         openHiddenPRItemTable();
     } else {
         generatePRItemTable();

@@ -265,7 +265,7 @@ namespace KUBOnlinePRPM.Controllers
 
                     db.SaveChanges();
 
-                    int TotalQuantity = 0; decimal TotalPrice = 0; decimal TotalExcSST = 0; decimal TotalIncSST = 0;
+                    decimal TotalQuantity = 0; decimal TotalPrice = 0; decimal TotalExcSST = 0; decimal TotalIncSST = 0;
                     foreach (var value in POModel.NewPOForm.POItemListObject)
                     {
                         PR_Items _objUpdatePRItem = db.PR_Items.First(m => m.itemsId == value.ItemsId);
@@ -551,7 +551,7 @@ namespace KUBOnlinePRPM.Controllers
                 var LocationQuery = db.Locations.Select(m => new { LocationCodeId = m.locationId, LocationCode = m.locationCode, Address = m.locationAddress + m.locationCity, CustId = m.custId }).Where(m => m.CustId == PRCustId).OrderBy(m => m.LocationCode);
                 var SpecReviewerQuery = db.Groups.Select(c => new GroupList { GroupId = c.groupId, GroupName = c.groupName }).OrderBy(c => c.GroupName);
                 var PurchaserCodeQuery = db.Purchasers.Select(m => new { PurchaserCodeId = m.purchaserId, PurchaserCode = m.purchaserCode, CustId = m.custId })
-                    //.Where(m => m.CustId == PRCustId)
+                    .Where(m => m.CustId == PRCustId)
                     .OrderBy(m => m.PurchaserCode);
                 PODetail.UserId = Int32.Parse(Session["UserId"].ToString());
                 PODetail.NewPOForm = (from a in db.PurchaseOrders
@@ -612,43 +612,50 @@ namespace KUBOnlinePRPM.Controllers
                     PODetail.NewPOForm.AdminId = getProcurement.ProcurementId;
                 }
 
-                PODetail.NewPOForm.POItemListObject = (from m in db.PO_Item
-                                                       from n in db.PopulateItemLists.Where(x => m.codeId == x.codeId && m.itemTypeId == x.itemTypeId).DefaultIfEmpty()
-                                                       join p in db.PR_Items on m.itemsId equals p.itemsId
-                                                       join o in db.Projects on m.jobNoId equals o.projectId into s
-                                                       join r in db.ItemTypes on m.itemTypeId equals r.itemTypeId
-                                                       join u in db.JobTasks on m.jobTaskNoId equals u.jobTaskNoId into v
-                                                       join x in db.TaxCodes on m.taxCodeId equals x.TaxCodeId into b
-                                                       join a in db.UOMs on m.UoMId equals a.UoMId into d
-                                                       from t in s.DefaultIfEmpty()
-                                                       from w in v.DefaultIfEmpty()
-                                                       from c in b.DefaultIfEmpty()
-                                                       from e in d.DefaultIfEmpty()
-                                                       where m.POId == PODetail.POId && n.custId == PRCustId
+                PODetail.NewPOForm.POItemListObject = (from a in db.PO_Item
+                                                       from b in db.PopulateItemLists.Where(x => a.codeId == x.codeId && a.itemTypeId == x.itemTypeId).DefaultIfEmpty()
+                                                       join c in db.PR_Items on a.itemsId equals c.itemsId
+                                                       join d in db.Projects on a.jobNoId equals d.projectId into e
+                                                       join f in db.ItemTypes on a.itemTypeId equals f.itemTypeId
+                                                       join g in db.JobTasks on a.jobTaskNoId equals g.jobTaskNoId into h
+                                                       join i in db.TaxCodes on a.taxCodeId equals i.TaxCodeId into j
+                                                       join k in db.UOMs on a.UoMId equals k.UoMId into l
+                                                       join q in db.Projects on a.dimProjectId equals q.projectId into r
+                                                       join s in db.Projects on a.dimDeptId equals s.projectId into t
+                                                       from m in e.DefaultIfEmpty()
+                                                       from n in h.DefaultIfEmpty()
+                                                       from o in j.DefaultIfEmpty()
+                                                       from p in l.DefaultIfEmpty()
+                                                       from u in r.DefaultIfEmpty()
+                                                       from v in t.DefaultIfEmpty()
+                                                       where a.POId == PODetail.POId && b.custId == PRCustId
                                                        select new POItemsTable()
                                                        {
-                                                           ItemsId = m.itemsId,
-                                                           ItemTypeId = m.itemTypeId,
-                                                           DateRequired = m.dateRequired,
-                                                           ItemCode = n.ItemDescription,
-                                                           Description = m.description,
-                                                           CustPONo = m.custPONo,
-                                                           Quantity = m.quantity,
-                                                           OutStandingQuantity = p.outStandingQuantity.Value,                                                           
-                                                           UoMId = m.UoMId,
-                                                           UOM = e.UoMCode,
-                                                           JobNoId = t.projectId,
-                                                           JobNo = t.projectCode,
-                                                           JobTaskNoId = m.jobTaskNoId,
-                                                           JobTaskNo = w.jobTaskNo,
-                                                           UnitPrice = m.unitPrice,
-                                                           TaxCodeId = m.taxCodeId,
-                                                           TaxCode = c.Code,
-                                                           TotalPrice = m.totalPrice,
-                                                           UnitPriceIncSST = m.unitPriceIncSST,
-                                                           TotalPriceIncSST = m.totalPriceIncSST,
-                                                           DimProjectId = m.dimProjectId,
-                                                           DimDeptId = m.dimDeptId
+                                                           ItemsId = a.itemsId,
+                                                           DateRequired = a.dateRequired,
+                                                           ItemTypeId = a.itemTypeId,
+                                                           ItemType = f.type,                                                           
+                                                           ItemCode = b.ItemDescription,
+                                                           Description = a.description,
+                                                           CustPONo = a.custPONo,
+                                                           Quantity = a.quantity,
+                                                           OutStandingQuantity = c.outStandingQuantity.Value,                                                           
+                                                           UoMId = a.UoMId,
+                                                           UOM = p.UoMCode,
+                                                           JobNoId = m.projectId,
+                                                           JobNo = m.projectCode,
+                                                           JobTaskNoId = n.jobTaskNoId,
+                                                           JobTaskNo = n.jobTaskNo,
+                                                           UnitPrice = a.unitPrice,
+                                                           TaxCodeId = a.taxCodeId,
+                                                           TaxCode = o.Code,
+                                                           TotalPrice = a.totalPrice,
+                                                           UnitPriceIncSST = a.unitPriceIncSST,
+                                                           TotalPriceIncSST = a.totalPriceIncSST,
+                                                           DimProjectId = a.dimProjectId,
+                                                           DimProject = u.projectName,
+                                                           DimDeptId = a.dimDeptId,
+                                                           DimDept = v.projectName
                                                        }).ToList();
 
                 ViewBag.PayToVendorList = new SelectList(PayToVendorQuery.AsEnumerable(), "VendorId", "VendorName", PODetail.NewPOForm.PayToVendorId);
@@ -740,12 +747,6 @@ namespace KUBOnlinePRPM.Controllers
                     db.SaveChanges();
 
                     int UserId = Int32.Parse(Session["UserId"].ToString());
-                    if (PRModel.Type == "Blanket")
-                    {
-
-                    }
-                    else
-                    {
                         PurchaseOrder newPO = new PurchaseOrder();
                         newPO.uuid = Guid.NewGuid();
                         newPO.PRId = updatePR.PRId;
@@ -790,11 +791,11 @@ namespace KUBOnlinePRPM.Controllers
 
                         if (checkPOforCust != null)
                         {
-                            int NewPOsequence =  Int32.Parse(checkPOforCust.PONo.Split('-')[2]) + 1;
+                            int NewPOsequence = Int32.Parse(checkPOforCust.PONo.Split('-')[2]) + 1;
                             if (ConfigurationManager.AppSettings[CustName] != null)
                             {
                                 NewPOsequence = Int32.Parse(ConfigurationManager.AppSettings[CustName].ToString()) + 1;
-                            } 
+                            }
                             newPO.PONo = "PO-" + DateTime.Now.Year.ToString().Substring(2) + "-" + string.Format("{0}{1}", 0, NewPOsequence.ToString("D4"));
                         }
                         else
@@ -832,7 +833,7 @@ namespace KUBOnlinePRPM.Controllers
 
                         db.SaveChanges();
 
-                        int TotalQuantity = 0;
+                        decimal TotalQuantity = 0;
                         foreach (var value in updatePRItem)
                         {
                             PO_Item _objNewPOItem = new PO_Item
@@ -891,14 +892,14 @@ namespace KUBOnlinePRPM.Controllers
                         NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == requestorDone.MsgId);
                         getDone.done = true;
                         db.SaveChanges();
-                    }
-                    PRModel.UserId = UserId;
-                    PRModel.FullName = Session["FullName"].ToString();
-                    PRModel.CustId = updatePR.CustId;
-                    PRModel.NewPRForm.PRNo = updatePR.PRNo;
-                    PRModel.NewPRForm.Scenario = updatePR.Scenario;
-                    SendEmailPONotification(PRModel, "IssuePO");
 
+                        PRModel.UserId = UserId;
+                        PRModel.FullName = Session["FullName"].ToString();
+                        PRModel.CustId = updatePR.CustId;
+                        PRModel.NewPRForm.PRNo = updatePR.PRNo;
+                        PRModel.NewPRForm.Scenario = updatePR.Scenario;
+                        SendEmailPONotification(PRModel, "IssuePO");
+                   
                     return Json(new { success = true, message = "The PO has been issued" });
                 }
                 catch (DbEntityValidationException e)

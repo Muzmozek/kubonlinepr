@@ -21,7 +21,7 @@ namespace KUBOnlinePRPM.Models
         public Nullable<System.DateTime> recommendedDate { get; set; }
         public Nullable<System.DateTime> lastRecommendedDate { get; set; }
     
-        public virtual User User { get; set; }
         public virtual PurchaseRequisition PurchaseRequisition { get; set; }
+        public virtual User User { get; set; }
     }
 }

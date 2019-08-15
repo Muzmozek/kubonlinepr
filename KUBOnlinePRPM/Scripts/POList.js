@@ -1,20 +1,22 @@
 ﻿$(document).ready(function () {
+    $.fn.dataTable.moment('D/M/YYYY h:m:s A');
+
     POListTable = $('#POListTable').DataTable({
         serverSide: false,
         dom: '<"btn-FloatLeft"l><"btn-FloatRight"B><"btn-FloatRight"f>tip',
         buttons: [
             'csv', 'excel', 'pdf', 'print'
         ],
-        processing: true,
+        processing: false,
         paging: true,
         deferRender: true,
         ordering: true,
         bAutoWidth: false,
         columnDefs: [
-                { visible: false, targets: [0] }
+            { visible: false, targets: [0] }
         ],
-        destroy: true,
-        aaSorting: [1, "desc"],
+        aaSorting: [2, "desc"],
+        destroy: true,       
         stateSave: true,
         responsive: {
             breakpoints: [

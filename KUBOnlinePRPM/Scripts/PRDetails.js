@@ -3,6 +3,7 @@
     //$.HSCore.components.HSFileAttachment.init('.js-file-attachment');
     //$.HSCore.helpers.HSFocusState.init();
     //generatePRItemTable();
+    $.fn.dataTable.moment('DD/MM/YYYY h:m:s A');
 
     $.ajaxSetup({
         beforeSend: function () { $("body").addClass("loading"); }
@@ -538,6 +539,11 @@
                 $("body").removeClass("loading");
             }
         });
+    });
+
+    $(document).on("change", "#VendorId", function () {
+        var VendorNo = $("#VendorId option:selected").text().split(" ")[0];
+        $("#VendorCompanyId").val(VendorNo);
     });
 
     //$(document).on("mouseup", ".CodeId", function () {

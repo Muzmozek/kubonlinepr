@@ -12,16 +12,12 @@ namespace KUBOnlinePRPM.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PR_RecommenderCFO
+    public partial class sysdiagram
     {
-        public System.Guid uuid { get; set; }
-        public int recommenderId { get; set; }
-        public int PRId { get; set; }
-        public int recommended { get; set; }
-        public Nullable<System.DateTime> recommendedDate { get; set; }
-        public Nullable<System.DateTime> lastRecommendedDate { get; set; }
-    
-        public virtual PurchaseRequisition PurchaseRequisition { get; set; }
-        public virtual User User { get; set; }
+        public string name { get; set; }
+        public int principal_id { get; set; }
+        public int diagram_id { get; set; }
+        public Nullable<int> version { get; set; }
+        public byte[] definition { get; set; }
     }
 }

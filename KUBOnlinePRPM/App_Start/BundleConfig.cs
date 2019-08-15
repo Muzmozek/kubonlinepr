@@ -63,8 +63,9 @@ namespace KUBOnlinePRPM
                         "~/Assets/imagesloaded.pkgd.js",
                         "~/Assets/masonry.pkgd.js",
                         "~/Assets/datatables/js/jquery.dataTables.js",
-                        //"~/Assets/datatables/js/dataTables.semanticui.js",
-                        
+                        "~/Assets/moment.js",
+                        "~/Assets/datetime-moment.js",
+                        //"~/Assets/datatables/js/dataTables.semanticui.js",                        
                         //"~/Assets/datatables/js/semantic.js",
                         "~/Assets/datatables/js/dataTables.bootstrap4.js",
                         "~/Assets/datatables/js/dataTables.responsive.js",

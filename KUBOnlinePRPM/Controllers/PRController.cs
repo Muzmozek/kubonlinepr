@@ -2298,15 +2298,19 @@ namespace KUBOnlinePRPM.Controllers
 
                     var requestorDone = (from m in db.NotificationMsgs
                                          join n in db.NotiGroups on m.msgId equals n.msgId
-                                         where n.toUserId == UserId && m.PRId == PrId && m.msgType == "Task"
+                                         join o in db.Users_Roles on n.toUserId equals o.userId
+                                         where m.PRId == PrId && m.msgType == "Task" && o.roleId == "R13"
                                          select new PRModel()
                                          {
                                              MsgId = m.msgId
-                                         }).First();
+                                         }).ToList();
 
-                    NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == requestorDone.MsgId);
-                    getDone.done = true;
-                    db.SaveChanges();
+                    foreach (var item in requestorDone)
+                    {
+                        NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == item.MsgId);
+                        getDone.done = true;
+                        db.SaveChanges();
+                    }
 
                     //PRModel x = new PRModel();
                     //x.PRId = PR.PRId;
@@ -2664,7 +2668,7 @@ namespace KUBOnlinePRPM.Controllers
                                               Justification = a.Justification,
                                               UtilizedToDate = a.utilizedToDate,
                                               TotalIncSST = a.TotalIncSST,
-                                              BudgetBalance = a.budgetBalance,
+                                              BudgetBalance = a.budgetedAmount - a.utilizedToDate - a.TotalIncSST.Value,
                                               PreparedById = a.PreparedById,
                                               PreparedDate = a.PreparedDate,
                                               HODApproverId = s.HODId,
@@ -3480,15 +3484,19 @@ namespace KUBOnlinePRPM.Controllers
 
                 var requestorDone = (from m in db.NotificationMsgs
                                      join n in db.NotiGroups on m.msgId equals n.msgId
-                                     where n.toUserId == UserId && m.PRId == PrId && m.msgType == "Task"
+                                     join o in db.Users_Roles on n.toUserId equals o.userId
+                                     where m.PRId == PrId && m.msgType == "Task" && o.roleId == "R03"
                                      select new PRModel()
                                      {
                                          MsgId = m.msgId
-                                     }).First();
+                                     }).ToList();
 
-                NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == requestorDone.MsgId);
-                getDone.done = true;
-                db.SaveChanges();
+                foreach (var item in requestorDone)
+                {
+                    NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == item.MsgId);
+                    getDone.done = true;
+                    db.SaveChanges();
+                }
 
                 decimal amountBudget = PRModel.NewPRForm.TotalIncSST.Value;
 

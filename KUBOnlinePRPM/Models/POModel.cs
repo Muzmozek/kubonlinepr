@@ -102,7 +102,7 @@ namespace KUBOnlinePRPM.Models
         public string Company { get; set; }
         public string RequestedName { get; set; }
         public string POItem { get; set; }
-        public int Quantity { get; set; }
+        public decimal Quantity { get; set; }
         public decimal TotalPrice { get; set; }
         public decimal? AmountRequired { get; set; }
         public int POAging { get; set; }
@@ -113,6 +113,7 @@ namespace KUBOnlinePRPM.Models
     public class POItemsTable
     {
         public int ItemsId { get; set; }
+        public string ItemType { get; set; }
         public int? ItemTypeId { get; set; }
         public int POId { get; set; }
         public DateTime DateRequired { get; set; }
@@ -120,8 +121,8 @@ namespace KUBOnlinePRPM.Models
         public int CodeId { get; set; }
         public string ItemCode { get; set; }
         public string CustPONo { get; set; }
-        public int Quantity { get; set; }
-        public int OutStandingQuantity { get; set; }
+        public decimal Quantity { get; set; }
+        public decimal OutStandingQuantity { get; set; }
         public string UOM { get; set; }
         public int? UoMId { get; set; }
         public decimal UnitPrice { get; set; }
@@ -137,7 +138,9 @@ namespace KUBOnlinePRPM.Models
         public string TaxCode { get; set; }
         public int? TaxPerc { get; set; }
         public int? DimProjectId { get; set; }
+        public string DimProject { get; set; }
         public int? DimDeptId { get; set; }
+        public string DimDept { get; set; }
     }
 
     public class POHeaderTable
@@ -171,8 +174,8 @@ namespace KUBOnlinePRPM.Models
         public DateTime? ExpReceiptDate { get; set; }
         public string Description { get; set; }
         public string UnitofMeasure { get; set; }
-        public int? Quantity { get; set; }
-        public int? OutStandingQuantity { get; set; }
+        public decimal? Quantity { get; set; }
+        public decimal? OutStandingQuantity { get; set; }
         public decimal? DirectUnitCost { get; set; }
         public decimal? Amount { get; set; }
         //public string DimProject { get; set; }
