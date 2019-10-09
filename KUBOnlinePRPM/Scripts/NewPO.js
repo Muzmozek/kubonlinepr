@@ -36,6 +36,16 @@
         //}
     });
 
+    $("#PayToVendor").combobox({
+        bsVersion: '4',
+        menu: '<ul class="typeahead typeahead-long dropdown-menu"></ul>',
+        item: '<li><a href="#" class="dropdown-item"></a></li>',
+        template: function () {
+            return '<div class="combobox-container"> <input type="hidden" /><div class="input-group"> <input type="text" autocomplete="off" /><span class="input-group-append input-group-text dropdown-toggle" data-dropdown="dropdown"><span class="caret" /> <span class="glyphicon glyphicon-remove" /></span></div></div>';
+        },
+        clearIfNoMatch: true
+    });
+
     $(document).on("change", ".Quantity", function () {
         var UnitPrice = parseInt($(this).parent().parent().find(".UnitPrice")[0].textContent);
         var TotalPrice = parseInt($(this).val()) * UnitPrice;

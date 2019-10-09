@@ -355,25 +355,6 @@ namespace KUBOnlinePRPM.Controllers
                                               EmailAddress = m.emailAddress
                                           }).ToList();
                         break;
-                    case 3:
-                        if (getPRPreparerChildCustId.childCompanyId == 16)
-                        {
-                            //kubma no incharge person for procurement
-                            getProcurement = null;
-                        }
-                        else
-                        {
-                            getProcurement = (from m in db.Users
-                                              join n in db.Users_Roles on m.userId equals n.userId
-                                              where n.roleId == "R03" && m.companyId == model.CustId
-                                              select new PRModel()
-                                              {
-                                                  UserId = m.userId,
-                                                  FullName = m.firstName + " " + m.lastName,
-                                                  EmailAddress = m.emailAddress
-                                              }).ToList();
-                        }
-                        break;
                     default:
                         getProcurement = (from m in db.Users
                                           join n in db.Users_Roles on m.userId equals n.userId
@@ -1056,25 +1037,6 @@ namespace KUBOnlinePRPM.Controllers
                                               FullName = m.firstName + " " + m.lastName,
                                               EmailAddress = m.emailAddress
                                           }).ToList();
-                        break;
-                    case 3:
-                        if (getPRPreparerChildCustId.childCompanyId == 16)
-                        {
-                            //kubma no incharge person for procurement
-                            getProcurement = null;
-                        }
-                        else
-                        {
-                            getProcurement = (from m in db.Users
-                                              join n in db.Users_Roles on m.userId equals n.userId
-                                              where n.roleId == "R03" && m.companyId == FormerPRDetails.CustId
-                                              select new PRModel()
-                                              {
-                                                  UserId = m.userId,
-                                                  FullName = m.firstName + " " + m.lastName,
-                                                  EmailAddress = m.emailAddress
-                                              }).ToList();
-                        }
                         break;
                     default:
                         getProcurement = (from m in db.Users

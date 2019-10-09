@@ -1756,26 +1756,35 @@ namespace KUBOnlinePRPM.Controllers
             if (Session["ifSuperAdmin"] != null)
             {
                 NotiMemberList = (from m in db.Users
-                                  join n in db.Customers on m.companyId equals n.custId into gy
-                                  from x in gy.DefaultIfEmpty()
+                                  join n in db.Users_Roles on m.userId equals n.userId
+                                  join o in db.Roles on n.roleId equals o.roleId
                                   select new NotiMemberList()
                                   {
                                       Id = m.userId,
                                       Name = m.firstName + " " + m.lastName
-                                  }).ToList().OrderBy(c => c.Name);
+                                  }).Distinct().ToList().OrderBy(c => c.Name);
             }
             else
             {
                 NotiMemberList = (from m in db.Users
-                                  join n in db.Customers on m.companyId equals n.custId into gy
-                                  from x in gy.DefaultIfEmpty()
-                                      //where m.status == true && m.companyId == CustId
+                                  join n in db.Users_Roles on m.userId equals n.userId
+                                  join o in db.Roles on n.roleId equals o.roleId
                                   where m.companyId == CustId
                                   select new NotiMemberList()
                                   {
                                       Id = m.userId,
                                       Name = m.firstName + " " + m.lastName
-                                  }).ToList().OrderBy(c => c.Name);
+                                  })
+                                  .Union(from m in db.Users
+                                         join n in db.Users_Roles on m.userId equals n.userId
+                                         join o in db.Roles on n.roleId equals o.roleId
+                                         where n.roleId == "R12" || n.roleId == "R14"
+                                         select new NotiMemberList()
+                                         {
+                                             Id = m.userId,
+                                             Name = m.firstName + " " + m.lastName
+                                         })
+                                  .Distinct().ToList().OrderBy(c => c.Name);
             }
 
             ViewBag.NotiMemberList = new MultiSelectList(NotiMemberList, "Id", "Name");
@@ -2189,25 +2198,6 @@ namespace KUBOnlinePRPM.Controllers
                                               EmailAddress = m.emailAddress
                                           }).ToList();
                         break;
-                    case 3:
-                        if (getPRPreparerChildCustId.childCompanyId == 16)
-                        {
-                            //kubma no incharge person for procurement
-                            getProcurement = null;
-                        }
-                        else
-                        {
-                            getProcurement = (from m in db.Users
-                                              join n in db.Users_Roles on m.userId equals n.userId
-                                              where n.roleId == "R03" && m.companyId == PR.CustId
-                                              select new PRModel()
-                                              {
-                                                  UserId = m.userId,
-                                                  FullName = m.firstName + " " + m.lastName,
-                                                  EmailAddress = m.emailAddress
-                                              }).ToList();
-                        }
-                        break;
                     default:
                         getProcurement = (from m in db.Users
                                           join n in db.Users_Roles on m.userId equals n.userId
@@ -2468,28 +2458,30 @@ namespace KUBOnlinePRPM.Controllers
 
                     var getPRPreparerChildCustId = db.Users.First(m => m.userId == objPRDetails.PreparedById);
                     var getProcurement = new List<PRModel>();
-                    if (objPRDetails.CustId == 3 && getPRPreparerChildCustId.childCompanyId == 16)
+                    switch (objPRDetails.CustId)
                     {
-                        getProcurement = (from m in db.Users
-                                          where m.userId == 210 || m.userId == 89
-                                          select new PRModel()
-                                          {
-                                              UserId = m.userId,
-                                              FullName = m.firstName + " " + m.lastName,
-                                              EmailAddress = m.emailAddress
-                                          }).ToList();
-                    }
-                    else
-                    {
-                        getProcurement = (from m in db.Users
-                                          join n in db.Users_Roles on m.userId equals n.userId
-                                          where n.roleId == "R03" && (m.companyId == objPRDetails.CustId && m.childCompanyId != 16)
-                                          select new PRModel()
-                                          {
-                                              UserId = m.userId,
-                                              FullName = m.firstName + " " + m.lastName,
-                                              EmailAddress = m.emailAddress
-                                          }).ToList();
+                        case 2:
+                            getProcurement = (from m in db.Users
+                                              join n in db.Users_Roles on m.userId equals n.userId
+                                              where n.roleId == "R03" && m.companyId == objPRDetails.CustId && m.userId == objPRDetails.PreparedById
+                                              select new PRModel()
+                                              {
+                                                  UserId = m.userId,
+                                                  FullName = m.firstName + " " + m.lastName,
+                                                  EmailAddress = m.emailAddress
+                                              }).ToList();
+                            break;
+                        default:
+                            getProcurement = (from m in db.Users
+                                              join n in db.Users_Roles on m.userId equals n.userId
+                                              where n.roleId == "R03" && m.companyId == objPRDetails.CustId
+                                              select new PRModel()
+                                              {
+                                                  UserId = m.userId,
+                                                  FullName = m.firstName + " " + m.lastName,
+                                                  EmailAddress = m.emailAddress
+                                              }).ToList();
+                            break;
                     }
 
                     NotificationMsg objTask = new NotificationMsg()
@@ -5386,25 +5378,6 @@ namespace KUBOnlinePRPM.Controllers
                                               EmailAddress = m.emailAddress
                                           }).ToList();
                         break;
-                    case 3:
-                        if (getPRPreparerChildCustId.childCompanyId == 16)
-                        {
-                            //kubma no incharge person for procurement
-                            getProcurement = null;
-                        }
-                        else
-                        {
-                            getProcurement = (from m in db.Users
-                                              join n in db.Users_Roles on m.userId equals n.userId
-                                              where n.roleId == "R03" && m.companyId == PR.CustId
-                                              select new PRModel()
-                                              {
-                                                  UserId = m.userId,
-                                                  FullName = m.firstName + " " + m.lastName,
-                                                  EmailAddress = m.emailAddress
-                                              }).ToList();
-                        }
-                        break;
                     default:
                         getProcurement = (from m in db.Users
                                           join n in db.Users_Roles on m.userId equals n.userId
@@ -5859,28 +5832,30 @@ namespace KUBOnlinePRPM.Controllers
 
                 var getPRPreparerChildCustId = db.Users.First(m => m.userId == UpdatePRStatus.PreparedById);
                 var getProcurement = new List<PRModel>();
-                if (UpdatePRStatus.CustId == 3 && getPRPreparerChildCustId.childCompanyId == 16)
+                switch (UpdatePRStatus.CustId)
                 {
-                    getProcurement = (from m in db.Users
-                                      where m.userId == 210 && m.userId == 89
-                                      select new PRModel()
-                                      {
-                                          UserId = m.userId,
-                                          FullName = m.firstName + " " + m.lastName,
-                                          EmailAddress = m.emailAddress
-                                      }).ToList();
-                }
-                else
-                {
-                    getProcurement = (from m in db.Users
-                                      join n in db.Users_Roles on m.userId equals n.userId
-                                      where n.roleId == "R03" && (m.companyId == UpdatePRStatus.CustId && m.childCompanyId != 16)
-                                      select new PRModel()
-                                      {
-                                          UserId = m.userId,
-                                          FullName = m.firstName + " " + m.lastName,
-                                          EmailAddress = m.emailAddress
-                                      }).ToList();
+                    case 2:
+                        getProcurement = (from m in db.Users
+                                          join n in db.Users_Roles on m.userId equals n.userId
+                                          where n.roleId == "R03" && m.companyId == UpdatePRStatus.CustId && m.userId == UpdatePRStatus.PreparedById
+                                          select new PRModel()
+                                          {
+                                              UserId = m.userId,
+                                              FullName = m.firstName + " " + m.lastName,
+                                              EmailAddress = m.emailAddress
+                                          }).ToList();
+                        break;
+                    default:
+                        getProcurement = (from m in db.Users
+                                          join n in db.Users_Roles on m.userId equals n.userId
+                                          where n.roleId == "R03" && m.companyId == UpdatePRStatus.CustId
+                                          select new PRModel()
+                                          {
+                                              UserId = m.userId,
+                                              FullName = m.firstName + " " + m.lastName,
+                                              EmailAddress = m.emailAddress
+                                          }).ToList();
+                        break;
                 }
 
                 NotificationMsg objTask = new NotificationMsg()

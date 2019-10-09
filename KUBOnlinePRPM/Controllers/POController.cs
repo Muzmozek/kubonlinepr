@@ -562,9 +562,11 @@ namespace KUBOnlinePRPM.Controllers
                                       join f in db.Purchasers on a.PurchaserId equals f.purchaserId into m
                                       join g in db.POStatus on a.StatusId equals g.statusId
                                       join h in db.PurchaseRequisitions on a.PRId equals h.PRId
+                                      join o in db.Vendors on a.PayToVendorId equals o.vendorId into p
                                       from j in i.DefaultIfEmpty()
                                       from l in k.DefaultIfEmpty()
                                       from n in m.DefaultIfEmpty()
+                                      from q in p.DefaultIfEmpty()
                                       where a.POId == PODetail.POId /*&& a.CustId == CustId*/
                                       select new NewPOModel()
                                       {
@@ -585,7 +587,7 @@ namespace KUBOnlinePRPM.Controllers
                                           TotalSST = a.TotalSST,
                                           TotalIncSST = a.TotalIncSST,
                                           PayToVendorId = a.PayToVendorId,
-                                          PayToVendorName = c.name,
+                                          PayToVendorName = q.name,
                                           PaymentTermsId = a.PaymentTermsId,
                                           PaymentTermsCode = l.paymentCode,
                                           SpecReviewerId = a.SpecsReviewerId,

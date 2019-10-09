@@ -5681,6 +5681,7 @@
     <Content Include="Scripts\ExcelGenerator.js" />
     <Content Include="Views\Shared\MessageEmailTemplate.cshtml" />
     <Content Include="Views\PO\POForm.cshtml" />
+    <Content Include="Views\Admin\PONumbering.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
