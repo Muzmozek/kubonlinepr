@@ -108,6 +108,9 @@ namespace KUBOnlinePRPM.Models
         public int POAging { get; set; }
         public string Status { get; set; }
         public string POType { get; set; }
+        public string LastModifiedPONo { get; set; }
+        public string LastModifiedDate { get; set; }
+        public string ProjectName { get; set; }
     }
 
     public class POItemsTable
