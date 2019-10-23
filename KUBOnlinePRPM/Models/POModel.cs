@@ -17,6 +17,7 @@ namespace KUBOnlinePRPM.Models
         public int PRId { get; set; }
         public string StatusId { get; set; }
         public NewPOModel NewPOForm { get; set; }
+        public POListTable POListTable { get; set; }
         public List<POListTable> POListObject { get; set; }
         public List<POItemsTable> POItemList { get; set; }
         public List<POHeaderTable> POHeaderList { get; set; }
@@ -93,6 +94,7 @@ namespace KUBOnlinePRPM.Models
 
     public class POListTable
     {
+        public int CustId { get; set; }
         public int POId { get; set; }
         public string PONo { get; set; }
         public DateTime PODate { get; set; }
@@ -108,8 +110,9 @@ namespace KUBOnlinePRPM.Models
         public int POAging { get; set; }
         public string Status { get; set; }
         public string POType { get; set; }
-        public string LastModifiedPONo { get; set; }
-        public string LastModifiedDate { get; set; }
+        public string LastPONo { get; set; }
+        public DateTime? LastPODate { get; set; }
+        public DateTime? ModifiedDate { get; set; }
         public string ProjectName { get; set; }
     }
 

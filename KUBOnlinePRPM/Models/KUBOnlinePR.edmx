@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="KUBOnlinePRModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="KUBOnlinePRModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Budget">
           <Key>
             <PropertyRef Name="budgetId" />
@@ -207,6 +207,19 @@
           <Property Name="totalPriceIncSST" Type="numeric" Precision="18" Scale="2" />
           <Property Name="dimProjectId" Type="int" />
           <Property Name="dimDeptId" Type="int" />
+        </EntityType>
+        <EntityType Name="PONoEditHistory">
+          <Key>
+            <PropertyRef Name="uuid" />
+          </Key>
+          <Property Name="uuid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="POId" Type="int" Nullable="false" />
+          <Property Name="custId" Type="int" Nullable="false" />
+          <Property Name="lastPODate" Type="datetime" Nullable="false" />
+          <Property Name="lastPONo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="newPONo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="modifiedByUserId" Type="int" Nullable="false" />
+          <Property Name="modifiedDate" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="POStatus">
           <Key>
@@ -847,6 +860,18 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PONoEditHistory_PurchaseOrder">
+          <End Role="PurchaseOrder" Type="Self.PurchaseOrder" Multiplicity="1" />
+          <End Role="PONoEditHistory" Type="Self.PONoEditHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseOrder">
+              <PropertyRef Name="POId" />
+            </Principal>
+            <Dependent Role="PONoEditHistory">
+              <PropertyRef Name="POId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PR_Admin_PurchaseRequisition">
           <End Role="PurchaseRequisition" Type="Self.PurchaseRequisition" Multiplicity="1" />
           <End Role="PR_Admin" Type="Self.PR_Admin" Multiplicity="*" />
@@ -1463,6 +1488,7 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
           <EntitySet Name="NotiGroup" EntityType="Self.NotiGroup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PaymentTerms" EntityType="Self.PaymentTerms" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PO_Item" EntityType="Self.PO_Item" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PONoEditHistory" EntityType="Self.PONoEditHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="POStatus" EntityType="Self.POStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PR_Admin" EntityType="Self.PR_Admin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PR_Approver" EntityType="Self.PR_Approver" Schema="dbo" store:Type="Tables" />
@@ -1578,6 +1604,10 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
           <AssociationSet Name="FK_PO_Item_PurchaseOrder" Association="Self.FK_PO_Item_PurchaseOrder">
             <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
             <End Role="PO_Item" EntitySet="PO_Item" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PONoEditHistory_PurchaseOrder" Association="Self.FK_PONoEditHistory_PurchaseOrder">
+            <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
+            <End Role="PONoEditHistory" EntitySet="PONoEditHistory" />
           </AssociationSet>
           <AssociationSet Name="FK_PR_Admin_PurchaseRequisition" Association="Self.FK_PR_Admin_PurchaseRequisition">
             <End Role="PurchaseRequisition" EntitySet="PurchaseRequisition" />
@@ -1780,8 +1810,7 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
             <End Role="VendorStaff" EntitySet="VendorStaff" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="KUBOnlinePRModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -2279,6 +2308,7 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
           <NavigationProperty Name="PurchaseRequisition" Relationship="Self.FK_PurchaseOrder_PurchaseRequisition" FromRole="PurchaseOrder" ToRole="PurchaseRequisition" />
           <NavigationProperty Name="Vendor" Relationship="Self.FK_PurchaseOrder_Vendor" FromRole="PurchaseOrder" ToRole="Vendor" />
           <NavigationProperty Name="VendorStaff" Relationship="Self.FK_PurchaseOrder_VendorStaff" FromRole="PurchaseOrder" ToRole="VendorStaff" />
+          <NavigationProperty Name="PONoEditHistories" Relationship="KUBOnlinePRModel.FK_PONoEditHistory_PurchaseOrder" FromRole="PurchaseOrder" ToRole="PONoEditHistory" />
         </EntityType>
         <EntityType Name="Purchaser">
           <Key>
@@ -3664,7 +3694,38 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
             <End Role="User" EntitySet="Users" />
             <End Role="VendorStaff" EntitySet="VendorStaffs" />
           </AssociationSet>
+          <EntitySet Name="PONoEditHistories" EntityType="KUBOnlinePRModel.PONoEditHistory" />
+          <AssociationSet Name="FK_PONoEditHistory_PurchaseOrder" Association="KUBOnlinePRModel.FK_PONoEditHistory_PurchaseOrder">
+            <End Role="PurchaseOrder" EntitySet="PurchaseOrders" />
+            <End Role="PONoEditHistory" EntitySet="PONoEditHistories" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="PONoEditHistory">
+          <Key>
+            <PropertyRef Name="uuid" />
+          </Key>
+          <Property Name="uuid" Type="Guid" Nullable="false" />
+          <Property Name="POId" Type="Int32" Nullable="false" />
+          <Property Name="lastPODate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="lastPONo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="newPONo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="modifiedByUserId" Type="Int32" Nullable="false" />
+          <Property Name="modifiedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="PurchaseOrder" Relationship="KUBOnlinePRModel.FK_PONoEditHistory_PurchaseOrder" FromRole="PONoEditHistory" ToRole="PurchaseOrder" />
+          <Property Name="custId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_PONoEditHistory_PurchaseOrder">
+          <End Type="KUBOnlinePRModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="1" />
+          <End Type="KUBOnlinePRModel.PONoEditHistory" Role="PONoEditHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseOrder">
+              <PropertyRef Name="POId" />
+            </Principal>
+            <Dependent Role="PONoEditHistory">
+              <PropertyRef Name="POId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4351,6 +4412,20 @@ warning 6002: The table/view 'KUBOnlinePR_Test.dbo.PopulateItemList' does not ha
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="custId" ColumnName="custId" />
                 <ScalarProperty Name="UoM" ColumnName="UoM" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PONoEditHistories">
+            <EntityTypeMapping TypeName="KUBOnlinePRModel.PONoEditHistory">
+              <MappingFragment StoreEntitySet="PONoEditHistory">
+                <ScalarProperty Name="custId" ColumnName="custId" />
+                <ScalarProperty Name="modifiedDate" ColumnName="modifiedDate" />
+                <ScalarProperty Name="modifiedByUserId" ColumnName="modifiedByUserId" />
+                <ScalarProperty Name="newPONo" ColumnName="newPONo" />
+                <ScalarProperty Name="lastPONo" ColumnName="lastPONo" />
+                <ScalarProperty Name="lastPODate" ColumnName="lastPODate" />
+                <ScalarProperty Name="POId" ColumnName="POId" />
+                <ScalarProperty Name="uuid" ColumnName="uuid" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

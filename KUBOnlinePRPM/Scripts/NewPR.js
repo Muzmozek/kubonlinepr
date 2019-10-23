@@ -14,6 +14,9 @@ function generatePRItemTable() {
             stateSave: true,
             columnDefs: [
                 { visible: false, targets: [0] }
+                , { width: '10%', targets: [2, 5] }
+                , { width: '15%', targets: [1, 4] }
+                , { width: '50%', targets: [3] }
                 , {
                     targets: [4, 5, 8, 9, 10, 11, 12, 13, 14, 15],
                     render: function (data, type, row, meta) {
@@ -89,6 +92,9 @@ function generatePRItemTable() {
             stateSave: true,
             columnDefs: [
                 { visible: false, targets: [0] }
+                , { width: '10%', targets: [2, 5] }
+                , { width: '15%', targets: [1, 4] }
+                , { width: '50%', targets: [3] }
                 , {
                     targets: [4, 5],
                     render: function (data, type, row, meta) {
@@ -166,6 +172,9 @@ function openHiddenPRItemTable() {
             stateSave: false,
             columnDefs: [
                 { visible: false, targets: [0] }
+                , { width: '10%', targets: [2, 5] }
+                , { width: '15%', targets: [1, 4] }
+                , { width: '50%', targets: [3] }
                 , {
                     targets: [4, 5, 8, 9, 10, 11, 12, 13, 14, 15],
                     render: function (data, type, row, meta) {
@@ -237,6 +246,9 @@ function openHiddenPRItemTable() {
             stateSave: false,
             columnDefs: [
                 { visible: false, targets: [0] }
+                , { width: '10%', targets: [2, 5] }
+                , { width: '15%', targets: [1, 4] }
+                , { width: '50%', targets: [3] }
                 , {
                     targets: [4, 5],
                     render: function (data, type, row, meta) {

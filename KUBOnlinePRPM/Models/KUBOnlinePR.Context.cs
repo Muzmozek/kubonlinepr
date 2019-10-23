@@ -69,5 +69,6 @@ namespace KUBOnlinePRPM.Models
         public virtual DbSet<VendorStaff> VendorStaffs { get; set; }
         public virtual DbSet<MessageList> MessageLists { get; set; }
         public virtual DbSet<PopulateItemList> PopulateItemLists { get; set; }
+        public virtual DbSet<PONoEditHistory> PONoEditHistories { get; set; }
     }
 }

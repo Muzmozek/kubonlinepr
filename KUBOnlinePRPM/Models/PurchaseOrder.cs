@@ -18,6 +18,7 @@ namespace KUBOnlinePRPM.Models
         public PurchaseOrder()
         {
             this.PO_Item = new HashSet<PO_Item>();
+            this.PONoEditHistories = new HashSet<PONoEditHistory>();
         }
     
         public System.Guid uuid { get; set; }
@@ -62,5 +63,7 @@ namespace KUBOnlinePRPM.Models
         public virtual PurchaseRequisition PurchaseRequisition { get; set; }
         public virtual Vendor Vendor { get; set; }
         public virtual VendorStaff VendorStaff { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PONoEditHistory> PONoEditHistories { get; set; }
     }
 }

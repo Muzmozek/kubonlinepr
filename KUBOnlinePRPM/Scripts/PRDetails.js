@@ -537,6 +537,7 @@
                 });                
                 $(".input-group-addon").addClass("buttonselect");
                 $("body").removeClass("loading");
+                generatePRItemTable();
             }
         });
     });

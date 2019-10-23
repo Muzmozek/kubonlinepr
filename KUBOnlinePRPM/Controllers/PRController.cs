@@ -2793,8 +2793,8 @@ namespace KUBOnlinePRPM.Controllers
                                           from q in db.PR_Approver.Where(x => x.PRId == PRDetail.PRId && x.approverApproved == 1)
                                           from s in db.PR_HOD.Where(x => x.PRId == PRDetail.PRId && x.HODApprovedP1 == 1).DefaultIfEmpty()
                                           from u in db.PR_Recommender.Where(x => x.PRId == PRDetail.PRId && x.recommended == 1).DefaultIfEmpty()
-                                          from ac in db.PR_RecommenderCFO.Where(x => x.PRId == PRDetail.PRId && x.recommended == 1)
-                                          join ad in db.Users on ac.recommenderId equals ad.userId
+                                          from ac in db.PR_RecommenderCFO.Where(x => x.PRId == PRDetail.PRId && x.recommended == 1).DefaultIfEmpty()
+                                          from ae in db.PR_RecommenderHOC.Where(x => x.PRId == PRDetail.PRId && x.recommended == 1).DefaultIfEmpty()
                                           //from v in r.DefaultIfEmpty()
                                           //from w in p.DefaultIfEmpty()
                                           //from x in l.DefaultIfEmpty()
@@ -2837,9 +2837,8 @@ namespace KUBOnlinePRPM.Controllers
                                               //ReviewedDate = o.reviewedDate.Value,
                                               RecommenderId = u.recommenderId,
                                               RecommendDate = u.recommendedDate,
-                                              RecommenderIdII = ac.recommenderId,
-                                              RecommenderNameII = ad.firstName + " " + ad.lastName,
-                                              RecommendDateII = ac.recommendedDate.Value,
+                                              RecommenderIdII = ac.recommenderId != null ? ac.recommenderId : ae.recommenderId ,
+                                              RecommendDateII = ac.recommendedDate.Value != null ? ac.recommendedDate.Value : ae.recommendedDate.Value,
                                               Saved = a.Saved,
                                               Submited = a.Submited,
                                               Rejected = a.Rejected,
@@ -2867,11 +2866,11 @@ namespace KUBOnlinePRPM.Controllers
                         User getFullname = db.Users.First(m => m.userId == PRDetail.NewPRForm.RecommenderId);
                         PRDetail.NewPRForm.RecommenderName = getFullname.firstName + " " + getFullname.lastName;
                     }
-                    //if (PRDetail.NewPRForm.RecommenderIdII != 0)
-                    //{
-                    //    User getFullname = db.Users.First(m => m.userId == PRDetail.NewPRForm.RecommenderId);
-                    //    PRDetail.NewPRForm.RecommenderNameII = getFullname.firstName + " " + getFullname.lastName;
-                    //}
+                    if (PRDetail.NewPRForm.RecommenderIdII != 0)
+                    {
+                        User getFullname = db.Users.First(m => m.userId == PRDetail.NewPRForm.RecommenderIdII);
+                        PRDetail.NewPRForm.RecommenderNameII = getFullname.firstName + " " + getFullname.lastName;
+                    }
                 }
 
                 PRDetail.NewPRForm.PRItemListObject = (from m in db.PR_Items
@@ -4123,7 +4122,7 @@ namespace KUBOnlinePRPM.Controllers
                     {
                         var getRecommenderII = new List<PRModel>();
                         int CustId = db.Projects.First(m => m.projectId == PR.ProjectId).custId;
-                        if (CustId == 2 || CustId == 6 || CustId == 4)
+                        if (CustId == 2 || CustId == 6)
                         {
                             PR.StatusId = "PR18";
                             getRecommenderII = (from m in db.Users
@@ -4184,7 +4183,7 @@ namespace KUBOnlinePRPM.Controllers
                             };
                             db.NotiGroups.Add(Task);
 
-                            if (CustId == 2 || CustId == 6 || CustId == 4)
+                            if (CustId == 2 || CustId == 6)
                             {
                                 PR_RecommenderCFO saveRecommender = new PR_RecommenderCFO()
                                 {
@@ -4774,7 +4773,7 @@ namespace KUBOnlinePRPM.Controllers
                         case 3:
                             {
                                 var getRecommenderII = new List<PRModel>();
-                                if (CustId == 2 || CustId == 6 || CustId == 4)
+                                if (CustId == 2 || CustId == 6)
                                 {
                                     PR.StatusId = "PR18";
                                     getRecommenderII = (from m in db.Users
@@ -4824,7 +4823,7 @@ namespace KUBOnlinePRPM.Controllers
                                     };
                                     db.NotiGroups.Add(Task);
 
-                                    if (CustId == 2 || CustId == 6 || CustId == 4)
+                                    if (CustId == 2 || CustId == 6)
                                     {
                                         PR_RecommenderCFO saveRecommender = new PR_RecommenderCFO()
                                         {
@@ -5107,9 +5106,17 @@ namespace KUBOnlinePRPM.Controllers
                             PR.StatusId = "PR05";
                             db.SaveChanges();
 
-                            PR_RecommenderCFO SaveRecommenderInfo = db.PR_RecommenderCFO.First(m => m.PRId == PR.PRId);
-                            SaveRecommenderInfo.recommendedDate = DateTime.Now;
-                            SaveRecommenderInfo.recommended = 1;
+                            if (CustId != 4)
+                            {
+                                PR_RecommenderCFO SaveRecommenderInfo = db.PR_RecommenderCFO.First(m => m.PRId == PR.PRId);
+                                SaveRecommenderInfo.recommendedDate = DateTime.Now;
+                                SaveRecommenderInfo.recommended = 1;
+                            } else
+                            {
+                                PR_RecommenderHOC SaveRecommenderInfo = db.PR_RecommenderHOC.First(m => m.PRId == PR.PRId);
+                                SaveRecommenderInfo.recommendedDate = DateTime.Now;
+                                SaveRecommenderInfo.recommended = 1;
+                            }                                                      
                             db.SaveChanges();
 
                             getRecommenderII = (from m in db.Users

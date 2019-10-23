@@ -248,6 +248,9 @@
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\POModel.cs" />
+    <Compile Include="Models\PONoEditHistory.cs">
+      <DependentUpon>KUBOnlinePR.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PopulateItemList.cs">
       <DependentUpon>KUBOnlinePR.tt</DependentUpon>
     </Compile>
@@ -5611,6 +5614,7 @@
     <Content Include="Scripts\Notification.js" />
     <Content Include="Scripts\PODetails.js" />
     <Content Include="Scripts\POList.js" />
+    <Content Include="Scripts\PONumbering.js" />
     <Content Include="Scripts\PR.js" />
     <Content Include="Scripts\PRConversations.js" />
     <Content Include="Scripts\PRDetails.js" />

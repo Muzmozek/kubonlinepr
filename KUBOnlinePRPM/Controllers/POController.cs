@@ -782,35 +782,49 @@ namespace KUBOnlinePRPM.Controllers
                                 break;
                         }
 
-                        var checkPOforCust = (from m in db.PurchaseOrders
-                                              join n in db.Projects on m.projectId equals n.projectId
-                                              where n.custId == PRCustId
-                                              select new
-                                              {
-                                                  PONo = m.PONo,
-                                                  POId = m.POId
-                                              }).OrderByDescending(m => m.POId).FirstOrDefault();
+                    var checkReqPONumbering = db.PONoEditHistories.OrderByDescending(m => m.modifiedDate).Where(m => m.custId == PRCustId).FirstOrDefault();
+                    int NewPOsequence = 0;
+                    var checkPOforCust = (from m in db.PurchaseOrders
+                                          join n in db.Projects on m.projectId equals n.projectId
+                                          where n.custId == PRCustId
+                                          select new
+                                          {
+                                              PONo = m.PONo,
+                                              PODate = m.PODate,
+                                              POId = m.POId
+                                          }).OrderByDescending(m => m.POId).FirstOrDefault();
 
-                        if (checkPOforCust != null)
+                    if (checkReqPONumbering != null && checkPOforCust != null)
+                    {
+                        if (checkReqPONumbering.modifiedDate > checkPOforCust.PODate)
                         {
-                            int NewPOsequence = Int32.Parse(checkPOforCust.PONo.Split('-')[2]) + 1;
-                            if (ConfigurationManager.AppSettings[CustName] != null)
-                            {
-                                NewPOsequence = Int32.Parse(ConfigurationManager.AppSettings[CustName].ToString()) + 1;
-                            }
+                            NewPOsequence = Int32.Parse(checkReqPONumbering.newPONo.Split('-')[2]) + 1;
+                            newPO.PONo = "PO-" + DateTime.Now.Year.ToString().Substring(2) + "-" + string.Format("{0}{1}", 0, NewPOsequence.ToString("D4"));
+                        } else
+                        {
+                            NewPOsequence = Int32.Parse(checkPOforCust.PONo.Split('-')[2]) + 1;
                             newPO.PONo = "PO-" + DateTime.Now.Year.ToString().Substring(2) + "-" + string.Format("{0}{1}", 0, NewPOsequence.ToString("D4"));
                         }
-                        else
-                        {
-                            int NewPOsequence = 1;
-                            if (ConfigurationManager.AppSettings[CustName] != null)
-                            {
-                                NewPOsequence = Int32.Parse(ConfigurationManager.AppSettings[CustName].ToString());
-                            }
-                            newPO.PONo = "PO-" + DateTime.Now.Year.ToString().Substring(2) + "-" + string.Format("{0}{1}", 0, NewPOsequence.ToString("D4"));
-                        }
-                        //newPO.PONo = "dummyset";
-                        newPO.CustId = updatePR.CustId;
+                        
+                    } else if (checkReqPONumbering == null && checkPOforCust != null)
+                    {
+                        NewPOsequence = Int32.Parse(checkPOforCust.PONo.Split('-')[2]) + 1;
+                        //if (ConfigurationManager.AppSettings[CustName] != null)
+                        //{
+                        //    NewPOsequence = Int32.Parse(ConfigurationManager.AppSettings[CustName].ToString()) + 1;
+                        //}
+                        newPO.PONo = "PO-" + DateTime.Now.Year.ToString().Substring(2) + "-" + string.Format("{0}{1}", 0, NewPOsequence.ToString("D4"));
+                    } else
+                    {
+                        NewPOsequence = 1;
+                        //if (ConfigurationManager.AppSettings[CustName] != null)
+                        //{
+                        //    NewPOsequence = Int32.Parse(ConfigurationManager.AppSettings[CustName].ToString());
+                        //}
+                        newPO.PONo = "PO-" + DateTime.Now.Year.ToString().Substring(2) + "-" + string.Format("{0}{1}", 0, NewPOsequence.ToString("D4"));
+                    }
+
+                    newPO.CustId = updatePR.CustId;
                         newPO.PODate = DateTime.Now;
                         newPO.projectId = updatePR.ProjectId;
                         newPO.vendorId = updatePR.VendorId.Value;

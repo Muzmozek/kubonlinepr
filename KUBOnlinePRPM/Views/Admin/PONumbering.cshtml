@@ -1,6 +1,6 @@
 ﻿@model KUBOnlinePRPM.Models.POModel
 
-@using (Html.BeginForm("PONumnbering", "Admin", FormMethod.Post, new { @id = "PoNumbering", @class = "container-fluid g-mb-40" }))
+@using (Html.BeginForm("PONumbering", "Admin", FormMethod.Post, new { @id = "PONumbering", @class = "container-fluid g-mb-40" }))
 {
     @Html.TextBoxFor(m => m.ChildCustId, new { @id = "ChildCustId", @class = "d-none", @type = "text" })
     <div class="row g-bg-white g-pa-20">
@@ -12,16 +12,21 @@
         <div class="container-fluid-v3 col-xs-12 g-mb-30 g-mt-10">
             <div class="row g-mb-20">
                 <div class="col-md-2 col-sm-2 formfield">
-                    <span>Start Date</span>
+                    <span>Insert the new PO No here</span>
                 </div>
                 <div class="d-flex col-md-4 col-sm-4">
-                    @Html.TextBoxFor(m => m.StartDate, new { @id = "StartDate", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "date" })
+                    @Html.TextBoxFor(m => m.NewPOForm.PONo, new { @id = "NewPONo", @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text" })
+                    
+                </div>
+                <div class="d-flex col-md-4 col-sm-4">
+                    <a id="SubmitNewPONo" class="btn btn-md text-white u-btn-blue g-mr-5">SUBMIT</a>
                 </div>
             </div>
 
             <table class="table table-striped table-bordered dt-responsive table-hover" id="PONumberListTable">
                 <thead>
                     <tr>
+                        <th class="d-none"></th>
                         <th>
                             Last Modified PO No.
                         </th>
@@ -44,29 +49,29 @@
                 <thead>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model.POListObject)
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.LastModifiedPONo)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.LastModifiedDate)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.PONo)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.PODate)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.PODate)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.PODate)
-                            </td>                           
-                        </tr>
-                    }
+                    <tr>
+                        <td class="d-none">
+                            @Html.DisplayFor(modelItem => Model.POListTable.POId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.POListTable.LastPONo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.POListTable.LastPODate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.POListTable.PONo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.POListTable.PODate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.POListTable.ProjectName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.POListTable.VendorCompany)
+                        </td>
+                    </tr>
                 </tbody>
             </table>            
         </div>
@@ -89,8 +94,8 @@
 
 @section scripts {
     <script type="text/javascript">
-        var POHeaderListTable; var POLineListTable;
-        var URLAdmin = "@Url.Action("Index", "Admin")";
+        var PONumberListTable;
+        var URLPONumbering = "@Url.Action("PONumbering", "Admin")";
     </script>
-    <script src="~/Scripts/ExcelGenerator.js"></script>
+    <script src="~/Scripts/PONumbering.js"></script>
 }
