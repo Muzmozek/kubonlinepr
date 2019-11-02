@@ -798,7 +798,7 @@ namespace KUBOnlinePRPM.Controllers
                     {
                         if (checkReqPONumbering.modifiedDate > checkPOforCust.PODate)
                         {
-                            NewPOsequence = Int32.Parse(checkReqPONumbering.newPONo.Split('-')[2]) + 1;
+                            NewPOsequence = Int32.Parse(checkReqPONumbering.newPONo.Split('-')[2]);
                             newPO.PONo = "PO-" + DateTime.Now.Year.ToString().Substring(2) + "-" + string.Format("{0}{1}", 0, NewPOsequence.ToString("D4"));
                         } else
                         {

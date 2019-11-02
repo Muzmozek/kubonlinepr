@@ -49,9 +49,7 @@ $(document).on("click", "#SubmitNewPONo", function (e) {
         success: function (resp) {
             if (resp.success === true) {
                 alert("NewPO Number Updated Successfully");
-                $("#PONumbering").load('.container-fluid-v3', function () {
-                    //generatePOItemTable();
-                });
+                location.href = URLPONumbering;
             }
             else if (resp.success === false && resp.exception === false) {
                 alert("Validation error");
