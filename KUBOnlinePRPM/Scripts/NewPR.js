@@ -454,20 +454,20 @@ $(document).on('ready', function () {
                 $("#CustId").val(resp.projectInfo.ChildCustId);
                 //$("#UtilizedToDate").val(UtilizedToDate);
                 //$("#BudgetBalance").val(BudgetBalance);
-                $.ajax({
-                    url: UrlGetUoM,
-                    method: 'GET',
-                    data: {
-                        Selectlistid: k,
-                        PRCustId: $("#CustId").val()
-                    },
-                    success: function (resp) {
-                        $("#UoM" + k).html("");
-                        $("#UoM" + k).html(resp.html);
-                        $("body").removeClass("loading");
-                    }
-                });
-                //$("body").removeClass("loading");
+                //$.ajax({
+                //    url: UrlGetUoM,
+                //    method: 'GET',
+                //    data: {
+                //        Selectlistid: k,
+                //        PRCustId: $("#CustId").val()
+                //    },
+                //    success: function (resp) {
+                //        $("#UoM" + k).html("");
+                //        $("#UoM" + k).html(resp.html);
+                //        $("body").removeClass("loading");
+                //    }
+                //});
+                $("body").removeClass("loading");
                 //to do - generate itemcode when select projectId
                 //$(".CodeId").select(resp.ItemCodeList);
             }

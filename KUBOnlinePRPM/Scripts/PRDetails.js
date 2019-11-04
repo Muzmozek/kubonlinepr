@@ -697,6 +697,25 @@
     //    }
     //    $("#AmountRequired").val(AmountRequired);
     //});
+    $("#EditPRPhase1").click(function (e) {
+        e.preventDefault();
+        $.post(UrlEditPR, {
+            PRId: PRId,
+        }, function (resp) {
+            if (resp.success === true) {
+                alert(resp.message);
+                $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
+                    generatePRItemTable();
+                    Custombox.modal.close();
+                });
+                $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                    $("body").removeClass("loading");
+                });
+            } else {
+                window.location = resp.url;
+            }
+        });
+    });
 
     $(".CancelPR").click(function (e) {
         e.preventDefault();

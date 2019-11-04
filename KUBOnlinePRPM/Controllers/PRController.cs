@@ -5640,7 +5640,55 @@ namespace KUBOnlinePRPM.Controllers
         //        return Redirect("~/Home/Index");
         //    }
         //}
+        public JsonResult EditPR()
+        {
+            if (User.Identity.IsAuthenticated && Session["UserId"] != null)
+            {
+                int UserId = Int32.Parse(Session["UserId"].ToString());
+                int PrId = Int32.Parse(Request["PRId"].ToString());
+                int CustId = Int32.Parse(Session["CompanyId"].ToString());
 
+                var UpdatePRStatus = db.PurchaseRequisitions.Where(m => m.PRId == PrId).First();
+                var getPreparerChildCustId = db.Users.Where(m => m.userId == UpdatePRStatus.PreparedById).First();
+ 
+                    UpdatePRStatus.StatusId = "PR08";
+                    NotificationMsg objNotification = new NotificationMsg()
+                    {
+                        uuid = Guid.NewGuid(),
+                        message = Session["FullName"].ToString() + " has edit the PR No: " + UpdatePRStatus.PRNo + " application. ",
+                        fromUserId = Int32.Parse(Session["UserId"].ToString()),
+                        msgDate = DateTime.Now,
+                        msgType = "Trail",
+                        PRId = PrId
+                    };
+                    db.NotificationMsgs.Add(objNotification);
+                    db.SaveChanges();
+
+                        var requestorDone = (from m in db.NotificationMsgs
+                                             join n in db.NotiGroups on m.msgId equals n.msgId
+                                             where n.toUserId != null && m.PRId == PrId && m.msgType == "Task"
+                                             select new PRModel()
+                                             {
+                                                 MsgId = m.msgId
+                                             }).ToList();
+
+                UpdatePRStatus.StatusId = "PR01";
+                foreach (var item in requestorDone)
+                        {
+                            
+                            NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == item.MsgId);
+                            getDone.done = true;
+                            db.SaveChanges();
+                        }
+
+                        return Json(new { success = true, exception = false, message = "Successfully edit the PR." });
+            }
+            else
+            {
+                var redirectUrl = new UrlHelper(Request.RequestContext).Action("Index", "Home", new { /* no params */ });
+                return Json(new { success = false, url = redirectUrl });
+            }
+        }
         public JsonResult CancelPR()
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
