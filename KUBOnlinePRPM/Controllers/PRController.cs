@@ -23,6 +23,7 @@ using System.Collections;
 using System.Web.Security;
 using System.Web.Routing;
 using System.Data.Entity.Validation;
+using System.Data.Entity;
 using System.Configuration;
 using System.Net.Http;
 using System.Threading;
@@ -5650,9 +5651,9 @@ namespace KUBOnlinePRPM.Controllers
 
                 var UpdatePRStatus = db.PurchaseRequisitions.Where(m => m.PRId == PrId).First();
                 var getPreparerChildCustId = db.Users.Where(m => m.userId == UpdatePRStatus.PreparedById).First();
- 
-                    UpdatePRStatus.StatusId = "PR08";
-                    NotificationMsg objNotification = new NotificationMsg()
+
+                UpdatePRStatus.StatusId = "PR01";
+                NotificationMsg objNotification = new NotificationMsg()
                     {
                         uuid = Guid.NewGuid(),
                         message = Session["FullName"].ToString() + " has edit the PR No: " + UpdatePRStatus.PRNo + " application. ",
@@ -5672,7 +5673,27 @@ namespace KUBOnlinePRPM.Controllers
                                                  MsgId = m.msgId
                                              }).ToList();
 
-                UpdatePRStatus.StatusId = "PR01";
+                var DeletePRAdmin = db.PR_Admin.Where(x => x.PRId == PrId).ToList();
+                var DeletePRFinance = db.PR_Finance.Where(x => x.PRId == PrId).ToList();
+                var DeletePRHOD = db.PR_HOD.Where(x => x.PRId == PrId).ToList();
+
+                //db.PR_Admin.Attach(DeletePRAdmin);
+                foreach(var item in DeletePRAdmin)
+                {
+                    db.PR_Admin.Remove(item);
+                    db.SaveChanges();
+                }
+                foreach (var item in DeletePRFinance)
+                {
+                    db.PR_Finance.Remove(item);
+                    db.SaveChanges();
+                }
+                foreach (var item in DeletePRHOD)
+                {
+                    db.PR_HOD.Remove(item);
+                    db.SaveChanges();
+                }
+                
                 foreach (var item in requestorDone)
                         {
                             

@@ -168,10 +168,9 @@ namespace KUBOnlinePRPM.Controllers
                 generateMsg.fromUserId = model.NewPRForm.PreparedById;
                 generateMsg.msgType = "Trail";
                 db.NotificationMsgs.Add(generateMsg);
+                db.SaveChanges();
 
-                if (generatePRNo.Submited == 1)
-                {
-                    var getPRPreparerChildCustId = db.Users.First(m => m.userId == model.NewPRForm.PreparedById);
+                var getPRPreparerChildCustId = db.Users.First(m => m.userId == model.NewPRForm.PreparedById);
 
                     var getHOD = new List<NewPRModel>();
                     switch (model.CustId)
@@ -381,12 +380,7 @@ namespace KUBOnlinePRPM.Controllers
                         };
                         db.PR_Admin.Add(_objSaveAdmin);
                         db.SaveChanges();
-                    }
-                }
-                else
-                {
-                    db.SaveChanges();
-                }               
+                    }              
                 //if (model.NewPRForm.StatusId == "PR07")
                 //{
                 //    var getMsgId = (from m in db.NotificationMsgs
