@@ -889,7 +889,7 @@
                                         <td>
                                             @Html.TextBoxFor(m => item.Quantity, new { @id = Quantity, @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
                                         </td>
-                                        <td>                                           
+                                        <td>
                                             @Html.TextBoxFor(m => item.UOM, new { @id = UoM, @class = "form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-20 g-px-14 g-py-10", @type = "text", @readonly = true })
                                         </td>
                                     }
@@ -1138,7 +1138,7 @@
                                 @if (Model.NewPRForm.StatusId == "PR01" && Session["ifRequestor"] != null)
                                 {
                                     <a id="SavePR" class="saveSubmitDetail btn btn-md u-btn-white g-mr-5 g-mb-15">SAVE</a>
-                                    <a id="CancelPR" class="CancelPR btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">CANCEL</a>
+                                    <a href="#InitCancelConfirmationModal" data-modal-target="#InitCancelConfirmationModal" data-modal-effect="fadein" class="btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">CANCEL</a>
                                     <a id="SubmitPR" class="saveSubmitDetail btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">SUBMIT</a>
                                 }
 
@@ -1231,11 +1231,11 @@
                                 @if ((Model.NewPRForm.StatusId != "PR01" && Model.NewPRForm.StatusId != "PR08") && Model.NewPRForm.Phase1Completed == false && (Model.UserId == Model.NewPRForm.PreparedById))
                                 {
                                     <a href="#EditConfirmationModal" data-modal-target="#EditConfirmationModal" data-modal-effect="fadein" class="btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">EDIT</a>
-                                    <a id="CancelPRPhase1" class="CancelPR btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">CANCEL</a>
+                                    <a href="#Phase1CancelConfirmationModal" data-modal-target="#Phase1CancelConfirmationModal" data-modal-effect="fadein" class="btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">CANCEL</a>
                                 }
                                 @if ((Session["ifRequestor"] != null && Model.NewPRForm.StatusId == "PR06" && Model.Type != "Blanket") || (Session["ifRequestor"] != null && Model.NewPRForm.StatusId != "PR08" && Model.NewPRForm.StatusId != "PR15" && Model.NewPRForm.StatusId != "PR16" && Model.NewPRForm.StatusId != "PR02" && Model.NewPRForm.PRItemListObject[0].CodeId != null && Model.NewPRForm.Phase1Completed == true))
                                 {
-                                    <a id="CancelPRFlow" class="CancelPR btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">CANCEL</a>
+                                    <a href="#CancelConfirmationModal" data-modal-target="#CancelConfirmationModal" data-modal-effect="fadein" class="btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">CANCEL</a>
                                 }
                                 @if (Model.NewPRForm.StatusId == "PR15" && (Session["ifHOD"] != null && Session["ifFinance"] == null))
                                 {
@@ -1258,51 +1258,75 @@
         <button type="button" class="close" onclick="Custombox.modal.close();">
             <i class="hs-icon hs-icon-close"></i>
         </button>
-        <h4 class="g-mb-20">Are you sure want to edit the PR? <br/>Status would be revert to 'Pending for submission from requestor' and need to be reviewed again by Initial Approver &amp; Financial Reviewer</h4>
+        <h4 class="g-mb-20">Are you sure want to edit the PR? <br />Status would be revert to 'Pending for submission from requestor' and need to be reviewed again by Initial Approver &amp; Financial Reviewer</h4>
         <a id="EditPRPhase1" class="btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">YES</a>
         <a id="NoPhase1" onclick="Custombox.modal.close();" class="btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">NO</a>
     </div>
-    <div id="RejectModal" class="text-left g-max-width-600 g-bg-white g-overflow-y-auto g-pa-20" style="display: none;">
-        <button type="button" class="close" onclick="Custombox.modal.close();">
-            <i class="hs-icon hs-icon-close"></i>
-        </button>
-        <h4 class="g-mb-20">Please state the reason why the PR is rejected</h4>
-        <textarea id="RejectRemark" class="form-control form-control-md g-resize-none rounded-0" rows="3" placeholder="Text area"></textarea>
-        @if (Model.NewPRForm.StatusId == "PR19" && Session["ifFinance"] != null)
-        {
-            <a id="RejectInitialPRReview" class="btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">REJECT</a>
-        }
-        @if ((Model.NewPRForm.StatusId == "PR09" && (Session["ifHOD"] != null && Session["ifFinance"] == null)) || (Model.NewPRForm.StatusId == "PR10" && Session["ifHOGPSS"] != null))
-        {
-            <a id="RejectPR" class="approveRejectDetail btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">REJECT</a>
-        }
-        @if ((Model.NewPRForm.Scenario == 1) && (Model.NewPRForm.StatusId == "PR03") && Model.PRReviewer != 0)
+<div id="Phase1CancelConfirmationModal" class="text-left g-max-width-600 g-bg-white g-overflow-y-auto g-pa-20" style="display: none;">
+    <button type="button" class="close" onclick="Custombox.modal.close();">
+        <i class="hs-icon hs-icon-close"></i>
+    </button>
+    <h4 class="g-mb-20">Are you sure want to cancel the PR? <br />This process shall be irreversible</h4>
+    <a id="CancelPRPhase1" class="CancelPR btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">YES</a>
+    <a id="NoPhase1" onclick="Custombox.modal.close();" class="btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">NO</a>
+</div>
+<div id="InitCancelConfirmationModal" class="text-left g-max-width-600 g-bg-white g-overflow-y-auto g-pa-20" style="display: none;">
+    <button type="button" class="close" onclick="Custombox.modal.close();">
+        <i class="hs-icon hs-icon-close"></i>
+    </button>
+    <h4 class="g-mb-20">Are you sure want to cancel the PR? <br />This process shall be irreversible</h4>
+    <a id="CancelPR" class="CancelPR btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">YES</a>
+    <a id="NoPhase1" onclick="Custombox.modal.close();" class="btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">NO</a>
+</div>
+<div id="CancelConfirmationModal" class="text-left g-max-width-600 g-bg-white g-overflow-y-auto g-pa-20" style="display: none;">
+    <button type="button" class="close" onclick="Custombox.modal.close();">
+        <i class="hs-icon hs-icon-close"></i>
+    </button>
+    <h4 class="g-mb-20">Are you sure want to cancel the PR? <br />This process shall be irreversible</h4>
+    <a id="CancelPRFlow" class="CancelPR btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">YES</a>
+    <a id="NoPhase1" onclick="Custombox.modal.close();" class="btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">NO</a>
+</div>
+<div id="RejectModal" class="text-left g-max-width-600 g-bg-white g-overflow-y-auto g-pa-20" style="display: none;">
+    <button type="button" class="close" onclick="Custombox.modal.close();">
+        <i class="hs-icon hs-icon-close"></i>
+    </button>
+    <h4 class="g-mb-20">Please state the reason why the PR is rejected</h4>
+    <textarea id="RejectRemark" class="form-control form-control-md g-resize-none rounded-0" rows="3" placeholder="Text area"></textarea>
+    @if (Model.NewPRForm.StatusId == "PR19" && Session["ifFinance"] != null)
+    {
+        <a id="RejectInitialPRReview" class="btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">REJECT</a>
+    }
+    @if ((Model.NewPRForm.StatusId == "PR09" && (Session["ifHOD"] != null && Session["ifFinance"] == null)) || (Model.NewPRForm.StatusId == "PR10" && Session["ifHOGPSS"] != null))
+    {
+        <a id="RejectPR" class="approveRejectDetail btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">REJECT</a>
+    }
+    @if ((Model.NewPRForm.Scenario == 1) && (Model.NewPRForm.StatusId == "PR03") && Model.PRReviewer != 0)
+    {
+        <a id="RejectPreparedReviewer" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">REJECT</a>
+    }
+    @if ((Model.NewPRForm.Scenario == 2) && (Model.NewPRForm.StatusId == "PR03") && Session["ifHOGPSS"] != null)
+    {
+        <a id="RejectPreparedReviewer" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">REJECT</a>
+    }
+    @if ((Model.NewPRForm.Scenario == 3) && (Model.NewPRForm.StatusId == "PR03") && Session["ifHOGPSS"] != null)
+    {
+        <a id="RejectPreparedReviewer" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">REJECT</a>
+    }
+    @if (Model.NewPRForm.StatusId == "PR04" || (Model.NewPRForm.StatusId == "PR04" && Model.PRRecommender != 0))
+    {
+        <a id="RejectPreparedRecommended" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">REJECT</a>
+    }
+    @if (Model.NewPRForm.StatusId == "PR11" && Session["ifHOC"] != null)
+    {
+        <a id="RejectPreparedRecommended" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">REJECT</a>
+    }
+    @if (Model.NewPRForm.StatusId == "PR05" && Model.NewPRForm.ApproverId != 0)
+    {
+        <a id="RejectPreparedApprover" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">REJECT</a>
+    }
+    @*@if (Model.NewPRForm.StatusId == "PR05" && Session["ifHOC"] != null && Model.NewPRForm.Scenario == 2)
         {
             <a id="RejectPreparedReviewer" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">REJECT</a>
-        }
-        @if ((Model.NewPRForm.Scenario == 2) && (Model.NewPRForm.StatusId == "PR03") && Session["ifHOGPSS"] != null)
-        {
-            <a id="RejectPreparedReviewer" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">REJECT</a>
-        }
-        @if ((Model.NewPRForm.Scenario == 3) && (Model.NewPRForm.StatusId == "PR03") && Session["ifHOGPSS"] != null)
-        {
-            <a id="RejectPreparedReviewer" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">REJECT</a>
-        }
-        @if (Model.NewPRForm.StatusId == "PR04" || (Model.NewPRForm.StatusId == "PR04" && Model.PRRecommender != 0))
-        {
-            <a id="RejectPreparedRecommended" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">REJECT</a>
-        }
-        @if (Model.NewPRForm.StatusId == "PR11" && Session["ifHOC"] != null)
-        {
-            <a id="RejectPreparedRecommended" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">REJECT</a>
-        }
-        @if (Model.NewPRForm.StatusId == "PR05" && Model.NewPRForm.ApproverId != 0)
-        {
-            <a id="RejectPreparedApprover" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">REJECT</a>
-        }
-        @*@if (Model.NewPRForm.StatusId == "PR05" && Session["ifHOC"] != null && Model.NewPRForm.Scenario == 2)
-            {
-                <a id="RejectPreparedReviewer" class=" btn btn-md text-white u-btn-blue g-mr-5 g-mb-15">REJECT</a>
-            }*@
-    </div>
+        }*@
+</div>
 }

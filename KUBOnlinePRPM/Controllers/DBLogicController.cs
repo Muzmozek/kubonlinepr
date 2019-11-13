@@ -216,8 +216,12 @@ namespace KUBOnlinePRPM.Controllers
                     if (getHOD != null)
                     {
                         int HODApproverId = 0;
-                        generatePRNo.StatusId = "PR09";
-                        foreach (var item in getHOD)
+                    generatePRNo.StatusId = "PR09";
+                    var EditPRDB = db.Entry(generatePRNo);
+                    EditPRDB.State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+
+                    foreach (var item in getHOD)
                         {
                             if (HODApproverId != item.HODApproverId)
                             {
@@ -849,9 +853,10 @@ namespace KUBOnlinePRPM.Controllers
                     msgDate = DateTime.Now,
                     fromUserId = x.UserId,
                     msgType = "Trail",
-                    message = x.FullName + " has submit PR application for PR No. " + FormerPRDetails.PRNo + " subject for reviewal"
+                    message = x.FullName + " has submit PR application for PR No. " + FormerPRDetails.PRNo + " subject for initial approval"
                 };
                 db.NotificationMsgs.Add(_objSubmited);
+                db.SaveChanges();
 
                 var getPRPreparerChildCustId = db.Users.First(m => m.userId == FormerPRDetails.PreparedById);
 
@@ -900,6 +905,10 @@ namespace KUBOnlinePRPM.Controllers
                 {
                     int HODApproverId = 0;
                     FormerPRDetails.StatusId = "PR09";
+                    var EditPRDB = db.Entry(FormerPRDetails);
+                    EditPRDB.State = System.Data.Entity.EntityState.Modified;                   
+                    db.SaveChanges();
+
                     foreach (var item in getHOD)
                     {
                         if (HODApproverId != item.HODApproverId)
@@ -972,6 +981,7 @@ namespace KUBOnlinePRPM.Controllers
                 {
                     int UserId = Int32.Parse(Session["UserId"].ToString());
                     FormerPRDetails.StatusId = "PR19";
+                    db.SaveChanges();
                     var getFinance = (from m in db.Users
                                       join n in db.Users_Roles on m.userId equals n.userId
                                       where n.roleId == "R13" && m.companyId == x.CustId

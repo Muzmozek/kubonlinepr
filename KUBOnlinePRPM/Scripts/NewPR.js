@@ -579,7 +579,6 @@ $(document).on('ready', function () {
             processData: false,
             cache: false,
             beforeSend: function () {
-                PRItemTable.state.save();
                 $("body").addClass("loading");
             },
             dataType: "json",
@@ -713,7 +712,6 @@ $(document).on('ready', function () {
             processData: false,
             cache: false,
             beforeSend: function () {
-                PRItemTable.state.save();
                 $("body").addClass("loading");
             },
             dataType: "json",
