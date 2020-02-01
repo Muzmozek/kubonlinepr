@@ -63,8 +63,18 @@ namespace KUBOnlinePRPM.Controllers
             //_updateProject.budgetBalance = model.NewPRForm.BudgetBalance;
             //db.SaveChanges();
 
-            PurchaseRequisition generatePRNo = db.PurchaseRequisitions.First(m => m.PRId == _objNewPR.PRId);
-            generatePRNo.PRNo = "PR-" + DateTime.Now.Year + "-" + string.Format("{0}{1}", 0, _objNewPR.PRId.ToString("D4"));
+            PurchaseRequisition generatePRNo = db.PurchaseRequisitions.OrderByDescending(x => x.SubmitDate).First();
+
+            if (DateTime.Now.Year != generatePRNo.SubmitDate.Value.Year)
+            {
+                int newNo = 0;
+                generatePRNo.PRNo = "PR-" + DateTime.Now.Year + "-" + string.Format("{0}{1}", 0, newNo.ToString("D4"));
+            } else
+            {
+                int newNo = Int32.Parse(generatePRNo.PRNo.Split('-')[2]) + 1;
+                generatePRNo.PRNo = "PR-" + DateTime.Now.Year + "-" + string.Format("{0}{1}", 0, newNo.ToString("D4"));
+            }
+            
             NotificationMsg generateMsg = new NotificationMsg();
 
             model.PRId = _objNewPR.PRId;
