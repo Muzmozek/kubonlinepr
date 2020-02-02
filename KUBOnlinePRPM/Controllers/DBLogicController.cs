@@ -27,6 +27,7 @@ namespace KUBOnlinePRPM.Controllers
 
         protected void PRSaveDbLogic(PRModel model)
         {
+            PurchaseRequisition checkPrevPR = db.PurchaseRequisitions.OrderByDescending(x => x.SubmitDate).First();
             PurchaseRequisition _objNewPR = new PurchaseRequisition
             {
                 uuid = Guid.NewGuid(),
@@ -61,20 +62,20 @@ namespace KUBOnlinePRPM.Controllers
             //_updateProject.budgetedAmount = model.NewPRForm.BudgetedAmount;
             //_updateProject.utilizedToDate = model.NewPRForm.UtilizedToDate;
             //_updateProject.budgetBalance = model.NewPRForm.BudgetBalance;
-            //db.SaveChanges();
+            //db.SaveChanges();            
+            PurchaseRequisition generatePRNo = db.PurchaseRequisitions.First(m => m.PRId == _objNewPR.PRId);
 
-            PurchaseRequisition generatePRNo = db.PurchaseRequisitions.OrderByDescending(x => x.SubmitDate).First();
-
-            if (DateTime.Now.Year != generatePRNo.SubmitDate.Value.Year)
+            if (DateTime.Now.Year != checkPrevPR.SubmitDate.Value.Year)
             {
-                int newNo = 0;
+                int newNo = 1;
                 generatePRNo.PRNo = "PR-" + DateTime.Now.Year + "-" + string.Format("{0}{1}", 0, newNo.ToString("D4"));
             } else
             {
-                int newNo = Int32.Parse(generatePRNo.PRNo.Split('-')[2]) + 1;
+                int newNo = Int32.Parse(checkPrevPR.PRNo.Split('-')[2]) + 1;
                 generatePRNo.PRNo = "PR-" + DateTime.Now.Year + "-" + string.Format("{0}{1}", 0, newNo.ToString("D4"));
             }
-            
+            db.SaveChanges();
+
             NotificationMsg generateMsg = new NotificationMsg();
 
             model.PRId = _objNewPR.PRId;

@@ -4071,9 +4071,10 @@ namespace KUBOnlinePRPM.Controllers
                     {
                         var getRecommenderII = new List<PRModel>();
                         int CustId = db.Projects.First(m => m.projectId == PR.ProjectId).custId;
+                        string pendingFor = "";
                         if (CustId == 2 || CustId == 6)
                         {
-                            PR.StatusId = "PR05";
+                            PR.StatusId = "PR05"; pendingFor = "approval";
                             getRecommenderII = (from m in db.Users
                                                 join n in db.Users_Roles on m.userId equals n.userId
                                                 where n.roleId == "R14" && m.companyId == 2
@@ -4086,7 +4087,7 @@ namespace KUBOnlinePRPM.Controllers
                         }
                         else
                         {
-                            PR.StatusId = "PR11";
+                            PR.StatusId = "PR11"; pendingFor = "recommendation";
                             getRecommenderII = (from m in db.Users
                                                 join n in db.Users_Roles on m.userId equals n.userId
                                                 //join o in db.Roles on n.roleId equals o.roleId
@@ -4102,7 +4103,7 @@ namespace KUBOnlinePRPM.Controllers
                         NotificationMsg objTask = new NotificationMsg()
                         {
                             uuid = Guid.NewGuid(),
-                            message = PR.PRNo + " pending for your recommendation",
+                            message = PR.PRNo + " pending for your " + pendingFor,
                             fromUserId = UserId,
                             msgDate = DateTime.Now,
                             msgType = "Task",
@@ -4117,7 +4118,7 @@ namespace KUBOnlinePRPM.Controllers
                             msgDate = DateTime.Now,
                             fromUserId = UserId,
                             msgType = "Trail",
-                            message = getFullName.firstName + " " + getFullName.lastName + " has submit PR application for PR No. " + PR.PRNo + " subject for joint recommendation"
+                            message = getFullName.firstName + " " + getFullName.lastName + " has submit PR application for PR No. " + PR.PRNo + " subject for " + pendingFor
                         };
                         db.NotificationMsgs.Add(_objSubmited);
                         db.SaveChanges();
