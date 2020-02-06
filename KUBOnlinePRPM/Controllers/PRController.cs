@@ -5459,6 +5459,7 @@ namespace KUBOnlinePRPM.Controllers
                 int PrId = Int32.Parse(Request["PrId"]);
                 string RejectRemark = Request["RejectRemark"].ToString();
                 var PR = db.PurchaseRequisitions.First(x => x.PRId == PrId);
+                var RequestorDetails = db.Users.First(x => x.userId == UserId);
                 PR.StatusId = "PR07";
                 PR.Rejected = PR.Rejected + 1;
                 PR.RejectedById = UserId;
@@ -5488,6 +5489,16 @@ namespace KUBOnlinePRPM.Controllers
                 getDone.done = true;
                 if (db.SaveChanges() > 0)
                 {
+                    PRModel x = new PRModel();
+                    x.PRId = PrId;
+                    x.UserId = UserId;
+                    x.EmailAddress = RequestorDetails.emailAddress;
+                    x.NewPRForm = new NewPRModel();
+                    x.NewPRForm.PRNo = PR.PRNo;
+                    x.NewPRForm.PreparedById = UserId;
+                    x.NewPRForm.RequestorName = RequestorDetails.firstName + ' ' + RequestorDetails.lastName;
+                    SendEmailPRNotification(x, "PRRejection");
+
                     return Json("Successfully reject");
                 }
                 else
@@ -5705,6 +5716,16 @@ namespace KUBOnlinePRPM.Controllers
                             getDone.done = true;
                             db.SaveChanges();
                         }
+
+                        PRModel x = new PRModel();
+                        x.PRId = PrId;
+                        x.UserId = UserId;
+                        x.EmailAddress = getPreparerChildCustId.emailAddress;
+                        x.NewPRForm = new NewPRModel();
+                        x.NewPRForm.PRNo = UpdatePRStatus.PRNo;
+                        x.NewPRForm.PreparedById = UserId;
+                        x.NewPRForm.RequestorName = getPreparerChildCustId.firstName + ' ' + getPreparerChildCustId.lastName;
+                        SendEmailPRNotification(x, "PRRejection");
 
                         return Json(new { success = true, flow = "phase1", message = "Successfully reject the PR." });
                     }

@@ -37,6 +37,10 @@ namespace KUBOnlinePRPM.Controllers
             {
                 NotiMessage = PR.FullName + " has send email notification for PR reviewal for PRNo : " + PR.NewPRForm.PRNo + " to " + getReceipientDetails.FullName;
             }
+            else if (PRFlow == "PRRejection")
+            {
+                NotiMessage = PR.FullName + " has send email notification for reject status for PRNo : " + PR.NewPRForm.PRNo + " to " + getReceipientDetails.FullName;
+            }
             else if(PRFlow == "ToHOGPSSNoti")
             {
                 NotiMessage = PR.FullName + " has send email notification for paper approval for PRNo : " + PR.NewPRForm.PRNo + " to " + getReceipientDetails.FullName + " (HODGPSS).";
