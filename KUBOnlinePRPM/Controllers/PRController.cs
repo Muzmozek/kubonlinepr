@@ -2354,7 +2354,15 @@ namespace KUBOnlinePRPM.Controllers
                                      select new PRModel()
                                      {
                                          MsgId = m.msgId
-                                     }).First();
+                                     }).ToList();
+
+                foreach (var item in requestorDone)
+                {
+                    NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == item.MsgId);
+                    getDone.done = true;
+                    db.SaveChanges();
+                }
+
                 int PRCustId = objPRDetails.CustId;
                 Project updateProject = db.Projects.First(m => m.projectId == objPRDetails.ProjectId);
 
@@ -2380,10 +2388,7 @@ namespace KUBOnlinePRPM.Controllers
                         };
                         db.NotificationMsgs.Add(objNotification);
                         db.SaveChanges();
-
-                        NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == requestorDone.MsgId);
-                        getDone.done = true;
-
+                   
                         var getFinance = (from m in db.Users
                                           join n in db.Users_Roles on m.userId equals n.userId
                                           where n.roleId == "R13" && m.companyId == PRCustId
@@ -2453,9 +2458,6 @@ namespace KUBOnlinePRPM.Controllers
                     };
                     db.NotificationMsgs.Add(objNotification);
                     db.SaveChanges();
-
-                    NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == requestorDone.MsgId);
-                    getDone.done = true;
 
                     var getPRPreparerChildCustId = db.Users.First(m => m.userId == objPRDetails.PreparedById);
                     var getProcurement = new List<PRModel>();
