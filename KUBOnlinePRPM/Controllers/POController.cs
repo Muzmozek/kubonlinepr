@@ -810,7 +810,7 @@ namespace KUBOnlinePRPM.Controllers
                             newPO.PONo = "PO-" + DateTime.Now.Year.ToString().Substring(2) + "-" + string.Format("{0}{1}", 0, NewPOsequence.ToString("D4"));
                         }
                         
-                    } else if (checkReqPONumbering == null && (checkPOforCust != null && DateTime.Now.Year != checkPOforCust.PODate.Year))
+                    } else if (checkReqPONumbering == null && (checkPOforCust != null && DateTime.Now.Year == checkPOforCust.PODate.Year))
                     {
                         NewPOsequence = Int32.Parse(checkPOforCust.PONo.Split('-')[2]) + 1;
                         //if (ConfigurationManager.AppSettings[CustName] != null)
