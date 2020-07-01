@@ -37,8 +37,9 @@ namespace KUBOnlinePRPM.Controllers
 
             newUserModel.HOD = (from m in db.Users
                                               join n in db.Users_Roles on m.userId equals n.userId
-                                              where n.roleId == "R02" && m.companyId == CustId
-                                              select m.firstName + " " + m.lastName).FirstOrDefault();
+                                              join o in db.Users on m.superiorId equals o.userId
+                                              where m.companyId == CustId && m.userId == userId
+                                select o.firstName + " " + o.lastName).FirstOrDefault();
 
             newUserModel.HOC = (from m in db.Users
                                               join n in db.Users_Roles on m.userId equals n.userId

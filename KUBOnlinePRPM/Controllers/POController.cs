@@ -792,7 +792,7 @@ namespace KUBOnlinePRPM.Controllers
                                               PONo = m.PONo,
                                               PODate = m.PODate,
                                               POId = m.POId
-                                          }).OrderByDescending(m => m.POId).FirstOrDefault();
+                                          }).Where(m => m.PODate != null).OrderByDescending(m => m.POId).FirstOrDefault();
 
                     if (checkReqPONumbering != null && checkPOforCust != null)
                     {
