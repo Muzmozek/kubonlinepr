@@ -27,7 +27,7 @@ namespace KUBOnlinePRPM.Controllers
 
         protected void PRSaveDbLogic(PRModel model)
         {
-            PurchaseRequisition checkPrevPR = db.PurchaseRequisitions.OrderByDescending(x => x.PRId).First();
+            PurchaseRequisition checkPrevPR = db.PurchaseRequisitions.Where(x => x.SubmitDate != null).OrderByDescending(x => x.PRId).First();
             PurchaseRequisition _objNewPR = new PurchaseRequisition
             {
                 uuid = Guid.NewGuid(),

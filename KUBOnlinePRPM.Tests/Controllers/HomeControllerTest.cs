@@ -503,7 +503,7 @@ namespace KUBOnlinePRPM.Tests.Controllers
         public void TestRecommender()
         {
             //var PR = db.PurchaseRequisitions.First(x => x.PRId == 161);
-            int CustId = 3;
+            int CustId = 3;            
             var getReqChildCustId = db.Users.First(m => m.userId == 203);
             var getRecommenderIII = new List<PRModel>();
             if (CustId == 2 || (CustId == 3 && getReqChildCustId.childCompanyId == 16) || CustId == 4)
@@ -529,5 +529,63 @@ namespace KUBOnlinePRPM.Tests.Controllers
                 //                     }).ToList();
             }
         }
+
+        [TestMethod]
+        public void TestPOnumbering()
+        {
+            int PRCustId = 2;
+            PurchaseOrder newPO = new PurchaseOrder();
+            newPO.uuid = Guid.NewGuid();
+            var checkReqPONumbering = db.PONoEditHistories.OrderByDescending(m => m.modifiedDate).Where(m => m.custId == PRCustId).FirstOrDefault();
+            int NewPOsequence = 0;
+            var checkPOforCust = (from m in db.PurchaseOrders
+                                  join n in db.Projects on m.projectId equals n.projectId
+                                  where n.custId == PRCustId
+                                  select new
+                                  {
+                                      PONo = m.PONo,
+                                      PODate = m.PODate,
+                                      POId = m.POId
+                                  }).OrderByDescending(m => m.POId).FirstOrDefault();
+
+            if (checkReqPONumbering != null && checkPOforCust != null)
+            {
+                if (checkReqPONumbering.modifiedDate > checkPOforCust.PODate)
+                {
+                    NewPOsequence = Int32.Parse(checkReqPONumbering.newPONo.Split('-')[2]);
+                    newPO.PONo = "PO-" + DateTime.Now.Year.ToString().Substring(2) + "-" + string.Format("{0}{1}", 0, NewPOsequence.ToString("D4"));
+                }
+                else if (DateTime.Now.Year == checkPOforCust.PODate.Year)
+                {
+                    NewPOsequence = Int32.Parse(checkPOforCust.PONo.Split('-')[2]) + 1;
+                    newPO.PONo = "PO-" + DateTime.Now.Year.ToString().Substring(2) + "-" + string.Format("{0}{1}", 0, NewPOsequence.ToString("D4"));
+                }
+                else
+                {
+                    NewPOsequence = 1;
+                    newPO.PONo = "PO-" + DateTime.Now.Year.ToString().Substring(2) + "-" + string.Format("{0}{1}", 0, NewPOsequence.ToString("D4"));
+                }
+
+            }
+            else if (checkReqPONumbering == null && (checkPOforCust != null && DateTime.Now.Year == checkPOforCust.PODate.Year))
+            {
+                NewPOsequence = Int32.Parse(checkPOforCust.PONo.Split('-')[2]) + 1;
+                //if (ConfigurationManager.AppSettings[CustName] != null)
+                //{
+                //    NewPOsequence = Int32.Parse(ConfigurationManager.AppSettings[CustName].ToString()) + 1;
+                //}
+                newPO.PONo = "PO-" + DateTime.Now.Year.ToString().Substring(2) + "-" + string.Format("{0}{1}", 0, NewPOsequence.ToString("D4"));
+            }
+            else
+            {
+                NewPOsequence = 1;
+                //if (ConfigurationManager.AppSettings[CustName] != null)
+                //{
+                //    NewPOsequence = Int32.Parse(ConfigurationManager.AppSettings[CustName].ToString());
+                //}
+                newPO.PONo = "PO-" + DateTime.Now.Year.ToString().Substring(2) + "-" + string.Format("{0}{1}", 0, NewPOsequence.ToString("D4"));
+            }
+        }
+
     }
 }
