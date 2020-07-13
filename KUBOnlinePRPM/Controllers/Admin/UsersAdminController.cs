@@ -91,6 +91,21 @@ namespace KUBOnlinePRPM.Controllers.Admin
             {
                 return HttpNotFound();
             }
+
+            if (user.companyId == 2)
+            {
+                var InitSuperiorKUBM = (from m in db.Users
+                                        join n in db.Users_Roles on m.userId equals n.userId
+                                        where n.roleId == "R02" && m.childCompanyId != null && m.userId == id
+                                        select new
+                                        {
+                                            userId = m.userId,
+                                            firstName = m.userName,
+
+                                        }).FirstOrDefault();
+                ViewBag.childCompanyId = InitSuperiorKUBM;
+            }
+            
             ViewBag.companyId = new SelectList(db.Customers, "custId", "name", user.companyId);
             ViewBag.superiorId = new SelectList(db.Users, "userId", "firstName", user.superiorId);
             ViewBag.roleList = db.Roles.Select(x => new UserRoleViewModel{ roleId = x.roleId , roleName = x.name});
@@ -133,7 +148,7 @@ namespace KUBOnlinePRPM.Controllers.Admin
             }
             var studentToUpdate = await db.Users.FindAsync(id);
             if (TryUpdateModel(studentToUpdate, "",
-               new string[] { "companyId", "userName", "emailAddress", "firstName", "lastName", "employeeNo", "jobTitle", "status", "telephoneNo", "address", "extensionNo" }))
+               new string[] { "companyId", "userName", "emailAddress", "firstName", "lastName", "employeeNo", "jobTitle", "status", "telephoneNo", "address", "extensionNo", "superiorId" }))
             {
                 try
                 {
