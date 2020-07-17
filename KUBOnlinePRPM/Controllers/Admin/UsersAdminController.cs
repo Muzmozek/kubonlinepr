@@ -94,7 +94,7 @@ namespace KUBOnlinePRPM.Controllers.Admin
 
             if (user.companyId == 2)
             {
-                var InitSuperiorKUBM = (from m in db.Users
+                var InitApproverKUBM = (from m in db.Users
                                         join n in db.Users_Roles on m.userId equals n.userId
                                         where n.roleId == "R02" && m.childCompanyId != null && m.userId == id
                                         select new
@@ -103,7 +103,17 @@ namespace KUBOnlinePRPM.Controllers.Admin
                                             firstName = m.userName,
 
                                         }).FirstOrDefault();
-                ViewBag.childCompanyId = InitSuperiorKUBM;
+                var checkHOD = (from m in db.Users
+                                join n in db.Users_Roles on m.userId equals n.userId
+                                where n.roleId == "R02" && m.userId == id
+                                select new
+                                {
+                                    userId = m.userId,
+                                    firstName = m.userName,
+
+                                }).FirstOrDefault();
+                ViewBag.childCompanyId = InitApproverKUBM;
+                ViewBag.HOD = checkHOD;
             }
             
             ViewBag.companyId = new SelectList(db.Customers, "custId", "name", user.companyId);

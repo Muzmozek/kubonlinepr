@@ -3444,12 +3444,13 @@ namespace KUBOnlinePRPM.Controllers
                     db.SaveChanges();
                 }
 
-                int InitCodeId = 0;
+                //int InitCodeId = 0;
                 foreach (var value in PRModel.NewPRForm.PRItemListObject)
                 {
                     PR_Items _objNewPRItem = db.PR_Items.FirstOrDefault(m => m.itemsId == value.ItemsId);
                     _objNewPRItem.itemTypeId = value.ItemTypeId;
-                    _objNewPRItem.codeId = value.CodeId.Value;
+                    //_objNewPRItem.codeId = value.CodeId.Value; 7967
+                        _objNewPRItem.codeId = value.CodeId.Value;
                     _objNewPRItem.quantity = value.Quantity;
                     _objNewPRItem.UoMId = value.UoMId;
                     _objNewPRItem.jobNoId = value.JobNoId;
@@ -3463,17 +3464,17 @@ namespace KUBOnlinePRPM.Controllers
                     _objNewPRItem.dimDeptId = value.DimDeptId;
                     db.SaveChanges();
 
-                    if (InitCodeId != value.CodeId.Value)
-                    {
-                        var AmountInProgress = db.Budgets.Select(m => new { CodeId = m.codeId, initialUtilized = m.initialUtilized, utilized = m.utilized }).Where(m => m.CodeId == value.CodeId.Value && m.utilized == false).GroupBy(m => m.CodeId).Select(n => new { total = n.Sum(o => o.initialUtilized) }).SingleOrDefault();
-                        var updateProgress = db.Budgets.Where(m => m.codeId == value.CodeId.Value).ToList();
-                        if (AmountInProgress != null)
-                        {
-                            updateProgress.ForEach(m => m.progress = AmountInProgress.total);
-                        }
-                        db.SaveChanges();
-                        InitCodeId = value.CodeId.Value;
-                    }
+                    //if (InitCodeId != value.CodeId.Value)
+                    //{
+                    //    var AmountInProgress = db.Budgets.Select(m => new { CodeId = m.codeId, initialUtilized = m.initialUtilized, utilized = m.utilized }).Where(m => m.CodeId == value.CodeId.Value && m.utilized == false).GroupBy(m => m.CodeId).Select(n => new { total = n.Sum(o => o.initialUtilized) }).SingleOrDefault();
+                    //    var updateProgress = db.Budgets.Where(m => m.codeId == value.CodeId.Value).ToList();
+                    //    if (AmountInProgress != null)
+                    //    {
+                    //        updateProgress.ForEach(m => m.progress = AmountInProgress.total);
+                    //    }
+                    //    db.SaveChanges();
+                    //    InitCodeId = value.CodeId.Value;
+                    //}
                 }
 
                 var requestorDone = (from m in db.NotificationMsgs
@@ -3915,9 +3916,9 @@ namespace KUBOnlinePRPM.Controllers
                                            where n.roleId == "R02" && m.companyId == PR.CustId && m.userId == PR.PreparedById
                                            select new PRModel()
                                            {
-                                               UserId = m.userId,
-                                               FullName = m.firstName + " " + m.lastName,
-                                               EmailAddress = m.emailAddress
+                                               UserId = o.userId,
+                                               FullName = o.firstName + " " + o.lastName,
+                                               EmailAddress = o.emailAddress
                                            }).ToList();
                         }
                         else if (CustId == 6)
@@ -4498,9 +4499,9 @@ namespace KUBOnlinePRPM.Controllers
                                                    where n.roleId == "R02" && m.companyId == PR.CustId && m.userId == PR.PreparedById
                                                    select new PRModel()
                                                    {
-                                                       UserId = m.userId,
-                                                       FullName = m.firstName + " " + m.lastName,
-                                                       EmailAddress = m.emailAddress
+                                                       UserId = o.userId,
+                                                       FullName = o.firstName + " " + o.lastName,
+                                                       EmailAddress = o.emailAddress
                                                    }).ToList();
                                 }
                                 else if (CustId == 6)
@@ -4829,9 +4830,9 @@ namespace KUBOnlinePRPM.Controllers
                                                    where n.roleId == "R02" && m.companyId == PR.CustId && m.userId == PR.PreparedById
                                                    select new PRModel()
                                                    {
-                                                       UserId = m.userId,
-                                                       FullName = m.firstName + " " + m.lastName,
-                                                       EmailAddress = m.emailAddress
+                                                       UserId = o.userId,
+                                                       FullName = o.firstName + " " + o.lastName,
+                                                       EmailAddress = o.emailAddress
                                                    }).ToList();
                                 }
                                 else if (CustId == 6)

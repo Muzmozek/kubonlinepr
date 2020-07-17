@@ -129,7 +129,7 @@ namespace KUBOnlinePRPM.Controllers.Admin
         // assign Roles to user
         // ajax call
         [HttpPost]
-        public async Task<JsonResult> UpdateRoles(int userId, String roleId, String action)
+        public async Task<JsonResult> UpdateRoles(int userId, String roleId, int? childCompanyId, String action)
         {
             var checkRoleExist = db.Users_Roles.Where(x => x.userId == userId).Where(x => x.roleId == roleId).Any();
             var status = false;
@@ -141,9 +141,18 @@ namespace KUBOnlinePRPM.Controllers.Admin
                 }
                 else if (action == "remove")
                 {
-                    var rolesToBeRemove = db.Users_Roles.Where(x => x.userId == userId).Where(x => x.roleId == roleId);
-                    db.Users_Roles.RemoveRange(rolesToBeRemove);
-                    db.SaveChanges();
+                    if (childCompanyId == null)
+                    {
+                        var rolesToBeRemove = db.Users_Roles.Where(x => x.userId == userId).Where(x => x.roleId == roleId);
+                        db.Users_Roles.RemoveRange(rolesToBeRemove);
+                        db.SaveChanges();
+                        
+                    } else
+                    {
+                        var removeChildCompId = db.Users.Where(x => x.userId == userId).FirstOrDefault();
+                        removeChildCompId.childCompanyId = null;
+                        db.SaveChanges();
+                    }
                     status = true;
                 }
             }
@@ -151,14 +160,22 @@ namespace KUBOnlinePRPM.Controllers.Admin
             {
                 if (action == "assign")
                 {
-                    db.Users_Roles.Add(new Users_Roles
+                    if (childCompanyId == null)
                     {
-                        uuid = System.Guid.NewGuid(),
-                        userId = userId,
-                        roleId = roleId
-                    });
+                        db.Users_Roles.Add(new Users_Roles
+                        {
+                            uuid = System.Guid.NewGuid(),
+                            userId = userId,
+                            roleId = roleId
+                        });
 
-                    db.SaveChanges();
+                        db.SaveChanges();
+                    } else
+                    {
+                        var addChildCompId = db.Users.Where(x => x.userId == userId).FirstOrDefault();
+                        addChildCompId.childCompanyId = childCompanyId;
+                        db.SaveChanges();
+                    }
                     status = true;
                     
                 }

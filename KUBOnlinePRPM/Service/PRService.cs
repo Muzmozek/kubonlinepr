@@ -85,7 +85,7 @@ namespace KUBOnlinePRPM.Service
             records.HeadOfGPSS = HOGPSS;
 
             // loop by Customer
-            var customers = _db.Customers.ToList();
+            var customers = _db.Customers.Where(x => x.custId != 1 && x.custId != 3 && x.custId != 5 && x.custId != 6 && x.custId != 7 && x.custId != 8).ToList();
            
             records.Members = new List<SubsidiaryLevel>();
 

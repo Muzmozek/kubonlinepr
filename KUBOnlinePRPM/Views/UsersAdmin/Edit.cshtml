@@ -218,17 +218,17 @@
             </label>
         </div>
     }
-    @if (Model.companyId == 2)
+    @if (Model.companyId == 2 && ViewBag.HOD != null)
     {
         <div class="checkbox">
             <label>
                 @if (ViewBag.childCompanyId != null)
                 {
-                    <input class="assignRole" type="checkbox" value="R02" name="roles[]" checked>
+                    <input class="assignChildCompanyId" type="checkbox" value="R02" name="roles[]" checked>
                 }
                 else
                 {
-                    <input class="assignRole" type="checkbox" value="" name="roles[]">
+                    <input class="assignChildCompanyId" type="checkbox" value="" name="roles[]">
                 }
                 Initial Approver
             </label>
@@ -247,25 +247,49 @@
 }
 @section scripts {
     <script>
-    $(document).on('ready', function () {
-
+        var department = "@Model.department"; var childCompanyId = "@Model.childCompanyId"; var companyId = "@Model.companyId";
+    $(document).on('ready', function () {       
         $('.assignRole').change(function () {
-
             var action = this.checked? "assign" : "remove";
             var userId = parseInt(@Model.userId);
             var roleId = this.value;
 
-            UpdateRoles(userId, roleId, action);
+            UpdateRoles(userId, roleId, null, action);
         });
 
+        $(".assignChildCompanyId").change(function () {
+            if (department == "Group Risk &amp; Audit Division") {
+                childCompanyId = "1";
+            } else if (department == "Group Legal Division") {
+                childCompanyId = "3";
+            } else if (department == "Corporate Planning &amp; Operational Excellence") {
+                childCompanyId = "5";
+            } else if (department == "Group Finance Division" || department == "Financial Reporting") {
+                childCompanyId = "9";
+            } else if (department == "Corporate Communication") {
+                childCompanyId = "10";
+            } else if (department == "Information Technology") {
+                childCompanyId = "11";
+            } else if (department == "Group Secretarial Division") {
+                childCompanyId = "14";
+            } else if (department == "Group Human Capital Division" || department == "Corporate Services") {
+                childCompanyId = "15";
+            } 
 
-        function UpdateRoles(userId, roleId, action) {
+            var action = this.checked? "assign" : "remove";
+            var userId = parseInt(@Model.userId);
+            var roleId = this.value;            
 
+            UpdateRoles(userId, roleId, childCompanyId, action);
+        });
+
+        function UpdateRoles(userId, roleId, childCompanyId, action) {
             Url = "@Url.Action("UpdateRoles", "Roles")";
 
             $.post(Url, {
                 userId: userId,
                 roleId: roleId,
+                childCompanyId: childCompanyId,
                 action: action
             }, function (resp) {
                 //console.log(resp)
