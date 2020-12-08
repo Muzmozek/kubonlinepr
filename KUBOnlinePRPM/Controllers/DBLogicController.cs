@@ -27,7 +27,8 @@ namespace KUBOnlinePRPM.Controllers
 
         protected void PRSaveDbLogic(PRModel model)
         {
-            PurchaseRequisition checkPrevPR = db.PurchaseRequisitions.Where(x => x.SubmitDate != null).OrderByDescending(x => x.PRId).First();
+            PurchaseRequisition checkPrevPRWithSubmission = db.PurchaseRequisitions.Where(x => x.SubmitDate != null).OrderByDescending(x => x.PRId).First();
+            PurchaseRequisition checkPrevPRWithoutSubmission = db.PurchaseRequisitions.Where(x => x.PreparedDate != null).OrderByDescending(x => x.PRId).First();
             PurchaseRequisition _objNewPR = new PurchaseRequisition
             {
                 uuid = Guid.NewGuid(),
@@ -65,13 +66,21 @@ namespace KUBOnlinePRPM.Controllers
             //db.SaveChanges();            
             PurchaseRequisition generatePRNo = db.PurchaseRequisitions.First(m => m.PRId == _objNewPR.PRId);
 
-            if (DateTime.Now.Year != checkPrevPR.SubmitDate.Value.Year)
+            if (DateTime.Now.Year != checkPrevPRWithSubmission.SubmitDate.Value.Year)
             {
                 int newNo = 1;
                 generatePRNo.PRNo = "PR-" + DateTime.Now.Year + "-" + string.Format("{0}{1}", 0, newNo.ToString("D4"));
             } else
             {
-                int newNo = Int32.Parse(checkPrevPR.PRNo.Split('-')[2]) + 1;
+                string lastPRNo = "";
+                if (checkPrevPRWithSubmission.PRId != checkPrevPRWithoutSubmission.PRId)
+                {
+                    lastPRNo = checkPrevPRWithoutSubmission.PRNo;
+                } else
+                {
+                    lastPRNo = checkPrevPRWithSubmission.PRNo;
+                }
+                int newNo = Int32.Parse(lastPRNo.Split('-')[2]) + 1;
                 generatePRNo.PRNo = "PR-" + DateTime.Now.Year + "-" + string.Format("{0}{1}", 0, newNo.ToString("D4"));
             }
             db.SaveChanges();

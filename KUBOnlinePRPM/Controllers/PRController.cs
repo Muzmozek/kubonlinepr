@@ -5726,8 +5726,9 @@ namespace KUBOnlinePRPM.Controllers
                         x.EmailAddress = getPreparerChildCustId.emailAddress;
                         x.NewPRForm = new NewPRModel();
                         x.NewPRForm.PRNo = UpdatePRStatus.PRNo;
-                        x.NewPRForm.PreparedById = UserId;
-                        x.NewPRForm.RequestorName = getPreparerChildCustId.firstName + ' ' + getPreparerChildCustId.lastName;
+                        //Receipient details actually
+                        x.NewPRForm.ApproverId = getPreparerChildCustId.userId;
+                        x.NewPRForm.ApproverName = getPreparerChildCustId.firstName + ' ' + getPreparerChildCustId.lastName;
                         SendEmailPRNotification(x, "PRRejection");
 
                         return Json(new { success = true, flow = "phase1", message = "Successfully reject the PR." });
@@ -5749,6 +5750,17 @@ namespace KUBOnlinePRPM.Controllers
                             getDone.done = true;
                             db.SaveChanges();
                         }
+
+                        PRModel x = new PRModel();
+                        x.PRId = PrId;
+                        x.UserId = UserId;
+                        x.EmailAddress = getPreparerChildCustId.emailAddress;
+                        x.NewPRForm = new NewPRModel();
+                        x.NewPRForm.PRNo = UpdatePRStatus.PRNo;
+                        //Receipient details actually
+                        x.NewPRForm.ApproverId = getPreparerChildCustId.userId;
+                        x.NewPRForm.ApproverName = getPreparerChildCustId.firstName + ' ' + getPreparerChildCustId.lastName;
+                        SendEmailPRNotification(x, "PRRejection");
 
                         return Json(new { success = true, flow = "phase1", message = "Successfully cancel the PR." });
                     }

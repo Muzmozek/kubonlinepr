@@ -736,6 +736,7 @@
                     $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
                         $("body").removeClass("loading");
                     });
+                    Custombox.modal.close();
                 }                                
             });
     });
