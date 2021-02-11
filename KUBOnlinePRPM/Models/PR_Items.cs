@@ -47,8 +47,8 @@ namespace KUBOnlinePRPM.Models
         public virtual ItemType ItemType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PO_Item> PO_Item { get; set; }
-        public virtual PurchaseRequisition PurchaseRequisition { get; set; }
         public virtual TaxCode TaxCode { get; set; }
         public virtual UOM UOM { get; set; }
+        public virtual PurchaseRequisition PurchaseRequisition { get; set; }
     }
 }

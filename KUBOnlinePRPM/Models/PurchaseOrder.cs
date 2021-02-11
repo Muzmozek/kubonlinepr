@@ -57,13 +57,13 @@ namespace KUBOnlinePRPM.Models
         public virtual PaymentTerm PaymentTerm { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PO_Item> PO_Item { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PONoEditHistory> PONoEditHistories { get; set; }
         public virtual POStatu POStatu { get; set; }
         public virtual Project Project { get; set; }
         public virtual Purchaser Purchaser { get; set; }
         public virtual PurchaseRequisition PurchaseRequisition { get; set; }
         public virtual Vendor Vendor { get; set; }
         public virtual VendorStaff VendorStaff { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PONoEditHistory> PONoEditHistories { get; set; }
     }
 }

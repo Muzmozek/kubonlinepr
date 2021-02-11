@@ -23,7 +23,7 @@ namespace KUBOnlinePRPM.Models
         public Nullable<System.DateTime> HODApprovedDate2 { get; set; }
         public Nullable<System.DateTime> LastHODApprovedDate { get; set; }
     
-        public virtual PurchaseRequisition PurchaseRequisition { get; set; }
         public virtual User User { get; set; }
+        public virtual PurchaseRequisition PurchaseRequisition { get; set; }
     }
 }

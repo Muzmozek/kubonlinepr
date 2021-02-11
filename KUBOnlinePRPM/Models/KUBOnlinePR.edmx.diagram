@@ -35,9 +35,7 @@
         <EntityTypeShape EntityType="KUBOnlinePRModel.Project" Width="1.5" PointX="7.5" PointY="63.75" IsExpanded="true" />
         <EntityTypeShape EntityType="KUBOnlinePRModel.PRs_FileUpload" Width="1.5" PointX="15" PointY="56.75" IsExpanded="true" />
         <EntityTypeShape EntityType="KUBOnlinePRModel.PRStatu" Width="1.5" PointX="10.5" PointY="54.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="KUBOnlinePRModel.PurchaseOrder" Width="1.5" PointX="18" PointY="53.375" IsExpanded="true" />
         <EntityTypeShape EntityType="KUBOnlinePRModel.Purchaser" Width="1.5" PointX="15.75" PointY="72.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="KUBOnlinePRModel.PurchaseRequisition" Width="1.5" PointX="12.75" PointY="48.25" IsExpanded="true" />
         <EntityTypeShape EntityType="KUBOnlinePRModel.PurchaseType" Width="1.5" PointX="10.5" PointY="57.375" IsExpanded="true" />
         <EntityTypeShape EntityType="KUBOnlinePRModel.Role" Width="1.5" PointX="6" PointY="68.5" IsExpanded="true" />
         <EntityTypeShape EntityType="KUBOnlinePRModel.sysdiagram" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
@@ -58,7 +56,6 @@
         <AssociationConnector Association="KUBOnlinePRModel.FK_Items_Customer" ManuallyRouted="false" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_Location_Customer" ManuallyRouted="false" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_Project_Customer" ManuallyRouted="false" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseRequisition_Customer" ManuallyRouted="false" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_User_Customer" ManuallyRouted="false" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_Vendor_Customer" ManuallyRouted="false" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_FileUpload_User" ManuallyRouted="false" />
@@ -70,45 +67,19 @@
         <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Items_ItemType" ManuallyRouted="false" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_NotiGroup_NotificationMsg" ManuallyRouted="false" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_NotiGroup_User" ManuallyRouted="false" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseOrder_PaymentTerms" ManuallyRouted="false" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PO_Item_PR_Items" ManuallyRouted="false" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PO_Item_PurchaseOrder" ManuallyRouted="false" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseOrder_POStatus" ManuallyRouted="false" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Admin_PurchaseRequisition" ManuallyRouted="false" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Approver_PurchaseRequisition" ManuallyRouted="false" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Approver_User" ManuallyRouted="false" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Finance_PurchaseRequisition" ManuallyRouted="false" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Finance_User" ManuallyRouted="false" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_HOD_PurchaseRequisition" ManuallyRouted="false" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PR_HOD_User" ManuallyRouted="false" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Items_PurchaseRequisition" ManuallyRouted="false" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Items_TaxCode" ManuallyRouted="false" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Items_UOM" ManuallyRouted="false" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_PaperApprover_PurchaseRequisition" ManuallyRouted="false" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PR_PaperApprover_User" ManuallyRouted="false" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Recommender_PurchaseRequisition" ManuallyRouted="false" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Recommender_User" ManuallyRouted="false" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_RecommenderCFO_PurchaseRequisition" ManuallyRouted="false" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PR_RecommenderCFO_User" ManuallyRouted="false" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_RecommenderCOO_PurchaseRequisition" ManuallyRouted="false" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PR_RecommenderCOO_User" ManuallyRouted="false" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_RecommenderII_PurchaseRequisition" ManuallyRouted="false" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PR_RecommenderII_User" ManuallyRouted="false" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Reviewer_PurchaseRequisition" ManuallyRouted="false" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Reviewer_User" ManuallyRouted="false" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PRs_FileUpload_Project" ManuallyRouted="false" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseOrder_Project" ManuallyRouted="false" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseRequisition_Project" ManuallyRouted="false" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PRs_FileUpload_PurchaseRequisition" ManuallyRouted="false" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseRequisition_PRStatus" ManuallyRouted="false" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseOrder_Purchaser" ManuallyRouted="false" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseOrder_PurchaseRequisition" ManuallyRouted="false" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseOrder_Vendor" ManuallyRouted="false" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseOrder_VendorStaff" ManuallyRouted="false" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseRequisition_PurchaseType" ManuallyRouted="false" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseRequisition_User" ManuallyRouted="false" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseRequisition_Vendor" ManuallyRouted="false" />
-        <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseRequisition_VendorStaff" ManuallyRouted="false" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_Users_Roles_Role" ManuallyRouted="false" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_Users_Roles_User" ManuallyRouted="false" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_Vendor_User" ManuallyRouted="false" />
@@ -116,7 +87,36 @@
         <AssociationConnector Association="KUBOnlinePRModel.FK_VendorStaff_User" ManuallyRouted="false" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_VendorStaff_User1" ManuallyRouted="false" />
         <EntityTypeShape EntityType="KUBOnlinePRModel.PONoEditHistory" Width="1.5" PointX="20.25" PointY="59.5" />
+        <EntityTypeShape EntityType="KUBOnlinePRModel.PurchaseOrder" Width="1.5" PointX="18" PointY="57" />
+        <EntityTypeShape EntityType="KUBOnlinePRModel.PurchaseRequisition" Width="1.5" PointX="12.75" PointY="48.25" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseRequisition_Customer" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseOrder_PaymentTerms" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PO_Item_PurchaseOrder" />
         <AssociationConnector Association="KUBOnlinePRModel.FK_PONoEditHistory_PurchaseOrder" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseOrder_POStatus" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Admin_PurchaseRequisition" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Approver_PurchaseRequisition" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Finance_PurchaseRequisition" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_HOD_PurchaseRequisition" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Items_PurchaseRequisition" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_PaperApprover_PurchaseRequisition" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Recommender_PurchaseRequisition" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_RecommenderCFO_PurchaseRequisition" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_RecommenderCOO_PurchaseRequisition" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_RecommenderII_PurchaseRequisition" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PR_Reviewer_PurchaseRequisition" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseOrder_Project" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseRequisition_Project" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PRs_FileUpload_PurchaseRequisition" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseRequisition_PRStatus" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseOrder_Purchaser" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseOrder_PurchaseRequisition" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseOrder_Vendor" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseOrder_VendorStaff" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseRequisition_PurchaseType" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseRequisition_User" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseRequisition_Vendor" />
+        <AssociationConnector Association="KUBOnlinePRModel.FK_PurchaseRequisition_VendorStaff" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

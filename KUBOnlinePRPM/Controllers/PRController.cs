@@ -306,28 +306,31 @@ namespace KUBOnlinePRPM.Controllers
             {
                 ItemCodeInfo.BudgetAmount = db.GLs.First(m => m.codeId == ItemCodeInfo.CodeId).budgetAmount;
                 ItemCodeInfo.UtilizedToDate = db.GLs.First(m => m.codeId == ItemCodeInfo.CodeId).budgetUtilized;
-                var AmountInProgress = db.Budgets.Select(m => new { CodeId = m.codeId, initialUtilized = m.initialUtilized, utilized = m.utilized }).Where(m => m.CodeId == ItemCodeInfo.CodeId && m.utilized == false).GroupBy(m => m.CodeId).Select(n => new { total = n.Sum(o => o.initialUtilized) }).SingleOrDefault();
 
-                if (ItemCodeInfo.BudgetAmount == null)
+                if (ConfigurationManager.AppSettings["TestBudget"] == "true")
                 {
-                    ItemCodeInfo.BudgetAmount = 0;
-                }
-                if (ItemCodeInfo.UtilizedToDate == null)
-                {
-                    ItemCodeInfo.UtilizedToDate = 0;
-                }
-                if (AmountInProgress == null)
-                {
-                    ItemCodeInfo.AmountInProgress = 0;
-                }
-                else
-                {
-                    ItemCodeInfo.AmountInProgress = AmountInProgress.total;
+                    var AmountInProgress = db.Budgets.Select(m => new { CodeId = m.codeId, initialUtilized = m.initialUtilized, utilized = m.utilized }).Where(m => m.CodeId == ItemCodeInfo.CodeId && m.utilized == false).GroupBy(m => m.CodeId).Select(n => new { total = n.Sum(o => o.initialUtilized) }).SingleOrDefault();
+
+                    if (ItemCodeInfo.BudgetAmount == null)
+                    {
+                        ItemCodeInfo.BudgetAmount = 0;
+                    }
+                    if (ItemCodeInfo.UtilizedToDate == null)
+                    {
+                        ItemCodeInfo.UtilizedToDate = 0;
+                    }
+                    if (AmountInProgress == null)
+                    {
+                        ItemCodeInfo.AmountInProgress = 0;
+                    }
+                    else
+                    {
+                        ItemCodeInfo.AmountInProgress = AmountInProgress.total;
+                    }
                 }
             }
 
             return Json(new { ItemCodeInfo }, JsonRequestBehavior.AllowGet);
-
         }
 
         public JsonResult GetTaxCode(int TaxCodeId, int PRCustId)
@@ -3437,11 +3440,14 @@ namespace KUBOnlinePRPM.Controllers
                 PR.TotalSST = PRModel.NewPRForm.TotalSST;
                 PR.TotalIncSST = PRModel.NewPRForm.TotalIncSST;
 
-                var updateBudget = db.Budgets.FirstOrDefault(m => m.PRId == PrId);
-                if (updateBudget != null)
+                if (ConfigurationManager.AppSettings["TestBudget"] == "true")
                 {
-                    updateBudget.initialUtilized = PR.TotalIncSST.Value;
-                    db.SaveChanges();
+                    var updateBudget = db.Budgets.FirstOrDefault(m => m.PRId == PrId);
+                    if (updateBudget != null)
+                    {
+                        updateBudget.initialUtilized = PR.TotalIncSST.Value;
+                        db.SaveChanges();
+                    }
                 }
 
                 //int InitCodeId = 0;

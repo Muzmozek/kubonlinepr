@@ -21,7 +21,7 @@ namespace KUBOnlinePRPM.Models
         public Nullable<System.DateTime> approverApprovedDate { get; set; }
         public Nullable<int> finalApproverUserId { get; set; }
     
-        public virtual PurchaseRequisition PurchaseRequisition { get; set; }
         public virtual User User { get; set; }
+        public virtual PurchaseRequisition PurchaseRequisition { get; set; }
     }
 }

@@ -31,12 +31,12 @@ namespace KUBOnlinePRPM.Models
             this.PR_RecommenderCOO = new HashSet<PR_RecommenderCOO>();
             this.PR_RecommenderHOC = new HashSet<PR_RecommenderHOC>();
             this.PR_Reviewer = new HashSet<PR_Reviewer>();
-            this.PurchaseRequisitions = new HashSet<PurchaseRequisition>();
             this.Users_Roles = new HashSet<Users_Roles>();
             this.Vendors = new HashSet<Vendor>();
             this.Vendors1 = new HashSet<Vendor>();
             this.VendorStaffs = new HashSet<VendorStaff>();
             this.VendorStaffs1 = new HashSet<VendorStaff>();
+            this.PurchaseRequisitions = new HashSet<PurchaseRequisition>();
         }
     
         public System.Guid uuid { get; set; }
@@ -104,8 +104,6 @@ namespace KUBOnlinePRPM.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_Reviewer> PR_Reviewer { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PurchaseRequisition> PurchaseRequisitions { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Users_Roles> Users_Roles { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Vendor> Vendors { get; set; }
@@ -115,5 +113,7 @@ namespace KUBOnlinePRPM.Models
         public virtual ICollection<VendorStaff> VendorStaffs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<VendorStaff> VendorStaffs1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PurchaseRequisition> PurchaseRequisitions { get; set; }
     }
 }
