@@ -32,6 +32,8 @@ namespace KUBOnlinePRPM.Models
         public string CompanyName { get; set; }
         public int POId { get; set; }
         public DateTime PRDate { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime PODate { get; set; }
         public string PONo { get; set; }
         public int ProjectId { get; set; }
@@ -71,7 +73,7 @@ namespace KUBOnlinePRPM.Models
         public decimal DiscountAmount { get; set; }
         public int DiscountPerc { get; set; }
         public decimal? TotalBeforeDisc { get; set; }
-        public decimal? TotalExclSST { get; set; }
+        public decimal? TotalExcSST { get; set; }
         public decimal? TotalSST { get; set; }
         public decimal? TotalIncSST { get; set; }
         public string SpecReviewerId { get; set; }
@@ -82,6 +84,7 @@ namespace KUBOnlinePRPM.Models
         public string DeliveryTo { get; set; }
 
         [Required]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? OrderDate { get; set; }
 
         [Required]
@@ -89,6 +92,7 @@ namespace KUBOnlinePRPM.Models
         public string PurchaserCode { get; set; }
 
         [Required]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? DeliveryDate { get; set; }
     }
 
