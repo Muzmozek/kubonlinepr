@@ -706,7 +706,7 @@ $(document).on('ready', function () {
         
         $.ajax({
             url: URL,
-            type: 'POST',
+            type: 'POST', //Team
             data: fd,
             contentType: false,
             processData: false,
