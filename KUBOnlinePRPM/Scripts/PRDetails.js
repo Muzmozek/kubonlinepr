@@ -618,7 +618,7 @@
                 $("input", cell).val(TotalPrice);                
                 var UnitPriceIncSST = (UnitPrice + (resp.TaxCodeInfo.SST / 100 * UnitPrice)).toFixed(2);
                 //$(".child #UnitPriceIncSST" + selectlistid, cell).val(UnitPriceIncSST);
-                var TotalPriceIncSST = TotalPrice + (resp.TaxCodeInfo.SST / 100 * TotalPrice);
+                var TotalPriceIncSST = TotalPrice + (resp.TaxCodeInfo.SST / 100 * TotalPrice).toFixed(2);
                 $("input", cell1).val(TotalPriceIncSST);
 
                 //$(".child #TaxCodeId + " + selectlistid + " select").val(TaxCodeId);
@@ -635,7 +635,7 @@
         var UnitPrice = parseFloat($(this).val()); var TaxCodeId = 0;
         var selectlistid = $(this)[0].id.substring(9, $(this)[0].id.length);
         var Quantity = $("#Quantity" + selectlistid).val();        
-        var TotalPrice = parseFloat(UnitPrice * Quantity /*+ parseFloat(SST)*/);
+        var TotalPrice = parseFloat(UnitPrice * Quantity /*+ parseFloat(SST)*/).toFixed(2);
         if ($(".child #TaxCodeId" + selectlistid + " option:selected").val() !== "") {
             TaxCodeId = $(".child #TaxCodeId" + selectlistid + " option:selected").val();
         }       
@@ -647,8 +647,8 @@
                 PRCustId: $("#CustId").val()
             },
             success: function (resp) {
-                var UnitPriceIncSST = (UnitPrice + (resp.TaxCodeInfo.SST / 100 * UnitPrice)).toFixed(2);
-                var TotalPriceIncSST = (TotalPrice + (resp.TaxCodeInfo.SST / 100 * TotalPrice)).toFixed(2);  
+                var UnitPriceIncSST = parseFloat((UnitPrice + (resp.TaxCodeInfo.SST / 100 * UnitPrice))).toFixed(2);
+                var TotalPriceIncSST = parseFloat((TotalPrice + (resp.TaxCodeInfo.SST / 100 * TotalPrice))).toFixed(2);  
                 //openHiddenPRItemTable();
                 $(".child #UnitPriceIncSST" + selectlistid).val(UnitPriceIncSST);
                 $(".child #TotalPriceIncSST" + selectlistid).val(TotalPriceIncSST);
@@ -663,6 +663,41 @@
                 $("body").removeClass("loading");
             }
         });        
+    });
+
+    $(document).on("change", ".Quantity", function () {
+        var Quantity = parseFloat($(this).val()); var TaxCodeId = 0;
+        var selectlistid = $(this)[0].id.substring(8, $(this)[0].id.length);
+        var UnitPrice = $("#UnitPrice" + selectlistid).val();
+        UnitPrice == "" ? UnitPrice = 0 : UnitPrice;
+        var TotalPrice = parseFloat(UnitPrice * Quantity /*+ parseFloat(SST)*/).toFixed(2);
+        if ($(".child #TaxCodeId" + selectlistid + " option:selected").val() !== "") {
+            TaxCodeId = $(".child #TaxCodeId" + selectlistid + " option:selected").val();
+        }
+        $.ajax({
+            url: UrlGetTaxCodeInfo,
+            method: 'GET',
+            data: {
+                TaxCodeId: TaxCodeId,
+                PRCustId: $("#CustId").val()
+            },
+            success: function (resp) {
+                var UnitPriceIncSST = parseFloat((UnitPrice + (resp.TaxCodeInfo.SST / 100 * UnitPrice))).toFixed(2);
+                var TotalPriceIncSST = parseFloat((TotalPrice + (resp.TaxCodeInfo.SST / 100 * TotalPrice))).toFixed(2);
+                //openHiddenPRItemTable();
+                $(".child #UnitPriceIncSST" + selectlistid).val(UnitPriceIncSST);
+                $(".child #TotalPriceIncSST" + selectlistid).val(TotalPriceIncSST);
+                $(".child #TotalPrice" + selectlistid).val(TotalPrice);
+                var cell = PRItemTable.cell({ row: selectlistid - 1, column: 12 }).node();
+                var cell1 = PRItemTable.cell({ row: selectlistid - 1, column: 13 }).node();
+                //$(".child #UnitPriceIncSST" + selectlistid, cell).val(UnitPriceIncSST);
+                $("input", cell1).val(TotalPriceIncSST);
+                $('input', cell).val(TotalPrice);
+                //generatePRItemTable();
+                calculateTotal();
+                $("body").removeClass("loading");
+            }
+        });
     });
 
     $(document).on("change", "#DiscountAmount", function () {

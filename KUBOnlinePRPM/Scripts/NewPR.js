@@ -361,6 +361,7 @@ function calculateTotal() {
         DiscountAmount = parseFloat($("#DiscountAmount").val());
     }
     var DiscountPerc = parseFloat(DiscountAmount / AmountRequired * 100).toFixed(2);
+    DiscountPerc == "NaN" ? DiscountPerc = 0 : DiscountPerc;
     var TotalExcSST = parseFloat(AmountRequired - DiscountAmount).toFixed(2);
     var TotalIncSST1 = parseFloat(TotalIncSST - DiscountAmount).toFixed(2);
     $("#DiscountPerc").val(parseInt(DiscountPerc));

@@ -1156,131 +1156,135 @@ namespace KUBOnlinePRPM.Controllers
                                     CustId = n.custId
                                 }).First().CustId;
 
-                string Report = "POForm";
-
-                var NewPOForm = db.Database.SqlQuery<NewPOModel>("NewPOFormDetails @POId", new SqlParameter("@POId", PODetail.POId)).ToList();
-                var POItemList = db.Database.SqlQuery<POItemsTable>("POItemList @POId, @PRCustId", new SqlParameter("@POId", PODetail.POId), new SqlParameter("@PRCustId", PRCustId)).ToList();
-
-                using (var viewer = new ReportViewer())
+                if (PRCustId == 4)
                 {
-                    viewer.Reset();
-                    Warning[] warnings;
-                    string[] streamids;
-                    string mimeType;
-                    string encoding;
-                    string filenameExtension;
+                    string Report = "POForm";
+                    var NewPOForm = db.Database.SqlQuery<NewPOModel>("NewPOFormDetails @POId", new SqlParameter("@POId", PODetail.POId)).ToList();
+                    var POItemList = db.Database.SqlQuery<POItemsTable>("POItemList @POId, @PRCustId", new SqlParameter("@POId", PODetail.POId), new SqlParameter("@PRCustId", PRCustId)).ToList();
 
-                    ReportDataSource ds1 = new ReportDataSource("NewPOFormDetails", NewPOForm);
-                    ReportDataSource ds2 = new ReportDataSource("POItemList", POItemList);
-                    viewer.LocalReport.DataSources.Clear();
-                    viewer.LocalReport.DataSources.Add(ds1);
-                    viewer.LocalReport.DataSources.Add(ds2);
-                    viewer.LocalReport.EnableExternalImages = true;
-                    viewer.LocalReport.ReportPath = (string.Format(@"Views\PO\{0}.rdlc", Report.Replace(".", @"\")));
-                    //viewer.LocalReport.SetParameters(new ReportParameter("FeedbackId", paramFeedbackId));
-                    viewer.LocalReport.Refresh();
+                    using (var viewer = new ReportViewer())
+                    {
+                        viewer.Reset();
+                        Warning[] warnings;
+                        string[] streamids;
+                        string mimeType;
+                        string encoding;
+                        string filenameExtension;
 
-                    byte[] bytes = viewer.LocalReport.Render(
-                        //"WORDOPENXML", null, out mimeType, out encoding, out filenameExtension,
-                        "PDF", null, out mimeType, out encoding, out filenameExtension, out streamids, out warnings);
+                        ReportDataSource ds1 = new ReportDataSource("NewPOFormDetails", NewPOForm);
+                        ReportDataSource ds2 = new ReportDataSource("POItemList", POItemList);
+                        viewer.LocalReport.DataSources.Clear();
+                        viewer.LocalReport.DataSources.Add(ds1);
+                        viewer.LocalReport.DataSources.Add(ds2);
+                        viewer.LocalReport.EnableExternalImages = true;
+                        viewer.LocalReport.ReportPath = (string.Format(@"Views\PO\{0}.rdlc", Report.Replace(".", @"\")));
+                        //viewer.LocalReport.SetParameters(new ReportParameter("FeedbackId", paramFeedbackId));
+                        viewer.LocalReport.Refresh();
 
-                    viewer.LocalReport.ReleaseSandboxAppDomain();
-                    Response.BufferOutput = false;
-                    return File(bytes, System.Net.Mime.MediaTypeNames.Application.Octet, NewPOForm[0].PONo + ".pdf");
+                        byte[] bytes = viewer.LocalReport.Render(
+                            //"WORDOPENXML", null, out mimeType, out encoding, out filenameExtension,
+                            "PDF", null, out mimeType, out encoding, out filenameExtension, out streamids, out warnings);
+
+                        viewer.LocalReport.ReleaseSandboxAppDomain();
+                        Response.BufferOutput = false;
+                        return File(bytes, System.Net.Mime.MediaTypeNames.Application.Octet, NewPOForm[0].PONo + ".pdf");
+                    }
                 }
+                else
+                {
+                    PODetail.NewPOForm = (from a in db.PurchaseOrders
+                                          join b in db.Users on a.PreparedById equals b.userId
+                                          join c in db.POStatus on a.StatusId equals c.statusId
+                                          join d in db.Projects on a.projectId equals d.projectId
+                                          join e in db.Vendors on a.vendorId equals e.vendorId into f
+                                          //join g in db.VendorStaffs on a.VendorStaffId equals g.staffId into l
+                                          join g in db.Projects on a.projectId equals g.projectId
+                                          join h in db.PO_Item on a.POId equals h.POId
+                                          join i in db.PopulateItemLists on h.codeId equals i.codeId into j
+                                          join k in db.PaymentTerms on a.PaymentTermsId equals k.paymentTermsId
+                                          join l in db.Purchasers on a.PurchaserId equals l.purchaserId into m
+                                          join o in db.Locations on a.LocationCodeId equals o.locationId into p
+                                          from n in m.DefaultIfEmpty()
+                                              //from v in r.DefaultIfEmpty()
+                                          from q in p.DefaultIfEmpty()
+                                          from y in f.DefaultIfEmpty()
+                                          from z in j.DefaultIfEmpty()
+                                          where a.POId == PODetail.POId
+                                          select new NewPOModel()
+                                          {
+                                              PONo = a.PONo,
+                                              PODate = a.PreparedDate,
+                                              OrderDate = a.OrderDate,
+                                              ProjectId = a.projectId,
+                                              ProjectName = g.projectName,
+                                              CustId = d.custId,
+                                              VendorId = a.vendorId,
+                                              VendorCode = y.vendorNo,
+                                              VendorName = y.name,
+                                              VendorAddress = y.address,
+                                              PayToVendorId = a.PayToVendorId,
+                                              PayToVendorName = y.name,
+                                              PaymentTermsId = a.PaymentTermsId,
+                                              PaymentTermsCode = k.paymentDescription,
+                                              VendorQuoteNo = a.VendorQuoteNo,
+                                              //VendorEmail = x.vendorEmail,
+                                              //VendorStaffId = x.staffId,
+                                              //VendorContactName = x.vendorContactName,
+                                              //VendorContactNo = x.vendorContactNo,
+                                              DeliveryDate = a.DeliveryDate,
+                                              DiscountAmount = a.DiscountAmount,
+                                              PurchaserCode = n.purchaserCode,
+                                              CompanyName = q.locationName,
+                                              DeliveryTo = q.locationAddress + " " + q.locationCity + " " + q.PostCode + " " + q.State + " " + q.CountryRegionCode,
+                                              AmountRequired = a.TotalPrice,
+                                              TotalBeforeDisc = a.TotalExcSST + a.DiscountAmount,
+                                              TotalExcSST = a.TotalExcSST,
+                                              TotalSST = a.TotalSST,
+                                              TotalIncSST = a.TotalIncSST,
+                                              PreparedById = a.PreparedById.Value,
+                                              Saved = a.Saved,
+                                              Submited = a.Submited,
+                                              StatusId = a.StatusId.Trim()
+                                          }).FirstOrDefault();
 
-                //PODetail.NewPOForm = (from a in db.PurchaseOrders
-                //                      join b in db.Users on a.PreparedById equals b.userId
-                //                      join c in db.POStatus on a.StatusId equals c.statusId
-                //                      join d in db.Projects on a.projectId equals d.projectId
-                //                      join e in db.Vendors on a.vendorId equals e.vendorId into f
-                //                      //join g in db.VendorStaffs on a.VendorStaffId equals g.staffId into l
-                //                      join g in db.Projects on a.projectId equals g.projectId
-                //                      join h in db.PO_Item on a.POId equals h.POId
-                //                      join i in db.PopulateItemLists on h.codeId equals i.codeId into j
-                //                      join k in db.PaymentTerms on a.PaymentTermsId equals k.paymentTermsId
-                //                      join l in db.Purchasers on a.PurchaserId equals l.purchaserId into m
-                //                      join o in db.Locations on a.LocationCodeId equals o.locationId into p
-                //                      from n in m.DefaultIfEmpty()
-                //                          //from v in r.DefaultIfEmpty()
-                //                      from q in p.DefaultIfEmpty()
-                //                      from y in f.DefaultIfEmpty()
-                //                      from z in j.DefaultIfEmpty()
-                //                      where a.POId == PODetail.POId
-                //                      select new NewPOModel()
-                //                      {
-                //                          PONo = a.PONo,
-                //                          PODate = a.PreparedDate,
-                //                          OrderDate = a.OrderDate,
-                //                          ProjectId = a.projectId,
-                //                          ProjectName = g.projectName,
-                //                          CustId = d.custId,
-                //                          VendorId = a.vendorId,
-                //                          VendorCode = y.vendorNo,
-                //                          VendorName = y.name,
-                //                          VendorAddress = y.address,
-                //                          PayToVendorId = a.PayToVendorId,
-                //                          PayToVendorName = y.name,
-                //                          PaymentTermsId = a.PaymentTermsId,
-                //                          PaymentTermsCode = k.paymentDescription,
-                //                          VendorQuoteNo = a.VendorQuoteNo,
-                //                          //VendorEmail = x.vendorEmail,
-                //                          //VendorStaffId = x.staffId,
-                //                          //VendorContactName = x.vendorContactName,
-                //                          //VendorContactNo = x.vendorContactNo,
-                //                          DeliveryDate = a.DeliveryDate,
-                //                          DiscountAmount = a.DiscountAmount,
-                //                          PurchaserCode = n.purchaserCode,
-                //                          CompanyName = q.locationName,
-                //                          DeliveryTo = q.locationAddress + " " + q.locationCity + " " + q.PostCode + " " + q.State + " " + q.CountryRegionCode,
-                //                          AmountRequired = a.TotalPrice,
-                //                          TotalBeforeDisc = a.TotalExcSST + a.DiscountAmount,
-                //                          TotalExclSST = a.TotalExcSST,
-                //                          TotalSST = a.TotalSST,
-                //                          TotalIncSST = a.TotalIncSST,
-                //                          PreparedById = a.PreparedById.Value,
-                //                          Saved = a.Saved,
-                //                          Submited = a.Submited,
-                //                          StatusId = a.StatusId.Trim()
-                //                      }).FirstOrDefault();
+                    var getUserDetails = (from m in db.PurchaseOrders
+                                          join o in db.PurchaseRequisitions on m.PRId equals o.PRId
+                                          join n in db.Users on o.PreparedById equals n.userId
+                                          where m.POId == PODetail.POId
+                                          select new
+                                          {
+                                              CustId = m.CustId,
+                                              ChildCustId = n.childCompanyId
+                                          }).First();
 
-                //var getUserDetails = (from m in db.PurchaseOrders
-                //                      join o in db.PurchaseRequisitions on m.PRId equals o.PRId
-                //                      join n in db.Users on o.PreparedById equals n.userId
-                //                      where m.POId == PODetail.POId
-                //                      select new
-                //                      {
-                //                          CustId = m.CustId,
-                //                          ChildCustId = n.childCompanyId
-                //                      }).First();
+                    PODetail.POItemList = (from m in db.PO_Item
+                                           from n in db.PopulateItemLists.Where(x => m.codeId == x.codeId && m.itemTypeId == x.itemTypeId)
+                                           join o in db.TaxCodes on m.taxCodeId equals o.TaxCodeId into p
+                                           join r in db.UOMs on m.UoMId equals r.UoMId into s
+                                           from q in p.DefaultIfEmpty()
+                                           from t in s.DefaultIfEmpty()
+                                           where m.POId == PODetail.POId && n.custId == PRCustId
+                                           select new POItemsTable()
+                                           {
+                                               ItemsId = m.itemsId,
+                                               DateRequired = m.dateRequired,
+                                               Description = m.description,
+                                               ItemCode = n.ItemCode,
+                                               CustPONo = m.custPONo,
+                                               Quantity = m.quantity,
+                                               UnitPrice = m.unitPrice,
+                                               //SST = m.sst,
+                                               TotalPrice = m.totalPrice,
+                                               DimDeptId = m.dimDeptId,
+                                               DimProjectId = m.dimProjectId,
+                                               TotalPriceIncSST = m.totalPriceIncSST,
+                                               TaxCode = q.Code,
+                                               TaxPerc = q.GST,
+                                               UOM = t.UoMCode
+                                           }).ToList();
 
-                //PODetail.POItemList = (from m in db.PO_Item
-                //                       from n in db.PopulateItemLists.Where(x => m.codeId == x.codeId && m.itemTypeId == x.itemTypeId)
-                //                       join o in db.TaxCodes on m.taxCodeId equals o.TaxCodeId into p
-                //                       join r in db.UOMs on m.UoMId equals r.UoMId into s
-                //                       from q in p.DefaultIfEmpty()
-                //                       from t in s.DefaultIfEmpty()
-                //                       where m.POId == PODetail.POId && n.custId == PRCustId
-                //                       select new POItemsTable()
-                //                       {
-                //                           ItemsId = m.itemsId,
-                //                           DateRequired = m.dateRequired,
-                //                           Description = m.description,
-                //                           ItemCode = n.ItemCode,
-                //                           CustPONo = m.custPONo,
-                //                           Quantity = m.quantity,
-                //                           UnitPrice = m.unitPrice,
-                //                           //SST = m.sst,
-                //                           TotalPrice = m.totalPrice,
-                //                           DimDeptId = m.dimDeptId,
-                //                           DimProjectId = m.dimProjectId,
-                //                           TotalPriceIncSST = m.totalPriceIncSST,
-                //                           TaxCode = q.Code,
-                //                           TaxPerc = q.GST,
-                //                           UOM = t.UoMCode
-                //                       }).ToList();
-
-                //return new RazorPDF.PdfActionResult("POForm", PODetail);
+                    return new RazorPDF.PdfActionResult("POForm", PODetail);
+                }
             }
             else
             {

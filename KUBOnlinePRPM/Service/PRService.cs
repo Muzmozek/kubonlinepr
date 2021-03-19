@@ -22,13 +22,16 @@ namespace KUBOnlinePRPM.Service
             if (amount <= 20000 || custId == 1)
                 return true;
 
+            if (amount <= 50000 && custId == 4)
+                return true;
+
             return false;
         }
 
         public bool CheckAmountScenarioTwo(decimal amount, int custId)
         {
             //custId = 4 is refered to Solar Gas Sdn Bhd
-            if (custId == 4 && amount >= decimal.Parse("20000.01") && amount <= 500000)
+            if (custId == 4 && amount >= decimal.Parse("50000.01") && amount <= 200000)
                 return true;
 
 
@@ -41,10 +44,19 @@ namespace KUBOnlinePRPM.Service
         public bool CheckAmountScenarioThree(decimal amount, int custId)
         {
             //custId = 4 is refered to Solar Gas Sdn Bhd
-            if (custId == 4 && amount >= decimal.Parse("500000.01"))
+            if (custId == 4 && amount >= decimal.Parse("500000.01") && amount <= 2000000)
                 return true;
 
             if (amount >= decimal.Parse("50000.01"))
+                return true;
+
+            return false;
+        }
+
+        public bool CheckAmountScenarioFour(decimal amount, int custId)
+        {
+            //custId = 4 is refered to Solar Gas Sdn Bhd
+            if (custId == 4 && amount >= decimal.Parse("2000000.01"))
                 return true;
 
             return false;

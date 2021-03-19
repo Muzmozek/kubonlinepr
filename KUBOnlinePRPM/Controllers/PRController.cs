@@ -2916,6 +2916,30 @@ namespace KUBOnlinePRPM.Controllers
             {
                 var FormerPRDetails = db.PurchaseRequisitions.First(x => x.PRId == PR.PRId);
                 PR.FullName = Session["FullName"].ToString();
+                if (FormerPRDetails.PurchaseTypeId != PR.NewPRForm.PurchaseTypeId)
+                {
+                    FormerPRDetails.PurchaseTypeId = PR.NewPRForm.PurchaseTypeId;
+                }
+                if (FormerPRDetails.BudgetDescription != PR.NewPRForm.BudgetDescription)
+                {
+                    FormerPRDetails.BudgetDescription = PR.NewPRForm.BudgetDescription;
+                }
+                if (FormerPRDetails.budgetedAmount != PR.NewPRForm.BudgetedAmount)
+                {
+                    FormerPRDetails.budgetedAmount = PR.NewPRForm.BudgetedAmount;
+                }
+                if (FormerPRDetails.utilizedToDate != PR.NewPRForm.UtilizedToDate)
+                {
+                    FormerPRDetails.utilizedToDate = PR.NewPRForm.UtilizedToDate;
+                }
+                if (FormerPRDetails.budgetBalance != PR.NewPRForm.BudgetBalance)
+                {
+                    FormerPRDetails.budgetBalance = PR.NewPRForm.BudgetBalance;
+                }
+                if (FormerPRDetails.Justification != PR.NewPRForm.Justification)
+                {
+                    FormerPRDetails.Justification = PR.NewPRForm.Justification;
+                }
                 if (FormerPRDetails.SpecsReviewerId != PR.NewPRForm.SpecReviewerId)
                 {
                     if (FormerPRDetails.SpecsReviewerId != null)
@@ -3104,6 +3128,10 @@ namespace KUBOnlinePRPM.Controllers
                 foreach (var value in PR.NewPRForm.PRItemListObject)
                 {
                     PR_Items FormerPRItem = db.PR_Items.FirstOrDefault(m => m.itemsId == value.ItemsId);
+                    if (FormerPRItem.dateRequired != value.DateRequired)
+                    {
+                        FormerPRItem.dateRequired = value.DateRequired;
+                    }
                     if (FormerPRItem.itemTypeId != value.ItemTypeId)
                     {
                         if (FormerPRItem.itemTypeId != null)
@@ -3144,6 +3172,9 @@ namespace KUBOnlinePRPM.Controllers
                                         default:
                                             CustId = FormerPRDetails.CustId; break;
                                     }
+                                } else
+                                {
+                                    CustId = FormerPRDetails.CustId;
                                 }
                                 var FormerItemCode = db.PopulateItemLists.Select(m => new { ItemDescription = m.ItemDescription, CodeId = m.codeId, CustId = m.custId }).Where(m => m.CustId == CustId).Where(m => m.CodeId == formerCodeId.codeId).First();
                                 var NewItemCode = db.PopulateItemLists.Select(m => new { ItemDescription = m.ItemDescription, CodeId = m.codeId, CustId = m.custId }).Where(m => m.CustId == CustId).Where(m => m.CodeId == value.CodeId).First();
@@ -3196,6 +3227,14 @@ namespace KUBOnlinePRPM.Controllers
                         }
                         db.NotificationMsgs.Add(_objDetails_NotificationMsg);
                         FormerPRItem.UoMId = value.UoMId;
+                    }
+                    if (FormerPRItem.description != value.Description)
+                    {
+                        FormerPRItem.description = value.Description;
+                    }
+                    if (FormerPRItem.custPONo != value.CustPONo)
+                    {
+                        FormerPRItem.custPONo = value.CustPONo;
                     }
                     if (FormerPRItem.jobNoId != value.JobNoId)
                     {
@@ -3428,6 +3467,12 @@ namespace KUBOnlinePRPM.Controllers
                 //String SpecsReviewer = Request["SpecsReviewer"];
 
                 var PR = db.PurchaseRequisitions.First(x => x.PRId == PrId);
+                PR.PurchaseTypeId = PRModel.NewPRForm.PurchaseTypeId;
+                PR.BudgetDescription = PRModel.NewPRForm.BudgetDescription;
+                PR.budgetedAmount = PRModel.NewPRForm.BudgetedAmount;
+                PR.utilizedToDate = PRModel.NewPRForm.UtilizedToDate;
+                PR.budgetBalance = PRModel.NewPRForm.BudgetBalance;
+                PR.Justification = PRModel.NewPRForm.Justification;
                 PR.SpecsReviewerId = PRModel.NewPRForm.SpecReviewerId;
                 PR.AmountRequired = PRModel.NewPRForm.TotalIncSST.Value;
                 PR.VendorId = PRModel.NewPRForm.VendorId;
@@ -3454,11 +3499,14 @@ namespace KUBOnlinePRPM.Controllers
                 foreach (var value in PRModel.NewPRForm.PRItemListObject)
                 {
                     PR_Items _objNewPRItem = db.PR_Items.FirstOrDefault(m => m.itemsId == value.ItemsId);
+                    _objNewPRItem.dateRequired = value.DateRequired;
                     _objNewPRItem.itemTypeId = value.ItemTypeId;
                     //_objNewPRItem.codeId = value.CodeId.Value; 7967
-                        _objNewPRItem.codeId = value.CodeId.Value;
+                    _objNewPRItem.codeId = value.CodeId.Value;
                     _objNewPRItem.quantity = value.Quantity;
                     _objNewPRItem.UoMId = value.UoMId;
+                    _objNewPRItem.description = value.Description;
+                    _objNewPRItem.custPONo = value.CustPONo;
                     _objNewPRItem.jobNoId = value.JobNoId;
                     _objNewPRItem.jobTaskNoId = value.JobTaskNoId;
                     _objNewPRItem.taxCodeId = value.TaxCodeId;
@@ -3724,43 +3772,15 @@ namespace KUBOnlinePRPM.Controllers
                                 break;
                             case 3:
                             case 4:
-                                if (amountBudget < 5000 && PR.CustId == 4)
-                                {
-                                    //get Pn. Liz
+                                    int SolarGasHOFDUserId = Int32.Parse(ConfigurationManager.AppSettings["SolarGasHOFDUserId"]);
                                     getApprover = (from m in db.Users
-                                                   where m.userId == 60 && m.companyId == PR.CustId
+                                                   where m.userId == SolarGasHOFDUserId && m.companyId == PR.CustId
                                                    select new PRModel()
                                                    {
                                                        UserId = m.userId,
                                                        FullName = m.firstName + " " + m.lastName,
                                                        EmailAddress = m.emailAddress
                                                    }).ToList();
-                                }
-                                else if (PR.CustId == 3 && getReqChildCustId.childCompanyId == 16)
-                                {
-                                    //get Datuk Rahim
-                                    getApprover = (from m in db.Users
-                                                   where m.userId == 165
-                                                   select new PRModel()
-                                                   {
-                                                       UserId = m.userId,
-                                                       FullName = m.firstName + " " + m.lastName,
-                                                       EmailAddress = m.emailAddress
-                                                   }).ToList();
-                                }
-                                else
-                                {
-                                    getApprover = (from m in db.Users
-                                                   join n in db.Users_Roles on m.userId equals n.userId
-                                                   //join o in db.Roles on n.roleId equals o.roleId
-                                                   where n.roleId == "R04" && m.companyId == PR.CustId
-                                                   select new PRModel()
-                                                   {
-                                                       UserId = n.userId,
-                                                       FullName = m.firstName + " " + m.lastName,
-                                                       EmailAddress = m.emailAddress
-                                                   }).ToList();
-                                }
                                 break;
                             default:
                                 getApprover = (from m in db.Users
@@ -4000,7 +4020,7 @@ namespace KUBOnlinePRPM.Controllers
 
                     return Json(new { success = true, message = "Sucessfully submit the procurement" });
                 }
-                else if (PRService.CheckAmountScenarioThree(amountBudget, PR.CustId))
+                else if (PRService.CheckAmountScenarioThree(amountBudget, PR.CustId) || PRService.CheckAmountScenarioFour(amountBudget, PR.CustId))
                 {
                     PR.Scenario = 3;
                     db.SaveChanges();
@@ -4177,60 +4197,6 @@ namespace KUBOnlinePRPM.Controllers
                             }                                                      
                         }
                     }
-                    //PR.StatusId = "PR03";
-                    //var getReviewer = (from m in db.Users
-                    //                   join n in db.Users_Roles on m.userId equals n.userId
-                    //                   //join o in db.Roles on n.roleId equals o.roleId
-                    //                   where n.roleId == "R10" && m.companyId == 2
-                    //                   select new PRModel()
-                    //                   {
-                    //                       UserId = n.userId,
-                    //                       FullName = m.firstName + " " + m.lastName,
-                    //                       EmailAddress = m.emailAddress
-                    //                   }).ToList();
-
-                    //NotificationMsg objTask = new NotificationMsg()
-                    //{
-                    //    uuid = Guid.NewGuid(),
-                    //    message = PR.PRNo + " pending for your reviewal",
-                    //    fromUserId = UserId,
-                    //    msgDate = DateTime.Now,
-                    //    msgType = "Task",
-                    //    PRId = PrId
-                    //};
-                    //db.NotificationMsgs.Add(objTask);
-                    //db.SaveChanges();
-
-                    //foreach (var item in getReviewer)
-                    //{
-                    //    NotiGroup ReviewerTask = new NotiGroup()
-                    //    {
-                    //        uuid = Guid.NewGuid(),
-                    //        msgId = objTask.msgId,
-                    //        toUserId = item.UserId,
-                    //        resubmit = false
-                    //    };
-                    //    db.NotiGroups.Add(ReviewerTask);
-
-                    //    PR_Reviewer _objSaveReviewer = new PR_Reviewer
-                    //    {
-                    //        uuid = Guid.NewGuid(),
-                    //        reviewerId = item.UserId,
-                    //        PRId = PR.PRId
-                    //    };
-                    //    db.PR_Reviewer.Add(_objSaveReviewer);
-                    //    db.SaveChanges();
-
-                    //    PRModel x = new PRModel();
-                    //    x.PRId = PR.PRId;
-                    //    x.UserId = UserId;
-                    //    x.EmailAddress = item.EmailAddress;
-                    //    x.NewPRForm = new NewPRModel();
-                    //    x.NewPRForm.PRNo = PR.PRNo;
-                    //    x.NewPRForm.ApproverId = item.UserId;
-                    //    x.NewPRForm.ApproverName = item.FullName;
-                    //    SendEmailPRNotification(x, "ToReviewerNoti");
-                    //}
 
                     return Json(new { success = true, message = "Sucessfully submit the procurement" });
                 }
@@ -4245,402 +4211,6 @@ namespace KUBOnlinePRPM.Controllers
             {
                 var redirectUrl = new UrlHelper(Request.RequestContext).Action("Index", "Home", new { /* no params */ });
                 return Json(new { success = false, url = redirectUrl });
-            }
-        }
-
-        public ActionResult RejectPRRecommended()
-        {
-            if (User.Identity.IsAuthenticated && Session["UserId"] != null)
-            {
-                int UserId = Int32.Parse(Session["UserId"].ToString());
-                int PrId = Int32.Parse(Request["PrId"]);
-                string RejectRemark = Request["RejectRemark"].ToString();
-                var PR = db.PurchaseRequisitions.First(x => x.PRId == PrId);
-                PR.StatusId = "PR07";
-                PR.Rejected = PR.Rejected + 1;
-                PR.RejectedById = UserId;
-                PR.RejectedDate = DateTime.Now;
-                PR.RejectedRemark = RejectRemark;
-                db.SaveChanges();
-
-                NotificationMsg objNotification = new NotificationMsg()
-                {
-                    uuid = Guid.NewGuid(),
-                    message = Session["FullName"].ToString() + " has rejected the PR No: " + PR.PRNo + " application. ",
-                    fromUserId = UserId,
-                    msgDate = DateTime.Now,
-                    msgType = "Trail",
-                    PRId = PrId
-                };
-                db.NotificationMsgs.Add(objNotification);
-
-                var requestorDone = (from m in db.NotificationMsgs
-                                     join n in db.NotiGroups on m.msgId equals n.msgId
-                                     where n.toUserId == UserId && m.PRId == PrId && m.msgType == "Task"
-                                     select new PRModel()
-                                     {
-                                         MsgId = m.msgId
-                                     }).First();
-
-                NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == requestorDone.MsgId);
-                getDone.done = true;
-
-                if (db.SaveChanges() > 0)
-                {
-                    return Json("Successfully reject");
-                }
-                else
-                {
-                    return Json("System failure. Please contact admin");
-                }
-            }
-            else
-            {
-                return Redirect("~/Home/Index");
-            }
-        }
-
-        public ActionResult RecommendedPRRecommended()
-        {
-            if (User.Identity.IsAuthenticated && Session["UserId"] != null)
-            {
-                // todo the session must be IT / HSE / PMO
-                // set status to PR03 and head of GPSS will proceed
-
-                int PrId = Int32.Parse(Request["PrId"]);
-                var PR = db.PurchaseRequisitions.First(x => x.PRId == PrId);
-
-                int UserId = Int32.Parse(Session["UserId"].ToString());
-                var requestorDone = (from m in db.NotificationMsgs
-                                     join n in db.NotiGroups on m.msgId equals n.msgId
-                                     where n.toUserId == UserId && m.PRId == PrId && m.msgType == "Task"
-                                     select new PRModel()
-                                     {
-                                         MsgId = m.msgId
-                                     }).First();
-
-                NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == requestorDone.MsgId);
-                getDone.done = true;
-                db.SaveChanges();
-
-                PR_Recommender SaveRecommenderInfo = db.PR_Recommender.First(m => m.PRId == PR.PRId);
-                SaveRecommenderInfo.recommendedDate = DateTime.Now;
-                SaveRecommenderInfo.recommended = 1;
-                db.SaveChanges();
-
-                PR_PaperApprover checkGMDpaper = db.PR_PaperApprover.FirstOrDefault(m => m.PRId == PrId);
-                if (checkGMDpaper != null)
-                {
-                    PR.StatusId = "PR05";
-                    var getApprover = (from m in db.Users
-                                       join n in db.Users_Roles on m.userId equals n.userId
-                                       //join o in db.Roles on n.roleId equals o.roleId
-                                       where m.userId == checkGMDpaper.finalApproverUserId
-                                       select new PRModel()
-                                       {
-                                           UserId = n.userId,
-                                           FullName = m.firstName + " " + m.lastName,
-                                           EmailAddress = m.emailAddress
-                                       }).ToList();
-
-                    NotificationMsg objTask = new NotificationMsg()
-                    {
-                        uuid = Guid.NewGuid(),
-                        message = PR.PRNo + " pending for your approval",
-                        fromUserId = UserId,
-                        msgDate = DateTime.Now,
-                        msgType = "Task",
-                        PRId = PR.PRId
-                    };
-                    db.NotificationMsgs.Add(objTask);
-                    db.SaveChanges();
-
-                    foreach (var item in getApprover)
-                    {
-
-                        NotiGroup Task = new NotiGroup()
-                        {
-                            uuid = Guid.NewGuid(),
-                            msgId = objTask.msgId,
-                            toUserId = item.UserId
-                        };
-                        db.NotiGroups.Add(Task);
-
-                        PR_Approver saveApprover = new PR_Approver()
-                        {
-                            uuid = Guid.NewGuid(),
-                            approverId = item.UserId,
-                            PRId = PR.PRId
-                        };
-                        db.PR_Approver.Add(saveApprover);
-                        db.SaveChanges();
-
-                        PRModel x = new PRModel();
-                        x.PRId = PR.PRId;
-                        x.UserId = UserId;
-                        x.EmailAddress = item.EmailAddress;
-                        x.NewPRForm = new NewPRModel();
-                        x.NewPRForm.PRNo = PR.PRNo;
-                        x.NewPRForm.ApproverId = item.UserId;
-                        x.NewPRForm.ApproverName = item.FullName;
-                        SendEmailPRNotification(x, "ToApproverNoti");
-                    }
-                }
-                else
-                {
-                    //NotificationMsg _objSubmited = new NotificationMsg
-                    //{
-                    //    uuid = Guid.NewGuid(),
-                    //    PRId = PrId,
-                    //    msgDate = DateTime.Now,
-                    //    fromUserId = UserId,
-                    //    msgType = "Trail",
-                    //    message = getFullName.firstName + " " + getFullName.lastName + " has submit PR application for PR No. " + PR.PRNo + " subject for approval"
-                    //};
-                    //db.NotificationMsgs.Add(_objSubmited);
-                    int CustId = db.Projects.First(m => m.projectId == PR.ProjectId).custId;
-                    switch (PR.Scenario)
-                    {
-                        case 3:
-                            {
-                                var getRecommenderII = new List<PRModel>();
-                                if (CustId == 2 || CustId == 6)
-                                {
-                                    PR.StatusId = "PR05";
-                                    getRecommenderII = (from m in db.Users
-                                                        join n in db.Users_Roles on m.userId equals n.userId
-                                                        where n.roleId == "R14" && m.companyId == 2
-                                                        select new PRModel()
-                                                        {
-                                                            UserId = n.userId,
-                                                            FullName = m.firstName + " " + m.lastName,
-                                                            EmailAddress = m.emailAddress
-                                                        }).ToList();
-                                }
-                                else
-                                {
-                                    PR.StatusId = "PR11";
-                                    getRecommenderII = (from m in db.Users
-                                                        join n in db.Users_Roles on m.userId equals n.userId
-                                                        //join o in db.Roles on n.roleId equals o.roleId
-                                                        where n.roleId == "R04" && m.companyId == PR.CustId
-                                                        select new PRModel()
-                                                        {
-                                                            UserId = n.userId,
-                                                            FullName = m.firstName + " " + m.lastName,
-                                                            EmailAddress = m.emailAddress
-                                                        }).ToList();
-                                }
-
-                                NotificationMsg objTask = new NotificationMsg()
-                                {
-                                    uuid = Guid.NewGuid(),
-                                    message = PR.PRNo + " pending for your recommendation",
-                                    fromUserId = UserId,
-                                    msgDate = DateTime.Now,
-                                    msgType = "Task",
-                                    PRId = PR.PRId
-                                };
-                                db.NotificationMsgs.Add(objTask);
-                                db.SaveChanges();
-
-                                foreach (var item in getRecommenderII)
-                                {
-                                    NotiGroup Task = new NotiGroup()
-                                    {
-                                        uuid = Guid.NewGuid(),
-                                        msgId = objTask.msgId,
-                                        toUserId = item.UserId
-                                    };
-                                    db.NotiGroups.Add(Task);
-
-                                    PRModel x = new PRModel();
-                                    x.PRId = PR.PRId;
-                                    x.UserId = UserId;
-                                    x.EmailAddress = item.EmailAddress;
-                                    x.NewPRForm = new NewPRModel();
-                                    x.NewPRForm.PRNo = PR.PRNo;
-                                    x.NewPRForm.ApproverId = item.UserId;
-                                    x.NewPRForm.ApproverName = item.FullName;                                    
-
-                                    if (CustId == 2 || CustId == 6)
-                                    {
-                                        PR_Approver saveApprover = new PR_Approver()
-                                        {
-                                            uuid = Guid.NewGuid(),
-                                            approverId = item.UserId,
-                                            PRId = PR.PRId
-                                        };
-                                        db.PR_Approver.Add(saveApprover);
-                                        db.SaveChanges();
-                                        SendEmailPRNotification(x, "ToApproverNoti");
-                                    }
-                                    else
-                                    {
-                                        PR_RecommenderHOC saveRecommender = new PR_RecommenderHOC()
-                                        {
-                                            uuid = Guid.NewGuid(),
-                                            recommenderId = item.UserId,
-                                            PRId = PR.PRId
-                                        };
-                                        db.PR_RecommenderHOC.Add(saveRecommender);
-                                        db.SaveChanges();
-                                        SendEmailPRNotification(x, "ToRecommenderNoti");
-                                    }
-                                    
-                                }
-
-                                break;
-                            }
-
-                        case 2:
-                            {
-                                PR.StatusId = "PR05";
-                                var getApprover = new List<PRModel>();
-                                if (CustId == 2)
-                                {
-                                    getApprover = (from m in db.Users
-                                                   join o in db.Users on m.superiorId equals o.userId
-                                                   join n in db.Users_Roles on o.userId equals n.userId
-                                                   where n.roleId == "R02" && m.companyId == PR.CustId && m.userId == PR.PreparedById
-                                                   select new PRModel()
-                                                   {
-                                                       UserId = o.userId,
-                                                       FullName = o.firstName + " " + o.lastName,
-                                                       EmailAddress = o.emailAddress
-                                                   }).ToList();
-                                }
-                                else if (CustId == 6)
-                                {
-                                    //get Datuk Rahim
-                                    getApprover = (from m in db.Users
-                                                   where m.userId == 165
-                                                   select new PRModel()
-                                                   {
-                                                       UserId = m.userId,
-                                                       FullName = m.firstName + " " + m.lastName,
-                                                       EmailAddress = m.emailAddress
-                                                   }).ToList();
-                                }
-                                else
-                                {
-                                    getApprover = (from m in db.Users
-                                                   join n in db.Users_Roles on m.userId equals n.userId
-                                                   //join o in db.Roles on n.roleId equals o.roleId
-                                                   where n.roleId == "R04" && m.companyId == PR.CustId
-                                                   select new PRModel()
-                                                   {
-                                                       UserId = n.userId,
-                                                       FullName = m.firstName + " " + m.lastName,
-                                                       EmailAddress = m.emailAddress
-                                                   }).ToList();
-                                }
-
-                                NotificationMsg objTask = new NotificationMsg()
-                                {
-                                    uuid = Guid.NewGuid(),
-                                    message = PR.PRNo + " pending for your approval",
-                                    fromUserId = UserId,
-                                    msgDate = DateTime.Now,
-                                    msgType = "Task",
-                                    PRId = PR.PRId
-                                };
-                                db.NotificationMsgs.Add(objTask);
-                                db.SaveChanges();
-
-                                foreach (var item in getApprover)
-                                {
-
-                                    NotiGroup Task = new NotiGroup()
-                                    {
-                                        uuid = Guid.NewGuid(),
-                                        msgId = objTask.msgId,
-                                        toUserId = item.UserId
-                                    };
-                                    db.NotiGroups.Add(Task);
-
-                                    PR_Approver saveApprover = new PR_Approver()
-                                    {
-                                        uuid = Guid.NewGuid(),
-                                        approverId = item.UserId,
-                                        PRId = PR.PRId
-                                    };
-                                    db.PR_Approver.Add(saveApprover);
-                                    db.SaveChanges();
-
-                                    PRModel x = new PRModel();
-                                    x.PRId = PR.PRId;
-                                    x.UserId = UserId;
-                                    x.EmailAddress = item.EmailAddress;
-                                    x.NewPRForm = new NewPRModel();
-                                    x.NewPRForm.PRNo = PR.PRNo;
-                                    x.NewPRForm.ApproverId = item.UserId;
-                                    x.NewPRForm.ApproverName = item.FullName;
-                                    SendEmailPRNotification(x, "ToApproverNoti");
-                                }
-
-                                break;
-                            }
-                    }
-                }
-
-                return Json("Successfully recommend");
-            }
-            else
-            {
-                return Redirect("~/Home/Index");
-            }
-        }
-
-        public ActionResult RejectPRReview()
-        {
-            if (User.Identity.IsAuthenticated && Session["UserId"] != null)
-            {
-                // todo the session must be IT / PMO /
-                int UserId = Int32.Parse(Session["UserId"].ToString());
-                int PrId = Int32.Parse(Request["PrId"]);
-                string RejectRemark = Request["RejectRemark"].ToString();
-                var PR = db.PurchaseRequisitions.First(x => x.PRId == PrId);
-                PR.StatusId = "PR07";
-                PR.Rejected = PR.Rejected + 1;
-                PR.RejectedById = UserId;
-                PR.RejectedDate = DateTime.Now;
-                PR.RejectedRemark = RejectRemark;
-                db.SaveChanges();
-
-                NotificationMsg objNotification = new NotificationMsg()
-                {
-                    uuid = Guid.NewGuid(),
-                    message = Session["FullName"].ToString() + " has rejected the PR No: " + PR.PRNo + " application. ",
-                    fromUserId = UserId,
-                    msgDate = DateTime.Now,
-                    msgType = "Trail",
-                    PRId = PrId
-                };
-                db.NotificationMsgs.Add(objNotification);
-
-                var requestorDone = (from m in db.NotificationMsgs
-                                     join n in db.NotiGroups on m.msgId equals n.msgId
-                                     where n.toUserId == UserId && m.PRId == PrId && m.msgType == "Task"
-                                     select new PRModel()
-                                     {
-                                         MsgId = m.msgId
-                                     }).First();
-
-                NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == requestorDone.MsgId);
-                getDone.done = true;
-                if (db.SaveChanges() > 0)
-                {
-                    return Json("Successfully reject");
-                }
-                else
-                {
-                    return Json("System failure. Please contact admin");
-                }
-            }
-            else
-            {
-                return Redirect("~/Home/Index");
             }
         }
 
@@ -5041,6 +4611,350 @@ namespace KUBOnlinePRPM.Controllers
             }
         }
 
+        public ActionResult RejectPRReview()
+        {
+            if (User.Identity.IsAuthenticated && Session["UserId"] != null)
+            {
+                // todo the session must be IT / PMO /
+                int UserId = Int32.Parse(Session["UserId"].ToString());
+                int PrId = Int32.Parse(Request["PrId"]);
+                string RejectRemark = Request["RejectRemark"].ToString();
+                var PR = db.PurchaseRequisitions.First(x => x.PRId == PrId);
+                PR.StatusId = "PR07";
+                PR.Rejected = PR.Rejected + 1;
+                PR.RejectedById = UserId;
+                PR.RejectedDate = DateTime.Now;
+                PR.RejectedRemark = RejectRemark;
+                db.SaveChanges();
+
+                NotificationMsg objNotification = new NotificationMsg()
+                {
+                    uuid = Guid.NewGuid(),
+                    message = Session["FullName"].ToString() + " has rejected the PR No: " + PR.PRNo + " application. ",
+                    fromUserId = UserId,
+                    msgDate = DateTime.Now,
+                    msgType = "Trail",
+                    PRId = PrId
+                };
+                db.NotificationMsgs.Add(objNotification);
+
+                var requestorDone = (from m in db.NotificationMsgs
+                                     join n in db.NotiGroups on m.msgId equals n.msgId
+                                     where n.toUserId == UserId && m.PRId == PrId && m.msgType == "Task"
+                                     select new PRModel()
+                                     {
+                                         MsgId = m.msgId
+                                     }).First();
+
+                NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == requestorDone.MsgId);
+                getDone.done = true;
+                if (db.SaveChanges() > 0)
+                {
+                    return Json("Successfully reject");
+                }
+                else
+                {
+                    return Json("System failure. Please contact admin");
+                }
+            }
+            else
+            {
+                return Redirect("~/Home/Index");
+            }
+        }
+
+        public ActionResult RecommendedPRRecommended()
+        {
+            if (User.Identity.IsAuthenticated && Session["UserId"] != null)
+            {
+                // todo the session must be IT / HSE / PMO
+                // set status to PR03 and head of GPSS will proceed
+
+                int PrId = Int32.Parse(Request["PrId"]);
+                var PR = db.PurchaseRequisitions.First(x => x.PRId == PrId);
+
+                int UserId = Int32.Parse(Session["UserId"].ToString());
+                var requestorDone = (from m in db.NotificationMsgs
+                                     join n in db.NotiGroups on m.msgId equals n.msgId
+                                     where n.toUserId == UserId && m.PRId == PrId && m.msgType == "Task"
+                                     select new PRModel()
+                                     {
+                                         MsgId = m.msgId
+                                     }).First();
+
+                NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == requestorDone.MsgId);
+                getDone.done = true;
+                db.SaveChanges();
+
+                PR_Recommender SaveRecommenderInfo = db.PR_Recommender.First(m => m.PRId == PR.PRId);
+                SaveRecommenderInfo.recommendedDate = DateTime.Now;
+                SaveRecommenderInfo.recommended = 1;
+                db.SaveChanges();
+
+                PR_PaperApprover checkGMDpaper = db.PR_PaperApprover.FirstOrDefault(m => m.PRId == PrId);
+                if (checkGMDpaper != null)
+                {
+                    PR.StatusId = "PR05";
+                    var getApprover = (from m in db.Users
+                                       join n in db.Users_Roles on m.userId equals n.userId
+                                       //join o in db.Roles on n.roleId equals o.roleId
+                                       where m.userId == checkGMDpaper.finalApproverUserId
+                                       select new PRModel()
+                                       {
+                                           UserId = n.userId,
+                                           FullName = m.firstName + " " + m.lastName,
+                                           EmailAddress = m.emailAddress
+                                       }).ToList();
+
+                    NotificationMsg objTask = new NotificationMsg()
+                    {
+                        uuid = Guid.NewGuid(),
+                        message = PR.PRNo + " pending for your approval",
+                        fromUserId = UserId,
+                        msgDate = DateTime.Now,
+                        msgType = "Task",
+                        PRId = PR.PRId
+                    };
+                    db.NotificationMsgs.Add(objTask);
+                    db.SaveChanges();
+
+                    foreach (var item in getApprover)
+                    {
+
+                        NotiGroup Task = new NotiGroup()
+                        {
+                            uuid = Guid.NewGuid(),
+                            msgId = objTask.msgId,
+                            toUserId = item.UserId
+                        };
+                        db.NotiGroups.Add(Task);
+
+                        PR_Approver saveApprover = new PR_Approver()
+                        {
+                            uuid = Guid.NewGuid(),
+                            approverId = item.UserId,
+                            PRId = PR.PRId
+                        };
+                        db.PR_Approver.Add(saveApprover);
+                        db.SaveChanges();
+
+                        PRModel x = new PRModel();
+                        x.PRId = PR.PRId;
+                        x.UserId = UserId;
+                        x.EmailAddress = item.EmailAddress;
+                        x.NewPRForm = new NewPRModel();
+                        x.NewPRForm.PRNo = PR.PRNo;
+                        x.NewPRForm.ApproverId = item.UserId;
+                        x.NewPRForm.ApproverName = item.FullName;
+                        SendEmailPRNotification(x, "ToApproverNoti");
+                    }
+                }
+                else
+                {
+                    //NotificationMsg _objSubmited = new NotificationMsg
+                    //{
+                    //    uuid = Guid.NewGuid(),
+                    //    PRId = PrId,
+                    //    msgDate = DateTime.Now,
+                    //    fromUserId = UserId,
+                    //    msgType = "Trail",
+                    //    message = getFullName.firstName + " " + getFullName.lastName + " has submit PR application for PR No. " + PR.PRNo + " subject for approval"
+                    //};
+                    //db.NotificationMsgs.Add(_objSubmited);
+                    int CustId = db.Projects.First(m => m.projectId == PR.ProjectId).custId;
+                    switch (PR.Scenario)
+                    {
+                        case 3:
+                            {
+                                var getRecommenderII = new List<PRModel>();
+                                if (CustId == 2 || CustId == 6)
+                                {
+                                    PR.StatusId = "PR05";
+                                    getRecommenderII = (from m in db.Users
+                                                        join n in db.Users_Roles on m.userId equals n.userId
+                                                        where n.roleId == "R14" && m.companyId == 2
+                                                        select new PRModel()
+                                                        {
+                                                            UserId = n.userId,
+                                                            FullName = m.firstName + " " + m.lastName,
+                                                            EmailAddress = m.emailAddress
+                                                        }).ToList();
+                                }
+                                else
+                                {
+                                    PR.StatusId = "PR11";
+                                    getRecommenderII = (from m in db.Users
+                                                        join n in db.Users_Roles on m.userId equals n.userId
+                                                        //join o in db.Roles on n.roleId equals o.roleId
+                                                        where n.roleId == "R04" && m.companyId == PR.CustId
+                                                        select new PRModel()
+                                                        {
+                                                            UserId = n.userId,
+                                                            FullName = m.firstName + " " + m.lastName,
+                                                            EmailAddress = m.emailAddress
+                                                        }).ToList();
+                                }
+
+                                NotificationMsg objTask = new NotificationMsg()
+                                {
+                                    uuid = Guid.NewGuid(),
+                                    message = PR.PRNo + " pending for your recommendation",
+                                    fromUserId = UserId,
+                                    msgDate = DateTime.Now,
+                                    msgType = "Task",
+                                    PRId = PR.PRId
+                                };
+                                db.NotificationMsgs.Add(objTask);
+                                db.SaveChanges();
+
+                                foreach (var item in getRecommenderII)
+                                {
+                                    NotiGroup Task = new NotiGroup()
+                                    {
+                                        uuid = Guid.NewGuid(),
+                                        msgId = objTask.msgId,
+                                        toUserId = item.UserId
+                                    };
+                                    db.NotiGroups.Add(Task);
+
+                                    PRModel x = new PRModel();
+                                    x.PRId = PR.PRId;
+                                    x.UserId = UserId;
+                                    x.EmailAddress = item.EmailAddress;
+                                    x.NewPRForm = new NewPRModel();
+                                    x.NewPRForm.PRNo = PR.PRNo;
+                                    x.NewPRForm.ApproverId = item.UserId;
+                                    x.NewPRForm.ApproverName = item.FullName;
+
+                                    if (CustId == 2 || CustId == 6)
+                                    {
+                                        PR_Approver saveApprover = new PR_Approver()
+                                        {
+                                            uuid = Guid.NewGuid(),
+                                            approverId = item.UserId,
+                                            PRId = PR.PRId
+                                        };
+                                        db.PR_Approver.Add(saveApprover);
+                                        db.SaveChanges();
+                                        SendEmailPRNotification(x, "ToApproverNoti");
+                                    }
+                                    else
+                                    {
+                                        PR_RecommenderHOC saveRecommender = new PR_RecommenderHOC()
+                                        {
+                                            uuid = Guid.NewGuid(),
+                                            recommenderId = item.UserId,
+                                            PRId = PR.PRId
+                                        };
+                                        db.PR_RecommenderHOC.Add(saveRecommender);
+                                        db.SaveChanges();
+                                        SendEmailPRNotification(x, "ToRecommenderNoti");
+                                    }
+
+                                }
+
+                                break;
+                            }
+
+                        case 2:
+                            {
+                                PR.StatusId = "PR05";
+                                var getApprover = new List<PRModel>();
+                                if (CustId == 2)
+                                {
+                                    getApprover = (from m in db.Users
+                                                   join o in db.Users on m.superiorId equals o.userId
+                                                   join n in db.Users_Roles on o.userId equals n.userId
+                                                   where n.roleId == "R02" && m.companyId == PR.CustId && m.userId == PR.PreparedById
+                                                   select new PRModel()
+                                                   {
+                                                       UserId = o.userId,
+                                                       FullName = o.firstName + " " + o.lastName,
+                                                       EmailAddress = o.emailAddress
+                                                   }).ToList();
+                                }
+                                else if (CustId == 6)
+                                {
+                                    //get Datuk Rahim
+                                    getApprover = (from m in db.Users
+                                                   where m.userId == 165
+                                                   select new PRModel()
+                                                   {
+                                                       UserId = m.userId,
+                                                       FullName = m.firstName + " " + m.lastName,
+                                                       EmailAddress = m.emailAddress
+                                                   }).ToList();
+                                }
+                                else
+                                {
+                                    getApprover = (from m in db.Users
+                                                   join n in db.Users_Roles on m.userId equals n.userId
+                                                   //join o in db.Roles on n.roleId equals o.roleId
+                                                   where n.roleId == "R04" && m.companyId == PR.CustId
+                                                   select new PRModel()
+                                                   {
+                                                       UserId = n.userId,
+                                                       FullName = m.firstName + " " + m.lastName,
+                                                       EmailAddress = m.emailAddress
+                                                   }).ToList();
+                                }
+
+                                NotificationMsg objTask = new NotificationMsg()
+                                {
+                                    uuid = Guid.NewGuid(),
+                                    message = PR.PRNo + " pending for your approval",
+                                    fromUserId = UserId,
+                                    msgDate = DateTime.Now,
+                                    msgType = "Task",
+                                    PRId = PR.PRId
+                                };
+                                db.NotificationMsgs.Add(objTask);
+                                db.SaveChanges();
+
+                                foreach (var item in getApprover)
+                                {
+
+                                    NotiGroup Task = new NotiGroup()
+                                    {
+                                        uuid = Guid.NewGuid(),
+                                        msgId = objTask.msgId,
+                                        toUserId = item.UserId
+                                    };
+                                    db.NotiGroups.Add(Task);
+
+                                    PR_Approver saveApprover = new PR_Approver()
+                                    {
+                                        uuid = Guid.NewGuid(),
+                                        approverId = item.UserId,
+                                        PRId = PR.PRId
+                                    };
+                                    db.PR_Approver.Add(saveApprover);
+                                    db.SaveChanges();
+
+                                    PRModel x = new PRModel();
+                                    x.PRId = PR.PRId;
+                                    x.UserId = UserId;
+                                    x.EmailAddress = item.EmailAddress;
+                                    x.NewPRForm = new NewPRModel();
+                                    x.NewPRForm.PRNo = PR.PRNo;
+                                    x.NewPRForm.ApproverId = item.UserId;
+                                    x.NewPRForm.ApproverName = item.FullName;
+                                    SendEmailPRNotification(x, "ToApproverNoti");
+                                }
+
+                                break;
+                            }
+                    }
+                }
+
+                return Json("Successfully recommend");
+            }
+            else
+            {
+                return Redirect("~/Home/Index");
+            }
+        }
+
         public ActionResult ApprovePRJointRecommended()
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
@@ -5062,143 +4976,135 @@ namespace KUBOnlinePRPM.Controllers
                 db.SaveChanges();
 
                 int CustId = db.Projects.First(m => m.projectId == PR.ProjectId).custId;
-                var getApprover = new List<PRModel>();
-                switch (CustId)
+                var getApprover = new List<PRModel>(); var getRecommenderII = new List<PRModel>();
+                decimal amountBudget = PR.TotalIncSST.Value;
+                if (CustId == 4 && PRService.CheckAmountScenarioFour(amountBudget, PR.CustId))
                 {
-                    //case 2:
-                    //case 6:
-                    //    {
-                    //        PR.StatusId = "PR05";
-                    //        db.SaveChanges();
+                    PR.StatusId = "PR18";
+                    db.SaveChanges();
 
-                    //            PR_RecommenderCFO SaveRecommenderInfo = db.PR_RecommenderCFO.First(m => m.PRId == PR.PRId);
-                    //            SaveRecommenderInfo.recommendedDate = DateTime.Now;
-                    //            SaveRecommenderInfo.recommended = 1;                                                   
-                    //        db.SaveChanges();
+                    PR_RecommenderHOC SaveRecommenderInfo = db.PR_RecommenderHOC.First(m => m.PRId == PR.PRId);
+                    SaveRecommenderInfo.recommendedDate = DateTime.Now;
+                    SaveRecommenderInfo.recommended = 1;
+                    db.SaveChanges();
 
-                    //        getRecommenderII = (from m in db.Users
-                    //                            join n in db.Users_Roles on m.userId equals n.userId
-                    //                            //join o in db.Roles on n.roleId equals o.roleId
-                    //                            where n.roleId == "R14" && m.companyId == 2
-                    //                            select new PRModel()
-                    //                            {
-                    //                                UserId = n.userId,
-                    //                                FullName = m.firstName + " " + m.lastName,
-                    //                                EmailAddress = m.emailAddress
-                    //                            }).ToList();
+                    getRecommenderII = (from m in db.Users
+                                        join n in db.Users_Roles on m.userId equals n.userId
+                                        //join o in db.Roles on n.roleId equals o.roleId
+                                        where n.roleId == "R14" && m.companyId == 2
+                                        select new PRModel()
+                                        {
+                                            UserId = n.userId,
+                                            FullName = m.firstName + " " + m.lastName,
+                                            EmailAddress = m.emailAddress
+                                        }).ToList();
 
-                    //        NotificationMsg objTask = new NotificationMsg()
-                    //        {
-                    //            uuid = Guid.NewGuid(),
-                    //            message = PR.PRNo + " pending for your approval",
-                    //            fromUserId = UserId,
-                    //            msgDate = DateTime.Now,
-                    //            msgType = "Task",
-                    //            PRId = PrId
-                    //        };
-                    //        db.NotificationMsgs.Add(objTask);
-                    //        db.SaveChanges();
+                    NotificationMsg objTask = new NotificationMsg()
+                    {
+                        uuid = Guid.NewGuid(),
+                        message = PR.PRNo + " pending for your recommendation",
+                        fromUserId = UserId,
+                        msgDate = DateTime.Now,
+                        msgType = "Task",
+                        PRId = PrId
+                    };
+                    db.NotificationMsgs.Add(objTask);
+                    db.SaveChanges();
 
-                    //        foreach (var item in getRecommenderII)
-                    //        {
-                    //            NotiGroup RecommenderIIITask = new NotiGroup()
-                    //            {
-                    //                uuid = Guid.NewGuid(),
-                    //                msgId = objTask.msgId,
-                    //                toUserId = item.UserId,
-                    //                resubmit = false
-                    //            };
-                    //            db.NotiGroups.Add(RecommenderIIITask);
-
-                    //            PR_Approver _objSaveGMD = new PR_Approver
-                    //            {
-                    //                uuid = Guid.NewGuid(),
-                    //                approverId = item.UserId,
-                    //                PRId = PR.PRId
-                    //            };
-                    //            db.PR_Approver.Add(_objSaveGMD);
-                    //            db.SaveChanges();
-
-                    //            PRModel x = new PRModel();
-                    //            x.PRId = PR.PRId;
-                    //            x.UserId = UserId;
-                    //            x.EmailAddress = item.EmailAddress;
-                    //            x.NewPRForm = new NewPRModel();
-                    //            x.NewPRForm.PRNo = PR.PRNo;
-                    //            x.NewPRForm.ApproverId = item.UserId;
-                    //            x.NewPRForm.ApproverName = item.FullName;
-                    //            SendEmailPRNotification(x, "ToApproverNoti");
-                    //        }
-
-                    //        break;
-                    //    }
-
-                    default:
+                    foreach (var item in getRecommenderII)
+                    {
+                        NotiGroup RecommenderIIITask = new NotiGroup()
                         {
-                            PR.StatusId = "PR05";
-                            db.SaveChanges();
+                            uuid = Guid.NewGuid(),
+                            msgId = objTask.msgId,
+                            toUserId = item.UserId,
+                            resubmit = false
+                        };
+                        db.NotiGroups.Add(RecommenderIIITask);
 
-                            PR_RecommenderHOC SaveRecommenderInfo = db.PR_RecommenderHOC.First(m => m.PRId == PR.PRId);
-                            SaveRecommenderInfo.recommendedDate = DateTime.Now;
-                            SaveRecommenderInfo.recommended = 1;
-                            db.SaveChanges();
+                        PR_RecommenderCFO _objSaveGMD = new PR_RecommenderCFO
+                        {
+                            uuid = Guid.NewGuid(),
+                            recommenderId = item.UserId,
+                            PRId = PR.PRId
+                        };
+                        db.PR_RecommenderCFO.Add(_objSaveGMD);
+                        db.SaveChanges();
 
-                            getApprover = (from m in db.Users
-                                                join n in db.Users_Roles on m.userId equals n.userId
-                                                //join o in db.Roles on n.roleId equals o.roleId
-                                                where n.roleId == "R14" && m.companyId == 2
-                                                select new PRModel()
-                                                {
-                                                    UserId = n.userId,
-                                                    FullName = m.firstName + " " + m.lastName,
-                                                    EmailAddress = m.emailAddress
-                                                }).ToList();
+                        PRModel x = new PRModel();
+                        x.PRId = PR.PRId;
+                        x.UserId = UserId;
+                        x.EmailAddress = item.EmailAddress;
+                        x.NewPRForm = new NewPRModel();
+                        x.NewPRForm.PRNo = PR.PRNo;
+                        x.NewPRForm.ApproverId = item.UserId;
+                        x.NewPRForm.ApproverName = item.FullName;
+                        SendEmailPRNotification(x, "ToRecommenderIINoti");
+                    }
+                }
+                else
+                {
+                    PR.StatusId = "PR05";
+                    db.SaveChanges();
 
-                            NotificationMsg objTask = new NotificationMsg()
-                            {
-                                uuid = Guid.NewGuid(),
-                                message = PR.PRNo + " pending for your approval",
-                                fromUserId = UserId,
-                                msgDate = DateTime.Now,
-                                msgType = "Task",
-                                PRId = PrId
-                            };
-                            db.NotificationMsgs.Add(objTask);
-                            db.SaveChanges();
+                    PR_RecommenderHOC SaveRecommenderInfo = db.PR_RecommenderHOC.First(m => m.PRId == PR.PRId);
+                    SaveRecommenderInfo.recommendedDate = DateTime.Now;
+                    SaveRecommenderInfo.recommended = 1;
+                    db.SaveChanges();
 
-                            foreach (var item in getApprover)
-                            {
-                                NotiGroup RecommenderIIITask = new NotiGroup()
-                                {
-                                    uuid = Guid.NewGuid(),
-                                    msgId = objTask.msgId,
-                                    toUserId = item.UserId,
-                                    resubmit = false
-                                };
-                                db.NotiGroups.Add(RecommenderIIITask);
+                    getApprover = (from m in db.Users
+                                   join n in db.Users_Roles on m.userId equals n.userId
+                                   //join o in db.Roles on n.roleId equals o.roleId
+                                   where n.roleId == "R14" && m.companyId == 2
+                                   select new PRModel()
+                                   {
+                                       UserId = n.userId,
+                                       FullName = m.firstName + " " + m.lastName,
+                                       EmailAddress = m.emailAddress
+                                   }).ToList();
 
-                                PR_Approver _objSaveGMD = new PR_Approver
-                                {
-                                    uuid = Guid.NewGuid(),
-                                    approverId = item.UserId,
-                                    PRId = PR.PRId
-                                };
-                                db.PR_Approver.Add(_objSaveGMD);
-                                db.SaveChanges();
+                    NotificationMsg objTask = new NotificationMsg()
+                    {
+                        uuid = Guid.NewGuid(),
+                        message = PR.PRNo + " pending for your approval",
+                        fromUserId = UserId,
+                        msgDate = DateTime.Now,
+                        msgType = "Task",
+                        PRId = PrId
+                    };
+                    db.NotificationMsgs.Add(objTask);
+                    db.SaveChanges();
 
-                                PRModel x = new PRModel();
-                                x.PRId = PR.PRId;
-                                x.UserId = UserId;
-                                x.EmailAddress = item.EmailAddress;
-                                x.NewPRForm = new NewPRModel();
-                                x.NewPRForm.PRNo = PR.PRNo;
-                                x.NewPRForm.ApproverId = item.UserId;
-                                x.NewPRForm.ApproverName = item.FullName;
-                                SendEmailPRNotification(x, "ToApproverNoti");
-                            }
+                    foreach (var item in getApprover)
+                    {
+                        NotiGroup RecommenderIIITask = new NotiGroup()
+                        {
+                            uuid = Guid.NewGuid(),
+                            msgId = objTask.msgId,
+                            toUserId = item.UserId,
+                            resubmit = false
+                        };
+                        db.NotiGroups.Add(RecommenderIIITask);
 
-                            break;
-                        }
+                        PR_Approver _objSaveGMD = new PR_Approver
+                        {
+                            uuid = Guid.NewGuid(),
+                            approverId = item.UserId,
+                            PRId = PR.PRId
+                        };
+                        db.PR_Approver.Add(_objSaveGMD);
+                        db.SaveChanges();
+
+                        PRModel x = new PRModel();
+                        x.PRId = PR.PRId;
+                        x.UserId = UserId;
+                        x.EmailAddress = item.EmailAddress;
+                        x.NewPRForm = new NewPRModel();
+                        x.NewPRForm.PRNo = PR.PRNo;
+                        x.NewPRForm.ApproverId = item.UserId;
+                        x.NewPRForm.ApproverName = item.FullName;
+                        SendEmailPRNotification(x, "ToApproverNoti");
+                    }
                 }
 
                 return Json("Successfully joint recommended");
@@ -5209,94 +5115,146 @@ namespace KUBOnlinePRPM.Controllers
             }
         }
 
-        //public ActionResult ApprovePRJointRecommendedII()
-        //{
-        //    if (User.Identity.IsAuthenticated && Session["UserId"] != null)
-        //    {
-        //        int PrId = Int32.Parse(Request["PrId"]);
-        //        var PR = db.PurchaseRequisitions.First(x => x.PRId == PrId);
-        //        // todo the session must be HOC
-        //        int UserId = Int32.Parse(Session["UserId"].ToString());
-        //        var requestorDone = (from m in db.NotificationMsgs
-        //                             join n in db.NotiGroups on m.msgId equals n.msgId
-        //                             where n.toUserId == UserId && m.PRId == PrId && m.msgType == "Task"
-        //                             select new PRModel()
-        //                             {
-        //                                 MsgId = m.msgId
-        //                             }).First();
+        public ActionResult ApprovePRJointRecommendedII()
+        {
+            if (User.Identity.IsAuthenticated && Session["UserId"] != null)
+            {
+                int PrId = Int32.Parse(Request["PrId"]);
+                var PR = db.PurchaseRequisitions.First(x => x.PRId == PrId);
+                // todo the session must be HOC
+                int UserId = Int32.Parse(Session["UserId"].ToString());
+                var requestorDone = (from m in db.NotificationMsgs
+                                     join n in db.NotiGroups on m.msgId equals n.msgId
+                                     where n.toUserId == UserId && m.PRId == PrId && m.msgType == "Task"
+                                     select new PRModel()
+                                     {
+                                         MsgId = m.msgId
+                                     }).First();
 
-        //        NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == requestorDone.MsgId);
-        //        getDone.done = true;
-        //        db.SaveChanges();
+                NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == requestorDone.MsgId);
+                getDone.done = true;
+                db.SaveChanges();
 
-        //        PR.StatusId = "PR05";
-        //        db.SaveChanges();
+                PR.StatusId = "PR05";
+                db.SaveChanges();
 
-        //        PR_RecommenderCFO SaveRecommenderInfo = db.PR_RecommenderCFO.First(m => m.PRId == PR.PRId);
-        //        SaveRecommenderInfo.recommendedDate = DateTime.Now;
-        //        SaveRecommenderInfo.recommended = 1;
-        //        db.SaveChanges();
+                PR_RecommenderCFO SaveRecommenderInfo = db.PR_RecommenderCFO.First(m => m.PRId == PR.PRId);
+                SaveRecommenderInfo.recommendedDate = DateTime.Now;
+                SaveRecommenderInfo.recommended = 1;
+                db.SaveChanges();
 
-        //        var getGMD = (from m in db.Users
-        //                      join n in db.Users_Roles on m.userId equals n.userId
-        //                      //join o in db.Roles on n.roleId equals o.roleId
-        //                      where n.roleId == "R14" && m.companyId == 2
-        //                      select new PRModel()
-        //                      {
-        //                          UserId = n.userId,
-        //                          FullName = m.firstName + " " + m.lastName,
-        //                          EmailAddress = m.emailAddress
-        //                      }).ToList();
+                var getFinalApprover = (from m in db.Users
+                              join n in db.Users_Roles on m.userId equals n.userId
+                              //join o in db.Roles on n.roleId equals o.roleId
+                              where n.roleId == "R04" && m.companyId == 4
+                              select new PRModel()
+                              {
+                                  UserId = n.userId,
+                                  FullName = m.firstName + " " + m.lastName,
+                                  EmailAddress = m.emailAddress
+                              }).ToList();
 
-        //        NotificationMsg objTask = new NotificationMsg()
-        //        {
-        //            uuid = Guid.NewGuid(),
-        //            message = PR.PRNo + " pending for your approval",
-        //            fromUserId = UserId,
-        //            msgDate = DateTime.Now,
-        //            msgType = "Task",
-        //            PRId = PR.PRId
-        //        };
-        //        db.NotificationMsgs.Add(objTask);
-        //        db.SaveChanges();
+                NotificationMsg objTask = new NotificationMsg()
+                {
+                    uuid = Guid.NewGuid(),
+                    message = PR.PRNo + " pending for your approval",
+                    fromUserId = UserId,
+                    msgDate = DateTime.Now,
+                    msgType = "Task",
+                    PRId = PR.PRId
+                };
+                db.NotificationMsgs.Add(objTask);
+                db.SaveChanges();
 
-        //        foreach (var item in getGMD)
-        //        {
-        //            NotiGroup Task = new NotiGroup()
-        //            {
-        //                uuid = Guid.NewGuid(),
-        //                msgId = objTask.msgId,
-        //                toUserId = item.UserId
-        //            };
-        //            db.NotiGroups.Add(Task);
+                foreach (var item in getFinalApprover)
+                {
+                    NotiGroup Task = new NotiGroup()
+                    {
+                        uuid = Guid.NewGuid(),
+                        msgId = objTask.msgId,
+                        toUserId = item.UserId
+                    };
+                    db.NotiGroups.Add(Task);
 
-        //            PR_Approver saveApprover = new PR_Approver()
-        //            {
-        //                uuid = Guid.NewGuid(),
-        //                approverId = item.UserId,
-        //                PRId = PR.PRId
-        //            };
-        //            db.PR_Approver.Add(saveApprover);
-        //            db.SaveChanges();
+                    PR_Approver saveApprover = new PR_Approver()
+                    {
+                        uuid = Guid.NewGuid(),
+                        approverId = item.UserId,
+                        PRId = PR.PRId
+                    };
+                    db.PR_Approver.Add(saveApprover);
+                    db.SaveChanges();
 
-        //            PRModel x = new PRModel();
-        //            x.PRId = PR.PRId;
-        //            x.UserId = UserId;
-        //            x.EmailAddress = item.EmailAddress;
-        //            x.NewPRForm = new NewPRModel();
-        //            x.NewPRForm.PRNo = PR.PRNo;
-        //            x.NewPRForm.ApproverId = item.UserId;
-        //            x.NewPRForm.ApproverName = item.FullName;
-        //            SendEmailPRNotification(x, "ToApproverNoti");
-        //        }
+                    PRModel x = new PRModel();
+                    x.PRId = PR.PRId;
+                    x.UserId = UserId;
+                    x.EmailAddress = item.EmailAddress;
+                    x.NewPRForm = new NewPRModel();
+                    x.NewPRForm.PRNo = PR.PRNo;
+                    x.NewPRForm.ApproverId = item.UserId;
+                    x.NewPRForm.ApproverName = item.FullName;
+                    SendEmailPRNotification(x, "ToApproverNoti");
+                }
 
-        //        return Json("Successfully joint recommended");
-        //    }
-        //    else
-        //    {
-        //        return Redirect("~/Home/Index");
-        //    }
-        //}
+                return Json("Successfully joint recommended");
+            }
+            else
+            {
+                return Redirect("~/Home/Index");
+            }
+        }
+
+        public ActionResult RejectPRRecommended()
+        {
+            if (User.Identity.IsAuthenticated && Session["UserId"] != null)
+            {
+                int UserId = Int32.Parse(Session["UserId"].ToString());
+                int PrId = Int32.Parse(Request["PrId"]);
+                string RejectRemark = Request["RejectRemark"].ToString();
+                var PR = db.PurchaseRequisitions.First(x => x.PRId == PrId);
+                PR.StatusId = "PR07";
+                PR.Rejected = PR.Rejected + 1;
+                PR.RejectedById = UserId;
+                PR.RejectedDate = DateTime.Now;
+                PR.RejectedRemark = RejectRemark;
+                db.SaveChanges();
+
+                NotificationMsg objNotification = new NotificationMsg()
+                {
+                    uuid = Guid.NewGuid(),
+                    message = Session["FullName"].ToString() + " has rejected the PR No: " + PR.PRNo + " application. ",
+                    fromUserId = UserId,
+                    msgDate = DateTime.Now,
+                    msgType = "Trail",
+                    PRId = PrId
+                };
+                db.NotificationMsgs.Add(objNotification);
+
+                var requestorDone = (from m in db.NotificationMsgs
+                                     join n in db.NotiGroups on m.msgId equals n.msgId
+                                     where n.toUserId == UserId && m.PRId == PrId && m.msgType == "Task"
+                                     select new PRModel()
+                                     {
+                                         MsgId = m.msgId
+                                     }).First();
+
+                NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == requestorDone.MsgId);
+                getDone.done = true;
+
+                if (db.SaveChanges() > 0)
+                {
+                    return Json("Successfully reject");
+                }
+                else
+                {
+                    return Json("System failure. Please contact admin");
+                }
+            }
+            else
+            {
+                return Redirect("~/Home/Index");
+            }
+        }
 
         public ActionResult ApprovePRApprover()
         {
@@ -5400,57 +5358,6 @@ namespace KUBOnlinePRPM.Controllers
                     x.NewPRForm.ApproverName = item.FullName;
                     SendEmailPRNotification(x, "ToProcurementNoti");
                 }
-                //}
-                //else
-                //{
-                //    NotificationMsg objTask = new NotificationMsg()
-                //    {
-                //        uuid = Guid.NewGuid(),
-                //        message = PR.PRNo + " pending for you to issue new PO (blanket)",
-                //        fromUserId = Int32.Parse(Session["UserId"].ToString()),
-                //        msgDate = DateTime.Now,
-                //        msgType = "Task",
-                //        PRId = PrId
-                //    };
-                //    db.NotificationMsgs.Add(objTask);
-                //    db.SaveChanges();
-
-                //    NotificationMsg _objSendMessage = new NotificationMsg
-                //    {
-                //        uuid = Guid.NewGuid(),
-                //        //POId = PR.poi,
-                //        PRId = PR.PRId,
-                //        msgDate = DateTime.Now,
-                //        fromUserId = Int32.Parse(Session["UserId"].ToString()),
-                //        message = Session["FullName"].ToString() + " has approved the PR No: " + PR.PRNo + " application. ",
-                //        msgType = "Trail"
-                //    };
-                //    db.NotificationMsgs.Add(_objSendMessage);
-                //    db.SaveChanges();
-
-                //    foreach (var item in getProcurement)
-                //    {
-                //        NotiGroup Task = new NotiGroup()
-                //        {
-                //            uuid = Guid.NewGuid(),
-                //            msgId = objTask.msgId,
-                //            toUserId = item.UserId
-                //        };
-                //        db.NotiGroups.Add(Task);
-                //        db.SaveChanges();
-
-                //        PRModel x = new PRModel();
-                //        x.PRId = PR.PRId;
-                //        x.UserId = UserId;
-                //        x.EmailAddress = item.EmailAddress;
-                //        x.NewPRForm = new NewPRModel();
-                //        x.NewPRForm.PRNo = PR.PRNo;
-                //        x.NewPRForm.ApproverId = item.UserId;
-                //        x.NewPRForm.ApproverName = item.FullName;
-                //        SendEmailPRNotification(x, "ToProcurementNoti");
-                //    }
-                //}
-                // todo the session must be HOC
 
                 return Json("Successfully approve");
             }
@@ -5468,7 +5375,7 @@ namespace KUBOnlinePRPM.Controllers
                 int PrId = Int32.Parse(Request["PrId"]);
                 string RejectRemark = Request["RejectRemark"].ToString();
                 var PR = db.PurchaseRequisitions.First(x => x.PRId == PrId);
-                var RequestorDetails = db.Users.First(x => x.userId == UserId);
+                var RequestorDetails = db.Users.First(x => x.userId == PR.PreparedById);
                 PR.StatusId = "PR07";
                 PR.Rejected = PR.Rejected + 1;
                 PR.RejectedById = UserId;
@@ -5504,8 +5411,8 @@ namespace KUBOnlinePRPM.Controllers
                     x.EmailAddress = RequestorDetails.emailAddress;
                     x.NewPRForm = new NewPRModel();
                     x.NewPRForm.PRNo = PR.PRNo;
-                    x.NewPRForm.PreparedById = UserId;
-                    x.NewPRForm.RequestorName = RequestorDetails.firstName + ' ' + RequestorDetails.lastName;
+                    x.NewPRForm.ApproverId = RequestorDetails.userId;
+                    x.NewPRForm.ApproverName = RequestorDetails.firstName + ' ' + RequestorDetails.lastName;
                     SendEmailPRNotification(x, "PRRejection");
 
                     return Json("Successfully reject");
