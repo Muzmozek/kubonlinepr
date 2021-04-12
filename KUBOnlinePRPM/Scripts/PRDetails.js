@@ -739,13 +739,8 @@
         }, function (resp) {
             if (resp.success === true) {
                 alert(resp.message);
-                $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
-                    generatePRItemTable();
-                    Custombox.modal.close();
-                });
-                $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
-                    $("body").removeClass("loading");
-                });
+                window.location = "PRTabs?PRId=" + PRId + "&PRType=Generic";
+                //window.location = "~/Home/Index?Username=" + UserDetails.UserName + "&PRId=" + PRId + "&PRType=Generic";
             } else {
                 window.location = resp.url;
             }

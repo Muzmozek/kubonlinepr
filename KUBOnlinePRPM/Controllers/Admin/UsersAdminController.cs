@@ -157,6 +157,7 @@ namespace KUBOnlinePRPM.Controllers.Admin
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var studentToUpdate = await db.Users.FindAsync(id);
+            //ToDo add "childCompanyId" in string[] and add new department ddl for KUBM user to select from
             if (TryUpdateModel(studentToUpdate, "",
                new string[] { "companyId", "userName", "emailAddress", "firstName", "lastName", "employeeNo", "jobTitle", "status", "telephoneNo", "address", "extensionNo", "superiorId" }))
             {
