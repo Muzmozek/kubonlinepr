@@ -325,6 +325,23 @@ namespace KUBOnlinePRPM.Controllers
                     db.NotificationMsgs.Add(_objSubmited);
                     db.SaveChanges();
 
+                    if (updatePR.AmountPOBalance == 0)
+                    {
+                        var requestorDone = (from m in db.NotificationMsgs
+                                             where m.PRId == updatePR.PRId && m.msgType == "Task"
+                                             select new PRModel()
+                                             {
+                                                 MsgId = m.msgId
+                                             }).OrderByDescending(m => m.MsgId).ToList();
+
+                        foreach (var item in requestorDone)
+                        {
+                            NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == item.MsgId);
+                            getDone.done = true;
+                            db.SaveChanges();
+                        }                       
+                    }                   
+
                     return Json(new { success = true, message = "The PO has been issued" });
                 }
                 catch (DbEntityValidationException e)

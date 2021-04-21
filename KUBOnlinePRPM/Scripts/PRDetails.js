@@ -607,7 +607,7 @@
             success: function (resp) {
                 var UnitPrice = parseFloat(0); var TotalPrice = parseFloat(0);
                 //openHiddenPRItemTable();
-                if ($(".child #UnitPrice" + selectlistid).val() !== "") {
+                    if ($(".child #UnitPrice" + selectlistid).val() !== "") {
                     UnitPrice = parseFloat($(".child #UnitPrice" + selectlistid).val());
                 }
                 if ($(".child #TotalPrice" + selectlistid).val() !== "") {
@@ -616,14 +616,14 @@
                 var cell = PRItemTable.cell({ row: selectlistid - 1, column: 12 }).node();
                 var cell1 = PRItemTable.cell({ row: selectlistid - 1, column: 13 }).node();
                 $("input", cell).val(TotalPrice);                
-                var UnitPriceIncSST = (UnitPrice + (resp.TaxCodeInfo.SST / 100 * UnitPrice)).toFixed(2);
+                var UnitPriceIncSST = parseFloat(UnitPrice + (resp.TaxCodeInfo.SST / 100 * UnitPrice));
                 //$(".child #UnitPriceIncSST" + selectlistid, cell).val(UnitPriceIncSST);
-                var TotalPriceIncSST = TotalPrice + (resp.TaxCodeInfo.SST / 100 * TotalPrice).toFixed(2);
+                var TotalPriceIncSST = parseFloat(TotalPrice + (resp.TaxCodeInfo.SST / 100 * TotalPrice));
                 $("input", cell1).val(TotalPriceIncSST);
 
                 //$(".child #TaxCodeId + " + selectlistid + " select").val(TaxCodeId);
-                $(".child #UnitPriceIncSST" + selectlistid).val(UnitPriceIncSST);
-                $(".child #TotalPriceIncSST" + selectlistid).val(TotalPriceIncSST);                
+                $(".child #UnitPriceIncSST" + selectlistid).val(UnitPriceIncSST.toFixed(2));
+                $(".child #TotalPriceIncSST" + selectlistid).val(TotalPriceIncSST.toFixed(2));                
                 //generatePRItemTable();
                 calculateTotal();
                 $("body").removeClass("loading");
@@ -635,7 +635,7 @@
         var UnitPrice = parseFloat($(this).val()); var TaxCodeId = 0;
         var selectlistid = $(this)[0].id.substring(9, $(this)[0].id.length);
         var Quantity = $("#Quantity" + selectlistid).val();        
-        var TotalPrice = parseFloat(UnitPrice * Quantity /*+ parseFloat(SST)*/).toFixed(2);
+        var TotalPrice = parseFloat(UnitPrice * Quantity /*+ parseFloat(SST)*/);
         if ($(".child #TaxCodeId" + selectlistid + " option:selected").val() !== "") {
             TaxCodeId = $(".child #TaxCodeId" + selectlistid + " option:selected").val();
         }       
@@ -647,17 +647,17 @@
                 PRCustId: $("#CustId").val()
             },
             success: function (resp) {
-                var UnitPriceIncSST = parseFloat((UnitPrice + (resp.TaxCodeInfo.SST / 100 * UnitPrice))).toFixed(2);
-                var TotalPriceIncSST = parseFloat((TotalPrice + (resp.TaxCodeInfo.SST / 100 * TotalPrice))).toFixed(2);  
+                var UnitPriceIncSST = parseFloat((UnitPrice + (resp.TaxCodeInfo.SST / 100 * UnitPrice)));
+                var TotalPriceIncSST = parseFloat((TotalPrice + (resp.TaxCodeInfo.SST / 100 * TotalPrice)));  
                 //openHiddenPRItemTable();
-                $(".child #UnitPriceIncSST" + selectlistid).val(UnitPriceIncSST);
-                $(".child #TotalPriceIncSST" + selectlistid).val(TotalPriceIncSST);
-                $(".child #TotalPrice" + selectlistid).val(TotalPrice);       
+                $(".child #UnitPriceIncSST" + selectlistid).val(UnitPriceIncSST.toFixed(2));
+                $(".child #TotalPriceIncSST" + selectlistid).val(TotalPriceIncSST.toFixed(2));
+                $(".child #TotalPrice" + selectlistid).val(TotalPrice.toFixed(2));       
                 var cell = PRItemTable.cell({ row: selectlistid - 1, column: 12 }).node();
                 var cell1 = PRItemTable.cell({ row: selectlistid - 1, column: 13 }).node();
                 //$(".child #UnitPriceIncSST" + selectlistid, cell).val(UnitPriceIncSST);
-                $("input", cell1).val(TotalPriceIncSST);
-                $('input', cell).val(TotalPrice);               
+                $("input", cell1).val(TotalPriceIncSST.toFixed(2));
+                $('input', cell).val(TotalPrice.toFixed(2));               
                 //generatePRItemTable();
                 calculateTotal();
                 $("body").removeClass("loading");
@@ -670,7 +670,7 @@
         var selectlistid = $(this)[0].id.substring(8, $(this)[0].id.length);
         var UnitPrice = $("#UnitPrice" + selectlistid).val();
         UnitPrice == "" ? UnitPrice = 0 : UnitPrice;
-        var TotalPrice = parseFloat(UnitPrice * Quantity /*+ parseFloat(SST)*/).toFixed(2);
+        var TotalPrice = parseFloat(UnitPrice * Quantity /*+ parseFloat(SST)*/);
         if ($(".child #TaxCodeId" + selectlistid + " option:selected").val() !== "") {
             TaxCodeId = $(".child #TaxCodeId" + selectlistid + " option:selected").val();
         }
@@ -682,17 +682,17 @@
                 PRCustId: $("#CustId").val()
             },
             success: function (resp) {
-                var UnitPriceIncSST = parseFloat((UnitPrice + (resp.TaxCodeInfo.SST / 100 * UnitPrice))).toFixed(2);
-                var TotalPriceIncSST = parseFloat((TotalPrice + (resp.TaxCodeInfo.SST / 100 * TotalPrice))).toFixed(2);
+                var UnitPriceIncSST = parseFloat((UnitPrice + (resp.TaxCodeInfo.SST / 100 * UnitPrice)));
+                var TotalPriceIncSST = parseFloat((TotalPrice + (resp.TaxCodeInfo.SST / 100 * TotalPrice)));
                 //openHiddenPRItemTable();
-                $(".child #UnitPriceIncSST" + selectlistid).val(UnitPriceIncSST);
-                $(".child #TotalPriceIncSST" + selectlistid).val(TotalPriceIncSST);
-                $(".child #TotalPrice" + selectlistid).val(TotalPrice);
+                $(".child #UnitPriceIncSST" + selectlistid).val(UnitPriceIncSST.toFixed(2));
+                $(".child #TotalPriceIncSST" + selectlistid).val(TotalPriceIncSST.toFixed(2));
+                $(".child #TotalPrice" + selectlistid).val(TotalPrice.toFixed(2));
                 var cell = PRItemTable.cell({ row: selectlistid - 1, column: 12 }).node();
                 var cell1 = PRItemTable.cell({ row: selectlistid - 1, column: 13 }).node();
                 //$(".child #UnitPriceIncSST" + selectlistid, cell).val(UnitPriceIncSST);
-                $("input", cell1).val(TotalPriceIncSST);
-                $('input', cell).val(TotalPrice);
+                $("input", cell1).val(TotalPriceIncSST.toFixed(2));
+                $('input', cell).val(TotalPrice.toFixed(2));
                 //generatePRItemTable();
                 calculateTotal();
                 $("body").removeClass("loading");
