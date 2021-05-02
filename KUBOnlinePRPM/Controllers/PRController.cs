@@ -101,6 +101,14 @@ namespace KUBOnlinePRPM.Controllers
                     }
                     for (int i = 0; i < PRModel.NewPRForm.PRItemListObject.Count; i++)
                     {
+                        if (PRModel.NewPRForm.PRItemListObject[i].ItemTypeId == null)
+                        {
+                            modelState.AddModelError("NewPRForm.PRItemListObject[" + (i + 1) + "].ItemTypeId", "Please insert Item Type");
+                        }
+                        if (PRModel.NewPRForm.PRItemListObject[i].CodeId == null)
+                        {
+                            modelState.AddModelError("NewPRForm.PRItemListObject[" + (i + 1) + "].CodeId", "Please insert Item Code");
+                        }
                         if (PRModel.NewPRForm.PRItemListObject[i].UnitPrice == null)
                         {
                             modelState.AddModelError("NewPRForm.PRItemListObject[" + (i + 1) + "].UnitPrice", "Please insert unit price (RM)");
@@ -108,6 +116,10 @@ namespace KUBOnlinePRPM.Controllers
                         if (PRModel.NewPRForm.PRItemListObject[i].TaxCodeId == null)
                         {
                             modelState.AddModelError("NewPRForm.PRItemListObject[" + (i + 1) + "].TaxCodeId", "Please select SST code");
+                        }
+                        if (PRModel.NewPRForm.PRItemListObject[i].UoMId == null)
+                        {
+                            modelState.AddModelError("NewPRForm.PRItemListObject[" + (i + 1) + "].UoMId", "Please select UOM code");
                         }
                     }
                     //todo: add other field validation
@@ -2277,6 +2289,7 @@ namespace KUBOnlinePRPM.Controllers
                     PR.RejectedById = UserId;
                     PR.RejectedDate = DateTime.Now;
                     PR.RejectedRemark = RejectRemark;
+                    db.Entry(PR).State = EntityState.Modified;
                     db.SaveChanges();
 
                     NotificationMsg objNotification = new NotificationMsg()
@@ -2546,7 +2559,7 @@ namespace KUBOnlinePRPM.Controllers
                     }
                 }
 
-                return Json(new { success = true });
+                return Json(new { success = true, message = "Successfully approved PR" });
             }
             else
             {
@@ -2557,7 +2570,7 @@ namespace KUBOnlinePRPM.Controllers
 
         [HttpPost]
         //public ActionResult Rejected(int PRId, string PRType, bool Reviewer, bool Approver, string RejectRemark)
-        public ActionResult Rejected(int PRId, string Approver, string RejectRemark)
+        public JsonResult Rejected(int PRId, string Approver, string RejectRemark)
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
@@ -2590,13 +2603,15 @@ namespace KUBOnlinePRPM.Controllers
 
                 NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == requestorDone.MsgId);
                 getDone.done = true;
+                db.Entry(objPRDetails).State = EntityState.Modified;
                 db.SaveChanges();
 
-                return Json(new { success = true });
+                return Json(new { success = true, message = "Successfully reject PR" });
             }
             else
             {
-                return Redirect("~/Home/Index");
+                var redirectUrl = new UrlHelper(Request.RequestContext).Action("Index", "Home", new { /* no params */ });
+                return Json(new { success = false, url = redirectUrl });
             }
         }
         #endregion
@@ -3582,11 +3597,11 @@ namespace KUBOnlinePRPM.Controllers
                     {
                         PR.Scenario = 1;
                     }
-                    else if ((PRService.IncludeInBudget(PR, PR.CustId) == false && PRService.CheckAmountScenarioOne(amountBudget, PR.CustId)) || PRService.CheckAmountScenarioTwo(amountBudget, PR.CustId))
+                    else if ((PRService.IncludeInBudget(PR, PR.CustId) == false && PRService.CheckAmountScenarioOne(amountBudget, PR.CustId)) || PRService.CheckAmountScenarioTwo(amountBudget, PR.CustId, PRService.IncludeInBudget(PR, PR.CustId)))
                     {
                         PR.Scenario = 2;
                     }
-                    else if (PRService.CheckAmountScenarioThree(amountBudget, PR.CustId))
+                    else if (PRService.CheckAmountScenarioThree(amountBudget, PR.CustId, PRService.IncludeInBudget(PR, PR.CustId)))
                     {
                         PR.Scenario = 3;
                     }
@@ -3843,7 +3858,7 @@ namespace KUBOnlinePRPM.Controllers
                     //return Json("Scenario 1 success");
                     return Json(new { success = true, message = "Sucessfully submit the procurement" });
                 }
-                else if ((PRService.IncludeInBudget(PR, PR.CustId) == false && PRService.CheckAmountScenarioOne(amountBudget, PR.CustId)) || PRService.CheckAmountScenarioTwo(amountBudget, PR.CustId))
+                else if ((PRService.IncludeInBudget(PR, PR.CustId) == false && PRService.CheckAmountScenarioOne(amountBudget, PR.CustId)) || PRService.CheckAmountScenarioTwo(amountBudget, PR.CustId, PRService.IncludeInBudget(PR, PR.CustId)))
                 {
                     PR.Scenario = 2;
                     db.SaveChanges();
@@ -4020,7 +4035,7 @@ namespace KUBOnlinePRPM.Controllers
 
                     return Json(new { success = true, message = "Sucessfully submit the procurement" });
                 }
-                else if (PRService.CheckAmountScenarioThree(amountBudget, PR.CustId) || PRService.CheckAmountScenarioFour(amountBudget, PR.CustId))
+                else if (PRService.CheckAmountScenarioThree(amountBudget, PR.CustId, PRService.IncludeInBudget(PR, PR.CustId)) || PRService.CheckAmountScenarioFour(amountBudget, PR.CustId, PRService.IncludeInBudget(PR, PR.CustId)))
                 {
                     PR.Scenario = 3;
                     db.SaveChanges();
@@ -4214,7 +4229,8 @@ namespace KUBOnlinePRPM.Controllers
             }
         }
 
-        public ActionResult ApprovePRReview()
+        [HttpPost]
+        public JsonResult ApprovePRReview()
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
@@ -4603,15 +4619,17 @@ namespace KUBOnlinePRPM.Controllers
                     }
                 }
 
-                return Json("Successfully reviewed");
+                return Json(new { success = true, message = "Successfully reviewed" });
             }
             else
             {
-                return Redirect("~/Home/Index");
+                var redirectUrl = new UrlHelper(Request.RequestContext).Action("Index", "Home", new { /* no params */ });
+                return Json(new { success = false, url = redirectUrl });
             }
         }
 
-        public ActionResult RejectPRReview()
+        [HttpPost]
+        public JsonResult RejectPRReview()
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
@@ -4625,6 +4643,7 @@ namespace KUBOnlinePRPM.Controllers
                 PR.RejectedById = UserId;
                 PR.RejectedDate = DateTime.Now;
                 PR.RejectedRemark = RejectRemark;
+                db.Entry(PR).State = EntityState.Modified;
                 db.SaveChanges();
 
                 NotificationMsg objNotification = new NotificationMsg()
@@ -4650,20 +4669,23 @@ namespace KUBOnlinePRPM.Controllers
                 getDone.done = true;
                 if (db.SaveChanges() > 0)
                 {
-                    return Json("Successfully reject");
+                    return Json(new { success = true, message = "Successfully reject" });
                 }
                 else
                 {
-                    return Json("System failure. Please contact admin");
+                    var redirectUrl = new UrlHelper(Request.RequestContext).Action("Index", "Home", new { /* no params */ });
+                    return Json(new { success = false, url = redirectUrl });
                 }
             }
             else
             {
-                return Redirect("~/Home/Index");
+                var redirectUrl = new UrlHelper(Request.RequestContext).Action("Index", "Home", new { /* no params */ });
+                return Json(new { success = false, url = redirectUrl });
             }
         }
 
-        public ActionResult RecommendedPRRecommended()
+        [HttpPost]
+        public JsonResult RecommendedPRRecommended()
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
@@ -4947,15 +4969,17 @@ namespace KUBOnlinePRPM.Controllers
                     }
                 }
 
-                return Json("Successfully recommend");
+                return Json(new { success = true, message = "Successfully recommend" });
             }
             else
             {
-                return Redirect("~/Home/Index");
+                var redirectUrl = new UrlHelper(Request.RequestContext).Action("Index", "Home", new { /* no params */ });
+                return Json(new { success = false, url = redirectUrl });
             }
         }
 
-        public ActionResult ApprovePRJointRecommended()
+        [HttpPost]
+        public JsonResult ApprovePRJointRecommended()
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
@@ -4978,7 +5002,7 @@ namespace KUBOnlinePRPM.Controllers
                 int CustId = db.Projects.First(m => m.projectId == PR.ProjectId).custId;
                 var getApprover = new List<PRModel>(); var getRecommenderII = new List<PRModel>();
                 decimal amountBudget = PR.TotalIncSST.Value;
-                if (CustId == 4 && PRService.CheckAmountScenarioFour(amountBudget, PR.CustId))
+                if (CustId == 4 && PRService.CheckAmountScenarioFour(amountBudget, PR.CustId, PRService.IncludeInBudget(PR, PR.CustId)))
                 {
                     PR.StatusId = "PR18";
                     db.SaveChanges();
@@ -5107,15 +5131,17 @@ namespace KUBOnlinePRPM.Controllers
                     }
                 }
 
-                return Json("Successfully joint recommended");
+                return Json(new { success = true, message = "Successfully joint recommended" });
             }
             else
             {
-                return Redirect("~/Home/Index");
+                var redirectUrl = new UrlHelper(Request.RequestContext).Action("Index", "Home", new { /* no params */ });
+                return Json(new { success = false, url = redirectUrl });
             }
         }
 
-        public ActionResult ApprovePRJointRecommendedII()
+        [HttpPost]
+        public JsonResult ApprovePRJointRecommendedII()
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
@@ -5196,15 +5222,17 @@ namespace KUBOnlinePRPM.Controllers
                     SendEmailPRNotification(x, "ToApproverNoti");
                 }
 
-                return Json("Successfully joint recommended");
+                return Json(new { success = true, message = "Successfully joint recommended" });
             }
             else
             {
-                return Redirect("~/Home/Index");
+                var redirectUrl = new UrlHelper(Request.RequestContext).Action("Index", "Home", new { /* no params */ });
+                return Json(new { success = false, url = redirectUrl });
             }
         }
 
-        public ActionResult RejectPRRecommended()
+        [HttpPost]
+        public JsonResult RejectPRRecommended()
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
@@ -5217,6 +5245,7 @@ namespace KUBOnlinePRPM.Controllers
                 PR.RejectedById = UserId;
                 PR.RejectedDate = DateTime.Now;
                 PR.RejectedRemark = RejectRemark;
+                db.Entry(PR).State = EntityState.Modified;
                 db.SaveChanges();
 
                 NotificationMsg objNotification = new NotificationMsg()
@@ -5243,20 +5272,23 @@ namespace KUBOnlinePRPM.Controllers
 
                 if (db.SaveChanges() > 0)
                 {
-                    return Json("Successfully reject");
+                    return Json(new { success = true, message = "Successfully reject" });
                 }
                 else
                 {
-                    return Json("System failure. Please contact admin");
+                    var redirectUrl = new UrlHelper(Request.RequestContext).Action("Index", "Home", new { /* no params */ });
+                    return Json(new { success = false, url = redirectUrl });
                 }
             }
             else
             {
-                return Redirect("~/Home/Index");
+                var redirectUrl = new UrlHelper(Request.RequestContext).Action("Index", "Home", new { /* no params */ });
+                return Json(new { success = false, url = redirectUrl });
             }
         }
 
-        public ActionResult ApprovePRApprover()
+        [HttpPost]
+        public JsonResult ApprovePRApprover()
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
@@ -5359,15 +5391,17 @@ namespace KUBOnlinePRPM.Controllers
                     SendEmailPRNotification(x, "ToProcurementNoti");
                 }
 
-                return Json("Successfully approve");
+                return Json(new { success = true, message = "Successfully approve" });
             }
             else
             {
-                return Redirect("~/Home/Index");
+                var redirectUrl = new UrlHelper(Request.RequestContext).Action("Index", "Home", new { /* no params */ });
+                return Json(new { success = false, url = redirectUrl });
             }
         }
 
-        public ActionResult RejectPRApprover()
+        [HttpPost]
+        public JsonResult RejectPRApprover()
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
@@ -5381,6 +5415,7 @@ namespace KUBOnlinePRPM.Controllers
                 PR.RejectedById = UserId;
                 PR.RejectedDate = DateTime.Now;
                 PR.RejectedRemark = RejectRemark;
+                db.Entry(PR).State = EntityState.Modified;
                 db.SaveChanges();
 
                 NotificationMsg objNotification = new NotificationMsg()
@@ -5415,16 +5450,18 @@ namespace KUBOnlinePRPM.Controllers
                     x.NewPRForm.ApproverName = RequestorDetails.firstName + ' ' + RequestorDetails.lastName;
                     SendEmailPRNotification(x, "PRRejection");
 
-                    return Json("Successfully reject");
+                    return Json(new { success = true, message = "Successfully reject" });
                 }
                 else
                 {
-                    return Json("System failure. Please contact admin");
+                    var redirectUrl = new UrlHelper(Request.RequestContext).Action("Index", "Home", new { /* no params */ });
+                    return Json(new { success = false, url = redirectUrl });
                 }
             }
             else
             {
-                return Redirect("~/Home/Index");
+                var redirectUrl = new UrlHelper(Request.RequestContext).Action("Index", "Home", new { /* no params */ });
+                return Json(new { success = false, url = redirectUrl });
             }
         }
         //public ActionResult ApprovePRJointRecommendedIII()
@@ -5515,6 +5552,7 @@ namespace KUBOnlinePRPM.Controllers
         //        return Redirect("~/Home/Index");
         //    }
         //}
+        [HttpPost]
         public JsonResult EditPR()
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
@@ -5528,31 +5566,31 @@ namespace KUBOnlinePRPM.Controllers
 
                 UpdatePRStatus.StatusId = "PR01";
                 NotificationMsg objNotification = new NotificationMsg()
-                    {
-                        uuid = Guid.NewGuid(),
-                        message = Session["FullName"].ToString() + " has edit the PR No: " + UpdatePRStatus.PRNo + " application. ",
-                        fromUserId = Int32.Parse(Session["UserId"].ToString()),
-                        msgDate = DateTime.Now,
-                        msgType = "Trail",
-                        PRId = PrId
-                    };
-                    db.NotificationMsgs.Add(objNotification);
-                    db.SaveChanges();
+                {
+                    uuid = Guid.NewGuid(),
+                    message = Session["FullName"].ToString() + " has edit the PR No: " + UpdatePRStatus.PRNo + " application. ",
+                    fromUserId = Int32.Parse(Session["UserId"].ToString()),
+                    msgDate = DateTime.Now,
+                    msgType = "Trail",
+                    PRId = PrId
+                };
+                db.NotificationMsgs.Add(objNotification);
+                db.SaveChanges();
 
-                        var requestorDone = (from m in db.NotificationMsgs
-                                             join n in db.NotiGroups on m.msgId equals n.msgId
-                                             where n.toUserId != null && m.PRId == PrId && m.msgType == "Task"
-                                             select new PRModel()
-                                             {
-                                                 MsgId = m.msgId
-                                             }).ToList();
+                var requestorDone = (from m in db.NotificationMsgs
+                                     join n in db.NotiGroups on m.msgId equals n.msgId
+                                     where n.toUserId != null && m.PRId == PrId && m.msgType == "Task"
+                                     select new PRModel()
+                                     {
+                                         MsgId = m.msgId
+                                     }).ToList();
 
                 var DeletePRAdmin = db.PR_Admin.Where(x => x.PRId == PrId).ToList();
                 var DeletePRFinance = db.PR_Finance.Where(x => x.PRId == PrId).ToList();
                 var DeletePRHOD = db.PR_HOD.Where(x => x.PRId == PrId).ToList();
 
                 //db.PR_Admin.Attach(DeletePRAdmin);
-                foreach(var item in DeletePRAdmin)
+                foreach (var item in DeletePRAdmin)
                 {
                     db.PR_Admin.Remove(item);
                     db.SaveChanges();
@@ -5567,16 +5605,16 @@ namespace KUBOnlinePRPM.Controllers
                     db.PR_HOD.Remove(item);
                     db.SaveChanges();
                 }
-                
-                foreach (var item in requestorDone)
-                        {
-                            
-                            NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == item.MsgId);
-                            getDone.done = true;
-                            db.SaveChanges();
-                        }
 
-                        return Json(new { success = true, exception = false, message = "Successfully edit the PR." });
+                foreach (var item in requestorDone)
+                {
+
+                    NotificationMsg getDone = db.NotificationMsgs.First(m => m.msgId == item.MsgId);
+                    getDone.done = true;
+                    db.SaveChanges();
+                }
+
+                return Json(new { success = true, exception = false, message = "Successfully edit the PR." });
             }
             else
             {
@@ -5584,6 +5622,8 @@ namespace KUBOnlinePRPM.Controllers
                 return Json(new { success = false, url = redirectUrl });
             }
         }
+
+        [HttpPost]
         public JsonResult CancelPR()
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
@@ -5781,7 +5821,8 @@ namespace KUBOnlinePRPM.Controllers
             }
         }
 
-        public ActionResult RecommendCancel()
+        [HttpPost]
+        public JsonResult RecommendCancel()
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
@@ -5857,20 +5898,23 @@ namespace KUBOnlinePRPM.Controllers
                 UpdatePRStatus.StatusId = "PR16";
                 if (db.SaveChanges() > 0)
                 {
-                    return Json("Successfully cancel");
+                    return Json(new { success = true, message = "Successfully cancel" });
                 }
                 else
                 {
-                    return Json("System failure. Please contact admin");
+                    var redirectUrl = new UrlHelper(Request.RequestContext).Action("Index", "Home", new { /* no params */ });
+                    return Json(new { success = false, url = redirectUrl });
                 }
             }
             else
             {
-                return Redirect("~/Home/Index");
+                var redirectUrl = new UrlHelper(Request.RequestContext).Action("Index", "Home", new { /* no params */ });
+                return Json(new { success = false, url = redirectUrl });
             }
         }
 
-        public ActionResult AcceptCancel()
+        [HttpPost]
+        public JsonResult AcceptCancel()
         {
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
@@ -5893,16 +5937,18 @@ namespace KUBOnlinePRPM.Controllers
 
                 if (db.SaveChanges() > 0)
                 {
-                    return Json("Successfully cancel");
+                    return Json(new { success = true, message = "Successfully cancel" });
                 }
                 else
                 {
-                    return Json("System failure. Please contact admin");
+                    var redirectUrl = new UrlHelper(Request.RequestContext).Action("Index", "Home", new { /* no params */ });
+                    return Json(new { success = false, url = redirectUrl });
                 }
             }
             else
             {
-                return Redirect("~/Home/Index");
+                var redirectUrl = new UrlHelper(Request.RequestContext).Action("Index", "Home", new { /* no params */ });
+                return Json(new { success = false, url = redirectUrl });
             }
         }
     }

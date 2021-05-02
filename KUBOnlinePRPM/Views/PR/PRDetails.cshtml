@@ -769,12 +769,16 @@
                             else
                             {
                                 <td>
-                                    @Html.DropDownListFor(m => item.ItemTypeId, (IEnumerable<SelectListItem>)ViewData["ItemTypeList" + i], "Select item type here", new { @id = ItemTypeId, @class = "TypeId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
-                                    @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[i].ItemTypeId, null, new { @class = "form-control-feedback" })
+                                    <div class="has-danger">
+                                        @Html.DropDownListFor(m => item.ItemTypeId, (IEnumerable<SelectListItem>)ViewData["ItemTypeList" + i], "Select item type here", new { @id = ItemTypeId, @class = "TypeId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                                        @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[i].ItemTypeId, null, new { @class = "form-control-feedback" })
+                                    </div>
                                 </td>
                                 <td>
-                                    @Html.DropDownListFor(m => item.CodeId, (IEnumerable<SelectListItem>)ViewData["ItemCodeList" + i], "Select item code here", new { @id = CodeId, @class = "CodeId combobox custom-select g-height-40 g-color-black g-color-black--hover text-left", @disabled = "disabled" })
-                                    @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[i].CodeId, null, new { @class = "form-control-feedback" })
+                                    <div class="has-danger">
+                                        @Html.DropDownListFor(m => item.CodeId, (IEnumerable<SelectListItem>)ViewData["ItemCodeList" + i], "Select item code here", new { @id = CodeId, @class = "CodeId combobox custom-select g-height-40 g-color-black g-color-black--hover text-left", @disabled = "disabled" })
+                                        @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[i].CodeId, null, new { @class = "form-control-feedback" })
+                                    </div>
                                 </td>
                             }
                             if (ProcurementPending4Submission)
@@ -793,9 +797,11 @@
                                     @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[i].Quantity, null, new { @class = "form-control-feedback" })
                                 </td>
                                 <td>
-                                    @*<input id="@UoM" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="UoM" value="@item.UOM" type="text" readonly>*@
-                                    @Html.DropDownListFor(m => item.UoMId, (IEnumerable<SelectListItem>)ViewData["UOMList" + i], "Select item type here", new { @id = UoM, @class = "UOM custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
-                                    @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[i].UoMId, null, new { @class = "form-control-feedback" })
+                                    <div class="has-danger">
+                                        @*<input id="@UoM" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-px-14 g-py-10" placeholder="" name="UoM" value="@item.UOM" type="text" readonly>*@
+                                        @Html.DropDownListFor(m => item.UoMId, (IEnumerable<SelectListItem>)ViewData["UOMList" + i], "Select item type here", new { @id = UoM, @class = "UOM custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                                        @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[i].UoMId, null, new { @class = "form-control-feedback" })
+                                    </div>
                                 </td>
                             }
                             else
@@ -930,12 +936,16 @@
                                     </div>
                                 </td>
                                 <td>
-                                    @Html.DropDownListFor(m => item.ItemTypeId, (IEnumerable<SelectListItem>)ViewData["ItemTypeList" + i], "Select item type here", new { @id = ItemTypeId, @class = "TypeId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
-                                    @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[k].ItemTypeId, null, new { @class = "form-control-feedback" })
+                                    <div class="has-danger">
+                                        @Html.DropDownListFor(m => item.ItemTypeId, (IEnumerable<SelectListItem>)ViewData["ItemTypeList" + i], "Select item type here", new { @id = ItemTypeId, @class = "TypeId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                                        @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[k].ItemTypeId, null, new { @class = "form-control-feedback" })
+                                    </div>
                                 </td>
                                 <td>
-                                    @Html.DropDownListFor(m => item.CodeId, (IEnumerable<SelectListItem>)ViewData["ItemCodeList" + i], "Select item code here", new { @id = CodeId, @class = "CodeId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
-                                    @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[k].CodeId, null, new { @class = "form-control-feedback" })
+                                    <div class="has-danger">
+                                        @Html.DropDownListFor(m => item.CodeId, (IEnumerable<SelectListItem>)ViewData["ItemCodeList" + i], "Select item code here", new { @id = CodeId, @class = "CodeId custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20", @disabled = "disabled" })
+                                        @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[k].CodeId, null, new { @class = "form-control-feedback" })
+                                    </div>
                                 </td>
                                 <td>
                                     <div class="has-danger">
@@ -953,8 +963,10 @@
                                     </div>
                                 </td>
                                 <td>
-                                    @Html.DropDownListFor(m => item.UoMId, (IEnumerable<SelectListItem>)ViewData["UOMList" + i], "Select UOM here", new { @id = UoM, @class = "UOM custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
-                                    @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[k].UoMId, null, new { @class = "form-control-feedback" })
+                                    <div class="has-danger">
+                                        @Html.DropDownListFor(m => item.UoMId, (IEnumerable<SelectListItem>)ViewData["UOMList" + i], "Select UOM here", new { @id = UoM, @class = "UOM custom-select g-height-40 g-color-black g-color-black--hover text-left g-rounded-20" })
+                                        @Html.ValidationMessageFor(m => m.NewPRForm.PRItemListObject[k].UoMId, null, new { @class = "form-control-feedback" })
+                                    </div>
                                 </td>
 
                             }

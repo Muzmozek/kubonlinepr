@@ -627,8 +627,9 @@ $(document).on('ready', function () {
         });
     });
 
-    $(document).one("click", "#SubmitNewPR, #SubmitPR", function (e) {
-        e.preventDefault();
+    $(document).on("click", "#SubmitNewPR, #SubmitPR", function (e) {
+        e.preventDefault();        
+        $("#SubmitNewPR, #SubmitPR").prop('disabled', true);
         var fd = new FormData(); var other_data; var PRType; var URL;
         if (POType === null) {
             PRType = $("#NewPR").find("#PRType").val();
@@ -730,6 +731,7 @@ $(document).on('ready', function () {
                     alert("The PR has been saved");
                     $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
                         generatePRItemTable();
+                        $("#SubmitNewPR, #SubmitPR").prop('disabled', false);
                     });
                     $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
                     });
@@ -749,6 +751,7 @@ $(document).on('ready', function () {
                         $('span[data-valmsg-for="' + input.key + '"]').text(input.errors[0]);
                     });
                     $("body").removeClass("loading");
+                    $("#SubmitNewPR, #SubmitPR").prop('disabled', false);
                 }
                 else if (resp.success === false && resp.exception === true) {
                     alert(resp.message);

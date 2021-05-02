@@ -28,36 +28,57 @@ namespace KUBOnlinePRPM.Service
             return false;
         }
 
-        public bool CheckAmountScenarioTwo(decimal amount, int custId)
+        public bool CheckAmountScenarioTwo(decimal amount, int custId, bool IncludeInBudget)
         {
-            //custId = 4 is refered to Solar Gas Sdn Bhd
-            if (custId == 4 && amount >= decimal.Parse("50000.01") && amount <= 200000)
-                return true;
+            if (IncludeInBudget)
+            {
+                if (custId == 4 && amount >= decimal.Parse("50000.01") && amount <= 500000)
+                    return true;
+            }
+            else
+            {
+                if (custId == 4 && amount <= 200000)
+                    return true;
+            }
 
-
-            if (amount >= decimal.Parse("20000.01") && amount <= 50000)
+            if (custId == 2 && amount >= decimal.Parse("20000.01") && amount <= 50000)
                 return true;
 
             return false;
         }
 
-        public bool CheckAmountScenarioThree(decimal amount, int custId)
+        public bool CheckAmountScenarioThree(decimal amount, int custId, bool IncludeInBudget)
         {
-            //custId = 4 is refered to Solar Gas Sdn Bhd
-            if (custId == 4 && amount >= decimal.Parse("500000.01") && amount <= 2000000)
-                return true;
+            if (IncludeInBudget)
+            {
+                if (custId == 4 && amount >= decimal.Parse("500000.01") && amount <= 2000000)
+                    return true;
+            }
+            else
+            {
+                if (custId == 4 && amount >= decimal.Parse("200000.01") && amount <= 500000)
+                    return true;
+            }
 
-            if (amount >= decimal.Parse("50000.01"))
+            if (custId == 2 && amount >= decimal.Parse("50000.01"))
                 return true;
 
             return false;
         }
 
-        public bool CheckAmountScenarioFour(decimal amount, int custId)
+        public bool CheckAmountScenarioFour(decimal amount, int custId, bool IncludeInBudget)
         {
-            //custId = 4 is refered to Solar Gas Sdn Bhd
-            if (custId == 4 && amount >= decimal.Parse("2000000.01"))
-                return true;
+            if (IncludeInBudget)
+            {
+                //custId = 4 is refered to Solar Gas Sdn Bhd
+                if (custId == 4 && amount >= decimal.Parse("2000000.01"))
+                    return true;
+            }
+            else
+            {
+                if (custId == 4 && amount >= decimal.Parse("500000.01"))
+                    return true;
+            }
 
             return false;
         }

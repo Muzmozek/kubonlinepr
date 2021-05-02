@@ -1308,5 +1308,18 @@ namespace KUBOnlinePRPM.Controllers
                 return Redirect("~/Home/Index");
             }
         }
+
+        public FileResult DownloadFile()
+        {
+            string fileName = "Solar Gas General Terms and Conditions.docx";
+            //Build the File Path.
+            string path = Server.MapPath("~/Documents/") + fileName;
+
+            //Read the File data into Byte Array.
+            byte[] bytes = System.IO.File.ReadAllBytes(path);
+
+            //Send the File to Download.
+            return File(bytes, "application/octet-stream", fileName);
+        }
     }
 }

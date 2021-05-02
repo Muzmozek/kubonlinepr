@@ -59,6 +59,7 @@
 
     $(document).on("click", ".saveSubmitProcDetail", function (e) {
         e.preventDefault();
+        $(".saveSubmitProcDetail").prop('disabled', true);
         var fd = new FormData(); var other_data; var PRType; var URL;
         if ($(this)[0].id === "SavePreparedProcurement") {
             fd.append("NewPRForm.SelectSave", true);
@@ -133,234 +134,234 @@
             fd.append("NewPRForm.PRItemListObject[" + i + "].JobNoId", JobNoId);
             fd.append("NewPRForm.PRItemListObject[" + i + "].JobTaskNoId", JobTaskNoId);
             fd.append("NewPRForm.PRItemListObject[" + i + "].TaxCodeId", TaxCodeId);
-            fd.append("NewPRForm.PRItemListObject[" + i + "].UnitPrice", unitPrice);            
-            fd.append("NewPRForm.PRItemListObject[" + i + "].TotalPrice", totalPrice);   
+            fd.append("NewPRForm.PRItemListObject[" + i + "].UnitPrice", unitPrice);
+            fd.append("NewPRForm.PRItemListObject[" + i + "].TotalPrice", totalPrice);
             fd.append("NewPRForm.PRItemListObject[" + i + "].UnitPriceIncSST", UnitPriceIncSST);
             fd.append("NewPRForm.PRItemListObject[" + i + "].TotalPriceIncSST", TotalPriceIncSST);
-            fd.append("NewPRForm.PRItemListObject[" + i + "].DimProjectId", DimProjectId);  
-            fd.append("NewPRForm.PRItemListObject[" + i + "].DimDeptId", DimDeptId);  
+            fd.append("NewPRForm.PRItemListObject[" + i + "].DimProjectId", DimProjectId);
+            fd.append("NewPRForm.PRItemListObject[" + i + "].DimDeptId", DimDeptId);
         });
 
-            $.ajax({
-                url: URL,
-                type: 'POST',
-                data: fd,
-                contentType: false,
-                processData: false,
-                cache: false,
-                dataType: "json",
-                success: function (resp) {
-                    if (resp.success === true) {
-                        alert(resp.message);
-                        $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
-                            openHiddenPRItemTable();
-                        });
-                        $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
-                            $("body").removeClass("loading");
-                        });
-                    }
-                        else if (resp.success === false && resp.exception === false) {
-                        alert("Validation error");
-                        $.each(resp.data, function (key, input) {
-                            //$('input[name="' + input.name + '"]').val(input.value);
-                            $('span[data-valmsg-for="' + input.key + '"]').text(input.errors[0]);                            
-                        });
+        $.ajax({
+            url: URL,
+            type: 'POST',
+            data: fd,
+            contentType: false,
+            processData: false,
+            cache: false,
+            dataType: "json",
+            success: function (resp) {
+                if (resp.success === true) {
+                    alert(resp.message);
+                    $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
+                        openHiddenPRItemTable();
+                        $(".saveSubmitProcDetail").prop('disabled', false);
+                    });
+                    $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
                         $("body").removeClass("loading");
-                    } else {
-                        window.location = resp.url;
-                    }                    
+                    });
                 }
-            });     
+                else if (resp.success === false && resp.exception === false) {
+                    alert("Validation error");
+                    $.each(resp.data, function (key, input) {
+                        //$('input[name="' + input.name + '"]').val(input.value);
+                        $('span[data-valmsg-for="' + input.key + '"]').text(input.errors[0]);
+                    });
+                    $("body").removeClass("loading");
+                    $(".saveSubmitProcDetail").prop('disabled', false);
+                } else {
+                    window.location = resp.url;
+                }
+            }
+        });
     });
 
     // scenario 1
     //Review IT/PMO/ start
     $("#RejectPreparedReviewer").click(function (e) {
-
         e.preventDefault();
         $.post(UrlRejectPreparedReviewer, {
-
             PRId: PRId,
             RejectRemark: $("textarea#RejectRemark").val()
-
         }, function (resp) {
-            alert(resp);
-            $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
-                generatePRItemTable();
-            });
-            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
-                $("body").removeClass("loading");
-            });
-            Custombox.modal.close();
-        });
-
-    });
-
-    $("#ReviewPreparedReviewer").click(function (e) {
-
-        e.preventDefault();
-
-        $.post(UrlReviewPreparedReviewer, {
-
-            PRId: PRId,
-            RejectRemark: $("textarea#RejectRemark").val()
-
-        }, function (resp) {
-            alert(resp);
-            $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
-                generatePRItemTable();
-            });
-            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
-                $("body").removeClass("loading");
-            });
-        });
-
-    });
-
-    //approver HOC start
-    $("#RejectPreparedApprover").click(function (e) {
-
-        e.preventDefault();
-        $.post(UrlRejectPreparedApprover, {
-
-            PRId: PRId,
-            RejectRemark: $("textarea#RejectRemark").val()
-
-        }, function (resp) {
-            alert(resp);
-            $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
-                generatePRItemTable();
-            });
-            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
-                $("body").removeClass("loading");
-            });
-            Custombox.modal.close();
-        });
-
-    });
-
-    $("#ApprovePreparedApprover").click(function (e) {
-
-        e.preventDefault();
-        $.post(UrlApprovePreparedApprover, {
-
-            PRId: PRId,
-            PRType: POType,
-            RejectRemark: $("textarea#RejectRemark").val()
-
-        }, function (resp) {
-            alert(resp);
-            $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
-                generatePRItemTable();
-            });
-            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
-                $("body").removeClass("loading");
-            });
-        });
-
-    });
-
-    //scenario 2
-    $("#RejectPreparedRecommended").click(function (e) {
-
-        e.preventDefault();
-        $.post(UrlRejectPreparedRecommended, {
-
-            PRId: PRId,
-            RejectRemark: $("textarea#RejectRemark").val()
-
-        }, function (resp) {
-            alert(resp);
-            $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
-                generatePRItemTable();
-            });
-            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
-                $("body").removeClass("loading");
-            });
-            Custombox.modal.close();
-        });
-
-    });
-
-    $("#RecommendedPreparedRecommended").click(function (e) {
-
-        e.preventDefault();
-        $.post(UrlRecommendedPreparedRecommended, {
-
-            PRId: PRId
-
-        }, function (resp) {
-            alert(resp);
-            $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
-                generatePRItemTable();
-            });
-            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
-                $("body").removeClass("loading");
-            });
-        });
-
-    });
-
-    $("#ApprovePreparedJointRecommended").click(function (e) {
-
-        e.preventDefault();
-        $.post(UrlApprovePreparedJointRecommended, {
-
-                PRId: PRId
-
-            }, function (resp) {
-                alert(resp);
+            if (resp.success) {
+                alert(resp.message);
                 $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
                     generatePRItemTable();
                 });
                 $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
                     $("body").removeClass("loading");
                 });
-            });
+                Custombox.modal.close();
+            } else {
+                window.location = resp.url;
+            }
+        });
+    });
 
+    $("#ReviewPreparedReviewer").click(function (e) {
+        e.preventDefault();
+        $.post(UrlReviewPreparedReviewer, {
+            PRId: PRId,
+            RejectRemark: $("textarea#RejectRemark").val()
+        }, function (resp) {
+            if (resp.success) {
+                alert(resp.message);
+                $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
+                    generatePRItemTable();
+                });
+                $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                    $("body").removeClass("loading");
+                });
+            } else {
+                window.location = resp.url;
+            }
+        });
+    });
+
+    //approver HOC start
+    $("#RejectPreparedApprover").click(function (e) {
+        e.preventDefault();
+        $.post(UrlRejectPreparedApprover, {
+            PRId: PRId,
+            RejectRemark: $("textarea#RejectRemark").val()
+        }, function (resp) {
+            if (resp.success) {
+                alert(resp.message);
+                $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
+                    generatePRItemTable();
+                });
+                $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                    $("body").removeClass("loading");
+                });
+                Custombox.modal.close();
+            } else {
+                window.location = resp.url;
+            }
+        });
+    });
+
+    $("#ApprovePreparedApprover").click(function (e) {
+        e.preventDefault();
+        $.post(UrlApprovePreparedApprover, {
+            PRId: PRId,
+            PRType: POType,
+            RejectRemark: $("textarea#RejectRemark").val()
+        }, function (resp) {
+            if (resp.success) {
+                alert(resp.message);
+                $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
+                    generatePRItemTable();
+                });
+                $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                    $("body").removeClass("loading");
+                });
+            } else {
+                window.location = resp.url;
+            }
+        });
+    });
+
+    //scenario 2
+    $("#RejectPreparedRecommended").click(function (e) {
+        e.preventDefault();
+        $.post(UrlRejectPreparedRecommended, {
+            PRId: PRId,
+            RejectRemark: $("textarea#RejectRemark").val()
+        }, function (resp) {
+            if (resp.success) {
+                alert(resp.message);
+                $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
+                    generatePRItemTable();
+                });
+                $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                    $("body").removeClass("loading");
+                });
+                Custombox.modal.close();
+            } else {
+                window.location = resp.url;
+            }
+        });
+    });
+
+    $("#RecommendedPreparedRecommended").click(function (e) {
+        e.preventDefault();
+        $.post(UrlRecommendedPreparedRecommended, {
+            PRId: PRId
+        }, function (resp) {
+            if (resp.success) {
+                alert(resp.message);
+                $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
+                    generatePRItemTable();
+                });
+                $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                    $("body").removeClass("loading");
+                });
+            } else {
+                window.location = resp.url;
+            }
+        });
+    });
+
+    $("#ApprovePreparedJointRecommended").click(function (e) {
+        e.preventDefault();
+        $.post(UrlApprovePreparedJointRecommended, {
+            PRId: PRId
+        }, function (resp) {
+            if (resp.success) {
+                alert(resp.message);
+                $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
+                    generatePRItemTable();
+                });
+                $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                    $("body").removeClass("loading");
+                });
+            } else {
+                window.location = resp.url;
+            }
+        });
     });
 
     $("#ApprovePreparedJointRecommendedII").click(function (e) {
-
         e.preventDefault();
         $.post(UrlApprovePreparedJointRecommendedII, {
-
             PRId: PRId
-
         }, function (resp) {
-            alert(resp);
-            $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
-                generatePRItemTable();
-            });
-            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
-                $("body").removeClass("loading");
-            });
+            if (resp.success) {
+                alert(resp.message);
+                $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
+                    generatePRItemTable();
+                });
+                $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                    $("body").removeClass("loading");
+                });
+            } else {
+                window.location = resp.url;
+            }
         });
-
     });
 
     $("#ApprovePreparedJointRecommendedIII").click(function (e) {
-
         e.preventDefault();
         $.post(UrlApprovePreparedJointRecommendedIII, {
-
             PRId: PRId
-
         }, function (resp) {
-            alert(resp);
-            $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
-                generatePRItemTable();
-            });
-            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
-                $("body").removeClass("loading");
-            });
+            if (resp.success) {
+                alert(resp.message);
+                $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
+                    generatePRItemTable();
+                });
+                $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                    $("body").removeClass("loading");
+                });
+            } else {
+                window.location = resp.url;
+            }
         });
-
     });
   
     //phase 1 reviewer approver approval logic
     $("#ApproveInitialPRReview").click(function (e) {
-
         e.preventDefault();
         var fd = new FormData(); var other_data;
         other_data = $(".checkFiles").serializeArray();
@@ -376,7 +377,7 @@
             cache: false,
             dataType: "json",
             success: function (resp) {
-                if (resp.success === true) {
+                if (resp.success) {
                     alert(resp.message);
                     $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
                         generatePRItemTable();
@@ -392,15 +393,12 @@
     });
 
     $("#RejectInitialPRReview").click(function (e) {
-
         e.preventDefault();
         $.post(UrlRejectInitialPRReview, {
-
             PRId: PRId,
             RejectRemark: $("textarea#RejectRemark").val()
-
         }, function (resp) {
-            if (resp.success === true) {
+            if (resp.success) {
                 alert(resp.message);
                 $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
                     generatePRItemTable();
@@ -413,7 +411,6 @@
                 window.location = resp.url;
             }           
         });
-
     });
 
     $(document).one("click", ".approveRejectDetail", function (e) {
@@ -444,7 +441,7 @@
                 cache: false,
                 dataType: "json",
                 success: function (resp) {
-                    if (resp.success === true) {
+                    if (resp.success) {
                         alert("The PR has been approved");
                         $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
                             generatePRItemTable();
@@ -452,7 +449,7 @@
                         $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
                             $("body").removeClass("loading");
                         });
-                    } else if (resp.success === false) {
+                    } else if (!resp.success) {
                         alert("Validation error");
                         $.each(resp.data, function (key, input) {
                             $('span[data-valmsg-for="' + input.key + '"]').text(input.errors[0]);
@@ -472,8 +469,18 @@
                 Approver: Approver,
                 RejectRemark: RejectRemark
             }, function (resp) {
-                alert("The PR has been rejected");
-                window.location = $("#UrlPRList").attr('href') + "?type=" + POType;
+                if (resp.success) {
+                    alert(resp.message);
+                    $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
+                        generatePRItemTable();
+                    });
+                    $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                        $("body").removeClass("loading");
+                    });
+                    Custombox.modal.close();
+                } else {
+                    window.location = resp.url;
+                }
             });
         }
     });
@@ -749,60 +756,64 @@
 
     $(".CancelPR").click(function (e) {
         e.preventDefault();
-            $.post(UrlCancelPR, {
-                PRId: PRId,
-                CancelType: $(".CancelPR")[0].id
-            }, function (resp) {
-                if (resp.success === true && resp.flow === "newPR") {
-                    window.location = UrlPRCard + "?type=" + POType;
-                } else if (resp.success === false) {
-                    window.location = resp.url;
-                }
-                else {
-                    alert(resp.message);
-                    $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
-                        generatePRItemTable();
-                    });
-                    $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
-                        $("body").removeClass("loading");
-                    });
-                    Custombox.modal.close();
-                }                                
-            });
+        $.post(UrlCancelPR, {
+            PRId: PRId,
+            CancelType: $(".CancelPR")[0].id
+        }, function (resp) {
+            if (resp.success === true && resp.flow === "newPR") {
+                window.location = UrlPRCard + "?type=" + POType;
+            } else if (resp.success === false) {
+                window.location = resp.url;
+            }
+            else {
+                alert(resp.message);
+                $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
+                    generatePRItemTable();
+                });
+                $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                    $("body").removeClass("loading");
+                });
+                Custombox.modal.close();
+            }
+        });
     });
 
     $("#RecommendCancel").click(function (e) {
-
-        e.preventDefault(); 
+        e.preventDefault();
         $.post(UrlRecommendCancel, {
             PRId: PRId
         }, function (resp) {
-            alert(resp);
-            $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
-                generatePRItemTable();
-            });
-            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
-                $("body").removeClass("loading");
-            });
+            if (resp.success) {
+                alert(resp.message);
+                $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
+                    generatePRItemTable();
+                });
+                $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                    $("body").removeClass("loading");
+                });
+            } else {
+                window.location = resp.url;
+            }
         });
-
     });
 
     $("#AcceptCancel").click(function (e) {
-
         e.preventDefault();
         $.post(UrlAcceptCancel, {
             PRId: PRId
         }, function (resp) {
-            alert(resp);
-            $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
-                generatePRItemTable();
-            });
-            $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
-                $("body").removeClass("loading");
-            });
+            if (resp.success) {
+                alert(resp.message);
+                $("#nav-4-1-primary-hor-center--PRDetails").load(UrlPRTabs + ' #PRDetailsTab', function () {
+                    generatePRItemTable();
+                });
+                $("#nav-4-1-primary-hor-center--Conversations").load(UrlPRTabs + ' #ConversationsTab', function () {
+                    $("body").removeClass("loading");
+                });
+            } else {
+                window.location = resp.url;
+            }
         });
-
     });
 
     $("#IssuePO").click(function (e) {

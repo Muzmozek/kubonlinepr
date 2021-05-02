@@ -5699,6 +5699,9 @@
     <Content Include="KUBOnlinePRDataSet.xsc">
       <DependentUpon>KUBOnlinePRDataSet.xsd</DependentUpon>
     </Content>
+    <Content Include="Documents\Solar Gas General Terms and Conditions.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="KUBOnlinePRDataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>KUBOnlinePRDataSet.Designer.cs</LastGenOutput>
@@ -5751,7 +5754,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Documents\" />
     <Folder Include="Views\NotiLogic\" />
   </ItemGroup>
   <ItemGroup>

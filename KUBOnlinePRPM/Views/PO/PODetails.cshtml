@@ -30,13 +30,21 @@
         </div>*@
             @if (Model.NewPOForm.StatusId == "PO03")
             {
-                <div class="media-body align-self-center text-right">
-                    <a href="~/PO/POForm">
-                        <span class="u-icon-v1 g-color-blue">
-                            <i class="icon-printer"></i>
+            <div class="media-body align-self-center text-right">
+                <a href="~/PO/POForm">
+                    <span class="u-icon-v1 g-color-blue">
+                        <i class="icon-printer" title="Print PO Form"></i>
+                    </span>
+                </a>
+                @if (Model.CustId == 4 || Session["ifSuperAdmin"] != null)
+                {
+                    <a href="~/PO/DownloadFile">
+                        <span class="u-icon-v1 g-color-black">
+                            <i class="icon-printer" title="Print PO TnC"></i>
                         </span>
                     </a>
-                </div>
+                }
+            </div>
             }
             
             @using (Html.BeginForm("PODetails", "PO", FormMethod.Post, new { @id = "PODetails", @class = "container-fluid g-mb-40" }))
