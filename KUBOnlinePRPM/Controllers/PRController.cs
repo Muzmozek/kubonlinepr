@@ -2649,7 +2649,7 @@ namespace KUBOnlinePRPM.Controllers
                                           join j in db.PopulateItemLists on h.codeId equals j.codeId into k
                                           join m in db.PurchaseTypes on a.PurchaseTypeId equals m.purchaseTypeId
                                           join n in db.Customers on b.companyId equals n.custId
-                                          from o in db.PR_Reviewer.Where(x => x.PRId == PRDetail.PRId && x.reviewed == 1).DefaultIfEmpty()
+                                          from o in db.PR_Finance.Where(x => x.PRId == PRDetail.PRId && x.reviewed == 1).DefaultIfEmpty()
                                           from q in db.PR_Approver.Where(x => x.PRId == PRDetail.PRId && x.approverApproved == 1)
                                           from s in db.PR_HOD.Where(x => x.PRId == PRDetail.PRId && x.HODApprovedP1 == 1).DefaultIfEmpty()
                                           //from x in l.DefaultIfEmpty()
@@ -2725,7 +2725,7 @@ namespace KUBOnlinePRPM.Controllers
                                           join j in db.PopulateItemLists on h.codeId equals j.codeId into k
                                           join m in db.PurchaseTypes on a.PurchaseTypeId equals m.purchaseTypeId
                                           join n in db.Customers on b.companyId equals n.custId
-                                          //from o in db.PR_Reviewer.Where(x => x.PRId == PRDetail.PRId && x.reviewed == 1)
+                                          from o in db.PR_Finance.Where(x => x.PRId == PRDetail.PRId && x.reviewed == 1)
                                           from q in db.PR_Approver.Where(x => x.PRId == PRDetail.PRId && x.approverApproved == 1)
                                           from s in db.PR_HOD.Where(x => x.PRId == PRDetail.PRId && x.HODApprovedP1 == 1).DefaultIfEmpty()
                                           from u in db.PR_Recommender.Where(x => x.PRId == PRDetail.PRId && x.recommended == 1).DefaultIfEmpty()
@@ -2767,8 +2767,8 @@ namespace KUBOnlinePRPM.Controllers
                                               //HODApprovedDate2 = s.HODApprovedDate2.Value,
                                               ApproverId = q.approverId,
                                               ApprovedDate = q.approverApprovedDate.Value,
-                                              //ReviewerId = o.reviewerId,
-                                              //ReviewedDate = o.reviewedDate.Value,
+                                              ReviewerId = o.reviewerId,
+                                              ReviewedDate = o.reviewedDate.Value,
                                               RecommenderId = u.recommenderId,
                                               RecommendDate = u.recommendedDate,
                                               Saved = a.Saved,
@@ -2787,11 +2787,11 @@ namespace KUBOnlinePRPM.Controllers
                         User getFullname = db.Users.First(m => m.userId == PRDetail.NewPRForm.HODApproverId);
                         PRDetail.NewPRForm.HODApproverName = getFullname.firstName + " " + getFullname.lastName;
                     }
-                    //if (PRDetail.NewPRForm.ReviewerId != 0)
-                    //{
-                    //    User getFullname = db.Users.First(m => m.userId == PRDetail.NewPRForm.ReviewerId);
-                    //    PRDetail.NewPRForm.ReviewerName = getFullname.firstName + " " + getFullname.lastName;
-                    //}
+                    if (PRDetail.NewPRForm.ReviewerId != 0)
+                    {
+                        User getFullname = db.Users.First(m => m.userId == PRDetail.NewPRForm.ReviewerId);
+                        PRDetail.NewPRForm.ReviewerName = getFullname.firstName + " " + getFullname.lastName;
+                    }
                     if (PRDetail.NewPRForm.RecommenderId != null && PRDetail.NewPRForm.RecommenderId != 0)
                     {
                         User getFullname = db.Users.First(m => m.userId == PRDetail.NewPRForm.RecommenderId);
@@ -2810,7 +2810,7 @@ namespace KUBOnlinePRPM.Controllers
                                           join j in db.PopulateItemLists on h.codeId equals j.codeId into k
                                           join m in db.PurchaseTypes on a.PurchaseTypeId equals m.purchaseTypeId
                                           join n in db.Customers on b.companyId equals n.custId
-                                          //from o in db.PR_Reviewer.Where(x => x.PRId == PRDetail.PRId && x.reviewed == 1)
+                                          from o in db.PR_Finance.Where(x => x.PRId == PRDetail.PRId && x.reviewed == 1)
                                           from q in db.PR_Approver.Where(x => x.PRId == PRDetail.PRId && x.approverApproved == 1)
                                           from s in db.PR_HOD.Where(x => x.PRId == PRDetail.PRId && x.HODApprovedP1 == 1).DefaultIfEmpty()
                                           from u in db.PR_Recommender.Where(x => x.PRId == PRDetail.PRId && x.recommended == 1).DefaultIfEmpty()
@@ -2854,8 +2854,8 @@ namespace KUBOnlinePRPM.Controllers
                                               //HODApprovedDate2 = s.HODApprovedDate2.Value,
                                               ApproverId = q.approverId,
                                               ApprovedDate = q.approverApprovedDate.Value,
-                                              //ReviewerId = o.reviewerId,
-                                              //ReviewedDate = o.reviewedDate.Value,
+                                              ReviewerId = o.reviewerId,
+                                              ReviewedDate = o.reviewedDate.Value,
                                               RecommenderId = u.recommenderId,
                                               RecommendDate = u.recommendedDate,
                                               RecommenderIdII = ac.recommenderId != null ? ac.recommenderId : ae.recommenderId ,
@@ -2877,11 +2877,11 @@ namespace KUBOnlinePRPM.Controllers
                         User getFullname = db.Users.First(m => m.userId == PRDetail.NewPRForm.HODApproverId);
                         PRDetail.NewPRForm.HODApproverName = getFullname.firstName + " " + getFullname.lastName;
                     }
-                    //if (PRDetail.NewPRForm.ReviewerId != 0)
-                    //{
-                    //    User getFullname = db.Users.First(m => m.userId == PRDetail.NewPRForm.ReviewerId);
-                    //    PRDetail.NewPRForm.ReviewerName = getFullname.firstName + " " + getFullname.lastName;
-                    //}
+                    if (PRDetail.NewPRForm.ReviewerId != 0)
+                    {
+                        User getFullname = db.Users.First(m => m.userId == PRDetail.NewPRForm.ReviewerId);
+                        PRDetail.NewPRForm.ReviewerName = getFullname.firstName + " " + getFullname.lastName;
+                    }
                     if (PRDetail.NewPRForm.RecommenderId != null && PRDetail.NewPRForm.RecommenderId != 0)
                     {
                         User getFullname = db.Users.First(m => m.userId == PRDetail.NewPRForm.RecommenderId);
