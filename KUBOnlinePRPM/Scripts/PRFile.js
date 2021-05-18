@@ -55,7 +55,8 @@
             processData: false
         });
     });
-    $(document).one("click", ".DeleteFile", function (e) {
+
+    $(document).on("click", ".DeleteFile", function (e) {
         e.preventDefault();
         $.ajax({
             url: UrlFileDelete,
@@ -88,4 +89,8 @@
             }
         });     
     });
+
+    $(document).on("change", $('#PRFiles').find('[name="UploadFile"]').val(), function () {
+        $("#UploadFileInput").val($('#PRFiles').find('[name="UploadFile"]').val());
+    })
 });

@@ -529,6 +529,8 @@ namespace KUBOnlinePRPM.Controllers
             if (User.Identity.IsAuthenticated && Session["UserId"] != null)
             {
                 POModel PODetail = new POModel();
+                int UserId = Int32.Parse(Session["UserId"].ToString());
+                PODetail = db.Users.Where(x => x.userId == UserId).Select(x => new POModel() { UserId = x.userId, CustId = x.companyId.Value }).Single();
                 if (Session["POId"] == null)
                 {
                     PODetail.POId = Int32.Parse(Request["POId"].ToString());
@@ -540,8 +542,7 @@ namespace KUBOnlinePRPM.Controllers
                     PODetail.POId = Int32.Parse(Session["POId"].ToString());
                     PODetail.Type = Session["POType"].ToString();
                 }
-
-                int UserId = Int32.Parse(Session["UserId"].ToString());
+               
                 int PRId = db.PurchaseOrders.First(m => m.POId == PODetail.POId).PRId.Value;
                 int PRCustId = (from m in db.PurchaseRequisitions
                                 join n in db.Projects on m.ProjectId equals n.projectId
@@ -572,7 +573,7 @@ namespace KUBOnlinePRPM.Controllers
                 var PurchaserCodeQuery = db.Purchasers.Select(m => new { PurchaserCodeId = m.purchaserId, PurchaserCode = m.purchaserCode, CustId = m.custId })
                     .Where(m => m.CustId == PRCustId)
                     .OrderBy(m => m.PurchaserCode);
-                PODetail.UserId = Int32.Parse(Session["UserId"].ToString());
+                
                 PODetail.NewPOForm = (from a in db.PurchaseOrders
                                       join b in db.Projects on a.projectId equals b.projectId
                                       join c in db.Vendors on a.vendorId equals c.vendorId
