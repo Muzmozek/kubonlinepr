@@ -149,9 +149,9 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox8</rd:DefaultName>
-        <Top>1.65778in</Top>
+        <Top>1.63in</Top>
         <Left>0.30083in</Left>
-        <Height>0.21806in</Height>
+        <Height>0.18681in</Height>
         <Width>1.11458in</Width>
         <ZIndex>4</ZIndex>
         <Style>
@@ -182,9 +182,9 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox8</rd:DefaultName>
-        <Top>1.94528in</Top>
+        <Top>1.855in</Top>
         <Left>0.30083in</Left>
-        <Height>0.25001in</Height>
+        <Height>0.19305in</Height>
         <Width>1.11458in</Width>
         <ZIndex>5</ZIndex>
         <Style>
@@ -215,9 +215,9 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox12</rd:DefaultName>
-        <Top>2.24944in</Top>
+        <Top>2.41611in</Top>
         <Left>0.30083in</Left>
-        <Height>0.58055in</Height>
+        <Height>0.41388in</Height>
         <Width>2.29861in</Width>
         <ZIndex>6</ZIndex>
         <Style>
@@ -248,9 +248,9 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox8</rd:DefaultName>
-        <Top>1.94529in</Top>
+        <Top>1.85501in</Top>
         <Left>2.86007in</Left>
-        <Height>0.25in</Height>
+        <Height>0.19304in</Height>
         <Width>1.42292in</Width>
         <ZIndex>7</ZIndex>
         <Style>
@@ -281,9 +281,9 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox12</rd:DefaultName>
-        <Top>2.23695in</Top>
+        <Top>2.41611in</Top>
         <Left>2.86007in</Left>
-        <Height>0.59304in</Height>
+        <Height>0.41388in</Height>
         <Width>2.29861in</Width>
         <ZIndex>8</ZIndex>
         <Style>
@@ -1739,7 +1739,7 @@
         <rd:DefaultName>Textbox8</rd:DefaultName>
         <Top>2.87166in</Top>
         <Left>0.30084in</Left>
-        <Height>0.17709in</Height>
+        <Height>0.18959in</Height>
         <Width>2.29861in</Width>
         <ZIndex>29</ZIndex>
         <Style>
@@ -1769,7 +1769,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox8</rd:DefaultName>
-        <Top>3.09042in</Top>
+        <Top>3.06264in</Top>
         <Left>0.30084in</Left>
         <Height>0.17709in</Height>
         <Width>2.29861in</Width>
@@ -1807,9 +1807,9 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox8</rd:DefaultName>
-        <Top>3.30917in</Top>
-        <Left>0.30083in</Left>
-        <Height>0.17709in</Height>
+        <Top>3.23973in</Top>
+        <Left>0.30084in</Left>
+        <Height>0.19272in</Height>
         <Width>2.29861in</Width>
         <ZIndex>31</ZIndex>
         <Style>
@@ -1840,7 +1840,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox8</rd:DefaultName>
-        <Top>3.32167in</Top>
+        <Top>3.23834in</Top>
         <Left>2.86007in</Left>
         <Height>0.17709in</Height>
         <Width>2.29861in</Width>
@@ -1873,7 +1873,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox8</rd:DefaultName>
-        <Top>3.10292in</Top>
+        <Top>3.06125in</Top>
         <Left>2.86007in</Left>
         <Height>0.17709in</Height>
         <Width>2.29861in</Width>
@@ -3279,6 +3279,72 @@
         <Height>0.39416in</Height>
         <Width>2.5961in</Width>
         <ZIndex>40</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox42">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=First(Fields!VendorName.Value, "NewPOFormDetails")</Value>
+                <Style>
+                  <FontFamily>calibri</FontFamily>
+                  <FontSize>8pt</FontSize>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox9</rd:DefaultName>
+        <Top>2.08972in</Top>
+        <Left>0.31333in</Left>
+        <Height>0.30139in</Height>
+        <Width>2.28611in</Width>
+        <ZIndex>41</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox43">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=First(Fields!CompanyName.Value, "NewPOFormDetails")</Value>
+                <Style>
+                  <FontFamily>calibri</FontFamily>
+                  <FontSize>8pt</FontSize>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox9</rd:DefaultName>
+        <Top>2.08972in</Top>
+        <Left>2.86007in</Left>
+        <Height>0.29861in</Height>
+        <Width>2.29861in</Width>
+        <ZIndex>42</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
