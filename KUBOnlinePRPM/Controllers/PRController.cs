@@ -2649,9 +2649,9 @@ namespace KUBOnlinePRPM.Controllers
                                           join j in db.PopulateItemLists on h.codeId equals j.codeId into k
                                           join m in db.PurchaseTypes on a.PurchaseTypeId equals m.purchaseTypeId
                                           join n in db.Customers on b.companyId equals n.custId
-                                          from o in db.PR_Finance.Where(x => x.PRId == PRDetail.PRId && x.reviewed == 1).DefaultIfEmpty()
-                                          from q in db.PR_Approver.Where(x => x.PRId == PRDetail.PRId && x.approverApproved == 1)
-                                          from s in db.PR_HOD.Where(x => x.PRId == PRDetail.PRId && x.HODApprovedP1 == 1).DefaultIfEmpty()
+                                          from o in db.PR_Finance.Where(x => x.PRId == PRDetail.PRId && x.reviewed >= 1).DefaultIfEmpty()
+                                          from q in db.PR_Approver.Where(x => x.PRId == PRDetail.PRId && x.approverApproved >= 1)
+                                          from s in db.PR_HOD.Where(x => x.PRId == PRDetail.PRId && x.HODApprovedP1 >= 1).DefaultIfEmpty()
                                           //from x in l.DefaultIfEmpty()
                                           //from v in r.DefaultIfEmpty()
                                           //from w in p.DefaultIfEmpty()
@@ -2725,10 +2725,10 @@ namespace KUBOnlinePRPM.Controllers
                                           join j in db.PopulateItemLists on h.codeId equals j.codeId into k
                                           join m in db.PurchaseTypes on a.PurchaseTypeId equals m.purchaseTypeId
                                           join n in db.Customers on b.companyId equals n.custId
-                                          from o in db.PR_Finance.Where(x => x.PRId == PRDetail.PRId && x.reviewed == 1)
-                                          from q in db.PR_Approver.Where(x => x.PRId == PRDetail.PRId && x.approverApproved == 1)
-                                          from s in db.PR_HOD.Where(x => x.PRId == PRDetail.PRId && x.HODApprovedP1 == 1).DefaultIfEmpty()
-                                          from u in db.PR_Recommender.Where(x => x.PRId == PRDetail.PRId && x.recommended == 1).DefaultIfEmpty()
+                                          from o in db.PR_Finance.Where(x => x.PRId == PRDetail.PRId && x.reviewed >= 1)
+                                          from q in db.PR_Approver.Where(x => x.PRId == PRDetail.PRId && x.approverApproved >= 1)
+                                          from s in db.PR_HOD.Where(x => x.PRId == PRDetail.PRId && x.HODApprovedP1 >= 1).DefaultIfEmpty()
+                                          from u in db.PR_Recommender.Where(x => x.PRId == PRDetail.PRId && x.recommended >= 1).DefaultIfEmpty()
                                               //from v in r.DefaultIfEmpty()
                                               //from w in p.DefaultIfEmpty()
                                               //from x in l.DefaultIfEmpty()
@@ -2810,12 +2810,12 @@ namespace KUBOnlinePRPM.Controllers
                                           join j in db.PopulateItemLists on h.codeId equals j.codeId into k
                                           join m in db.PurchaseTypes on a.PurchaseTypeId equals m.purchaseTypeId
                                           join n in db.Customers on b.companyId equals n.custId
-                                          from o in db.PR_Finance.Where(x => x.PRId == PRDetail.PRId && x.reviewed == 1)
-                                          from q in db.PR_Approver.Where(x => x.PRId == PRDetail.PRId && x.approverApproved == 1)
-                                          from s in db.PR_HOD.Where(x => x.PRId == PRDetail.PRId && x.HODApprovedP1 == 1).DefaultIfEmpty()
-                                          from u in db.PR_Recommender.Where(x => x.PRId == PRDetail.PRId && x.recommended == 1).DefaultIfEmpty()
-                                          from ac in db.PR_RecommenderCFO.Where(x => x.PRId == PRDetail.PRId && x.recommended == 1).DefaultIfEmpty()
-                                          from ae in db.PR_RecommenderHOC.Where(x => x.PRId == PRDetail.PRId && x.recommended == 1).DefaultIfEmpty()
+                                          from o in db.PR_Finance.Where(x => x.PRId == PRDetail.PRId && x.reviewed >= 1)
+                                          from q in db.PR_Approver.Where(x => x.PRId == PRDetail.PRId && x.approverApproved >= 1)
+                                          from s in db.PR_HOD.Where(x => x.PRId == PRDetail.PRId && x.HODApprovedP1 >= 1).DefaultIfEmpty()
+                                          from u in db.PR_Recommender.Where(x => x.PRId == PRDetail.PRId && x.recommended >= 1).DefaultIfEmpty()
+                                          from ac in db.PR_RecommenderCFO.Where(x => x.PRId == PRDetail.PRId && x.recommended >= 1).DefaultIfEmpty()
+                                          from ae in db.PR_RecommenderHOC.Where(x => x.PRId == PRDetail.PRId && x.recommended >= 1).DefaultIfEmpty()
                                           //from v in r.DefaultIfEmpty()
                                           //from w in p.DefaultIfEmpty()
                                           //from x in l.DefaultIfEmpty()
