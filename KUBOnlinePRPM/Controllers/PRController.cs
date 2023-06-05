@@ -4520,9 +4520,9 @@ namespace KUBOnlinePRPM.Controllers
                                     case 4:
                                         if (PR.AmountRequired < 5000)
                                         {
-                                            //get Pn. Liz
+                                            //get Pn. Liz id 60//Rozaidin id 170
                                             getApprover = (from m in db.Users
-                                                           where m.userId == 60 && m.companyId == PR.CustId
+                                                           where m.userId == 170 && m.companyId == PR.CustId
                                                            select new PRModel()
                                                            {
                                                                UserId = m.userId,
