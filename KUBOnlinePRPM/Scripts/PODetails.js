@@ -158,9 +158,6 @@ $(document).ready(function () {
         fd.append("NewPOForm.PurchaserCodeId", $("#PurchaserCode").find("option:selected").val());
         fd.append("NewPOForm.OrderDate", $("#OrderDate").val());
         fd.append("NewPOForm.POId", $("#POId").val());
-        fd.append("NewPOForm.VendorContactName", $("#VendorContactName").val());
-        fd.append("NewPOForm.VendorContactNo", $("#VendorContactNo").val());
-        fd.append("NewPOForm.VendorEmail", $("#VendorEmail").val());
         $.ajax({
             url: UrlComfirmPO,
             type: 'POST',

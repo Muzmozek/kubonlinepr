@@ -583,12 +583,10 @@ namespace KUBOnlinePRPM.Controllers
                                       join g in db.POStatus on a.StatusId equals g.statusId
                                       join h in db.PurchaseRequisitions on a.PRId equals h.PRId
                                       join o in db.Vendors on a.PayToVendorId equals o.vendorId into p
-                                      join r in db.VendorStaffs on c.vendorId equals r.vendorId into s
                                       from j in i.DefaultIfEmpty()
                                       from l in k.DefaultIfEmpty()
                                       from n in m.DefaultIfEmpty()
                                       from q in p.DefaultIfEmpty()
-                                      from t in s.DefaultIfEmpty()
                                       where a.POId == PODetail.POId /*&& a.CustId == CustId*/
                                       select new NewPOModel()
                                       {
@@ -599,10 +597,10 @@ namespace KUBOnlinePRPM.Controllers
                                           VendorName = c.name,
                                           VendorCode = c.vendorNo,
                                           VendorQuoteNo = a.VendorQuoteNo,
-                                          VendorContactName = t.vendorContactName,
-                                          VendorEmail = t.vendorEmail,
-                                          VendorStaffId = t.staffId,
-                                          VendorContactNo = t.vendorContactNo,
+                                          //VendorContactName = d.vendorContactName,
+                                          //VendorEmail = d.vendorEmail,
+                                          //VendorStaffId = d.staffId,
+                                          //VendorContactNo = d.vendorContactNo,
                                           DiscountAmount = a.DiscountAmount,
                                           DiscountPerc = a.Discount_,
                                           TotalExcSST = a.TotalExcSST,
@@ -982,27 +980,11 @@ namespace KUBOnlinePRPM.Controllers
                     int PaymentTermsId = POModel.NewPOForm.PaymentTermsId.Value;
                     int PurchaserCodeId = POModel.NewPOForm.PurchaserCodeId.Value;
                     DateTime DeliveryDate = POModel.NewPOForm.DeliveryDate.Value;
-                    string VendorContactName = POModel.NewPOForm.VendorContactName;
-                    string VendorContactNo = POModel.NewPOForm.VendorContactNo;
-                    string VendorEmail = POModel.NewPOForm.VendorEmail;
                     int POId = POModel.NewPOForm.POId;                   
                     int UserId = Int32.Parse(Session["UserId"].ToString());
 
                     PurchaseOrder updatePO = db.PurchaseOrders.First(m => m.POId == POId);
                     PurchaseRequisition getScenario = db.PurchaseRequisitions.First(m => m.PRId == updatePO.PRId);
-                    VendorStaff newContact = new VendorStaff()
-                    {
-                        uuid = Guid.NewGuid(),
-                        vendorId = updatePO.vendorId,
-                        vendorContactName = VendorContactName,
-                        vendorContactNo = VendorContactNo,
-                        vendorEmail = VendorEmail,
-                        createByUserId = Int32.Parse(Session["UserId"].ToString()),
-                        createDate = DateTime.Now
-                    };
-                    db.VendorStaffs.Add(newContact);
-                    db.SaveChanges();
-
                     int CustId = db.Projects.First(m => m.projectId == getScenario.ProjectId).custId;
                     int getCodeId = db.PR_Items.First(m => m.PRId == updatePO.PRId).codeId.Value;
 
